@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+     >
+
+    <ScrollView
+        android:id="@+id/scrollview_manual_add_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="40dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:stretchColumns="0,1" >
+                <TableRow>
+                <TextView
+                    android:id="@+id/textview01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/default_text_address_size_sp"
+                    android:text="@string/txt_name_data" />
+ <!--               <View
+                    android:id="@+id/view_separate_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/textview01"
+                    android:background="@color/separate_line" /> -->
+
+                    <EditText
+                        android:id="@+id/account_name"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_account_name"
+                        android:singleLine="true"
+                        android:text="" />
+            
+                   </TableRow>
+                <TableRow>
+                <TextView
+                    android:id="@+id/txt_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/default_text_address_size_sp"
+                    android:text="@string/txt_id" />
+                    <EditText
+                        android:id="@+id/account_password"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_default_portal_password"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/txt_phone_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:text="@string/txt_phone_data" />
+                    <EditText
+                        android:id="@+id/phone_number"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_default_portal_password"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/txt_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:text="@string/txt_password_data" />
+                    <EditText
+                        android:id="@+id/password_data"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_default_portal_password"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/txt_password_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:text="@string/txt_password_confirm" />
+                    <EditText
+                        android:id="@+id/password_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_default_portal_password"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:id="@+id/txt_recommdator_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:text="@string/txt_recommdator_code" />
+                    <EditText
+                        android:id="@+id/recommdator_code"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_default_portal_password"
+                        android:singleLine="true"
+                        android:text="" />
+
+
+
+                </TableRow>
+                <TableRow>
+                    <CheckBox
+                        android:id="@+id/aggree"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/check_aggree"
+                        android:textSize="@dimen/default_text_address_size_sp"
+
+                        />
+
+                </TableRow>
+                <Button
+                    android:id="@+id/testconect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/login_btn_bg_normal"
+                    android:textColor="@color/white"
+                    android:text="@string/send_valid_code_button" />
+            </TableLayout>
+       </LinearLayout>
+            
+    </ScrollView>
+
+   
+
+</RelativeLayout>

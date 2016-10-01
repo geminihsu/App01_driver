@@ -1,0 +1,37 @@
+<resources>
+
+    <!-- login page -->
+    <string name="app_name">App01</string>
+    <string name="portal_login">Log In</string>
+    <string name="portal_clean">Sign Out</string>
+    <string name="login_id_title">．cellphone</string>
+    <string name="login_password_title">．Password</string>
+    <string name="hint_default_portal_id">phone number</string>
+    <string name="hint_default_portal_password">Password</string>
+    <string name="hint_test_portal_id">odaru@geovision.com.tw</string>
+    <string name="hint_test_portal_password">odaru123</string>
+    <string name="forget_password">Forget Password</string>
+    <string name="login_button">Login</string>
+    <string name="register_button">Register</string>
+
+    <!--  forget password page -->
+    <string name="txt_info">Get new password by message</string>
+    <string name="resend_button">Re-Send Password</string>
+    <string name="txt_id">．身分證字號</string>
+
+    <!--  register page -->
+    <string name="txt_name_data">．姓名</string>
+    <string name="txt_id_data">．身分證字號</string>
+    <string name="txt_phone_data">．手機號碼</string>
+    <string name="txt_password_data">．登入密碼</string>
+    <string name="txt_password_confirm">．密碼確認</string>
+    <string name="txt_recommdator_code">推薦人代號</string>
+    <string name="hint_account_name">odaru@geovision.com.tw</string>
+    <string name="hint_account_id">odaru123</string>
+    <string name="send_valid_code_button">傳送驗證碼</string>
+    <string name="check_aggree">我同意隱私政策和會員規則</string>
+
+    <!-- MenuMainActivity -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+</resources>
