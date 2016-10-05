@@ -20,7 +20,7 @@ public class ForgetPasswordActivity extends Activity {
         setContentView(R.layout.forget_password_page_activity);
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
     }
 
     @Override
@@ -30,6 +30,7 @@ public class ForgetPasswordActivity extends Activity {
 
 
     }
+
 
     private void findViews()
     {

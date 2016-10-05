@@ -16,10 +16,26 @@
             </intent-filter>
         </activity>
         <activity android:name=".ForgetPasswordActivity"
+            android:label="@string/forget_page_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".RegisterActivity"
+            android:label="@string/register_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MenuMainActivity" android:theme="@style/AppTheme.NoActionBar"
+        <activity android:name=".MenuMainActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".SupportAnswerActivity"
+            android:label="@string/suggestion_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ChangePasswordActivity"
+            android:label="@string/change_password_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".CommentActivity"
+            android:label="@string/commmet_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".RecommendActivity"
+            android:label="@string/recommend_page_title"
             android:configChanges="orientation|screenSize"/>
 
     </application>

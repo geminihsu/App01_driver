@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffffff</color>
     <color name="login_btn_bg_normal">#2593CE</color>
+    <color name="bg_gray">#cecbce</color>
+    <color name="address_devicename_txt">#646464</color>
+
 </resources>

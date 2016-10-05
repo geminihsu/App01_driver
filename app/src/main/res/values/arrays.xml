@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <resources>
+    　　    <string-array name="support_menu">
+    　　        <item>常見問題</item>
+    　　        <item>會員條款</item>
+    　　        <item>提供意見</item>
+    　　    </string-array>
+            <string-array name="myaccount">
+        　　    <item>修改密碼</item>
+        　　    <item>獲得評語</item>
+        　　    <item>我推薦的好友</item>
+        　　    </string-array>
+ </resources>

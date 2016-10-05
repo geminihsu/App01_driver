@@ -1,5 +1,20 @@
 <resources>
 
+    <!-- Page Title -->
+    <string name="login_page_title">登入帳號</string>
+    <string name="forget_page_title">忘記密碼</string>
+    <string name="register_page_title">會員註冊</string>
+    <string name="about_page_title">關於第一幫</string>
+    <string name="order_record_page_title">訂單紀錄</string>
+    <string name="support_page_title">客戶支援</string>
+    <string name="question_page_title">常見問題</string>
+    <string name="clause_page_title">會員條款</string>
+    <string name="suggestion_page_title">提供建議</string>
+    <string name="myaccount_page_title">我的帳戶</string>
+    <string name="change_password_page_title">修改密碼</string>
+    <string name="commmet_page_title">獲得評語</string>
+    <string name="recommend_page_title">我推薦的好友</string>
+
     <!-- login page -->
     <string name="app_name">App01</string>
     <string name="portal_login">Log In</string>
@@ -34,4 +49,38 @@
     <!-- MenuMainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="order">訂單</string>
+    <string name="order_record">訂單紀錄</string>
+    <string name="support">客戶支援</string>
+    <string name="notification">最新通知</string>
+    <string name="setting">設定</string>
+    <string name="about">關於第一幫</string>
+    <string name="share">與朋友分享</string>
+    <string name="account">我的帳戶</string>
+    <string name="wallet">我的錢包</string>
+    <string name="bouns">積勵分享</string>
+
+    <!-- fragment_service -->
+    <string name="service_info">請選擇需要的服務</string>
+
+    <!-- SupportAnswerActivity -->
+    <string name="txt_answer">請留下寶貴的建議</string>
+    <string name="txt_name">聯絡人名稱</string>
+    <string name="txt_phone">電話/電郵</string>
+    <string name="txt_suggestion">意見</string>
+    <string name="btn_send">送出</string>
+
+    <string name="btn_logout">登出</string>
+
+    <!-- ChangeAccountActivity -->
+    <string name="txt_name_show">姓名</string>
+    <string name="txt_id_show">身分證</string>
+    <string name="txt_phone_show">手機</string>
+    <string name="txt_courrent_passwod">．舊密碼</string>
+    <string name="txt_new_passwod">．新密碼</string>
+    <string name="txt_passwod_confirm">．密碼確認</string>
+
+    <!-- RecommendActivity -->
+    <string name="txt_obtain_prize">已為您賺取500積分</string>
+
 </resources>
