@@ -36,7 +36,7 @@ import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
 
-public class Fragment_order_record extends Fragment {
+public class Fragment_OrderRecord extends Fragment {
 
     private ListView listView;
     private final List<OrderRecordListItem> mRecordOrderListData = new ArrayList<OrderRecordListItem>();;

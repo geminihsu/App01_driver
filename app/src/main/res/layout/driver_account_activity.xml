@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="5dp"
+    android:background="@color/white" >
+
+    <FrameLayout
+        android:id="@+id/imagePannel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true" >
+
+        <ImageView
+            android:id="@+id/host_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_image_camera_alt" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:layout_toLeftOf="@+id/imagestatusPannel"
+        android:layout_toRightOf="@id/imagePannel"
+        android:orientation="vertical" >
+    <RelativeLayout
+        android:id="@+id/linearLayout_star"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        >
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleIndicator"
+            />
+        <TextView
+            android:id="@+id/host_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/rating"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text="@string/driver_account_title_level"
+            android:textColor="@color/red"
+            android:textSize="@dimen/default_text_address_size_sp" />
+
+    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/linearLayout_pos_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" >
+                <TextView
+                    android:id="@+id/people_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/driver_current_order_number"
+                    android:textColor="@color/address_devicename_txt"
+                    android:textSize="@dimen/default_text_address_info_size_sp" />
+                <TextView
+                    android:id="@+id/money_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_marginLeft="50dp"
+                    android:text="@string/order_cancel_count"
+                    android:textColor="@color/address_devicename_txt"
+                    android:textSize="@dimen/default_text_address_info_size_sp" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" >
+                <TextView
+                    android:id="@+id/count_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="@string/order_finish_percent"
+                    android:textColor="@color/address_devicename_txt"
+                    android:textSize="@dimen/default_text_address_info_size_sp" />
+
+                <TextView
+                    android:id="@+id/converte_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_marginLeft="50dp"
+                    android:text="@string/driver_total_score"
+                    android:textColor="@color/address_devicename_txt"
+                    android:textSize="@dimen/default_text_address_info_size_sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

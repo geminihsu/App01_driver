@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 import tw.com.geminihsu.app01.R;
 
-public class Fragment_service extends Fragment {
+public class Fragment_Service extends Fragment {
 	private TextView article ;
 	private ImageView mImageView ;
 	private ProgressDialog PDLoading ;

@@ -7,5 +7,10 @@
     <color name="login_btn_bg_normal">#2593CE</color>
     <color name="bg_gray">#cecbce</color>
     <color name="address_devicename_txt">#646464</color>
-
+    <color name="btn_bouns_upgrade">#FF6600</color>
+    <color name="btn_bouns_record">#1E9678</color>
+    <color name="btn_bouns_title">#3C4B3C</color>
+    <color name="red">#ff0000</color>
+    <color name="bg_light_gray">#F0F0F0</color>
+    <color name="transparent">#00000000</color>
 </resources>

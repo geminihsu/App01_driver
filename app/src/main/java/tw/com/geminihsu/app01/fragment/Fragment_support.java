@@ -34,7 +34,7 @@ import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 
-public class Fragment_support extends Fragment {
+public class Fragment_Support extends Fragment {
 
     private ListView listView;
     @Override

@@ -35,7 +35,7 @@ import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.webview.MyBrowser;
 
 
-public class Fragment_about extends Fragment {
+public class Fragment_About extends Fragment {
 
     private ListView listView;
     private WebView browser;

@@ -42,7 +42,7 @@ import tw.com.geminihsu.app01.adapter.RecommendListItem;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 
-public class Fragment_account extends Fragment {
+public class Fragment_Account extends Fragment {
 
     private ListView listView;
     //actionBar item Id

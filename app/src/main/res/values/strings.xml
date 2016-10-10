@@ -14,7 +14,12 @@
     <string name="change_password_page_title">修改密碼</string>
     <string name="commmet_page_title">獲得評語</string>
     <string name="recommend_page_title">我推薦的好友</string>
+    <string name="prize_record_page_title">積分紀錄</string>
+    <string name="photo_verify_page_title">上傳證件</string>
 
+    <!--司機登入的流程-->
+    <string name="driver_idenity_page_title">選擇身份</string>
+    <string name="driver_login_page_title">司機登入</string>
     <!-- login page -->
     <string name="app_name">App01</string>
     <string name="portal_login">Log In</string>
@@ -58,7 +63,7 @@
     <string name="share">與朋友分享</string>
     <string name="account">我的帳戶</string>
     <string name="wallet">我的錢包</string>
-    <string name="bouns">積勵分享</string>
+    <string name="bouns">積勵獎勵</string>
 
     <!-- fragment_service -->
     <string name="service_info">請選擇需要的服務</string>
@@ -82,5 +87,51 @@
 
     <!-- RecommendActivity -->
     <string name="txt_obtain_prize">已為您賺取500積分</string>
+    <!-- Fragment_Bouns -->
+    <string name="txt_next_title">下一次升級</string>
+    <string name="txt_next_time">01小時58分32秒</string>
+    <string name="btn_upgrade">升級樹苗</string>
+    <string name="btn_next">下次領取</string>
+    <string name="default_title">車神</string>
+    <string name="default_info">可以領取以下獎勵</string>
+    <string name="txt_prize_info">獲取積分200點</string>
 
+    <!-- DriverIdentityActivity -->
+    <string name="pick_identity_title">選擇註冊身份</string>
+    <string name="pick_identity_info">每個手機只能註冊一種身份</string>
+    <string name="taxi_driver">計程車司機</string>
+    <string name="truck_driver">貨車司機</string>
+    <string name="cargo_driver">貨櫃車司機</string>
+
+    <!-- DriverLoginActivity -->
+    <string name="car_title">車籍資料</string>
+    <string name="car_brand_name">廠牌名稱</string>
+    <string name="car_cc_number">車種CC數</string>
+    <string name="car_release_year">車種出廠年份</string>
+    <string name="car_type_number">車種號碼</string>
+    <string name="car_work_licence">營業證號</string>
+    <string name="btn_finish">完成</string>
+
+    <!-- PhotoUploadActivity -->
+    <string name="photo_verify">線上驗證</string>
+    <string name="photo_licence_type">1.車輛行照</string>
+    <string name="photo_id">2.身分證</string>
+    <string name="photo_drive_licence">3.駕照</string>
+    <string name="photo_business＿license">4.營業執照</string>
+    <string name="photo_car_full">5.車身連車牌照片</string>
+    <string name="photo_skip">略過</string>
+    <string name="photo_finish">完成</string>
+
+    <!-- Driver_Account_Activity -->
+    <string name="driver_account_title_level">車神</string>
+    <string name="driver_current_order_number">目前接單數</string>
+    <string name="driver_cancel_order_number">2.身分證</string>
+    <string name="order_finish_percent">訂單完成率</string>
+    <string name="driver_total_score">累積總績分</string>
+    <string name="order_cancel_count">訂單取消數</string>
+    <string name="driver_name">姓名</string>
+    <string name="driver_car_brand">車牌</string>
+    <string name="driver_car_type">車型</string>
+    <string name="driver_service_spec">服務特色</string>
 </resources>
+

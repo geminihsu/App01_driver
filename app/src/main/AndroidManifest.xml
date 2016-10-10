@@ -37,7 +37,18 @@
         <activity android:name=".RecommendActivity"
             android:label="@string/recommend_page_title"
             android:configChanges="orientation|screenSize"/>
-
+        <activity android:name=".BoundsRecordActivity"
+            android:label="@string/recommend_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".DriverIdentityActivity"
+            android:label="@string/driver_idenity_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".DriverLoginActivity"
+            android:label="@string/driver_login_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".PhotoVerifyActivity"
+            android:label="@string/photo_verify_page_title"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

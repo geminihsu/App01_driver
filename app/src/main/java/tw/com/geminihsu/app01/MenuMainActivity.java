@@ -14,11 +14,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import tw.com.geminihsu.app01.fragment.Fragment_about;
-import tw.com.geminihsu.app01.fragment.Fragment_account;
-import tw.com.geminihsu.app01.fragment.Fragment_order_record;
-import tw.com.geminihsu.app01.fragment.Fragment_service;
-import tw.com.geminihsu.app01.fragment.Fragment_support;
+import tw.com.geminihsu.app01.fragment.Fragment_About;
+import tw.com.geminihsu.app01.fragment.Fragment_Account;
+import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
+import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
+import tw.com.geminihsu.app01.fragment.Fragment_Service;
+import tw.com.geminihsu.app01.fragment.Fragment_Support;
 
 public class MenuMainActivity extends AppCompatActivity {
 
@@ -89,7 +90,7 @@ public class MenuMainActivity extends AppCompatActivity {
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order:
                         // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                        Fragment_service fragment = new Fragment_service();
+                        Fragment_Service fragment = new Fragment_Service();
                         android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.container, fragment);
                         fragmentTransaction.commit();
@@ -99,14 +100,14 @@ public class MenuMainActivity extends AppCompatActivity {
 
                     case R.id.navigation_item_order_record:
                         //Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
-                        Fragment_order_record order_history = new Fragment_order_record();
+                        Fragment_OrderRecord order_history = new Fragment_OrderRecord();
                         android.support.v4.app.FragmentTransaction order_historyTransaction = getSupportFragmentManager().beginTransaction();
                         order_historyTransaction.replace(R.id.container, order_history);
                         order_historyTransaction.commit();
 
                         return true;
                     case R.id.navigation_item_support:
-                        Fragment_support support = new Fragment_support();
+                        Fragment_Support support = new Fragment_Support();
                         android.support.v4.app.FragmentTransaction support_historyTransaction = getSupportFragmentManager().beginTransaction();
                         support_historyTransaction.replace(R.id.container, support);
                         support_historyTransaction.commit();
@@ -118,7 +119,7 @@ public class MenuMainActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "All Mail Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.navigation_item_about:
-                        Fragment_about about = new Fragment_about();
+                        Fragment_About about = new Fragment_About();
                         android.support.v4.app.FragmentTransaction about_historyTransaction = getSupportFragmentManager().beginTransaction();
                         about_historyTransaction.replace(R.id.container, about);
                         about_historyTransaction.commit();
@@ -140,10 +141,16 @@ public class MenuMainActivity extends AppCompatActivity {
                         startActivity(Intent.createChooser(share, "share"));*/
                         return true;
                     case R.id.navigation_item_account:
-                        Fragment_account account = new Fragment_account();
+                        Fragment_Account account = new Fragment_Account();
                         android.support.v4.app.FragmentTransaction account_historyTransaction = getSupportFragmentManager().beginTransaction();
                         account_historyTransaction.replace(R.id.container, account);
                         account_historyTransaction.commit();
+                        return true;
+                    case R.id.navigation_item_bouns:
+                        Fragment_Bouns bouns = new Fragment_Bouns();
+                        android.support.v4.app.FragmentTransaction bounsTransaction = getSupportFragmentManager().beginTransaction();
+                        bounsTransaction.replace(R.id.container, bouns);
+                        bounsTransaction.commit();
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
