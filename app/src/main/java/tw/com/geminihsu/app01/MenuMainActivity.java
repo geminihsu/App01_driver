@@ -3,8 +3,10 @@ package tw.com.geminihsu.app01;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,12 +18,16 @@ import android.widget.Toast;
 
 import tw.com.geminihsu.app01.fragment.Fragment_About;
 import tw.com.geminihsu.app01.fragment.Fragment_Account;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
+import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01.fragment.Fragment_Service;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
 
-public class MenuMainActivity extends AppCompatActivity {
+public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,
+        Fragment_BeginOrderInteractive.OnListItemClickListener{
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -88,6 +94,34 @@ public class MenuMainActivity extends AppCompatActivity {
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.navigation_item_begin:
+                        Fragment_BeginOrder begin = new Fragment_BeginOrder();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction_begin = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction_begin.replace(R.id.container, begin);
+                        fragmentTransaction_begin.commit();
+
+                        return true;
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.navigation_item_order_filter:
+                        Fragment_OrderFilter filter = new Fragment_OrderFilter();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction_filter = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction_filter.replace(R.id.container, filter);
+                        fragmentTransaction_filter.commit();
+
+                        return true;
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.navigation_item_wait:
+
+                        return true;
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    case R.id.navigation_item_order_past:
+
+                        return true;
+
+                    //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order:
                         // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
                         Fragment_Service fragment = new Fragment_Service();
@@ -114,9 +148,6 @@ public class MenuMainActivity extends AppCompatActivity {
                         return true;
                     case R.id.navigation_item_notification:
                         Toast.makeText(getApplicationContext(), "Drafts Selected", Toast.LENGTH_SHORT).show();
-                        return true;
-                    case R.id.navigation_item_setting:
-                        Toast.makeText(getApplicationContext(), "All Mail Selected", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.navigation_item_about:
                         Fragment_About about = new Fragment_About();
@@ -182,5 +213,16 @@ public class MenuMainActivity extends AppCompatActivity {
         shareIntent.putExtra(Intent.EXTRA_TEXT,
                 "http://stackandroid.com");
         return shareIntent;
+    }
+
+    @Override
+    public void setupTabLayout(ViewPager viewPager) {
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+    }
+
+    @Override
+    public void onListItemClick(String title) {
+        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
     }
 }

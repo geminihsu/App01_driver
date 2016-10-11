@@ -62,7 +62,7 @@ public class MainActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), DriverIdentityActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
                 startActivity(intent);
             }
         });

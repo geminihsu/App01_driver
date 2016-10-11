@@ -10,4 +10,13 @@
         　　    <item>獲得評語</item>
         　　    <item>我推薦的好友</item>
         　　    </string-array>
+            <string-array name="driver_myaccount">
+        　　    <item>修改密碼</item>
+               <item>編輯司機資料</item>
+        　　    <item>獲得評語</item>
+                <item>司機身份</item>
+                <item>車籍登陸</item>
+                <item>上傳證件</item>
+                <item>我推薦的好友</item>
+        　　    </string-array>
  </resources>

@@ -5,7 +5,6 @@
     <string name="forget_page_title">忘記密碼</string>
     <string name="register_page_title">會員註冊</string>
     <string name="about_page_title">關於第一幫</string>
-    <string name="order_record_filter_page_title">訂單篩選</string>
     <string name="order_record_page_title">訂單紀錄</string>
     <string name="support_page_title">客戶支援</string>
     <string name="question_page_title">常見問題</string>
@@ -151,7 +150,6 @@
     <string name="txt_order_filter_distance">距離目前位置:</string>
     <string name="order_filter_distance">公里內</string>
     <string name="order_departure">從</string>
-    <string name="to_order_departure">往</string>
     <string name="order_departure_car">發車</string>
     <string name="order_departure_car_record">路上所有訂單</string>
 
@@ -159,7 +157,7 @@
     <string name="tab_real_time">即時</string>
     <string name="tab_reservation">預約</string>
     <string name="tab_company">車行</string>
-    <string name="list_btn_take_look">查看</string>
-    <string name="list_btn_take_over">搶單</string>
+
+
 </resources>
 

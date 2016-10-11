@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--<color name="action_bar_background">#1a3832</color> -->
+    <color name="action_bar_background">#417ba8</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
@@ -9,7 +11,7 @@
     <color name="address_devicename_txt">#646464</color>
     <color name="btn_bouns_upgrade">#FF6600</color>
     <color name="btn_bouns_record">#1E9678</color>
-    <color name="btn_bouns_title">#3C4B3C</color>
+    <color name="btn_bouns_title">#246054</color>
     <color name="red">#ff0000</color>
     <color name="bg_light_gray">#F0F0F0</color>
     <color name="transparent">#00000000</color>

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/RelativeLayout01"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="5dp"
+    android:orientation="vertical"
     android:background="@color/white" >
-
+    <LinearLayout
+        android:id="@+id/linearLayout_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <FrameLayout
         android:id="@+id/imagePannel"
         android:layout_width="wrap_content"
@@ -116,7 +121,162 @@
                     android:textSize="@dimen/default_text_address_info_size_sp" />
             </LinearLayout>
         </LinearLayout>
-
+       </LinearLayout>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/txt_driver_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_name"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:enabled="false"
+            android:text=""
 
-</RelativeLayout>
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/car_brand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_car_brand"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:enabled="false"
+            android:text=""
+
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_car_type"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:enabled="false"
+            android:text=""
+
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/sevice_spec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_service_spec"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:enabled="false"
+            android:text=""
+
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/driver_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_information"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/driver_information_content"
+            android:textColor="@color/address_devicename_txt"
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/driver_car_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_car_photo"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:src="@drawable/car_android"
+            />
+    </LinearLayout>
+</LinearLayout>

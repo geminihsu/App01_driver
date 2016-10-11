@@ -49,6 +49,9 @@
         <activity android:name=".PhotoVerifyActivity"
             android:label="@string/photo_verify_page_title"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".DriverAccountActivity"
+            android:label="@string/driver_account_page_title"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>

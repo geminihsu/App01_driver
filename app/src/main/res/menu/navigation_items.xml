@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+        <!-- for Driver application!-->
+        <item
+            android:id="@+id/navigation_item_begin"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher"
+            android:title="@string/begin_order"/>
+        <!-- for Driver application!-->
+        <item
+            android:id="@+id/navigation_item_order_filter"
+            android:icon="@drawable/ic_launcher"
+            android:title="@string/order_filer"/>
+        <!-- for Driver application!-->
+        <item
+            android:id="@+id/navigation_item_wait"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher"
+            android:title="@string/wait_list"/>
+        <!-- for Driver application!-->
+        <item
+            android:id="@+id/navigation_item_order_past"
+            android:icon="@drawable/ic_launcher"
+            android:title="@string/past_order"/>
+
+        <!-- for Customer application!-->
         <item
             android:id="@+id/navigation_item_order"
             android:checked="true"
             android:icon="@drawable/ic_launcher"
             android:title="@string/order"/>
+        <!-- for Customer application!-->
         <item
             android:id="@+id/navigation_item_order_record"
             android:icon="@drawable/ic_launcher"
@@ -20,11 +45,6 @@
             android:checked="true"
             android:icon="@drawable/ic_launcher"
             android:title="@string/notification"/>
-        <item
-            android:id="@+id/navigation_item_setting"
-            android:checked="true"
-            android:icon="@drawable/ic_launcher"
-            android:title="@string/setting"/>
         <item
             android:id="@+id/navigation_item_about"
             android:checked="true"
