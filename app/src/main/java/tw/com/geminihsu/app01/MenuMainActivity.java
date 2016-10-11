@@ -249,9 +249,14 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                 startActivity(question);
             }
         });*/
-        Intent question = new Intent(MenuMainActivity.this, OrderProcesssActivity.class);
+       /* Intent question = new Intent(MenuMainActivity.this, MerchandiseOrderActivity.class);
         Bundle b = new Bundle();
+        b.putInt(Constants.ARG_POSITION,Constants.QUERY_MERCHANDISE);
         question.putExtras(b);
+        startActivity(question);*/
+
+        Intent question = new Intent(MenuMainActivity.this, OrderProcesssActivity.class);
+
         startActivity(question);
     }
 }

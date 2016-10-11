@@ -13,6 +13,9 @@ public class Constants {
 	final public static int CONTROL_PANNEL_MANUAL = 3;
 	final public static int CANCEL_ORDER_FEEDBACK = 4;
 
+
+	final public static int QUERY_MERCHANDISE = 0;
+	final public static int QUERY_PASSENGER = 1;
 }
 
 

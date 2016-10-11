@@ -2,6 +2,7 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Menu;
@@ -139,8 +140,11 @@ public class SupportAnswerActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                //將表單資料送出後回到主畫面
-                this.finish();
+                Intent question = new Intent(SupportAnswerActivity.this, MerchandiseOrderActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

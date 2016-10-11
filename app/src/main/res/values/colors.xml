@@ -15,4 +15,5 @@
     <color name="red">#ff0000</color>
     <color name="bg_light_gray">#F0F0F0</color>
     <color name="transparent">#00000000</color>
+    <color name="sender_comment">#1904f9</color>
 </resources>

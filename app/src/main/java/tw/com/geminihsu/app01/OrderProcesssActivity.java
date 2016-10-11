@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,6 +23,15 @@ public class OrderProcesssActivity extends Activity {
     private final int ACTIONBAR_MENU_ITEM_CANCEL = 0x0001;
 
     private TextView information;
+    private ImageView detail;
+    private ImageView departure;
+    private ImageView destination;
+    private ImageView change_money;
+    private ImageView passenger_status;
+    private ImageView done_order;
+    private ImageView online_payment;
+    private ImageView online_check;
+
 
 
     @Override
@@ -64,6 +74,15 @@ public class OrderProcesssActivity extends Activity {
     {
         information = (TextView) findViewById(R.id.txt_pannel_info);
 
+
+        detail = (ImageView) findViewById(R.id.detail);
+        departure = (ImageView) findViewById(R.id.navigation);
+        destination = (ImageView) findViewById(R.id.navigation_destination);
+        change_money = (ImageView) findViewById(R.id.order_change);
+        passenger_status = (ImageView) findViewById(R.id.passeger_status);
+        done_order = (ImageView) findViewById(R.id.order_finish);
+        online_payment = (ImageView) findViewById(R.id.order_online_payment);
+        online_check = (ImageView) findViewById(R.id.order_online_check);
     }
 
 
@@ -82,6 +101,116 @@ public class OrderProcesssActivity extends Activity {
             startActivity(question);
         }
     });
+        detail.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(OrderProcesssActivity.this, MerchandiseOrderActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.QUERY_MERCHANDISE);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        departure.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        destination.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        change_money.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        passenger_status.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderProcesssActivity.this);
+                // set title
+                alertDialogBuilder.setTitle(getString(R.string.dialog_get_on_car));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(getString(R.string.dialog_get_on_car_message))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.dialog_get_on_car_comfirm),new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                                // if this button is clicked, close
+                                // current activity
+
+                                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                                Bundle b = new Bundle();
+                                b.putInt(Constants.ARG_POSITION, Constants.CANCEL_ORDER_FEEDBACK);
+                                question.putExtras(b);
+                                startActivity(question);
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+            }
+        });
+        done_order.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+            Bundle b = new Bundle();
+            b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+            question.putExtras(b);
+            startActivity(question);
+        }
+    });
+        online_payment.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        online_check.setOnClickListener(new View.OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+            Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+            Bundle b = new Bundle();
+            b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+            question.putExtras(b);
+            startActivity(question);
+        }
+    });
+
+
     }
 
 
@@ -127,7 +256,10 @@ public class OrderProcesssActivity extends Activity {
                                 dialog.cancel();
                             }
                         });
-                alertDialogBuilder.show();
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

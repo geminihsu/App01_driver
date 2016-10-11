@@ -5,10 +5,16 @@
     android:background="@color/bg_gray"
      >
 
+    <ScrollView
+        android:id="@+id/scrollview_manual_add_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
 
 
             <LinearLayout
-                android:id="@+id/info"
+                android:id="@+id/merchandise_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white"
@@ -16,6 +22,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:orientation="vertical"
+                android:visibility="gone"
                 >
                 <LinearLayout
                  android:layout_width="fill_parent"
@@ -24,23 +31,47 @@
                  android:paddingTop="20dp"
                  >
                  <TextView
-                     android:id="@+id/name"
+                     android:id="@+id/txt_name"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:ellipsize="middle"
                      android:singleLine="true"
                      android:paddingLeft="20dp"
-                     android:text="@string/txt_name_show"
-                     android:textColor="@color/address_devicename_txt"
+                     android:layout_gravity="center_vertical"
+                     android:text="@string/order_sender"
+                     android:textSize="@dimen/default_text_address_size_sp"
+                     android:textColor="@color/btn_bouns_title"
+                     android:textStyle="bold"
                      />
-                 <EditText
-                     android:layout_width="fill_parent"
-                     android:layout_height="wrap_content"
-                     android:ellipsize="middle"
-                     android:singleLine="true"
-                     android:text=""
-
-                     />
+                    <TextView
+                        android:id="@+id/name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="鄭明成"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                    <TextView
+                        android:id="@+id/comment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/merchandise_comment"
+                        android:textColor="@color/sender_comment"
+                        />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:src="@drawable/ic_communication_call"
+                        />
              </LinearLayout>
                 <LinearLayout
                 android:layout_width="fill_parent"
@@ -48,136 +79,578 @@
                 android:orientation="horizontal"
                 >
                 <TextView
-                    android:id="@+id/id"
+                    android:id="@+id/buyer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
                     android:singleLine="true"
                     android:paddingLeft="20dp"
-                    android:text="@string/txt_id_show"
-                    android:textColor="@color/address_devicename_txt"
+                    android:text="@string/merchant＿buyer"
+                    android:textSize="@dimen/default_text_address_size_sp"
+                    android:textColor="@color/btn_bouns_upgrade"
+                    android:textStyle="bold"
                     />
-                <EditText
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="middle"
-                    android:singleLine="true"
-                    android:text=""
+                    <RadioGroup
+                        android:id="@+id/source"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:orientation="horizontal" >
 
-                    />
+                        <RadioButton
+                            android:id="@+id/sender_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/btn_bouns_upgrade"
+                            android:textSize="@dimen/default_text_address_size_sp"
+                            android:checked="true"
+                            android:text="@string/merchant" />
+
+                        <RadioButton
+                            android:id="@+id/buyer_radio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/bg_gray"
+                            android:textSize="@dimen/default_text_address_size_sp"
+                            android:text="@string/buyer" />
+                    </RadioGroup>
             </LinearLayout>
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:paddingTop="10dp"
                     >
                     <TextView
-                        android:id="@+id/phone"
+                        android:id="@+id/departure"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:paddingLeft="20dp"
-                        android:text="@string/txt_phone_show"
+                        android:text="@string/merchandise_departure"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="台中市建成路一段一號二樓"
                         android:textColor="@color/address_devicename_txt"
                         />
-                    <EditText
-                        android:layout_width="fill_parent"
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/destination"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
-                        android:text=""
-
-
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/merchandise_destination"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/address_destination"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="台中市黎明路一段五號七樓"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/reservation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/reservation_date"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/reservation_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="2015/12/08 上午07:04"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:text="@string/merchandise_content"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="書籍"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:text="@string/merchandise_weight"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="3kg"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:text="@string/merchandise_unit"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textStyle="bold"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_unit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="5才"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/spec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/merchandise_requirement"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_requirement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="機場接送"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/fee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/merchandise_fee"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_fee"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="50元"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:id="@+id/information"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/merchandise_spec"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <TextView
+                        android:id="@+id/merchandise_spec"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:background="@color/bg_gray"
+                        android:textSize="@dimen/default_text_address_info_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:text="我在2015年12月15日上午09:00搭乘車牌EHE-530車輛，從台中火車站前往台中市政府"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="10dp"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/photo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:text="@string/merchandise_photo"
+                        android:textColor="@color/btn_bouns_title"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        />
+                    <ImageView
+                        android:id="@+id/merchandise_photo1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/car_android"
+                        android:textColor="@color/address_devicename_txt"
+                        />
+                    <ImageView
+                        android:id="@+id/merchandise_photo2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/car_android"
+                        android:textColor="@color/address_devicename_txt"
                         />
                 </LinearLayout>
             </LinearLayout>
 
+   </ScrollView>
     <LinearLayout
-        android:id="@+id/change"
+        android:id="@+id/passeger_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:layout_below="@+id/info"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:visibility="gone"
         android:orientation="vertical"
         >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="20dp"
+        >
+        <TextView
+            android:id="@+id/txt_passeger_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/passenger_name"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:textColor="@color/btn_bouns_title"
+            android:textStyle="bold"
+            />
+        <TextView
+            android:id="@+id/passeger_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:layout_gravity="center_vertical"
+            android:text="鄭明成"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <TextView
+            android:id="@+id/passeger_comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:layout_gravity="center_vertical"
+            android:text="@string/merchandise_comment"
+            android:textColor="@color/sender_comment"
+            />
+
+    </LinearLayout>
         <LinearLayout
-            android:id="@+id/password"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             >
             <TextView
-                android:id="@+id/old_password"
+                android:id="@+id/passenger_departure"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text="@string/txt_courrent_passwod"
-                android:textColor="@color/address_devicename_txt"
+                android:paddingLeft="20dp"
+                android:text="@string/merchandise_departure"
+                android:textColor="@color/btn_bouns_title"
+                android:textStyle="bold"
+                android:textSize="@dimen/default_text_address_size_sp"
                 />
-            <EditText
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/passenger_address"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="middle"
+                android:ellipsize="end"
                 android:singleLine="true"
-                android:text=""
-
+                android:paddingLeft="20dp"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:layout_gravity="center_vertical"
+                android:text="台中火車站"
+                android:textColor="@color/address_devicename_txt"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
             android:orientation="horizontal"
             >
             <TextView
-                android:id="@+id/new_password"
+                android:id="@+id/passenger_destination"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text="@string/txt_new_passwod"
-                android:textColor="@color/address_devicename_txt"
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
+                android:text="@string/merchandise_destination"
+                android:textColor="@color/btn_bouns_title"
+                android:textSize="@dimen/default_text_address_size_sp"
                 />
-            <EditText
-                android:layout_width="fill_parent"
+            <TextView
+                android:id="@+id/passenger_address_destination"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="middle"
+                android:ellipsize="end"
                 android:singleLine="true"
-                android:text=""
-
+                android:paddingLeft="20dp"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:layout_gravity="center_vertical"
+                android:text="台中市政府"
+                android:textColor="@color/address_devicename_txt"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
+            android:paddingTop="10dp"
             android:orientation="horizontal"
             >
             <TextView
-                android:id="@+id/confirm_password"
+                android:id="@+id/passenger_reservation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text="@string/txt_passwod_confirm"
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
+                android:text="@string/reservation_date"
+                android:textColor="@color/btn_bouns_title"
+                android:textSize="@dimen/default_text_address_size_sp"
+                />
+            <TextView
+                android:id="@+id/passenger_reservation_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:paddingLeft="20dp"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:layout_gravity="center_vertical"
+                android:text="即時"
                 android:textColor="@color/address_devicename_txt"
                 />
-            <EditText
-                android:layout_width="fill_parent"
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/passenger_spec"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text=""
-
-
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
+                android:text="@string/merchandise_requirement"
+                android:textColor="@color/btn_bouns_title"
+                android:textSize="@dimen/default_text_address_size_sp"
+                />
+            <TextView
+                android:id="@+id/passenger_requirement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:paddingLeft="20dp"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:layout_gravity="center_vertical"
+                android:text="懂日語"
+                android:textColor="@color/address_devicename_txt"
                 />
         </LinearLayout>
-
-</LinearLayout>
-   
-
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="10dp"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/passenger_information"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:paddingLeft="20dp"
+                android:textStyle="bold"
+                android:text="@string/merchandise_spec"
+                android:textColor="@color/btn_bouns_title"
+                android:textSize="@dimen/default_text_address_size_sp"
+                />
+            <TextView
+                android:id="@+id/passenger_specInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@color/bg_gray"
+                android:textSize="@dimen/default_text_address_info_size_sp"
+                android:layout_gravity="center_vertical"
+                android:text=""
+                android:textColor="@color/address_devicename_txt"
+                />
+        </LinearLayout>
+    </LinearLayout>
 </RelativeLayout>

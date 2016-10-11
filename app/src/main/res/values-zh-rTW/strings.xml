@@ -20,6 +20,8 @@
     <string name="order_filter_page_title">訂單篩選</string>
     <string name="begin_order_page_title">開始接單</string>
     <string name="wait_order_page_title">待跑訂單</string>
+    <string name="merchandise_page_title">貨單資訊</string>
+    <string name="passenger_page_title">乘車資訊</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -166,6 +168,7 @@
     <string name="order_payment">960元(發貨方付款)</string>
     <string name="order_sender">發貨方 : </string>
     <string name="order_recevier">收貨方 : </string>
+    <string name="buyer">發貨方</string>
     <string name="order_departure_info">從 : </string>
     <string name="order_destination_info">到 : </string>
     <string name="order_date">2015/12/08 上午07:04</string>
@@ -187,5 +190,22 @@
     <string name="menu_cancel_order_warn">如果經常性或惡意取消訂單，可能會受到處罰</string>
     <string name="menu_cancel_order_reason">請選擇取消訂單的理由</string>
 
+    <!-- MerchandiseOrderActivity Control Panel-->
+    <string name="merchandise_comment">查看評價</string>
+    <string name="merchant">發貨方</string>
+    <string name="merchant＿buyer">付款方 : </string>
+    <string name="merchandise_departure">起始位置 : </string>
+    <string name="merchandise_destination">終點位置 : </string>
+    <string name="reservation_date">預約時間 : </string>
+    <string name="merchandise_content">貨物內容 : </string>
+    <string name="merchandise_weight">重量 : </string>
+    <string name="merchandise_unit">才數 : </string>
+    <string name="merchandise_requirement">特殊需求 : </string>
+    <string name="merchandise_fee">小費 : </string>
+    <string name="merchandise_spec">備註 : </string>
+    <string name="merchandise_photo">貨物照片 : </string>
+
+    <string name="passenger_name">叫車乘客 : </string>
+    <string name="take_order">接單</string>
 </resources>
 
