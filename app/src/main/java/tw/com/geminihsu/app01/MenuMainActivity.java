@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import tw.com.geminihsu.app01.fragment.Fragment_About;
@@ -25,6 +27,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01.fragment.Fragment_Service;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,
         Fragment_BeginOrderInteractive.OnListItemClickListener{
@@ -113,6 +116,16 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_wait:
+                        // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
+                        Fragment_BeginOrderInteractive wait = new Fragment_BeginOrderInteractive();
+                        android.support.v4.app.FragmentTransaction fragmentTransaction_wait = getSupportFragmentManager().beginTransaction();
+
+                        Bundle data = new Bundle();
+                        data.putBoolean(Constants.ARG_POSITION, true);
+                        wait.setArguments(data);
+
+                        fragmentTransaction_wait.replace(R.id.container, wait);
+                        fragmentTransaction_wait.commit();
 
                         return true;
 
@@ -222,7 +235,23 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     }
 
     @Override
-    public void onListItemClick(String title) {
-        Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+    public void onListItemClick(View v) {
+        //Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
+        Button take_prize = (Button) v.findViewById(R.id.btn_take);
+
+       /* take_prize.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(MenuMainActivity.this, BoundsRecordActivity.class);
+                Bundle b = new Bundle();
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });*/
+        Intent question = new Intent(MenuMainActivity.this, OrderProcesssActivity.class);
+        Bundle b = new Bundle();
+        question.putExtras(b);
+        startActivity(question);
     }
 }

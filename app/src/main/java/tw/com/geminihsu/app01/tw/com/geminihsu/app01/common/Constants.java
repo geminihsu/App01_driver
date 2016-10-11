@@ -8,8 +8,10 @@ public class Constants {
 
 	/** <code>ARG_POSITION</code> ARG_POSITION*/
 	final public static String ARG_POSITION = "position";
-	
 
+
+	final public static int CONTROL_PANNEL_MANUAL = 3;
+	final public static int CANCEL_ORDER_FEEDBACK = 4;
 
 }
 

@@ -2,14 +2,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white"
+    android:background="@color/bg_gray"
      >
 
     <ScrollView
         android:id="@+id/scrollview_manual_add_device"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="7dp"
         android:descendantFocusability="beforeDescendants"
         android:focusableInTouchMode="true" >
 
@@ -33,8 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:paddingTop="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp"
+                android:background="@color/white"
                 android:orientation="vertical"
                 android:visibility="gone"
+
                 >
                 <TextView
                     android:id="@+id/title"
@@ -118,9 +122,85 @@
                         />
                 </LinearLayout>
             </LinearLayout>
+        <LinearLayout
+            android:id="@+id/order_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingTop="20dp"
+            android:layout_marginTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:orientation="vertical"
+            android:visibility="gone"
+            >
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/txt_cancel_reason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/menu_cancel_order_reason"
+                    android:textSize="@dimen/default_text_address_size_sp"
+                    android:textColor="@color/btn_bouns_title"
+                    />
+                <Spinner android:id="@+id/reason"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:drawSelectorOnTop="true"
+                    />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                >
+                <TextView
+                    android:id="@+id/txt_cancel_reason_suggestion"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:ellipsize="middle"
+                    android:singleLine="true"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/txt_answer"
+                    android:textSize="@dimen/default_text_address_size_sp"
+                    android:textColor="@color/btn_bouns_title"
+                    />
+                <EditText
+                    android:layout_width="fill_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/white"
+                    android:verticalScrollbarPosition="left"
+                    android:text=""
 
+                    />
+            </LinearLayout>
         </LinearLayout>
-            
+            <TextView
+                android:id="@+id/manual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:layout_gravity="center_horizontal"
+                android:text="@string/txt_answer"
+                android:visibility="gone"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:textColor="@color/address_devicename_txt"
+                />
+        </LinearLayout>
+
     </ScrollView>
 
    

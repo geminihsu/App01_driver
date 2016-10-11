@@ -5,6 +5,7 @@ public class BeginOrderListItem {
     public String departure;
     public String destination;
     public String order_time="";
-
+    public String button_information="";
+    public Integer button_take_look_visible;
 
 }

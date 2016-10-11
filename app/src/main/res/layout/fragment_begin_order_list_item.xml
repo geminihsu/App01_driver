@@ -61,20 +61,25 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
+        android:layout_centerVertical="true"
         >
         <Button
+            android:id="@+id/take_look"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/btn_bouns_record"
             android:textColor="@color/white"
+            android:visibility="gone"
             android:text="@string/list_btn_take_look"
             />
         <Button
+            android:id="@+id/take_over"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/btn_bouns_upgrade"
             android:textColor="@color/white"
             android:text="@string/list_btn_take_over"
+
             />
     </LinearLayout>
 </RelativeLayout>

@@ -64,7 +64,7 @@ public class BeginOrderAdapter extends RecyclerView.Adapter<BeginOrderAdapter.Vi
             if (null != mListItemClickListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
-                mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()));
+                mListItemClickListener.onListItemClick(view);
             }
         }
     }

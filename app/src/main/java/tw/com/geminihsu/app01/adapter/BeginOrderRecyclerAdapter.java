@@ -4,9 +4,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
@@ -49,6 +49,10 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
         final String order_time = mItemsList.get(position).order_time;
         holder.order_time.setText(order_time);
 
+        final String btn_take = mItemsList.get(position).button_information;
+        holder.btn_take_over.setText(btn_take);
+
+        holder.btn_take_look.setVisibility(mItemsList.get(position).button_take_look_visible);
     }
 
    /* @Override
@@ -69,6 +73,9 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
         TextView destination;
         TextView order_time;
 
+        Button btn_take_look;
+        Button btn_take_over;
+
         /**
          * Constructor
          * @param v The container view which holds the elements from the row item xml
@@ -81,6 +88,9 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
             destination = (TextView) v.findViewById(R.id.destination);
             order_time = (TextView)v.findViewById(R.id.order_time);
 
+            btn_take_look = (Button) v.findViewById(R.id.take_look);
+            btn_take_over = (Button) v.findViewById(R.id.take_over);
+
             v.setOnClickListener(this);
         }
 
@@ -90,7 +100,7 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
             if (null != mListItemClickListener) {
                 // Notify the active callbacks interface (the activity, if the
                 // fragment is attached to one) that an item has been selected.
-                mListItemClickListener.onListItemClick(mItemsList.get(getAdapterPosition()).order_title);
+                mListItemClickListener.onListItemClick(view);
             }
         }
     }

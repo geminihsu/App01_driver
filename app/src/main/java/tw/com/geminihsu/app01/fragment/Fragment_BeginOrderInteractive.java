@@ -14,7 +14,8 @@ import java.util.List;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderRecyclerAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.orderDivider.DividerItemDecoration;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.beginOrderDivider.DividerItemDecoration;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_BeginOrderInteractive extends Fragment {
@@ -26,6 +27,8 @@ public class Fragment_BeginOrderInteractive extends Fragment {
      *
      * @return A new instance of fragment PageFragment.
      */
+
+    private boolean wait = false;
     public static Fragment_BeginOrderInteractive newInstance() {
         return new Fragment_BeginOrderInteractive();
     }
@@ -58,13 +61,26 @@ public class Fragment_BeginOrderInteractive extends Fragment {
             beginOrderListItem.order_title = "一般搭乘(小費:50元)";
             beginOrderListItem.departure = "從:台中市大道一段1號";
             beginOrderListItem.destination = "到:台中市政府";
-            beginOrderListItem.order_time = "即時";
+
+
+            if(!wait) {
+                beginOrderListItem.order_time = "即時";
+                beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
+                beginOrderListItem.button_take_look_visible = View.VISIBLE;
+            }else
+            {
+                beginOrderListItem.order_time = "2015-12-08 上午07:04";
+                beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                beginOrderListItem.button_take_look_visible = View.GONE;
+
+            }
             orderList.add(beginOrderListItem);
         }
 
         BeginOrderRecyclerAdapter adapter = new BeginOrderRecyclerAdapter(orderList);
         recyclerView.setAdapter(adapter);
         adapter.setOnItemTapListener(mListItemClickListener);
+
         return view;
     }
 
@@ -77,6 +93,13 @@ public class Fragment_BeginOrderInteractive extends Fragment {
             throw new ClassCastException(context.toString()
                     + " must implement OnListItemClickListener");
         }
+
+        Bundle data=getArguments();
+        if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
+        {
+            if(data.getBoolean(Constants.ARG_POSITION)==true)
+                    wait=true;
+        }
     }
 
     @Override
@@ -85,8 +108,19 @@ public class Fragment_BeginOrderInteractive extends Fragment {
         mListItemClickListener = null;
     }
 
+    @Override
+    public void onResume() {
+        if(wait)
+           getActivity().setTitle(getString(R.string.wait_order_page_title));
+        else
+            getActivity().setTitle(getString(R.string.begin_order_page_title));
+
+        super.onResume();
+
+
+    }
 
     public interface OnListItemClickListener {
-        void onListItemClick(String title);
+        void onListItemClick(View v);
     }
 }

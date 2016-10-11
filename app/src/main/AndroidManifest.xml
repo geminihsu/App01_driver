@@ -52,6 +52,9 @@
         <activity android:name=".DriverAccountActivity"
             android:label="@string/driver_account_page_title"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".OrderProcesssActivity"
+            android:label="@string/order_process_page_title"
+            android:configChanges="orientation|screenSize"/>
     </application>
 
 </manifest>
