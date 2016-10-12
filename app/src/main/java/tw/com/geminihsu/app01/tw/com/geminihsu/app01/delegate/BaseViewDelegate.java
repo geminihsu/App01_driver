@@ -6,7 +6,7 @@ import android.view.Menu;
 import tw.com.geminihsu.app01.R;
 
 public class BaseViewDelegate {
-	public void setActionBarItem(Menu menu)
+	public void setNavigationItem(Menu menu)
 	{
 		//先全部隱藏
 		menu.findItem(R.id.navigation_item_begin).setVisible(false);//駕駛開始接單頁面

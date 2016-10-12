@@ -28,20 +28,34 @@ import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01.fragment.Fragment_Service;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,
         Fragment_BeginOrderInteractive.OnListItemClickListener{
 
+    private MenuMainViewDelegateBase viewDelegateBase;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView navigationView;
     private ShareActionProvider mShareActionProvider;
 
 
+    private boolean isDriver = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity_main);
+         // 判斷要用哪一個Delegate
+        if (isDriver) {
+
+            viewDelegateBase = new MenuMainViewDelegateDriver(this);
+        } else {
+
+            viewDelegateBase = new MenuMainViewDelegateCustomer(this);
+        }
 
 
     }
@@ -70,6 +84,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.navigation_drawer);
+        viewDelegateBase.setNavigationItem(navigationView.getMenu());
         navigationView.setCheckedItem(0);
     }
 
@@ -92,65 +107,43 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                 //Closing drawer on item click
                 mDrawerLayout.closeDrawers();
 
+
                 //Check to see which item was being clicked and perform appropriate action
                 switch (menuItem.getItemId()) {
 
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_begin:
-                        Fragment_BeginOrder begin = new Fragment_BeginOrder();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction_begin = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction_begin.replace(R.id.container, begin);
-                        fragmentTransaction_begin.commit();
-
+                        viewDelegateBase.setNavigationItemOnClick_beginOrder();
                         return true;
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order_filter:
-                        Fragment_OrderFilter filter = new Fragment_OrderFilter();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction_filter = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction_filter.replace(R.id.container, filter);
-                        fragmentTransaction_filter.commit();
-
+                        viewDelegateBase.setNavigationItemOnClick_orderFilter();
                         return true;
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_wait:
-                        // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                        Fragment_BeginOrderInteractive wait = new Fragment_BeginOrderInteractive();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction_wait = getSupportFragmentManager().beginTransaction();
-
-                        Bundle data = new Bundle();
-                        data.putBoolean(Constants.ARG_POSITION, true);
-                        wait.setArguments(data);
-
-                        fragmentTransaction_wait.replace(R.id.container, wait);
-                        fragmentTransaction_wait.commit();
+                        viewDelegateBase.setNavigationItemOnClick_waitOrder();
 
                         return true;
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order_past:
+                        viewDelegateBase.setNavigationItemOnClick_pastOrder();
 
                         return true;
 
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order:
                         // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                        Fragment_Service fragment = new Fragment_Service();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.container, fragment);
-                        fragmentTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_service();
                         return true;
 
                     // For rest of the options we just show a toast on click
 
                     case R.id.navigation_item_order_record:
-                        //Toast.makeText(getApplicationContext(),"Stared Selected",Toast.LENGTH_SHORT).show();
-                        Fragment_OrderRecord order_history = new Fragment_OrderRecord();
-                        android.support.v4.app.FragmentTransaction order_historyTransaction = getSupportFragmentManager().beginTransaction();
-                        order_historyTransaction.replace(R.id.container, order_history);
-                        order_historyTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_pastOrder();
 
                         return true;
                     case R.id.navigation_item_support:
@@ -160,13 +153,11 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                         support_historyTransaction.commit();
                         return true;
                     case R.id.navigation_item_notification:
-                        Toast.makeText(getApplicationContext(), "Drafts Selected", Toast.LENGTH_SHORT).show();
+                        viewDelegateBase.setNavigationItemOnClick_notify();
+
                         return true;
                     case R.id.navigation_item_about:
-                        Fragment_About about = new Fragment_About();
-                        android.support.v4.app.FragmentTransaction about_historyTransaction = getSupportFragmentManager().beginTransaction();
-                        about_historyTransaction.replace(R.id.container, about);
-                        about_historyTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_about();
                         return true;
                     case R.id.navigation_item_share:
 
@@ -185,16 +176,10 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                         startActivity(Intent.createChooser(share, "share"));*/
                         return true;
                     case R.id.navigation_item_account:
-                        Fragment_Account account = new Fragment_Account();
-                        android.support.v4.app.FragmentTransaction account_historyTransaction = getSupportFragmentManager().beginTransaction();
-                        account_historyTransaction.replace(R.id.container, account);
-                        account_historyTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_account();
                         return true;
                     case R.id.navigation_item_bouns:
-                        Fragment_Bouns bouns = new Fragment_Bouns();
-                        android.support.v4.app.FragmentTransaction bounsTransaction = getSupportFragmentManager().beginTransaction();
-                        bounsTransaction.replace(R.id.container, bouns);
-                        bounsTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_bounds();
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
