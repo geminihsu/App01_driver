@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -42,20 +44,22 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     private ShareActionProvider mShareActionProvider;
 
 
-    private boolean isDriver = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity_main);
          // 判斷要用哪一個Delegate
-        if (isDriver) {
+        if (Constants.Driver) {
 
             viewDelegateBase = new MenuMainViewDelegateDriver(this);
         } else {
 
             viewDelegateBase = new MenuMainViewDelegateCustomer(this);
         }
+
+         // 加入主頁面fragment
+        viewDelegateBase.setContentLayoutFragment();
 
 
     }
@@ -184,6 +188,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;
+
 
                 }
             }

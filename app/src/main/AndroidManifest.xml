@@ -5,7 +5,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/login_page_title"
         android:supportsRtl="true"
         android:theme="@style/CustomTheme">
         <activity android:name=".MainActivity">
@@ -21,8 +21,10 @@
         <activity android:name=".RegisterActivity"
             android:label="@string/register_page_title"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".VerifyCodeActivity"
+            android:label="@string/verify_code_title"
+            android:configChanges="orientation|screenSize"/>
         <activity android:name=".MenuMainActivity"
-            android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".SupportAnswerActivity"

@@ -24,6 +24,7 @@
     <string name="order_process_page_title">訂單處理</string>
     <string name="merchandise_page_title">貨單資訊</string>
     <string name="passenger_page_title">乘車資訊</string>
+    <string name="verify_code_title">驗證碼</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -32,8 +33,8 @@
     <string name="app_name">App01</string>
     <string name="portal_login">Log In</string>
     <string name="portal_clean">Sign Out</string>
-    <string name="login_id_title">．cellphone</string>
-    <string name="login_password_title">．Password</string>
+    <string name="login_id_title">*cellphone</string>
+    <string name="login_password_title">*Password</string>
     <string name="hint_default_portal_id">phone number</string>
     <string name="hint_default_portal_password">Password</string>
     <string name="hint_test_portal_id">odaru@geovision.com.tw</string>
@@ -45,19 +46,21 @@
     <!--  forget password page -->
     <string name="txt_info">Get new password by message</string>
     <string name="resend_button">Re-Send Password</string>
-    <string name="txt_id">．身分證字號</string>
+    <string name="txt_id">*身分證</string>
 
     <!--  register page -->
-    <string name="txt_name_data">．姓名</string>
-    <string name="txt_id_data">．身分證字號</string>
-    <string name="txt_phone_data">．手機號碼</string>
-    <string name="txt_password_data">．登入密碼</string>
-    <string name="txt_password_confirm">．密碼確認</string>
+    <string name="txt_name_data">*姓名</string>
+    <string name="txt_id_data">*身分證字號</string>
+    <string name="txt_phone_data">*手機號碼</string>
+    <string name="txt_password_data">*登入密碼</string>
+    <string name="txt_password_confirm">*密碼確認</string>
     <string name="txt_recommdator_code">推薦人代號</string>
     <string name="hint_account_name">odaru@geovision.com.tw</string>
     <string name="hint_account_id">odaru123</string>
     <string name="send_valid_code_button">傳送驗證碼</string>
-    <string name="check_aggree">我同意隱私政策和會員規則</string>
+    <string name="check_aggree">我同意</string>
+    <string name="check_aggree_info">隱私政策和會員規則</string>
+
 
     <!-- MenuMainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -215,5 +218,12 @@
     <string name="dialog_get_on_car">已經上車</string>
     <string name="dialog_get_on_car_message">已記錄上車時間2015/12/08 上午07:04，恭喜您獲得績分200點</string>
     <string name="dialog_get_on_car_comfirm">確認</string>
+
+
+    <!-- VerifyCodeActivity Control Panel-->
+    <string name="txt_verify_code">請輸入4碼簡訊驗證碼</string>
+    <string name="txt_verify_code_warm">驗證碼將於60秒後失效</string>
+    <string name="txt_verify_code_warm_qestion"><u>沒收到簡訊驗證碼嗎？</u></string>
+    <string name="txt_verify_info">簡訊已發送</string>
 </resources>
 

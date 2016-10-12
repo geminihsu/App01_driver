@@ -2,14 +2,21 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class RegisterActivity extends Activity {
 
-    TextView txt_forget_password;
+    private TextView clause;
+    private Button verify;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,19 +30,40 @@ public class RegisterActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
+        setLister();
 
 
     }
 
     private void findViews()
     {
-        txt_forget_password = (TextView) findViewById(R.id.txt_forget_password);
+        clause = (TextView) findViewById(R.id.agree);
+        verify = (Button) findViewById(R.id.send_code);
     }
 
 
     private void setLister()
     {
+        clause.setOnClickListener(new View.OnClickListener() {
 
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(RegisterActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.CLAUSE);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+
+       verify.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
+                startActivity(question);
+            }
+        });
     }
 
     @Override

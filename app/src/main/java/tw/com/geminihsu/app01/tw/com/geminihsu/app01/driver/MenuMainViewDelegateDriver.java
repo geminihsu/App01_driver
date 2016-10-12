@@ -1,11 +1,13 @@
 package tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver;
 
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
@@ -20,7 +22,16 @@ public class MenuMainViewDelegateDriver extends MenuMainViewDelegateBase {
 
 	@Override
 	public void setContentLayoutFragment() {
+        // Instantiate a new fragment.
+		Fragment newFragment = new Fragment_BeginOrder();
 
+		FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
+		//if (mainActivity.getSupportFragmentManager().findFragmentByTag(MultiLiveView.PARENT_FRAGMENT_TAG_ID) == null) {
+			ft.add(R.id.container, newFragment);
+			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+			// ft.addToBackStack(Fragment_Liveview.class.getSimpleName());
+			ft.commit();
+		//}
 
 	}
 

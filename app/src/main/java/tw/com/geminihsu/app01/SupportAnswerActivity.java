@@ -92,16 +92,14 @@ public class SupportAnswerActivity extends Activity {
 
 
 
-    private void displayLayout()
-    {
-        if(choice == SupportAnswerActivity.SUGGESTION)
-        {
+    private void displayLayout() {
+        if (choice == SupportAnswerActivity.SUGGESTION) {
             getActionBar().setTitle(getString(R.string.suggestion_page_title));
             linearLayout_form.setVisibility(View.VISIBLE);
-        }
-        else if(choice == SupportAnswerActivity.CLAUSE)
+        } else if (choice == SupportAnswerActivity.CLAUSE){
             getActionBar().setTitle(getString(R.string.clause_page_title));
-        else if(choice == SupportAnswerActivity.QUESTION){
+        browser.setVisibility(View.VISIBLE);
+        } else if(choice == SupportAnswerActivity.QUESTION){
             getActionBar().setTitle(getString(R.string.question_page_title));
             browser.setVisibility(View.VISIBLE);
         }
