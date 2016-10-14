@@ -2,8 +2,11 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -90,6 +93,9 @@ public class DriverVerifyActivity extends Activity {
 
         if(choice== DriverVerifyActivity.SUGGESTION){
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.btn_finish));
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         return true;

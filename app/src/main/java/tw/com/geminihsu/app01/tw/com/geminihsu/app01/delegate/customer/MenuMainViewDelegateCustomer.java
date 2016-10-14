@@ -1,18 +1,13 @@
 package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer;
 
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
-import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
-import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
-import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
-import tw.com.geminihsu.app01.fragment.Fragment_Service;
+import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 
 public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
@@ -26,7 +21,7 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 	@Override
 	public void setContentLayoutFragment() {
 
-		Fragment newFragment = new Fragment_Service();
+		Fragment newFragment = new Fragment_Client_Service();
 
 		FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
 		//if (mainActivity.getSupportFragmentManager().findFragmentByTag(MultiLiveView.PARENT_FRAGMENT_TAG_ID) == null) {

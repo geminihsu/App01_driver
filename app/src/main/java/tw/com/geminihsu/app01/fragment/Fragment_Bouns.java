@@ -33,9 +33,6 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.BoundsRecordActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.SupportAnswerActivity;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
 import tw.com.geminihsu.app01.adapter.PrizeListItem;
 import tw.com.geminihsu.app01.adapter.PrizeListItemAdapter;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -45,6 +42,7 @@ public class Fragment_Bouns extends Fragment {
     private ListView listView;
     private final List<PrizeListItem> mPrizeListData = new ArrayList<PrizeListItem>();;
     private PrizeListItemAdapter listViewAdapter;
+    private Button record;
 
     private int MAXSIZE=10;
     @Override
@@ -59,7 +57,7 @@ public class Fragment_Bouns extends Fragment {
         //}
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.bouns_page_activity, container, false);
+        return inflater.inflate(R.layout.fragment_bouns, container, false);
     }
 
     @Override
@@ -81,7 +79,7 @@ public class Fragment_Bouns extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
+         getActivity().setTitle(getString(R.string.prize_record_page_title));
 
     }
 
@@ -94,7 +92,7 @@ public class Fragment_Bouns extends Fragment {
     private void findViews()
     {
         listView = (ListView) getView().findViewById(R.id.listView1);
-
+        record = (Button) getView().findViewById(R.id.bouns_record);
 
     }
 
@@ -111,14 +109,19 @@ public class Fragment_Bouns extends Fragment {
 
                     @Override
                     public void onClick(View v) {
-                        Intent question = new Intent(getActivity(), BoundsRecordActivity.class);
-                        Bundle b = new Bundle();
-                        b.putInt(Constants.ARG_POSITION, prize_position);
-                        question.putExtras(b);
-                        startActivity(question);
+
                     }
                 });
 
+            }
+        });
+
+        record.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(getActivity(), BoundsRecordActivity.class);
+                startActivity(question);
             }
         });
     }

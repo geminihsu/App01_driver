@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:rating="1"
+            android:rating="5"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
             android:isIndicator="true"
@@ -144,7 +144,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:enabled="false"
-            android:text=""
+            android:text="王小明"
 
 
             />
@@ -170,7 +170,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:enabled="false"
-            android:text=""
+            android:text="AZ-3368"
 
 
             />
@@ -196,7 +196,7 @@
             android:ellipsize="middle"
             android:singleLine="true"
             android:enabled="false"
-            android:text=""
+            android:text="091200000"
 
 
             />

@@ -14,7 +14,7 @@
     <string name="change_password_page_title">修改密碼</string>
     <string name="commmet_page_title">獲得評語</string>
     <string name="recommend_page_title">我推薦的好友</string>
-    <string name="prize_record_page_title">積分紀錄</string>
+    <string name="prize_record_page_title">積分獎勵</string>
     <string name="photo_verify_page_title">上傳證件</string>
     <string name="driver_account_page_title">編輯司機資料</string>
     <string name="order_filter_page_title">訂單篩選</string>
@@ -23,6 +23,11 @@
     <string name="merchandise_page_title">貨單資訊</string>
     <string name="passenger_page_title">乘車資訊</string>
     <string name="verify_code_title">驗證碼</string>
+    <string name="bouns_record_title">積分紀錄</string>
+    <string name="client_take_ride_title">一般搭乘</string>
+    <string name="client_book_marks_title">常用地點</string>
+    <string name="client_take_ride_search_title">通知司機中</string>
+
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -44,7 +49,7 @@
     <!--  forget password page -->
     <string name="txt_info">以簡訊傳送新密碼</string>
     <string name="resend_button">重新傳送新密碼</string>
-    <string name="txt_id">．身分證</string>
+    <string name="txt_id">*身分證</string>
 
     <!--  register page -->
     <string name="txt_name_data">*姓名</string>
@@ -76,7 +81,7 @@
     <string name="wallet">我的錢包</string>
     <string name="bouns">積分獎勵</string>
 
-    <!-- fragment_service -->
+    <!-- fragment_client_service -->
     <string name="service_info">請選擇需要的服務</string>
 
     <!-- SupportAnswerActivity -->
@@ -102,7 +107,7 @@
     <string name="txt_next_title">下一次升級</string>
     <string name="txt_next_time">01小時58分32秒</string>
     <string name="btn_upgrade">升級樹苗</string>
-    <string name="btn_next">下次領取</string>
+    <string name="btn_next">積分紀錄</string>
     <string name="default_title">車神</string>
     <string name="default_info">可以領取以下獎勵</string>
     <string name="txt_prize_info">獲取積分200點</string>
@@ -215,5 +220,28 @@
     <string name="txt_verify_code_warm">驗證碼將於60秒後失效</string>
     <string name="txt_verify_code_warm_qestion"><u>沒收到簡訊驗證碼嗎？</u></string>
     <string name="txt_verify_info">簡訊已發送</string>
+
+
+    <!-- ClientTakeRideActivity Control Panel-->
+    <string name="txt_take_ride">您好！您要去哪裡?</string>
+    <string name="txt_take_type">*類型：</string>
+    <string name="txt_take_real_time">即時</string>
+    <string name="txt_take_reservation">預約</string>
+    <string name="txt_take_time">*時間：</string>
+    <string name="txt_take_departure">起點：</string>
+    <string name="txt_take_stopby">停靠：</string>
+    <string name="txt_take_destination">*終點：</string>
+    <string name="pop_map_option1">從地圖輸入</string>
+    <string name="pop_map_option2">從常用輸入</string>
+    <string name="menu_take">叫車</string>
+    <string name="sure_take_spec">確認</string>
+    <string name="cancel_take_spec">取消</string>
+    <string name="menu_dialog_sure">確認單</string>
+    <string name="txt_take_spec">請選擇特殊需求：</string>
+
+    <!-- ClientOrderCarSearch -->
+    <string name="txt_search">正在為您叫車</string>
+    <string name="txt_fee">小費</string>
+
 </resources>
 

@@ -5,10 +5,10 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/login_page_title"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/CustomTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"  android:label="@string/login_page_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,7 +40,7 @@
             android:label="@string/recommend_page_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".BoundsRecordActivity"
-            android:label="@string/recommend_page_title"
+            android:label="@string/bouns_record_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".DriverIdentityActivity"
             android:label="@string/driver_idenity_page_title"
@@ -60,6 +60,25 @@
         <activity android:name=".MerchandiseOrderActivity"
             android:label="@string/merchandise_page_title"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".MapsActivity"
+            android:label="@string/merchandise_page_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ClientTakeRideActivity"
+            android:label="@string/client_take_ride_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".BookmarksMapListActivity"
+            android:label="@string/client_book_marks_title"
+            android:configChanges="orientation|screenSize"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
     </application>
+        <meta-data
+        android:name="com.google.android.gms.version"
+        android:value="@integer/google_play_services_version" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

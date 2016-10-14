@@ -17,7 +17,9 @@ limitations under the License.
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" android:id="@+id/main_layout">
+    android:orientation="vertical" android:id="@+id/main_layout"
+	android:background="@color/bg_gray"
+	>
 	<LinearLayout
 		android:id="@+id/camera1"
 		android:layout_width="match_parent"
@@ -27,7 +29,7 @@ limitations under the License.
 		android:layout_marginTop="20dp"
 		android:layout_marginLeft="20dp"
 		android:layout_marginRight="20dp"
-		android:background="@color/bg_gray"
+		android:background="@color/bg_light_gray"
 		>
 		</LinearLayout>
 
@@ -49,22 +51,32 @@ limitations under the License.
 		android:gravity="center_horizontal"
 		>
 		<ImageButton
+			android:id="@+id/normal"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_local_taxi"
+			/>
+		<ImageButton
 	        android:id="@+id/taxi"
 	        android:layout_width="100dp"
 	        android:layout_height="100dp"
-            android:src="@android:drawable/ic_menu_gallery"
+			android:background="@color/transparent"
+            android:src="@drawable/ic_maps_local_airport"
             />
 		<ImageButton
 			android:id="@+id/truck"
 			android:layout_width="100dp"
 			android:layout_height="100dp"
-			android:src="@android:drawable/ic_media_next"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_local_shipping"
 			/>
 		<ImageButton
 			android:id="@+id/bigtruck"
 			android:layout_width="100dp"
 			android:layout_height="100dp"
-			android:src="@android:drawable/ic_menu_myplaces"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_directions_ferry"
 			/>
       
     </LinearLayout>

@@ -15,10 +15,14 @@
  */
 package tw.com.geminihsu.app01.fragment;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +44,11 @@ import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.adapter.CommentListItem;
 import tw.com.geminihsu.app01.adapter.RecommendListItem;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.Fragment_AccountDelegateCustomer;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.Fragment_AccountDelegateDriver;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
 
 
 public class Fragment_Account extends Fragment {
@@ -47,6 +56,8 @@ public class Fragment_Account extends Fragment {
     private ListView listView;
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_LOGOUT = 0x0001;
+
+    private Fragment_AccountDelegateBase viewDelegateBase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -59,6 +70,7 @@ public class Fragment_Account extends Fragment {
          //   mCurrentPosition = savedInstanceState.getInt(Constants.ARG_POSITION);
         //}
 
+
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_support, container, false);
     }
@@ -66,12 +78,23 @@ public class Fragment_Account extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (Constants.Driver) {
 
+            viewDelegateBase = new Fragment_AccountDelegateDriver(this);
+        } else {
+
+            viewDelegateBase = new Fragment_AccountDelegateCustomer(this);
+        }
         this.findViews();
         this.setLister();
 
     }
 
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+    }
     @Override
     public void onResume() {
         getActivity().setTitle(getString(R.string.myaccount_page_title));
@@ -91,15 +114,12 @@ public class Fragment_Account extends Fragment {
         listView = (ListView) getView().findViewById(R.id.listView1);
 
 
-
-        Resources res =getResources();
-        String[] menu=res.getStringArray(R.array.myaccount);
+        String[] menu=viewDelegateBase.setListData();
         final ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < menu.length; ++i) {
             list.add(menu[i]);
         }
         ListAdapter adapter = new ArrayAdapter<>(getActivity() , android.R.layout.simple_list_item_1 ,menu);
-        //使用ListAdapter來顯示你輸入的文字
 
         listView.setAdapter(adapter);
 
@@ -110,17 +130,7 @@ public class Fragment_Account extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                if(position == 0) {
-                    Intent question = new Intent(getActivity(), ChangePasswordActivity.class);
-                    startActivity(question);
-                }else  if(position == 1) {
-                    Intent question = new Intent(getActivity(), CommentActivity.class);
-                    startActivity(question);
-                }else  if(position == 2) {
-                    Intent question = new Intent(getActivity(), RecommendActivity.class);
-                    startActivity(question);
-                }
-
+                viewDelegateBase.listViewOnItemClickListener(parent,v,position,id);
 
             }
         });
@@ -136,6 +146,10 @@ public class Fragment_Account extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_LOGOUT, Menu.NONE, getString(R.string.btn_logout));
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+        item.setTitle(spanString);
+
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         super.onCreateOptionsMenu(menu,inflater);
     }

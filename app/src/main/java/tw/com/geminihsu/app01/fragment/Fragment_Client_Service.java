@@ -16,28 +16,26 @@
 package tw.com.geminihsu.app01.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.SyncStateContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.R;
+import tw.com.geminihsu.app01.SupportAnswerActivity;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
-public class Fragment_Service extends Fragment {
+public class Fragment_Client_Service extends Fragment {
 	private TextView article ;
-	private ImageView mImageView ;
-	private ProgressDialog PDLoading ;
-	private int mCurrentPosition = -1;
-
-	private Handler handler = new Handler();
-
-	
-	private byte[] imagebuffer;
+	private ImageButton take_ride;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -51,56 +49,28 @@ public class Fragment_Service extends Fragment {
         //}
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_service, container, false);
+        return inflater.inflate(R.layout.fragment_client_service, container, false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         this.findViews();
-        getActivity().setTitle("");
+        setLister();
 
-        // During startup, check if there are arguments passed to the fragment.
-        // onStart is a good place to do this because the layout has already been
-        // applied to the fragment at this point so we can safely call the method
-        // below that sets the article text.
-        Bundle args = getArguments();
-        if (args != null) {
-            // Set article based on argument passed in
-           // updateArticleView(args.getInt(SyncStateContract.Constants.ARG_POSITION));
-        } else if (mCurrentPosition != -1) {
-            // Set article based on saved instance state defined during onCreateView
-            updateArticleView(mCurrentPosition);
-        }
-        
-     
-		
 		
     }
     
     @Override
 	public void onStop() {
 		super.onStop();
-		/*
-		 * Remove any pending posts of callbacks and sent messages whose obj is token. 
-		 * If token is null, all callbacks and messages will be removed."
-		 * */
-		handler.removeCallbacksAndMessages(null);
+
 	}
 
 	private void findViews()
     {
     	article = (TextView) getView().findViewById(R.id.service_info);
-    	//mImageView= (ImageView) getView().findViewById(R.id.mImageView);
-    	//設定所有view 的font size
-    	//View main_layout = (View)getView().findViewById(R.id.main_layout);
-		//DisplayUtil displayUtil=new DisplayUtil();
-		//displayUtil.setFontSize(main_layout, getResources().getDimension(R.dimen.default_text_size_px));
-    }
-    public void updateArticleView(int position) {
-        
-        article.setText("Camera"+position);
-        mCurrentPosition = position;
+        take_ride = (ImageButton) getView().findViewById(R.id.normal);
     }
 
     @Override
@@ -112,7 +82,17 @@ public class Fragment_Service extends Fragment {
     }
     
 	
+     private void setLister()
+     {
+         take_ride.setOnClickListener(new View.OnClickListener() {
 
+             @Override
+             public void onClick(View v) {
+                 Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                 startActivity(question);
+             }
+         });
+     }
 	
 
 

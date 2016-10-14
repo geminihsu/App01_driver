@@ -3,8 +3,11 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,6 +128,10 @@ public class MerchandiseOrderActivity extends Activity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.take_order));
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+        item.setTitle(spanString);
+
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return true;

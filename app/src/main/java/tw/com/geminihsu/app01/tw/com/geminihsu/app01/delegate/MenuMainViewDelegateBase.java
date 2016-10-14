@@ -10,13 +10,8 @@ import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01.fragment.Fragment_NotifyList;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
-import tw.com.geminihsu.app01.fragment.Fragment_Service;
+import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
@@ -75,11 +70,11 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	public void setNavigationItemOnClick_service() {
 		FragmentTransaction fragTran;
-		Fragment_Service frag2 = new Fragment_Service();
+		Fragment_Client_Service frag2 = new Fragment_Client_Service();
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
-		fragTran.replace(R.id.container, frag2, Fragment_Service.class.getSimpleName());
+		fragTran.replace(R.id.container, frag2, Fragment_Client_Service.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragTran.addToBackStack(Fragment_Service.class.getSimpleName());
+		fragTran.addToBackStack(Fragment_Client_Service.class.getSimpleName());
 		fragTran.commit();
 
 	}

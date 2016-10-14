@@ -5,8 +5,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -116,10 +119,7 @@ public class OrderProcesssActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-                question.putExtras(b);
+                Intent question = new Intent(OrderProcesssActivity.this, MapsActivity.class);
                 startActivity(question);
             }
         });
@@ -127,10 +127,7 @@ public class OrderProcesssActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-                question.putExtras(b);
+                Intent question = new Intent(OrderProcesssActivity.this, MapsActivity.class);
                 startActivity(question);
             }
         });
@@ -219,6 +216,10 @@ public class OrderProcesssActivity extends Activity {
 
 
         MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_CANCEL, Menu.NONE, getString(R.string.menu_cancel_order));
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+        item.setTitle(spanString);
+
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         return true;

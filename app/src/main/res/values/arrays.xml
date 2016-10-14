@@ -19,4 +19,15 @@
                 <item>上傳證件</item>
                 <item>我推薦的好友</item>
         　　    </string-array>
+             <string-array name="client_take_ride_requirement">
+        　　    <item>包車</item>
+                <item>五年新車</item>
+        　　    <item>無障礙</item>
+               <item>無吸菸</item>
+               <item>女司機</item>
+               <item>可載寵物</item>
+               <item>兒童座椅</item>
+               <item>懂英文</item>
+               <item>懂日文</item>
+        　　    </string-array>
  </resources>
