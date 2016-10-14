@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 public class Fragment_Client_Service extends Fragment {
 	private TextView article ;
 	private ImageButton take_ride;
+    private ImageButton air_plane;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -71,6 +73,7 @@ public class Fragment_Client_Service extends Fragment {
     {
     	article = (TextView) getView().findViewById(R.id.service_info);
         take_ride = (ImageButton) getView().findViewById(R.id.normal);
+        air_plane = (ImageButton) getView().findViewById(R.id.airplane);
     }
 
     @Override
@@ -92,6 +95,23 @@ public class Fragment_Client_Service extends Fragment {
                  startActivity(question);
              }
          });
+
+
+         air_plane.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+             public void onClick(View v) {
+                 Fragment newFragment = new Fragment_BeginOrder();
+                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                 transaction.replace(R.id.container, newFragment);
+                 transaction.addToBackStack(null);
+
+                 transaction.commit();
+             }
+         });
+
+
      }
 	
 

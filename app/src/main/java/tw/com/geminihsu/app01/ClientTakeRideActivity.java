@@ -232,9 +232,8 @@ public class ClientTakeRideActivity extends Activity {
                         })
                         .setNegativeButton(getString(R.string.sure_take_spec),new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // if this button is clicked, just close
-                                // the dialog box and do nothing
-                                dialog.cancel();
+                                Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
+                                startActivity(question);
                             }
                         });
 

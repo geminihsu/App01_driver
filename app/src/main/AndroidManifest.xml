@@ -69,6 +69,12 @@
         <activity android:name=".BookmarksMapListActivity"
             android:label="@string/client_book_marks_title"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ClientWaitCarActivity"
+            android:label="@string/client_take_ride_title"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".ClientTakeRideSearchActivity"
+            android:label="@string/client_take_ride_title"
+            android:configChanges="orientation|screenSize"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />

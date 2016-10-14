@@ -250,5 +250,20 @@
     <!-- ClientOrderCarSearch -->
     <string name="txt_search">正在為您叫車</string>
     <string name="txt_fee">小費</string>
+
+
+    <!-- ClientOrderCarWait -->
+    <string name="txt_wait">稍後，司機正趕來接您</string>
+    <string name="txt_car_type">車型</string>
+    <string name="txt_car_brand">車牌</string>
+    <string name="txt_car_distance">距您0.8</string>
+    <string name="txt_car_unit">公里</string>
+    <string name="txt_car_location">司機在哪</string>
+    <string name="txt_car_fee">小費50元</string>
+    <string name="txt_car_payment">計費方式採跳錶收費</string>
+    <string name="txt_car_share">分享乘車資訊</string>
+    <string name="txt_car_online">線上支付</string>
+
+    <string name="txt_cancel_order">取消叫車</string>
 </resources>
 
