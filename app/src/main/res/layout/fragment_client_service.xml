@@ -58,13 +58,6 @@ limitations under the License.
 			android:src="@drawable/ic_maps_local_taxi"
 			/>
 		<ImageButton
-	        android:id="@+id/airplane"
-	        android:layout_width="100dp"
-	        android:layout_height="100dp"
-			android:background="@color/transparent"
-            android:src="@drawable/ic_maps_local_airport"
-            />
-		<ImageButton
 			android:id="@+id/truck"
 			android:layout_width="100dp"
 			android:layout_height="100dp"
@@ -78,7 +71,13 @@ limitations under the License.
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_directions_ferry"
 			/>
-      
+		<ImageButton
+			android:id="@+id/airplane"
+			android:layout_width="100dp"
+			android:layout_height="100dp"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_local_airport"
+			/>
     </LinearLayout>
 
 </LinearLayout>

@@ -37,6 +37,7 @@ import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 public class Fragment_Client_Service extends Fragment {
 	private TextView article ;
 	private ImageButton take_ride;
+    private ImageButton send_merchandise;
     private ImageButton air_plane;
 	
     @Override
@@ -73,6 +74,7 @@ public class Fragment_Client_Service extends Fragment {
     {
     	article = (TextView) getView().findViewById(R.id.service_info);
         take_ride = (ImageButton) getView().findViewById(R.id.normal);
+        send_merchandise = (ImageButton) getView().findViewById(R.id.truck);
         air_plane = (ImageButton) getView().findViewById(R.id.airplane);
     }
 
@@ -92,16 +94,29 @@ public class Fragment_Client_Service extends Fragment {
              @Override
              public void onClick(View v) {
                  Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                 Bundle b = new Bundle();
+                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.TAKE_RIDE);
+                 question.putExtras(b);
                  startActivity(question);
              }
          });
 
+         send_merchandise.setOnClickListener(new View.OnClickListener() {
 
+             @Override
+             public void onClick(View v) {
+                 Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                 Bundle b = new Bundle();
+                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.SEND_MERCHANDISE);
+                 question.putExtras(b);
+                 startActivity(question);
+             }
+         });
          air_plane.setOnClickListener(new View.OnClickListener() {
 
              @Override
              public void onClick(View v) {
-                 Fragment newFragment = new Fragment_BeginOrder();
+                 Fragment newFragment = new Fragment_ClientAirPlanePickUp();
                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                  transaction.replace(R.id.container, newFragment);

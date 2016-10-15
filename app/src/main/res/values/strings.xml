@@ -29,6 +29,14 @@
     <string name="client_take_ride_title">一般搭乘</string>
     <string name="client_book_marks_title">常用地點</string>
     <string name="client_take_ride_search_title">通知司機中</string>
+    <string name="client_order_car_wait_title">司機趕路中</string>
+    <string name="client_order_car_sms_title">簡訊通知</string>
+    <string name="client_airplane_pick_up">機場接送</string>
+    <string name="client_merchandise_insurance_title">保險說明</string>
+    <string name="client_merchandise_restrict_title">貨物限制</string>
+    <string name="client_merchanse_send_title">貨物快送</string>
+    <string name="driver_price_report_title">司機報價中</string>
+    <string name="driver_price_report_check_title">司機資訊</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -200,6 +208,8 @@
     <string name="menu_sure_cancel_order">仍要取消</string>
     <string name="menu_cancel_order_warn">如果經常性或惡意取消訂單，可能會受到處罰</string>
     <string name="menu_cancel_order_reason">請選擇取消訂單的理由</string>
+    <string name="menu_send_sms_txt">將搭車訊息傳給熟人確保安全</string>
+    <string name="menu_send_sms_txt_content">簡訊內容</string>
 
     <!-- MerchandiseOrderActivity Control Panel-->
     <string name="merchandise_comment">查看評價</string>
@@ -224,6 +234,16 @@
     <string name="dialog_get_on_car_comfirm">確認</string>
 
 
+    <string name="merchandise_insurance">加保貨險 : </string>
+
+
+    <string name="merchandise_insurance_yes">是</string>
+    <string name="merchandise_insurance_no">否</string>
+
+    <string name="merchandise_unit_count"><u>才數計算</u></string>
+    <string name="merchandise_restrict"><u>貨物限制</u></string>
+    <string name="merchandise_insurance_info"><u>保險說明</u></string>
+
     <!-- VerifyCodeActivity Control Panel-->
     <string name="txt_verify_code">請輸入4碼簡訊驗證碼</string>
     <string name="txt_verify_code_warm">驗證碼將於60秒後失效</string>
@@ -232,6 +252,7 @@
 
     <!-- ClientTakeRideActivity Control Panel-->
     <string name="txt_take_ride">您好！您要去哪裡?</string>
+    <string name="txt_send_merchandise">選擇站點</string>
     <string name="txt_take_type">*類型：</string>
     <string name="txt_take_real_time">即時</string>
     <string name="txt_take_reservation">預約</string>
@@ -243,6 +264,7 @@
     <string name="pop_map_option2">從常用輸入</string>
     <string name="menu_take">叫車</string>
     <string name="sure_take_spec">確認</string>
+    <string name="sure_ok">確定</string>
     <string name="cancel_take_spec">取消</string>
     <string name="menu_dialog_sure">確認單</string>
     <string name="txt_take_spec">請選擇特殊需求：</string>
@@ -250,7 +272,9 @@
     <!-- ClientOrderCarSearch -->
     <string name="txt_search">正在為您叫車</string>
     <string name="txt_fee">小費</string>
-
+    <string name="txt_report_price">已有三名司機報價</string>
+    <string name="txt_add_fee">增加小費</string>
+    <string name="txt_price">報價：1000元</string>
 
     <!-- ClientOrderCarWait -->
     <string name="txt_wait">稍後，司機正趕來接您</string>
@@ -265,5 +289,13 @@
     <string name="txt_car_online">線上支付</string>
 
     <string name="txt_cancel_order">取消叫車</string>
+
+    <!-- SendMerchandise -->
+    <string name="send_merchandise_info">收貨人資訊</string>
+    <string name="send_merchandise_phone">*電話</string>
+    <string name="send_merchandise_buyer">*付款方</string>
+    <string name="send_merchandise_send">送貨方</string>
+    <string name="send_merchandise_recevid">收貨方</string>
+
 </resources>
 

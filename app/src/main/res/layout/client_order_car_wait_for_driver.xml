@@ -15,6 +15,7 @@
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/default_text_address_size_sp"
         android:text="@string/txt_wait"
+        android:textColor="@color/btn_bouns_title"
         android:linksClickable="true"
         />
 
@@ -130,6 +131,7 @@
                 android:textColor="@color/address_devicename_txt"
                 />
             <Button
+                android:id="@+id/location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
@@ -186,6 +188,7 @@
             >
 
             <Button
+                android:id="@+id/share"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_car_share"

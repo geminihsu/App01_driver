@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="match_parent"
     android:background="@color/bg_gray"
      >
 
@@ -186,7 +186,80 @@
 
                     />
             </LinearLayout>
+
         </LinearLayout>
+            <LinearLayout
+                android:id="@+id/order_sms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:paddingTop="20dp"
+                android:layout_marginTop="20dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:orientation="vertical"
+                android:visibility="gone"
+                >
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+                    <TextView
+                        android:id="@+id/txt_msg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/menu_send_sms_txt"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:textColor="@color/btn_bouns_title"
+                        />
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:verticalScrollbarPosition="left"
+                        android:textColor="@color/bg_gray"
+                        android:text="0915129198"
+
+                        />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp"
+                    >
+                    <TextView
+                        android:id="@+id/sms_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="fill_parent"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:layout_gravity="center_horizontal"
+                        android:text="@string/menu_send_sms_txt_content"
+                        android:textSize="@dimen/default_text_address_size_sp"
+                        android:textColor="@color/btn_bouns_title"
+                        />
+                    <EditText
+                        android:layout_width="fill_parent"
+                        android:layout_height="200dp"
+                        android:layout_marginTop="20dp"
+                        android:paddingTop="20dp"
+                        android:background="@color/white"
+                        android:gravity="center_horizontal"
+                        android:textColor="@color/bg_gray"
+                        android:verticalScrollbarPosition="left"
+                        android:text="我在2015年12月15日上午09:00搭乘車牌EHE-530車輛，從台中火車站前往台中市政府。"
+
+                        />
+                </LinearLayout>
+
+            </LinearLayout>
             <TextView
                 android:id="@+id/manual"
                 android:layout_width="wrap_content"

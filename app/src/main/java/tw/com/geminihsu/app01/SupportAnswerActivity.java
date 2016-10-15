@@ -28,6 +28,7 @@ public class SupportAnswerActivity extends Activity {
     private WebView browser;
     private LinearLayout linearLayout_form;
     private LinearLayout linearLayout_cancel_order;
+    private LinearLayout linearLayout_sms_report;
     private TextView manual;
     private Spinner spinner_reason;
     private ArrayAdapter arrayAdapter_reason;
@@ -38,6 +39,9 @@ public class SupportAnswerActivity extends Activity {
     final public static int SUGGESTION= 2;
     final public static int MANUAL= 3;
     final public static int CANCEL_FEEDBACK= 4;
+    final public static int SMS_REPORT= 5;
+    final public static int INSURANCE_INFO =6;
+    final public static int MERCHANDISE_RESTRICT= 7;
 
     private int choice = 0;
 
@@ -83,6 +87,8 @@ public class SupportAnswerActivity extends Activity {
         browser.setWebViewClient(new MyBrowser("www.google.com"));
         linearLayout_form = (LinearLayout) findViewById(R.id.form);
         linearLayout_cancel_order= (LinearLayout) findViewById(R.id.order_cancel);
+        linearLayout_sms_report = (LinearLayout) findViewById(R.id.order_sms);
+
         manual = (TextView) findViewById(R.id.manual);
 
         spinner_reason = (Spinner)findViewById(R.id.reason);
@@ -105,6 +111,12 @@ public class SupportAnswerActivity extends Activity {
         } else if(choice == SupportAnswerActivity.QUESTION){
             getActionBar().setTitle(getString(R.string.question_page_title));
             browser.setVisibility(View.VISIBLE);
+        }else if(choice == SupportAnswerActivity.INSURANCE_INFO){
+            getActionBar().setTitle(getString(R.string.client_merchandise_insurance_title));
+            browser.setVisibility(View.VISIBLE);
+        }else if(choice == SupportAnswerActivity.MERCHANDISE_RESTRICT){
+            getActionBar().setTitle(getString(R.string.client_merchandise_restrict_title));
+            browser.setVisibility(View.VISIBLE);
         }
         else if(choice == SupportAnswerActivity.MANUAL){
             getActionBar().setTitle(getString(R.string.order_pannel_info));
@@ -113,6 +125,10 @@ public class SupportAnswerActivity extends Activity {
         } else if(choice == SupportAnswerActivity.CANCEL_FEEDBACK){
             getActionBar().setTitle(getString(R.string.menu_cancel_order));
             linearLayout_cancel_order.setVisibility(View.VISIBLE);
+
+        }else if(choice == SupportAnswerActivity.SMS_REPORT){
+            getActionBar().setTitle(getString(R.string.menu_send_sms_txt_content));
+            linearLayout_sms_report.setVisibility(View.VISIBLE);
 
         }
     }
@@ -126,7 +142,7 @@ public class SupportAnswerActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(choice== SupportAnswerActivity.SUGGESTION){
+        if(choice== SupportAnswerActivity.SUGGESTION || choice== SupportAnswerActivity.SMS_REPORT){
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.btn_send));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
@@ -148,11 +164,16 @@ public class SupportAnswerActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                Intent question = new Intent(SupportAnswerActivity.this, MerchandiseOrderActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-                question.putExtras(b);
-                startActivity(question);
+                if(choice== SupportAnswerActivity.SUGGESTION) {
+                    Intent question = new Intent(SupportAnswerActivity.this, MerchandiseOrderActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                    question.putExtras(b);
+                    startActivity(question);
+                }else if(choice== SupportAnswerActivity.SMS_REPORT)
+                {
+                    finish();
+                }
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

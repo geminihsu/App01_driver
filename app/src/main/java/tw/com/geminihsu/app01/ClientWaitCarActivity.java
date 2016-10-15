@@ -2,6 +2,8 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -10,8 +12,22 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import tw.com.geminihsu.app01.adapter.CommentListItem;
+import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
+import tw.com.geminihsu.app01.adapter.DriverReportPriceListItem;
+import tw.com.geminihsu.app01.adapter.DriverReportPriceListItemAdapter;
+import tw.com.geminihsu.app01.adapter.RecommendListItem;
+import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class ClientWaitCarActivity extends Activity {
@@ -19,14 +35,14 @@ public class ClientWaitCarActivity extends Activity {
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
 
-    private LinearLayout linearLayout_form;
+    private ImageView checkdriver;
+    private Button checklocation;
+    private Button shareTakeInfo;
 
-    final public static int QUESTION = 0;
 
-    final public static int CLAUSE = 1;
-    final public static int SUGGESTION= 2;
 
-    private int choice = 0;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,20 +59,7 @@ public class ClientWaitCarActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
-        Bundle bundle = this.getIntent().getExtras();
-        if (bundle != null) {
-            if (bundle.containsKey(Constants.ARG_POSITION)){
-                choice = bundle.getInt(Constants.ARG_POSITION);
-                displayLayout();
-            }else
-            {
-                //Error!!!!
-            }
-        }
-        else
-        {
-            //Error!!!!
-        }
+
         this.setLister();
 
 
@@ -66,22 +69,76 @@ public class ClientWaitCarActivity extends Activity {
 
     private void findViews()
     {
-        linearLayout_form = (LinearLayout) findViewById(R.id.form);
-
-
+        checkdriver = (ImageView) findViewById(R.id.name);
+        checklocation = (Button) findViewById(R.id.location);
+        shareTakeInfo = (Button) findViewById(R.id.share);
     }
 
-
-
-    private void displayLayout()
-    {
-
-    }
 
     private void setLister()
     {
+        checkdriver.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(ClientWaitCarActivity.this, DriverAccountActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+
+        checklocation.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(ClientWaitCarActivity.this, MapsActivity.class);
+                startActivity(question);
+            }
+        });
+
+        shareTakeInfo.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ClientWaitCarActivity.this);
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ClientWaitCarActivity.this,
+                android.R.layout.select_dialog_item);
+        arrayAdapter.add(getString(R.string.txt_share_sms));
+        arrayAdapter.add(getString(R.string.txt_share_line));
+        arrayAdapter.add(getString(R.string.txt_share_email));
+
+
+                builderSingle.setAdapter(
+                arrayAdapter,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+
+                        switch (which){
+                            case 0:
+                                Intent question = new Intent(ClientWaitCarActivity.this, SupportAnswerActivity.class);
+                                Bundle b = new Bundle();
+                                b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.SMS_REPORT);
+                                question.putExtras(b);
+                                startActivity(question);
+                                break;
+                            case 1:
+                                Intent page = new Intent(ClientWaitCarActivity.this, BookmarksMapListActivity.class);
+                                startActivity(page);
+                                break;
+                        }
+                    }
+                });
+        builderSingle.show();
+            }
+        });
 
     }
+
 
 
     @Override

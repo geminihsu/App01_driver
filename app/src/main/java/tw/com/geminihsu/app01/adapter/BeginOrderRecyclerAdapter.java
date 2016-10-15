@@ -11,12 +11,15 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.R;
+import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlaneInteractive;
 
 
 public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRecyclerAdapter.ViewHolder> {
 
     private List<BeginOrderListItem> mItemsList;
     private Fragment_BeginOrderInteractive.OnListItemClickListener mListItemClickListener;
+    private Fragment_ClientAirPlaneInteractive.OnListItemClickListener mListItemClickListener2;
+
 
     public BeginOrderRecyclerAdapter(List<BeginOrderListItem> itemsList) {
         mItemsList = itemsList;
@@ -102,10 +105,20 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
                 // fragment is attached to one) that an item has been selected.
                 mListItemClickListener.onListItemClick(view);
             }
+
+            if (null != mListItemClickListener2) {
+                // Notify the active callbacks interface (the activity, if the
+                // fragment is attached to one) that an item has been selected.
+                mListItemClickListener2.onListItemClick(view);
+            }
         }
     }
 
     public void setOnItemTapListener(Fragment_BeginOrderInteractive.OnListItemClickListener itemClickListener) {
         mListItemClickListener = itemClickListener;
+    }
+
+    public void setOnItemTapListener(Fragment_ClientAirPlaneInteractive.OnListItemClickListener itemClickListener) {
+        mListItemClickListener2 = itemClickListener;
     }
 }

@@ -4,21 +4,19 @@
     android:layout_height="fill_parent"
     android:background="@color/bg_gray"
     >
-
-
     <TextView
-        android:id="@+id/txt_forget_password"
-        android:paddingTop="20dp"
-        android:layout_marginLeft="20dp"
+        android:id="@+id/merchandise_txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:ellipsize="middle"
+        android:singleLine="true"
+        android:paddingLeft="20dp"
+        android:layout_marginTop="10dp"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/default_text_address_size_sp"
-        android:text="@string/txt_search"
+        android:text="@string/send_merchandise_info"
         android:textColor="@color/btn_bouns_title"
-        android:linksClickable="true"
         />
-
 
     <LinearLayout
         android:id="@+id/info"
@@ -28,7 +26,6 @@
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_below="@+id/txt_forget_password"
         android:orientation="vertical"
         >
         <LinearLayout
@@ -44,7 +41,7 @@
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:paddingLeft="20dp"
-                android:text="@string/login_id_title"
+                android:text="@string/txt_name_data"
                 android:textColor="@color/address_devicename_txt"
                 />
             <EditText
@@ -52,7 +49,33 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text=""
+                android:text="林添財"
+
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:id="@+id/id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:paddingLeft="20dp"
+                android:text="@string/send_merchandise_phone"
+                android:textColor="@color/address_devicename_txt"
+                />
+            <EditText
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="091185566"
 
                 />
         </LinearLayout>
@@ -63,64 +86,38 @@
             android:paddingBottom="20dp"
             >
             <TextView
-                android:id="@+id/id"
+                android:id="@+id/txt_buy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:paddingLeft="20dp"
-                android:text="@string/login_password_title"
+                android:layout_gravity="center_vertical"
+                android:text="@string/send_merchandise_buyer"
                 android:textColor="@color/address_devicename_txt"
                 />
-            <EditText
-                android:layout_width="fill_parent"
+            <RadioGroup
+                android:id="@+id/pay_people"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text=""
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal" >
 
-                />
+                <RadioButton
+                    android:id="@+id/insurance_yes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bg_gray"
+                    android:checked="true"
+                    android:text="@string/send_merchandise_send" />
+
+                <RadioButton
+                    android:id="@+id/insurance_no"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/bg_gray"
+                    android:text="@string/send_merchandise_recevid" />
+            </RadioGroup>
         </LinearLayout>
     </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/password"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@+id/info"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:paddingTop="20dp"
-            >
-
-            <TextView
-                android:id="@+id/fee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:paddingLeft="20dp"
-                android:text="@string/txt_fee"
-                android:textColor="@color/address_devicename_txt"
-                />
-            <Spinner android:id="@+id/truck_location"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:drawSelectorOnTop="true"
-                />
-        </LinearLayout>
-
-    <ListView
-        android:id="@+id/listView1"
-        android:layout_below="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:descendantFocusability="blocksDescendants"
-        android:drawSelectorOnTop="false" />
-
 </RelativeLayout>

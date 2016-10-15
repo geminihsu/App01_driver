@@ -6,6 +6,7 @@
     android:paddingLeft="5dp"
     android:orientation="vertical"
     android:background="@color/white" >
+
     <LinearLayout
         android:id="@+id/linearLayout_record"
         android:layout_width="wrap_content"
@@ -202,6 +203,7 @@
             />
     </LinearLayout>
     <LinearLayout
+        android:id="@+id/spec"
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -216,6 +218,8 @@
             android:text="@string/driver_service_spec"
             android:textColor="@color/address_devicename_txt"
             />
+
+
         <EditText
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -227,6 +231,81 @@
 
             />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/driver_service"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:paddingLeft="10dp"
+        android:layout_toLeftOf="@+id/imagestatusPannel"
+        android:layout_toRightOf="@id/imagePannel"
+        android:visibility="gone"
+        android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cameranumber"
+            android:textColor="@color/white"
+            android:text="123"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cameranumber"
+            android:textColor="@color/white"
+            android:text="123"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cameranumber"
+            android:textColor="@color/white"
+            android:text="123"
+            />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_cameranumber"
+            android:textColor="@color/white"
+            android:text="123"
+            />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_cameranumber"
+                android:textColor="@color/white"
+                android:text="123"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_cameranumber"
+                android:textColor="@color/white"
+                android:text="123"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_cameranumber"
+                android:textColor="@color/white"
+                android:text="123"
+                />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_cameranumber"
+                android:textColor="@color/white"
+                android:text="123"
+                />
+        </LinearLayout>
+        </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="match_parent"

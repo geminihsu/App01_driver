@@ -9,6 +9,7 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -22,8 +23,7 @@ public class DriverAccountActivity extends Activity {
 
     final public static int QUESTION = 0;
 
-    final public static int CLAUSE = 1;
-    final public static int SUGGESTION= 2;
+    final public static int DRIVER_SERVICE = 1;
 
     private int choice = 0;
 
@@ -65,7 +65,7 @@ public class DriverAccountActivity extends Activity {
 
     private void findViews()
     {
-        linearLayout_form = (LinearLayout) findViewById(R.id.form);
+        linearLayout_form = (LinearLayout) findViewById(R.id.driver_service);
 
 
     }
@@ -74,7 +74,11 @@ public class DriverAccountActivity extends Activity {
 
     private void displayLayout()
     {
-
+         if(choice == DRIVER_SERVICE)
+         {
+             linearLayout_form.setVisibility(View.VISIBLE);
+             getActionBar().setTitle(getString(R.string.driver_price_report_check_title));
+         }
     }
 
     private void setLister()
@@ -86,8 +90,8 @@ public class DriverAccountActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(choice== DriverAccountActivity.SUGGESTION){
-            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.driver_account_save));
+        if(choice== DriverAccountActivity.DRIVER_SERVICE){
+            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.menu_take));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
             item.setTitle(spanString);

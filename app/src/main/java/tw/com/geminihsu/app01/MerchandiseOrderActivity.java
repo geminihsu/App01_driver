@@ -22,15 +22,18 @@ public class MerchandiseOrderActivity extends Activity {
     private final int ACTIONBAR_MENU_ITEM_TAKE = 0x0001;
 
     private LinearLayout linearLayout_merchandise;
+    private LinearLayout linearLayout_send_merchandise;
     private LinearLayout linearLayout_passenger;
 
 
     private TextView driver_comment;
     private TextView passenger_comment;
+    private TextView insurance_info;
+    private TextView merchandise_restrict;
 
     final public static int MERCHANDISE = 0;
-
-    final public static int PASSENGER = 1;
+    final public static int SEND_MERCHANDISE = 1;
+    final public static int PASSENGER = 2;
 
     private int choice = 0;
 
@@ -73,10 +76,13 @@ public class MerchandiseOrderActivity extends Activity {
     private void findViews()
     {
         linearLayout_merchandise = (LinearLayout) findViewById(R.id.merchandise_info);
-
+        linearLayout_send_merchandise= (LinearLayout) findViewById(R.id.send_merchandise_info);
         linearLayout_passenger = (LinearLayout) findViewById(R.id.passeger_info);
         driver_comment = (TextView) findViewById(R.id.comment);
         passenger_comment = (TextView) findViewById(R.id.passeger_comment);
+        insurance_info = (TextView) findViewById(R.id.insurance_inform);
+        merchandise_restrict = (TextView) findViewById(R.id.send_merchandise_restrict);
+
     }
 
 
@@ -88,7 +94,13 @@ public class MerchandiseOrderActivity extends Activity {
             linearLayout_merchandise.setVisibility(View.VISIBLE);
             getActionBar().setTitle(getString(R.string.merchandise_page_title));
 
-        }else if(choice == PASSENGER)
+        }else if(choice == SEND_MERCHANDISE)
+        {
+            linearLayout_send_merchandise.setVisibility(View.VISIBLE);
+            getActionBar().setTitle(getString(R.string.client_send_merchandise_title));
+
+        }
+        else if(choice == PASSENGER)
         {
             linearLayout_passenger.setVisibility(View.VISIBLE);
             getActionBar().setTitle(getString(R.string.passenger_page_title));
@@ -121,18 +133,51 @@ public class MerchandiseOrderActivity extends Activity {
                 startActivity(question);
             }
         });
+
+        insurance_info.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(MerchandiseOrderActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.INSURANCE_INFO);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        merchandise_restrict.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(MerchandiseOrderActivity.this, SupportAnswerActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.MERCHANDISE_RESTRICT);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.take_order));
-        SpannableString spanString = new SpannableString(item.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
-        item.setTitle(spanString);
+        if(choice ==SEND_MERCHANDISE)
+        {
+            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.sure_ok));
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else
+        {
+            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.take_order));
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }
 
         return true;
     }
@@ -142,8 +187,8 @@ public class MerchandiseOrderActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_TAKE:
-                //將表單資料送出後回到主畫面
-                this.finish();
+                Intent question = new Intent(MerchandiseOrderActivity.this, SendMerchandiseActivity.class);
+                startActivity(question);
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

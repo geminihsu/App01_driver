@@ -24,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -42,11 +43,16 @@ public class ClientTakeRideActivity extends Activity {
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
 
 
+    final public static int TAKE_RIDE = 1;
+    final public static int SEND_MERCHANDISE= 2;
+    private LinearLayout change;
     private ImageButton timerPicker;
     private ImageButton departure;
     private ImageButton stop;
     private ImageButton destination;
     private ImageButton spec;
+    private TextView show_title;
+    private int option;
 
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
     private ClientTakeRideSelectSpecListItemAdapter listViewAdapter;
@@ -70,7 +76,20 @@ public class ClientTakeRideActivity extends Activity {
         super.onStart();
         this.findViews();
         this.setLister();
-
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.containsKey(Constants.ARG_POSITION)){
+                option = bundle.getInt(Constants.ARG_POSITION);
+                displayLayout();
+            }else
+            {
+                //Error!!!!
+            }
+        }
+        else
+        {
+            //Error!!!!
+        }
 
 
 
@@ -78,16 +97,26 @@ public class ClientTakeRideActivity extends Activity {
 
     private void findViews()
     {
+        change = (LinearLayout) findViewById (R.id.change);
         timerPicker = (ImageButton) findViewById(R.id.time_picker);
         departure = (ImageButton) findViewById(R.id.departure);
         stop = (ImageButton) findViewById(R.id.stop);
         destination = (ImageButton) findViewById(R.id.destination);
         spec = (ImageButton) findViewById(R.id.spec_option);
-
+        show_title = (TextView) findViewById(R.id.txt_info);
     }
 
 
-
+    private void displayLayout() {
+        if (option == ClientTakeRideActivity.TAKE_RIDE) {
+            getActionBar().setTitle(getString(R.string.client_take_ride_title));
+            change.setVisibility(View.VISIBLE);
+        } else if (option == ClientTakeRideActivity.SEND_MERCHANDISE){
+            show_title.setText(getString(R.string.txt_send_merchandise));
+            getActionBar().setTitle(getString(R.string.client_send_merchandise_title));
+            change.setVisibility(View.GONE);
+        }
+    }
     private void setLister()
     {
 
@@ -200,13 +229,19 @@ public class ClientTakeRideActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-
-        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.menu_take));
-        SpannableString spanString = new SpannableString(item.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
-        item.setTitle(spanString);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
+        if (option == ClientTakeRideActivity.TAKE_RIDE) {
+            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.menu_take));
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }else if (option == ClientTakeRideActivity.SEND_MERCHANDISE) {
+            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.sure_take_spec));
+            SpannableString spanString = new SpannableString(item.getTitle().toString());
+            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+            item.setTitle(spanString);
+            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        }
         return true;
     }
 
@@ -215,33 +250,42 @@ public class ClientTakeRideActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        this);
+                if (option == ClientTakeRideActivity.TAKE_RIDE) {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                            this);
 
-                // set title
-                alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
+                    // set title
+                    alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.cancel_take_spec),new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
 
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.sure_take_spec),new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                                Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
-                                startActivity(question);
-                            }
-                        });
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
+                                    startActivity(question);
+                                }
+                            });
 
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
 
-                // show it
-                alertDialog.show();
+                    // show it
+                    alertDialog.show();
+                }else
+                {
+                    Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Constants.ARG_POSITION, MerchandiseOrderActivity.SEND_MERCHANDISE);
+                    question.putExtras(b);
+                    startActivity(question);
+                }
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

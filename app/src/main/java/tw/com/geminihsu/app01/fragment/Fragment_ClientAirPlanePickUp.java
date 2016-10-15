@@ -67,7 +67,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
     }
     @Override
     public void onResume() {
-        getActivity().setTitle(getString(R.string.begin_order_page_title));
+        getActivity().setTitle(getString(R.string.client_airplane_pick_up));
         super.onResume();
 
 
@@ -85,7 +85,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return Fragment_BeginOrderInteractive.newInstance();
+            return Fragment_ClientAirPlaneInteractive.newInstance();
         }
 
         @Override
@@ -110,7 +110,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_FIILTER, Menu.NONE, getString(R.string.order_filter_page_title));
+        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_FIILTER, Menu.NONE, getString(R.string.menu_take));
         SpannableString spanString = new SpannableString(item.getTitle().toString());
         spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
         item.setTitle(spanString);

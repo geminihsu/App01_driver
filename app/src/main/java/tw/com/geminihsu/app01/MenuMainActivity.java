@@ -20,14 +20,16 @@ import android.widget.Toast;
 
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
+import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlaneInteractive;
+import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
 
-public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,
-        Fragment_BeginOrderInteractive.OnListItemClickListener{
+public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,
+        Fragment_BeginOrderInteractive.OnListItemClickListener,Fragment_ClientAirPlaneInteractive.OnListItemClickListener{
 
     private MenuMainViewDelegateBase viewDelegateBase;
     private DrawerLayout mDrawerLayout;
