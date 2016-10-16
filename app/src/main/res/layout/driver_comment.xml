@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_gray"
+    >
+
+
+
+    <LinearLayout
+        android:id="@+id/info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:id="@+id/imagePannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image_camera_alt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/imagestatusPannel"
+            android:layout_toRightOf="@id/imagePannel"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:id="@+id/driver"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="黃師傅"
+                android:textColor="@color/address_devicename_txt"
+                />
+
+                <RatingBar
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="5"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10dp"
+                    android:isIndicator="true"
+                    style="?android:attr/ratingBarStyleSmall"
+                    />
+            </LinearLayout>
+            <TextView
+                android:id="@+id/car_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="車牌"
+                />
+
+            <TextView
+                android:id="@+id/car_brand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:text="車型"
+                />
+
+            <!-- android:autoLink="all" -->
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/change"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_below="@+id/info"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:id="@+id/password"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            >
+            <TextView
+                android:id="@+id/level_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:layout_gravity="center_horizontal"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:text="@string/driver_service"
+                android:textColor="@color/btn_bouns_title"
+                />
+            <RatingBar
+                android:id="@+id/rating_level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:rating="5"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:isIndicator="true"
+                style="?android:attr/ratingBarStyleIndicator"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buns_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_below="@+id/change"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        >
+    <LinearLayout
+        android:id="@+id/option"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        >
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_comment"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <Spinner android:id="@+id/location"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:drawSelectorOnTop="true"
+            />
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        >
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/driver_other"
+            android:textColor="@color/address_devicename_txt"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:text=""
+
+            />
+    </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

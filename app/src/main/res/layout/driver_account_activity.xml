@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/RelativeLayout01"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:paddingLeft="5dp"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:layout_height="fill_parent"
+    android:background="@color/bg_gray"
+    >
 
+    <ScrollView
+        android:id="@+id/scrollview_manual_add_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true" >
+        <LinearLayout
+            android:id="@+id/merchandise_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="vertical"
+            >
     <LinearLayout
         android:id="@+id/linearLayout_record"
         android:layout_width="wrap_content"
@@ -48,7 +62,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="20dp"
             android:isIndicator="true"
-            style="?android:attr/ratingBarStyleIndicator"
+            style="?android:attr/ratingBarStyleSmall"
             />
         <TextView
             android:id="@+id/host_title"
@@ -245,64 +259,72 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_cameranumber"
             android:textColor="@color/white"
-            android:text="123"
+            android:layout_weight="1"
+            android:text="@string/driver_service_a"
             />
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_cameranumber"
             android:textColor="@color/white"
-            android:text="123"
+            android:layout_weight="1"
+            android:text="@string/driver_service_b"
             />
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_cameranumber"
             android:textColor="@color/white"
-            android:text="123"
+            android:layout_weight="1"
+            android:text="@string/driver_service_c"
             />
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_cameranumber"
             android:textColor="@color/white"
-            android:text="123"
+            android:layout_weight="1"
+            android:text="@string/driver_service_d"
             />
     </LinearLayout>
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent">
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_cameranumber"
                 android:textColor="@color/white"
-                android:text="123"
+                android:layout_weight="1"
+                android:text="@string/driver_service_e"
                 />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_cameranumber"
                 android:textColor="@color/white"
-                android:text="123"
+                android:layout_weight="1"
+                android:text="@string/driver_service_f"
                 />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_cameranumber"
                 android:textColor="@color/white"
-                android:text="123"
+                android:layout_weight="1"
+                android:text="@string/driver_service_g"
                 />
             <Button
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_cameranumber"
                 android:textColor="@color/white"
-                android:text="123"
+                android:layout_weight="1"
+                android:text="@string/driver_service_h"
                 />
         </LinearLayout>
         </LinearLayout>
@@ -337,6 +359,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:visibility="gone"
         >
         <TextView
             android:id="@+id/driver_car_photo"
@@ -357,5 +380,26 @@
             android:paddingRight="20dp"
             android:src="@drawable/car_android"
             />
-    </LinearLayout>
-</LinearLayout>
+
+        </LinearLayout>
+            <TextView
+                android:id="@+id/driver_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="middle"
+                android:singleLine="true"
+                android:paddingTop="20dp"
+                android:paddingLeft="20dp"
+                android:text="@string/passenger_comment_driver"
+                android:textColor="@color/address_devicename_txt"
+                />
+            <ListView
+                android:id="@+id/listView1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawSelectorOnTop="false" />
+
+        </LinearLayout>
+</ScrollView>
+
+</RelativeLayout>

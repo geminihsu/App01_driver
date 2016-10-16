@@ -35,6 +35,10 @@
     <string name="client_merchanse_send_title">貨物快送</string>
     <string name="driver_price_report_title">司機報價中</string>
     <string name="driver_price_report_check_title">司機資訊</string>
+    <string name="driver_comment_title">司機評分</string>
+    <string name="driver_report">檢舉司機</string>
+    <string name="app_report">APP評分</string>
+    <string name="merchandise_calculator">才數計算機</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -97,6 +101,10 @@
     <string name="txt_phone">電話/電郵</string>
     <string name="txt_suggestion">意見</string>
     <string name="btn_send">送出</string>
+
+    <string name="menu_send_share_txt_comment">分享您使用的心得</string>
+    <string name="menu_send_share_comment">分享APP評分可獲得500點積分</string>
+    <string name="menu_send_share_comment_tip">若您覺得APP好用\n請給小費鼓勵</string>
 
     <string name="btn_logout">登出</string>
 
@@ -161,6 +169,22 @@
     <string name="driver_car_photo">愛車照片</string>
     <string name="driver_account_save">儲存</string>
 
+    <string name="driver_service_a">可預約</string>
+    <string name="driver_service_b">包車</string>
+    <string name="driver_service_c">機場接送</string>
+    <string name="driver_service_d">五年新車</string>
+    <string name="driver_service_e">無菸車</string>
+    <string name="driver_service_f">可刷卡</string>
+    <string name="driver_service_g">貨物接送</string>
+    <string name="driver_service_h">WI-FI</string>
+
+    <string name="client_agree_price">同意司機報價</string>
+    <string name="client_agree_notion">請注意\n按下確認後此訂單即刻成立\n請立刻與司機溝通載貨內容\n避免雙方認知落差</string>
+    <string name="client_wait_take_order">稍後叫車</string>
+    <string name="client_immendately_take_order">立即叫車</string>
+
+    <string name="passenger_comment_driver">乘客評價</string>
+    <string name="passenger_comment_report">檢舉</string>
     <!-- Fragment_BeginOrder -->
     <string name="order_filter_message">請勾選看單條件</string>
     <string name="txt_order_filter_distance">距離目前位置:</string>
@@ -205,6 +229,8 @@
     <string name="menu_cancel_order_reason">請選擇取消訂單的理由</string>
     <string name="menu_send_sms_txt">將搭車訊息傳給熟人確保安全</string>
     <string name="menu_send_sms_txt_content">簡訊內容</string>
+    <string name="menu_send_report_txt_content">檢舉原因</string>
+
 
     <!-- MerchandiseOrderActivity Control Panel-->
     <string name="merchandise_comment">查看評價</string>
@@ -302,5 +328,11 @@
     <string name="send_merchandise_buyer">*付款方</string>
     <string name="send_merchandise_send">送貨方</string>
     <string name="send_merchandise_recevid">收貨方</string>
+
+    <!-- DriverCommet-->
+    <string name="driver_service">司機服務</string>
+    <string name="driver_comment">評語：</string>
+    <string name="driver_other">其他：</string>
+
 </resources>
 

@@ -30,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
+import tw.com.geminihsu.app01.DriverCommentActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -39,6 +40,7 @@ public class Fragment_Client_Service extends Fragment {
 	private ImageButton take_ride;
     private ImageButton send_merchandise;
     private ImageButton air_plane;
+    private ImageButton train;
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -76,6 +78,7 @@ public class Fragment_Client_Service extends Fragment {
         take_ride = (ImageButton) getView().findViewById(R.id.normal);
         send_merchandise = (ImageButton) getView().findViewById(R.id.truck);
         air_plane = (ImageButton) getView().findViewById(R.id.airplane);
+        train = (ImageButton) getView().findViewById(R.id.bigtruck);
     }
 
     @Override
@@ -123,6 +126,15 @@ public class Fragment_Client_Service extends Fragment {
                  transaction.addToBackStack(null);
 
                  transaction.commit();
+             }
+         });
+
+         train.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+             public void onClick(View v) {
+                 Intent question = new Intent(getActivity(), DriverCommentActivity.class);
+                 startActivity(question);
              }
          });
 

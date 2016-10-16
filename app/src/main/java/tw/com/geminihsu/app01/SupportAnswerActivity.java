@@ -29,6 +29,9 @@ public class SupportAnswerActivity extends Activity {
     private LinearLayout linearLayout_form;
     private LinearLayout linearLayout_cancel_order;
     private LinearLayout linearLayout_sms_report;
+    private LinearLayout linearLayout_driver_report;
+    private LinearLayout linearLayout_app_report;
+    private LinearLayout linearLayout_fee_report;
     private TextView manual;
     private Spinner spinner_reason;
     private ArrayAdapter arrayAdapter_reason;
@@ -42,6 +45,8 @@ public class SupportAnswerActivity extends Activity {
     final public static int SMS_REPORT= 5;
     final public static int INSURANCE_INFO =6;
     final public static int MERCHANDISE_RESTRICT= 7;
+    final public static int REPORT_DRIVER= 8;
+    final public static int REPORT_APP= 9;
 
     private int choice = 0;
 
@@ -88,6 +93,10 @@ public class SupportAnswerActivity extends Activity {
         linearLayout_form = (LinearLayout) findViewById(R.id.form);
         linearLayout_cancel_order= (LinearLayout) findViewById(R.id.order_cancel);
         linearLayout_sms_report = (LinearLayout) findViewById(R.id.order_sms);
+        linearLayout_driver_report =(LinearLayout) findViewById(R.id.driver_report);
+        linearLayout_app_report =(LinearLayout) findViewById(R.id.comment_report);
+        linearLayout_fee_report =(LinearLayout) findViewById(R.id.app_comment_report);
+
 
         manual = (TextView) findViewById(R.id.manual);
 
@@ -130,6 +139,14 @@ public class SupportAnswerActivity extends Activity {
             getActionBar().setTitle(getString(R.string.menu_send_sms_txt_content));
             linearLayout_sms_report.setVisibility(View.VISIBLE);
 
+        }else if(choice == SupportAnswerActivity.REPORT_DRIVER){
+            getActionBar().setTitle(getString(R.string.driver_report));
+            linearLayout_driver_report.setVisibility(View.VISIBLE);
+
+        }else if(choice == SupportAnswerActivity.REPORT_APP){
+            getActionBar().setTitle(getString(R.string.app_report));
+            linearLayout_app_report.setVisibility(View.VISIBLE);
+            linearLayout_fee_report.setVisibility(View.VISIBLE);
         }
     }
 

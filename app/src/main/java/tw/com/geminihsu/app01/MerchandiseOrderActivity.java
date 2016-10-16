@@ -30,6 +30,7 @@ public class MerchandiseOrderActivity extends Activity {
     private TextView passenger_comment;
     private TextView insurance_info;
     private TextView merchandise_restrict;
+    private TextView merchandise_count;
 
     final public static int MERCHANDISE = 0;
     final public static int SEND_MERCHANDISE = 1;
@@ -81,6 +82,7 @@ public class MerchandiseOrderActivity extends Activity {
         driver_comment = (TextView) findViewById(R.id.comment);
         passenger_comment = (TextView) findViewById(R.id.passeger_comment);
         insurance_info = (TextView) findViewById(R.id.insurance_inform);
+        merchandise_count = (TextView) findViewById(R.id.send_merchandise_count);
         merchandise_restrict = (TextView) findViewById(R.id.send_merchandise_restrict);
 
     }
@@ -134,6 +136,26 @@ public class MerchandiseOrderActivity extends Activity {
             }
         });
 
+        passenger_comment.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(MerchandiseOrderActivity.this, CommentActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+
+        merchandise_count.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(MerchandiseOrderActivity.this, MerchandiseUnitcalculatorActivity.class);
+                startActivity(question);
+            }
+        });
         insurance_info.setOnClickListener(new View.OnClickListener() {
 
             @Override
