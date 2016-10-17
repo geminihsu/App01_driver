@@ -2,6 +2,8 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
@@ -9,13 +11,21 @@ import android.text.Spanned;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-    TextView txt_forget_password;
-    Button btn_register;
-    Button btn_login;
+    private TextView txt_forget_password;
+    private Button btn_register;
+    private Button btn_login;
+    private EditText account_phone;
+    private EditText account_password;
+
+    private String phone_number;
+    private String password;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,9 +45,12 @@ public class MainActivity extends Activity {
     private void findViews()
     {
         txt_forget_password = (TextView) findViewById(R.id.txt_forget_password);
-        makeTextViewHyperlink(txt_forget_password);
+
         btn_register = (Button) findViewById(R.id.register);
         btn_login = (Button) findViewById(R.id.login);
+
+        account_phone = (EditText) findViewById(R.id.account_phone);
+        account_password = (EditText)findViewById(R.id.account_password);
     }
 
 
@@ -62,20 +75,40 @@ public class MainActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                startActivity(intent);
+                phone_number = account_phone.getText().toString();
+                password = account_password.getText().toString();
+                if(phone_number.isEmpty()||password.isEmpty())
+                {
+                    alert();
+                }else {
+                    Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
-    /**
-     * Sets a hyperlink style to the textview.
-     */
-    private void makeTextViewHyperlink(TextView tv) {
-        SpannableStringBuilder ssb = new SpannableStringBuilder();
-        ssb.append(tv.getText());
-        ssb.setSpan(new URLSpan("#"), 0, ssb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        tv.setText(ssb, TextView.BufferType.SPANNABLE);
-    }
 
+
+    private void alert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.login_error_title));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(getString(R.string.login_error_msg))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm),new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        Intent intent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
+                        startActivity(intent);
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
 
 }

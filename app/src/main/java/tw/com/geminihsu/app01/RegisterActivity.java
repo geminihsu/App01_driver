@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -16,6 +18,7 @@ public class RegisterActivity extends Activity {
 
     private TextView clause;
     private Button verify;
+    private CheckBox agree;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +42,26 @@ public class RegisterActivity extends Activity {
     {
         clause = (TextView) findViewById(R.id.agree);
         verify = (Button) findViewById(R.id.send_code);
+        verify.setEnabled(false);
+        agree  = (CheckBox) findViewById(R.id.txt_forget_password);
     }
 
 
     private void setLister()
     {
+        agree.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked)
+            {
+                if(isChecked)
+                    verify.setEnabled(true);
+                else
+                    verify.setEnabled(false);
+            }
+        }
+    );
         clause.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -62,6 +80,7 @@ public class RegisterActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
                 startActivity(question);
+
             }
         });
     }

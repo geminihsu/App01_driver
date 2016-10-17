@@ -34,62 +34,154 @@ limitations under the License.
 		</LinearLayout>
 
     <TextView
-	   android:id="@+id/service_info"
-	   android:layout_width="wrap_content"
-	   android:layout_height="wrap_content"
-	   android:padding="16dp"
+	    android:id="@+id/service_info"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:padding="16dp"
 		android:orientation="horizontal"
-		android:gravity="center_horizontal"
-	   android:text="@string/service_info"
+		android:textStyle="bold"
+		android:layout_gravity="center_horizontal"
+		android:textSize="@dimen/default_text_address_size_sp"
+		android:textColor="@color/btn_bouns_title"
+	    android:text="@string/service_info"
 	/>
 
     <LinearLayout
         android:id="@+id/camera1_linearLayout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="wrap_content"
         android:orientation="horizontal"
-		android:gravity="center_horizontal"
 		>
-		<ImageButton
-			android:id="@+id/normal"
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+		<ImageButton
+			android:id="@+id/normal"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_taxi"
 			/>
-		<ImageButton
-			android:id="@+id/truck"
+			<TextView
+				android:id="@+id/txt_detail"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textStyle="bold"
+				android:text="@string/service_take"
+				android:textColor="@color/btn_bouns_title"
+				/>
+			</LinearLayout>
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+		<ImageButton
+			android:id="@+id/truck"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_shipping"
 			/>
-		<ImageButton
-			android:id="@+id/dock"
+			<TextView
+				android:id="@+id/txt_truck"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="middle"
+				android:textStyle="bold"
+				android:text="@string/service_send_merchandise"
+				android:textColor="@color/btn_bouns_title"
+				/>
+		</LinearLayout>
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+		<ImageButton
+			android:id="@+id/dock"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_directions_ferry"
 			/>
-		<ImageButton
-			android:id="@+id/train"
+			<TextView
+				android:id="@+id/txt_dock"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="middle"
+				android:textStyle="bold"
+				android:text="@string/service_big_truck"
+				android:textColor="@color/btn_bouns_title"
+				/>
+		</LinearLayout>
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+
+		<ImageButton
+			android:id="@+id/train"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_directions_subway"
 			/>
-		<ImageButton
-			android:id="@+id/airplane"
+			<TextView
+				android:id="@+id/txt_train"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="middle"
+				android:textStyle="bold"
+				android:text="@string/service_pick_up_train"
+				android:textColor="@color/btn_bouns_title"
+				/>
+		</LinearLayout>
+		<LinearLayout
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+		<ImageButton
+			android:id="@+id/airplane"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_airport"
 			/>
+			<TextView
+				android:id="@+id/txt_airplane"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="middle"
+				android:textStyle="bold"
+				android:text="@string/service_pick_up_train"
+				android:textColor="@color/btn_bouns_title"
+				/>
+		</LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

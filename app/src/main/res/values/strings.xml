@@ -58,9 +58,12 @@
     <string name="hint_default_portal_password">Password</string>
     <string name="hint_test_portal_id">odaru@geovision.com.tw</string>
     <string name="hint_test_portal_password">odaru123</string>
-    <string name="forget_password">Forget Password</string>
+    <string name="forget_password"><u>Forget Password</u></string>
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
+    <string name="login_error_title">登入失敗</string>
+    <string name="login_error_msg">抱歉！\n您輸入的手機號碼或密碼有誤。</string>
+
 
     <!--  forget password page -->
     <string name="txt_info">Get new password by message</string>
@@ -100,6 +103,15 @@
 
     <!-- fragment_client_service -->
     <string name="service_info">請選擇需要的服務</string>
+    <string name="service_take">一般搭乘</string>
+    <string name="service_send_merchandise">貨物快送</string>
+    <string name="service_pick_up_train">車站接送</string>
+    <string name="service_pick_up_airplane">機場接送</string>
+    <string name="service_taxi">計程車</string>
+    <string name="service_truck">貨車</string>
+    <string name="service_big_truck">貨櫃車</string>
+
+
 
     <!-- SupportAnswerActivity -->
     <string name="txt_answer">請留下寶貴的建議</string>

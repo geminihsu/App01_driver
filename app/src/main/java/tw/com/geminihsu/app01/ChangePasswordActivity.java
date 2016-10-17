@@ -94,14 +94,13 @@ public class ChangePasswordActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(choice== ChangePasswordActivity.SUGGESTION){
-            MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.btn_send));
-            SpannableString spanString = new SpannableString(item.getTitle().toString());
-            spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
-            item.setTitle(spanString);
+        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.driver_account_save));
+        SpannableString spanString = new SpannableString(item.getTitle().toString());
+        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
+        item.setTitle(spanString);
 
-            item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
         return true;
     }
 
