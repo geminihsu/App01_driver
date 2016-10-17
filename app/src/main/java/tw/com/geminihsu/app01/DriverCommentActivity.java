@@ -2,6 +2,8 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -87,11 +89,29 @@ public class DriverCommentActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                Intent question = new Intent(DriverCommentActivity.this, SupportAnswerActivity.class);
+               /* Intent question = new Intent(DriverCommentActivity.this, SupportAnswerActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_APP);
                 question.putExtras(b);
-                startActivity(question);
+                startActivity(question);*/
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DriverCommentActivity.this);
+                // set title
+                alertDialogBuilder.setTitle(getString(R.string.dialog_finish_order));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(getString(R.string.dialog_finish_order_message))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog,int id) {
+                               finish();
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

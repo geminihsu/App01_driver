@@ -1,9 +1,6 @@
 package tw.com.geminihsu.app01.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,18 +20,17 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
-public class Fragment_ClientAirPlanePickUp extends Fragment {
+public class Fragment_TrainPlanePickUp extends Fragment {
 
     private TabLayoutSetupCallback mToolbarSetupCallback;
     private List<String> mTabNamesList;
     private final int ACTIONBAR_MENU_ITEM_FIILTER = 0x0001;
 
-    public Fragment_ClientAirPlanePickUp() {
+    public Fragment_TrainPlanePickUp() {
         // Required empty public constructor
     }
 
@@ -54,8 +50,8 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         mTabNamesList = new ArrayList<>();
-        mTabNamesList.add(getString(R.string.tab_send));
-        mTabNamesList.add(getString(R.string.tab_pick_up));
+        mTabNamesList.add(getString(R.string.tab_send_train));
+        mTabNamesList.add(getString(R.string.tab_pick_up_train));
 
     }
 
@@ -72,7 +68,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
     }
     @Override
     public void onResume() {
-        getActivity().setTitle(getString(R.string.client_airplane_pick_up));
+        getActivity().setTitle(getString(R.string.client_train_pick_up));
         super.onResume();
 
 
@@ -94,13 +90,13 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
             switch (position)
             {
                 case 0:
-                    fragment = new Fragment_PickUpAirPlane();
+                    fragment = new Fragment_PickUpTrain();
                     Bundle args2 = new Bundle();
                     args2.putInt(Constants.ARG_POSITION, 0);
                     fragment.setArguments(args2);
                     break;
                 case 1:
-                    fragment = new Fragment_PickUpAirPlane();
+                    fragment = new Fragment_PickUpTrain();
                     Bundle args3 = new Bundle();
                     args3.putInt(Constants.ARG_POSITION, 1);
                     fragment.setArguments(args3);
@@ -148,33 +144,14 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_FIILTER:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getActivity());
+                // Create new fragment and transaction
+                Fragment newFragment = new Fragment_OrderFilter();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                // set title
-                alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
+                transaction.replace(R.id.container, newFragment);
+                transaction.addToBackStack(null);
 
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                Intent question = new Intent(getActivity(), ClientTakeRideSearchActivity.class);
-                                startActivity(question);
-                            }
-                        });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                transaction.commit();
                 return true;
 
             default:

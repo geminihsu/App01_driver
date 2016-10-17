@@ -31,10 +31,13 @@ public class MerchandiseOrderActivity extends Activity {
     private TextView insurance_info;
     private TextView merchandise_restrict;
     private TextView merchandise_count;
+    private TextView merchandise_car_requirement;
+    private TextView merchandise_car_requirement_spec;
 
     final public static int MERCHANDISE = 0;
     final public static int SEND_MERCHANDISE = 1;
     final public static int PASSENGER = 2;
+    final public static int CLIENT_SEND_MERCHANDISE = 3;
 
     private int choice = 0;
 
@@ -84,7 +87,8 @@ public class MerchandiseOrderActivity extends Activity {
         insurance_info = (TextView) findViewById(R.id.insurance_inform);
         merchandise_count = (TextView) findViewById(R.id.send_merchandise_count);
         merchandise_restrict = (TextView) findViewById(R.id.send_merchandise_restrict);
-
+        merchandise_car_requirement = (TextView) findViewById(R.id.send_content);
+        merchandise_car_requirement_spec = (TextView) findViewById(R.id.send_merchandise_content);
     }
 
 
@@ -99,6 +103,13 @@ public class MerchandiseOrderActivity extends Activity {
         }else if(choice == SEND_MERCHANDISE)
         {
             linearLayout_send_merchandise.setVisibility(View.VISIBLE);
+            getActionBar().setTitle(getString(R.string.client_send_merchandise_title));
+
+        }else if(choice == CLIENT_SEND_MERCHANDISE)
+        {
+            linearLayout_send_merchandise.setVisibility(View.VISIBLE);
+            merchandise_car_requirement.setText(getString(R.string.merchandise_car_requirement));
+            merchandise_car_requirement_spec.setText("20呎");
             getActionBar().setTitle(getString(R.string.client_send_merchandise_title));
 
         }
@@ -184,7 +195,7 @@ public class MerchandiseOrderActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(choice ==SEND_MERCHANDISE)
+        if(choice ==SEND_MERCHANDISE || choice == CLIENT_SEND_MERCHANDISE)
         {
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.sure_ok));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
@@ -210,6 +221,9 @@ public class MerchandiseOrderActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_TAKE:
                 Intent question = new Intent(MerchandiseOrderActivity.this, SendMerchandiseActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, SendMerchandiseActivity.CLIENT_SEND_MERCHANDISE);
+                question.putExtras(b);
                 startActivity(question);
                 return true;
             case android.R.id.home:

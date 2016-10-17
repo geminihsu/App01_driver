@@ -47,6 +47,7 @@ public class SupportAnswerActivity extends Activity {
     final public static int MERCHANDISE_RESTRICT= 7;
     final public static int REPORT_DRIVER= 8;
     final public static int REPORT_APP= 9;
+    final public static int ONLINE_CHECK= 10;
 
     private int choice = 0;
 
@@ -147,6 +148,9 @@ public class SupportAnswerActivity extends Activity {
             getActionBar().setTitle(getString(R.string.app_report));
             linearLayout_app_report.setVisibility(View.VISIBLE);
             linearLayout_fee_report.setVisibility(View.VISIBLE);
+        }else if(choice == SupportAnswerActivity.ONLINE_CHECK){
+            getActionBar().setTitle(getString(R.string.driver_online_check));
+
         }
     }
 
@@ -159,7 +163,7 @@ public class SupportAnswerActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        if(choice== SupportAnswerActivity.SUGGESTION || choice== SupportAnswerActivity.SMS_REPORT){
+        if(choice== SupportAnswerActivity.SUGGESTION || choice== SupportAnswerActivity.SMS_REPORT ||choice== SupportAnswerActivity.ONLINE_CHECK){
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.btn_send));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white

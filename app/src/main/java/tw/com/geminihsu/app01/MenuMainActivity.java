@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -20,17 +21,18 @@ import android.widget.Toast;
 
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
-import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlaneInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
+import tw.com.geminihsu.app01.fragment.Fragment_MerchandiseDorkPickUp;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
+import tw.com.geminihsu.app01.fragment.Fragment_TrainPlanePickUp;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
 
-public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,
-        Fragment_BeginOrderInteractive.OnListItemClickListener,Fragment_ClientAirPlaneInteractive.OnListItemClickListener{
-
+public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
+        Fragment_BeginOrderInteractive.OnListItemClickListener{
+    private final String TAG=this.getClass().getSimpleName();
     private MenuMainViewDelegateBase viewDelegateBase;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
@@ -221,9 +223,9 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     @Override
     public void onListItemClick(View v) {
         //Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-        Button take_prize = (Button) v.findViewById(R.id.btn_take);
+        //Button take_prize = (Button) v.findViewById(R.id.btn_take);
 
-       /* take_prize.setOnClickListener(new View.OnClickListener() {
+       /*take_prize.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -233,14 +235,13 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                 startActivity(question);
             }
         });*/
-       /* Intent question = new Intent(MenuMainActivity.this, MerchandiseOrderActivity.class);
-        Bundle b = new Bundle();
-        b.putInt(Constants.ARG_POSITION,Constants.QUERY_MERCHANDISE);
-        question.putExtras(b);
-        startActivity(question);*/
-
+        //int position = (Integer)(take_prize.getTag());
+        //Log.e(TAG,"button_index:"+position);
         Intent question = new Intent(MenuMainActivity.this, OrderProcesssActivity.class);
-
+        Bundle b = new Bundle();
+        b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.MERCHANDISE);
+        question.putExtras(b);
         startActivity(question);
+
     }
 }

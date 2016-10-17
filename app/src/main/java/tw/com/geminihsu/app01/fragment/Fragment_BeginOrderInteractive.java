@@ -58,7 +58,10 @@ public class Fragment_BeginOrderInteractive extends Fragment {
 
         for (int i = 0; i < 10; i++) {
             BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
-            beginOrderListItem.order_title = "一般搭乘(小費:50元)";
+            if(i%2==0)
+              beginOrderListItem.order_title = "一般搭乘(小費:50元)";
+            else
+              beginOrderListItem.order_title = "貨物快送(小費:80元)";
             beginOrderListItem.departure = "從:台中市大道一段1號";
             beginOrderListItem.destination = "到:台中市政府";
 

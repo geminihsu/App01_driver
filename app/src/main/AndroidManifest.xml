@@ -61,7 +61,7 @@
             android:label="@string/merchandise_page_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".MapsActivity"
-            android:label="@string/merchandise_page_title"
+            android:label="@string/map_location"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".ClientTakeRideActivity"
             android:label="@string/client_take_ride_title"

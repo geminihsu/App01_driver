@@ -8,10 +8,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
@@ -19,7 +24,10 @@ public class SendMerchandiseActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
+    final public static int CLIENT_SEND_MERCHANDISE = 1;
+    private LinearLayout target;
 
+    private int choice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +44,20 @@ public class SendMerchandiseActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
-
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            if (bundle.containsKey(Constants.ARG_POSITION)){
+                choice = bundle.getInt(Constants.ARG_POSITION);
+                displayLayout();
+            }else
+            {
+                //Error!!!!
+            }
+        }
+        else
+        {
+            //Error!!!!
+        }
         this.setLister();
 
 
@@ -46,6 +67,7 @@ public class SendMerchandiseActivity extends Activity {
 
     private void findViews()
     {
+       target = (LinearLayout) findViewById(R.id.txt_target);
 
     }
 
@@ -57,6 +79,11 @@ public class SendMerchandiseActivity extends Activity {
 
     }
 
+    private void displayLayout() {
+        if (choice == CLIENT_SEND_MERCHANDISE) {
+            target.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -87,18 +114,18 @@ public class SendMerchandiseActivity extends Activity {
                 alertDialogBuilder
                         .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
                         .setCancelable(false)
-                        .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent question = new Intent(SendMerchandiseActivity.this, ClientTakeRideSearchActivity.class);
                                 Bundle b = new Bundle();
                                 b.putInt(Constants.ARG_POSITION, ClientTakeRideSearchActivity.DRIVER_REPORT_PRICE);
                                 question.putExtras(b);
                                 startActivity(question);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
                             }
                         });
 

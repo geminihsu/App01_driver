@@ -30,6 +30,8 @@
     <string name="client_take_ride_search_title">通知司機中</string>
     <string name="client_order_car_wait_title">司機趕路中</string>
     <string name="client_order_car_sms_title">簡訊通知</string>
+    <string name="client_train_pick_up">車站接送</string>
+    <string name="client_airplane_pick_up">機場接送</string>
     <string name="client_merchandise_insurance_title">保險說明</string>
     <string name="client_merchandise_restrict_title">貨物限制</string>
     <string name="client_merchanse_send_title">貨物快送</string>
@@ -39,6 +41,9 @@
     <string name="driver_report">檢舉司機</string>
     <string name="app_report">APP評分</string>
     <string name="merchandise_calculator">才數計算機</string>
+    <string name="merchandise_car_requirement">*車種需求</string>
+    <string name="map_location">選擇地點</string>
+    <string name="driver_online_check">線上簽收</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -254,6 +259,11 @@
     <string name="dialog_get_on_car_message">已記錄上車時間2015/12/08 上午07:04，恭喜您獲得績分200點</string>
     <string name="dialog_get_on_car_comfirm">確認</string>
 
+    <string name="dialog_finish_order">完成訂單</string>
+    <string name="dialog_finish_order_message">完成訂單時間2015/12/08 上午07:04，恭喜您獲得績分200點</string>
+    <string name="dialog_finish_order_comfirm">邀請客戶評分</string>
+
+
     <string name="merchandise_insurance">加保貨險 : </string>
 
 
@@ -274,6 +284,7 @@
 
     <!-- ClientTakeRideActivity Control Panel-->
     <string name="txt_take_ride">您好！您要去哪裡?</string>
+    <string name="txt_pick_up_airplane">請選擇服務項目</string>
     <string name="txt_take_type">*類型：</string>
     <string name="txt_take_real_time">即時</string>
     <string name="txt_take_reservation">預約</string>
@@ -289,7 +300,9 @@
     <string name="cancel_take_spec">取消</string>
     <string name="menu_dialog_sure">確認單</string>
     <string name="txt_take_spec">請選擇特殊需求：</string>
-
+    <string name="pick_up_tra_train">台鐵</string>
+    <string name="pick_up_thsr_train">高鐵</string>
+    <string name="pick_up_train">車站</string>
     <!-- ClientOrderCarSearch -->
     <string name="txt_search">正在為您叫車</string>
     <string name="txt_fee">小費</string>
@@ -320,7 +333,11 @@
     <!-- Fragment_ClientAirPlanePickUp -->
     <string name="tab_send">送機</string>
     <string name="tab_pick_up">接機</string>
-
+    <string name="tab_send_train">前往車站</string>
+    <string name="tab_pick_up_train">離開車站</string>
+    <string name="tab_go_dock">前往港口</string>
+    <string name="tab_no_dock">非港口運輸</string>
+    <string name="tab_back_dock">港口返回</string>
 
     <!-- SendMerchandise -->
     <string name="send_merchandise_info">收貨人資訊</string>

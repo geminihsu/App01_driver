@@ -11,7 +11,9 @@ import tw.com.geminihsu.app01.fragment.Fragment_NotifyList;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
@@ -50,6 +52,9 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 	public void setNavigationItemOnClick_waitOrder() {
 		FragmentTransaction fragTran;
 		Fragment_BeginOrderInteractive frag2 = new Fragment_BeginOrderInteractive();
+		Bundle args2 = new Bundle();
+		args2.putBoolean(Constants.ARG_POSITION, true);
+		frag2.setArguments(args2);
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
 		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderInteractive.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);

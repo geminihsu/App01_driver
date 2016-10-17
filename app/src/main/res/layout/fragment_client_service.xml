@@ -52,29 +52,41 @@ limitations under the License.
 		>
 		<ImageButton
 			android:id="@+id/normal"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_taxi"
 			/>
 		<ImageButton
 			android:id="@+id/truck"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_shipping"
 			/>
 		<ImageButton
-			android:id="@+id/bigtruck"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
+			android:id="@+id/dock"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_directions_ferry"
 			/>
 		<ImageButton
+			android:id="@+id/train"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_directions_subway"
+			/>
+		<ImageButton
 			android:id="@+id/airplane"
-			android:layout_width="100dp"
-			android:layout_height="100dp"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_airport"
 			/>

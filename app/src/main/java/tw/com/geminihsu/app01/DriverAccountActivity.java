@@ -154,14 +154,15 @@ public class DriverAccountActivity extends Activity {
                     alertDialogBuilder
                             .setMessage(getString(R.string.client_agree_notion))
                             .setCancelable(false)
-                            .setPositiveButton(getString(R.string.client_wait_take_order), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.client_immendately_take_order), new DialogInterface.OnClickListener() {
+                            .setPositiveButton(getString(R.string.client_immendately_take_order), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
                                     Intent question = new Intent(DriverAccountActivity.this, ClientWaitCarActivity.class);
                                     startActivity(question);
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.client_wait_take_order), new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+
                                 }
                             });
 

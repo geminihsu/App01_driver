@@ -13,9 +13,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -25,7 +24,19 @@ public class OrderProcesssActivity extends Activity {
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_CANCEL = 0x0001;
 
+    final public static int MERCHANDISE = 1;
+    final public static int PASSENGER= 2;
+
+    private LinearLayout linearLayout_sender;
+    private LinearLayout linearLayout_receiver;
+    private LinearLayout linearLayout_change_price;
+    private LinearLayout linearLayout_online_check_price;
+    private LinearLayout linearLayout_call_panel_merchandise;
+    private LinearLayout linearLayout_call_panel_client;
+
     private TextView information;
+    private TextView send_method;
+    private TextView payment;
     private ImageView detail;
     private ImageView departure;
     private ImageView destination;
@@ -36,6 +47,7 @@ public class OrderProcesssActivity extends Activity {
     private ImageView online_check;
 
 
+    private int choice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +64,12 @@ public class OrderProcesssActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
+        this.setLister();
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
-               // choice = bundle.getInt(Constants.ARG_POSITION);
-               // displayLayout();
+                choice = bundle.getInt(Constants.ARG_POSITION);
+                displayLayout();
             }else
             {
                 //Error!!!!
@@ -66,7 +79,7 @@ public class OrderProcesssActivity extends Activity {
         {
             //Error!!!!
         }
-        this.setLister();
+
 
 
 
@@ -76,6 +89,15 @@ public class OrderProcesssActivity extends Activity {
     private void findViews()
     {
         information = (TextView) findViewById(R.id.txt_pannel_info);
+        send_method = (TextView) findViewById(R.id.send_method);
+        payment = (TextView) findViewById(R.id.payment);
+
+        linearLayout_sender = (LinearLayout) findViewById(R.id.sender);
+        linearLayout_receiver = (LinearLayout) findViewById(R.id.receiver);
+        linearLayout_change_price = (LinearLayout) findViewById(R.id.online_check_price);
+        linearLayout_online_check_price = (LinearLayout) findViewById(R.id.change_price);
+        linearLayout_call_panel_merchandise= (LinearLayout) findViewById(R.id.phone_merchandise);
+        linearLayout_call_panel_client= (LinearLayout) findViewById(R.id.phone_client);
 
 
         detail = (ImageView) findViewById(R.id.detail);
@@ -88,6 +110,19 @@ public class OrderProcesssActivity extends Activity {
         online_check = (ImageView) findViewById(R.id.order_online_check);
     }
 
+    private void displayLayout() {
+        if(choice == PASSENGER)
+        {
+            send_method.setText("一般載客(小費:50元)");
+            payment.setText("照表收費");
+            linearLayout_change_price.setVisibility(View.GONE);
+            linearLayout_online_check_price.setVisibility(View.GONE);
+            linearLayout_sender.setVisibility(View.GONE);
+            linearLayout_receiver.setVisibility(View.GONE);
+            linearLayout_call_panel_merchandise.setVisibility(View.GONE);
+            linearLayout_call_panel_client.setVisibility(View.VISIBLE);
+        }
+    }
 
 
 
@@ -159,10 +194,7 @@ public class OrderProcesssActivity extends Activity {
                                 // if this button is clicked, close
                                 // current activity
 
-                                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-                                Bundle b = new Bundle();
-                                b.putInt(Constants.ARG_POSITION, Constants.CANCEL_ORDER_FEEDBACK);
-                                question.putExtras(b);
+                                Intent question = new Intent(OrderProcesssActivity.this, DriverCommentActivity.class);
                                 startActivity(question);
                             }
                         });
@@ -177,11 +209,24 @@ public class OrderProcesssActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-            Bundle b = new Bundle();
-            b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-            question.putExtras(b);
-            startActivity(question);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderProcesssActivity.this);
+            // set title
+            alertDialogBuilder.setTitle(getString(R.string.dialog_finish_order));
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(getString(R.string.dialog_finish_order_message))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog,int id) {
+
+                        }
+                    });
+
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            // show it
+            alertDialog.show();
         }
     });
         online_payment.setOnClickListener(new View.OnClickListener() {
@@ -201,7 +246,7 @@ public class OrderProcesssActivity extends Activity {
         public void onClick(View v) {
             Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
             Bundle b = new Bundle();
-            b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+            b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.ONLINE_CHECK);
             question.putExtras(b);
             startActivity(question);
         }

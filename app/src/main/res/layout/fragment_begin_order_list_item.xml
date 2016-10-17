@@ -67,17 +67,22 @@
             android:id="@+id/take_look"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/btn_bouns_record"
+            android:background="@drawable/ic_look"
             android:textColor="@color/white"
-            android:visibility="gone"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="@string/list_btn_take_look"
             />
         <Button
             android:id="@+id/take_over"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/btn_bouns_upgrade"
+            android:background="@drawable/ic_take"
             android:textColor="@color/white"
+            android:clickable="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
             android:text="@string/list_btn_take_over"
 
             />

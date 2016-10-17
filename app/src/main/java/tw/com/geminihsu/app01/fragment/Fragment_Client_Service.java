@@ -15,24 +15,18 @@
  */
 package tw.com.geminihsu.app01.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
-import tw.com.geminihsu.app01.DriverCommentActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_Client_Service extends Fragment {
@@ -41,7 +35,7 @@ public class Fragment_Client_Service extends Fragment {
     private ImageButton send_merchandise;
     private ImageButton air_plane;
     private ImageButton train;
-	
+    private ImageButton dock;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -65,7 +59,14 @@ public class Fragment_Client_Service extends Fragment {
 
 		
     }
-    
+
+    @Override
+    public void onResume() {
+        getActivity().setTitle("");
+        super.onResume();
+
+
+    }
     @Override
 	public void onStop() {
 		super.onStop();
@@ -78,7 +79,8 @@ public class Fragment_Client_Service extends Fragment {
         take_ride = (ImageButton) getView().findViewById(R.id.normal);
         send_merchandise = (ImageButton) getView().findViewById(R.id.truck);
         air_plane = (ImageButton) getView().findViewById(R.id.airplane);
-        train = (ImageButton) getView().findViewById(R.id.bigtruck);
+        train = (ImageButton) getView().findViewById(R.id.train);
+        dock = (ImageButton) getView().findViewById(R.id.dock);
     }
 
     @Override
@@ -133,12 +135,29 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
-                 Intent question = new Intent(getActivity(), DriverCommentActivity.class);
-                 startActivity(question);
+                 Fragment newFragment = new Fragment_TrainPlanePickUp();
+                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                 transaction.replace(R.id.container, newFragment);
+                 transaction.addToBackStack(null);
+
+                 transaction.commit();
              }
          });
 
+         dock.setOnClickListener(new View.OnClickListener() {
 
+             @Override
+             public void onClick(View v) {
+                 Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
+                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                 transaction.replace(R.id.container, newFragment);
+                 transaction.addToBackStack(null);
+
+                 transaction.commit();
+             }
+         });
      }
 	
 
