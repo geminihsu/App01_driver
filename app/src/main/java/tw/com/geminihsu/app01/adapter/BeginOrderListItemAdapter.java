@@ -24,7 +24,7 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
         mInflater = (LayoutInflater)_context
             .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-       
+
     }
    
     public View getView(int position,
@@ -55,10 +55,11 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
 
 			holder.btn_take_over = (Button) convertView.findViewById(R.id.take_over);
 			holder.btn_take_look = (Button) convertView.findViewById(R.id.take_look);
+			holder.btn_take_look.setTag(position);
 			holder.btn_take_over.setText(item.button_information);
 
 			holder.btn_take_look.setVisibility(item.button_take_look_visible);
-
+			holder.btn_take_over.setTag(position);
 			convertView.setTag(holder);
         }
         else
@@ -72,8 +73,8 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
 			holder.order_time.setText(item.order_time);
 			holder.btn_take_over.setText(item.button_information);
 			holder.btn_take_look.setVisibility(item.button_take_look_visible);
-
-
+			holder.btn_take_look.setTag(position);
+			holder.btn_take_over.setTag(position);
 
 
 		}
@@ -92,7 +93,7 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
 		Button btn_take_over;
 
 	}
-    
+
 
 
 }

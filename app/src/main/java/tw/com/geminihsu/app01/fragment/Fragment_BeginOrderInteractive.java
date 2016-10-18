@@ -132,13 +132,5 @@ public class Fragment_BeginOrderInteractive extends Fragment {
         void onListItemClick(View v);
     }
 
-    public interface OnBtnLookClickListener {
-        void onLookClick(View v);
-    }
-
-    public interface OnBtnTakeClickListener {
-        void onTakeClick(View v);
-    }
-
 
 }

@@ -29,6 +29,7 @@ public class Fragment_BeginOrder extends Fragment {
     private TabLayoutSetupCallback mToolbarSetupCallback;
     private List<String> mTabNamesList;
     private final int ACTIONBAR_MENU_ITEM_FIILTER = 0x0001;
+    private ViewPager viewPager;
 
     public Fragment_BeginOrder() {
         // Required empty public constructor
@@ -56,12 +57,14 @@ public class Fragment_BeginOrder extends Fragment {
 
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beginorder, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
         viewPager.setAdapter(new ItemsPagerAdapter(getChildFragmentManager(), mTabNamesList));
         mToolbarSetupCallback.setupTabLayout(viewPager);
 

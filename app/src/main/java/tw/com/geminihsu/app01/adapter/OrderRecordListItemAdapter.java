@@ -20,7 +20,7 @@ import tw.com.geminihsu.app01.R;
 public class OrderRecordListItemAdapter extends ArrayAdapter<OrderRecordListItem> {
 
     private LayoutInflater mInflater;
-
+	private final List<OrderRecordListItem> list = new ArrayList<>();
 
     public OrderRecordListItemAdapter(Context _context,
 									  int rid, List<OrderRecordListItem> list) {
@@ -30,6 +30,12 @@ public class OrderRecordListItemAdapter extends ArrayAdapter<OrderRecordListItem
 
        
     }
+
+	public void setDataList(List<OrderRecordListItem> items) {
+		list.clear();
+		list.addAll(items);
+	//	notifyDataSetChanged();
+	}
    
     public View getView(int position,
                         View convertView, ViewGroup parent) {

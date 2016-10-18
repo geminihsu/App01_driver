@@ -79,7 +79,7 @@ public class ClientTakeRideSearchActivity extends Activity {
         }
 
         setLister();
-       /* new CountDownTimer(2000,1000){
+        new CountDownTimer(2000,1000){
 
             @Override
             public void onFinish() {
@@ -96,7 +96,7 @@ public class ClientTakeRideSearchActivity extends Activity {
                // mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
             }
 
-        }.start();*/
+        }.start();
 
     }
 

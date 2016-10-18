@@ -225,26 +225,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
     @Override
     public void onListItemClick(View v) {
-        //Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-        Button take_prize = (Button) v.findViewById(R.id.btn_take);
 
-       /*take_prize.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent question = new Intent(MenuMainActivity.this, BoundsRecordActivity.class);
-                Bundle b = new Bundle();
-                question.putExtras(b);
-                startActivity(question);
-            }
-        });*/
-        //int position = (Integer)(take_prize.getTag());
-        //Log.e(TAG,"button_index:"+position);
-        Intent question = new Intent(MenuMainActivity.this, OrderProcesssActivity.class);
-        Bundle b = new Bundle();
-        b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.MERCHANDISE);
-        question.putExtras(b);
-        startActivity(question);
 
     }
 

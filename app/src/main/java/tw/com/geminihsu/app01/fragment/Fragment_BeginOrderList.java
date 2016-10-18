@@ -89,6 +89,7 @@ public class Fragment_BeginOrderList extends Fragment {
         listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
+
         // During startup, check if there are arguments passed to the fragment.
         // onStart is a good place to do this because the layout has already been
         // applied to the fragment at this point so we can safely call the method
@@ -238,7 +239,10 @@ public class Fragment_BeginOrderList extends Fragment {
     private void findViews() {
 
         listView = (ListView) getView().findViewById(R.id.listView1);
-
+        listView.setItemsCanFocus(true);
+        listView.setFocusable(false);
+        listView.setFocusableInTouchMode(false);
+        listView.setClickable(false);
         // 設定所有view 的font size
         // View main_layout = (View) getView().findViewById(R.id.main_layout);
         // DisplayUtil displayUtil = new DisplayUtil();
