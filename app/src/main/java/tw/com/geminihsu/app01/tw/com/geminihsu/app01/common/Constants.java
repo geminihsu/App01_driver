@@ -18,7 +18,7 @@ public class Constants {
 	final public static int QUERY_PASSENGER = 1;
 
 	//用來判斷目前登入是司機還是乘客的流程
-	final public static boolean Driver =true;
+	final public static boolean Driver =false;
 
 	final public static String hotel_latitude = "latitude";
 	final public static String hotel_longitude = "longitude";

@@ -21,6 +21,7 @@ public class OrderRecordListItemAdapter extends ArrayAdapter<OrderRecordListItem
 
     private LayoutInflater mInflater;
 
+	private List<OrderRecordListItem> data;
 
     public OrderRecordListItemAdapter(Context _context,
 									  int rid, List<OrderRecordListItem> list) {
@@ -30,6 +31,12 @@ public class OrderRecordListItemAdapter extends ArrayAdapter<OrderRecordListItem
 
        
     }
+
+	public void setData(List<OrderRecordListItem> items) {
+		data.clear();
+		data.addAll(items);
+		notifyDataSetChanged();
+	}
    
     public View getView(int position,
                         View convertView, ViewGroup parent) {

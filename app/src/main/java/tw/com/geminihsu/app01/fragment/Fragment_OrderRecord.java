@@ -116,7 +116,7 @@ public class Fragment_OrderRecord extends Fragment {
 
                             @Override
                             public void onNext(List<OrderRecordListItem> tvShows) {
-                                listViewAdapter.setDataList(tvShows);
+                                listViewAdapter.setData(tvShows);
                                 listViewAdapter.notifyDataSetChanged();
                             }
                         });
