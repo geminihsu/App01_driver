@@ -31,18 +31,25 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
 
 public class Fragment_OrderRecord extends Fragment {
 
+    private Subscription mOrderSubscription;
     private ListView listView;
     private final List<OrderRecordListItem> mRecordOrderListData = new ArrayList<OrderRecordListItem>();;
     private OrderRecordListItemAdapter listViewAdapter;
 
-     private int MAXSIZE=10;
+     private int MAXSIZE=1000;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -62,11 +69,11 @@ public class Fragment_OrderRecord extends Fragment {
     public void onStart() {
         super.onStart();
         this.findViews();
-           getDataFromDB();
+         ///  getDataFromDB();
         // 建立ListItemAdapter
         listViewAdapter = new OrderRecordListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
-        listViewAdapter.notifyDataSetChanged();
+        createObservable();
         // During startup, check if there are arguments passed to the fragment.
         // onStart is a good place to do this because the layout has already been
         // applied to the fragment at this point so we can safely call the method
@@ -85,12 +92,50 @@ public class Fragment_OrderRecord extends Fragment {
 
     }
 
-    @Override
+    private void createObservable() {
+        //Observable<List<OrderRecordListItem>> listObservable = Observable.just(getDataFromDB());
+        Observable<List<OrderRecordListItem>> tvShowObservable = Observable.fromCallable(new Callable<List<OrderRecordListItem>>() {
+            @Override
+            public List<OrderRecordListItem> call() {
+                return getDataFromDB();
+            }
+        });
+        mOrderSubscription=tvShowObservable.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        new Observer<List<OrderRecordListItem>>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(List<OrderRecordListItem> tvShows) {
+                                listViewAdapter.setDataList(tvShows);
+                                listViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+    }
+
+        @Override
 	public void onStop() {
 		super.onStop();
 
 	}
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mOrderSubscription != null && !mOrderSubscription.isUnsubscribed()) {
+            mOrderSubscription.unsubscribe();
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -114,7 +159,10 @@ public class Fragment_OrderRecord extends Fragment {
 
 
     /* 從 xml 取得 OrderRecord 清單 */
-    private void getDataFromDB() {
+    private List<OrderRecordListItem> getDataFromDB() {
+        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
+        Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
 
         mRecordOrderListData.clear();
         try {
@@ -123,7 +171,6 @@ public class Fragment_OrderRecord extends Fragment {
             for (int i = 0; i < MAXSIZE; i++) {
 
                     if(i%3==0) {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
                         //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
                         item.image = bm1;
@@ -137,10 +184,9 @@ public class Fragment_OrderRecord extends Fragment {
                         mRecordOrderListData.add(item);
 
                     }else if(i%3==1) {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
                         //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
-                        item.image = bm1;
+                        item.image = bm2;
                         item.order_status = "已完成";
                         item.order_status_fontColor = getResources().getColor(R.color.address_devicename_txt);
                         item.time = "2015-12-18 上午07:04";
@@ -154,10 +200,10 @@ public class Fragment_OrderRecord extends Fragment {
                     else
 
                     {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
+                        //Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
                         //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
-                        item.image = bm1;
+                        item.image = bm3;
                         item.order_status = "進行中";
                         item.order_status_fontColor = getResources().getColor(R.color.btn_bouns_upgrade);
                         item.time = "2015-12-18 上午07:04";
@@ -173,6 +219,8 @@ public class Fragment_OrderRecord extends Fragment {
         } catch (Throwable t) {
             Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
         }
+
+        return mRecordOrderListData;
     }
 
 
