@@ -42,9 +42,9 @@ public class Fragment_OrderRecord extends Fragment {
     private final List<OrderRecordListItem> mRecordOrderListData = new ArrayList<OrderRecordListItem>();;
     private OrderRecordListItemAdapter listViewAdapter;
 
-     private int MAXSIZE=10;
+     private int MAXSIZE=100;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
         Bundle savedInstanceState) {
 
         // If activity recreated (such as from screen rotate), restore
@@ -73,8 +73,8 @@ public class Fragment_OrderRecord extends Fragment {
         // below that sets the article text.
         Bundle args = getArguments();
 
-		
-		
+
+
     }
 
     @Override
@@ -115,6 +115,9 @@ public class Fragment_OrderRecord extends Fragment {
 
     /* 從 xml 取得 OrderRecord 清單 */
     private void getDataFromDB() {
+        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
+        Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
 
         mRecordOrderListData.clear();
         try {
@@ -123,8 +126,7 @@ public class Fragment_OrderRecord extends Fragment {
             for (int i = 0; i < MAXSIZE; i++) {
 
                     if(i%3==0) {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
-                        //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                           //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
                         item.image = bm1;
                         item.order_status = "已取消";
@@ -137,10 +139,9 @@ public class Fragment_OrderRecord extends Fragment {
                         mRecordOrderListData.add(item);
 
                     }else if(i%3==1) {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
-                        //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                         //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
-                        item.image = bm1;
+                        item.image = bm2;
                         item.order_status = "已完成";
                         item.order_status_fontColor = getResources().getColor(R.color.address_devicename_txt);
                         item.time = "2015-12-18 上午07:04";
@@ -154,10 +155,9 @@ public class Fragment_OrderRecord extends Fragment {
                     else
 
                     {
-                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
                         //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
                         OrderRecordListItem item = new OrderRecordListItem();
-                        item.image = bm1;
+                        item.image = bm3;
                         item.order_status = "進行中";
                         item.order_status_fontColor = getResources().getColor(R.color.btn_bouns_upgrade);
                         item.time = "2015-12-18 上午07:04";
