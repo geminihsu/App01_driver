@@ -22,6 +22,7 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_BeginOrder extends Fragment {
 
@@ -86,7 +87,31 @@ public class Fragment_BeginOrder extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            return Fragment_BeginOrderInteractive.newInstance();
+            Fragment fragment = null;
+            switch (position)
+            {
+                case 0:
+                    fragment = new Fragment_BeginOrderList();
+                    Bundle args2 = new Bundle();
+                    args2.putInt(Constants.ARG_POSITION, 0);
+                    fragment.setArguments(args2);
+                    break;
+                case 1:
+                    fragment = new Fragment_BeginOrderList();
+                    Bundle args3 = new Bundle();
+                    args3.putInt(Constants.ARG_POSITION, 1);
+                    fragment.setArguments(args3);
+                    break;
+                case 2:
+                    fragment = new Fragment_BeginOrderList();
+                    Bundle args4 = new Bundle();
+                    args4.putInt(Constants.ARG_POSITION, 2);
+                    fragment.setArguments(args4);
+                    break;
+
+
+            }
+            return fragment;
         }
 
         @Override

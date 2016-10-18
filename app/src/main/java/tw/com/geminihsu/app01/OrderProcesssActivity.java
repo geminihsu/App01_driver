@@ -3,6 +3,7 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -170,11 +173,36 @@ public class OrderProcesssActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-                question.putExtras(b);
-                startActivity(question);
+                final Dialog dialog = new Dialog(OrderProcesssActivity.this);
+                dialog.setContentView(R.layout.dialog_enter_change_price_layout);
+                dialog.setTitle(getString(R.string.order_change_fee));
+                TextView content = (TextView)dialog.findViewById(R.id.txt_msg);
+                content.setVisibility(View.VISIBLE);
+                EditText enter=(EditText)dialog.findViewById(R.id.editText_password);
+                enter.setText("1000");
+                Button sure = (Button) dialog.findViewById(R.id.sure_action);
+                sure.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                        Bundle b = new Bundle();
+                        b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_PRICE);
+                        question.putExtras(b);
+                        startActivity(question);
+                    }
+                });
+
+                Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
+                cancel.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+
+                dialog.show();
             }
         });
         passenger_status.setOnClickListener(new View.OnClickListener() {

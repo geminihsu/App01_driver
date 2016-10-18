@@ -33,6 +33,7 @@ public class MerchandiseOrderActivity extends Activity {
     private TextView merchandise_count;
     private TextView merchandise_car_requirement;
     private TextView merchandise_car_requirement_spec;
+    private TextView merchandise_title;
 
     final public static int MERCHANDISE = 0;
     final public static int SEND_MERCHANDISE = 1;
@@ -89,6 +90,7 @@ public class MerchandiseOrderActivity extends Activity {
         merchandise_restrict = (TextView) findViewById(R.id.send_merchandise_restrict);
         merchandise_car_requirement = (TextView) findViewById(R.id.send_content);
         merchandise_car_requirement_spec = (TextView) findViewById(R.id.send_merchandise_content);
+        merchandise_title= (TextView) findViewById(R.id.txt_info);
     }
 
 
@@ -107,6 +109,7 @@ public class MerchandiseOrderActivity extends Activity {
 
         }else if(choice == CLIENT_SEND_MERCHANDISE)
         {
+            merchandise_title.setVisibility(View.VISIBLE);
             linearLayout_send_merchandise.setVisibility(View.VISIBLE);
             merchandise_car_requirement.setText(getString(R.string.merchandise_car_requirement));
             merchandise_car_requirement_spec.setText("20呎");

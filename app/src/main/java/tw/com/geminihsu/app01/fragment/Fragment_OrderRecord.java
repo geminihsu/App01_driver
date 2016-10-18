@@ -121,21 +121,53 @@ public class Fragment_OrderRecord extends Fragment {
             // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
             // GeoDeviceManagement.deviceList.clear();
             for (int i = 0; i < MAXSIZE; i++) {
-                                        // for listview 要用的資料
-                    Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_camera_72x72);
-                    //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
-                    OrderRecordListItem item = new OrderRecordListItem();
-                    item.image = bm1;
-                    item.order_status="已取消";
-                    item.order_status_fontColor = getResources().getColor(R.color.bg_gray);
-                    item.time="2015-12-18 上午07:04";
-                    item.departure="從台中市台灣大段一段一號";
-                    item.destination="到台中市政府";
-                    item.pay_method="照表收費";
-                    item.car_status="一般搭乘";
-                    mRecordOrderListData.add(item);
 
+                    if(i%3==0) {
+                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
+                        //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                        OrderRecordListItem item = new OrderRecordListItem();
+                        item.image = bm1;
+                        item.order_status = "已取消";
+                        item.order_status_fontColor = getResources().getColor(R.color.bg_gray);
+                        item.time = "2015-12-18 上午07:04";
+                        item.departure = "從台中市台灣大段一段一號";
+                        item.destination = "到台中市政府";
+                        item.pay_method = "照表收費";
+                        item.car_status = "一般搭乘";
+                        mRecordOrderListData.add(item);
 
+                    }else if(i%3==1) {
+                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
+                        //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                        OrderRecordListItem item = new OrderRecordListItem();
+                        item.image = bm1;
+                        item.order_status = "已完成";
+                        item.order_status_fontColor = getResources().getColor(R.color.address_devicename_txt);
+                        item.time = "2015-12-18 上午07:04";
+                        item.departure = "從台中市台灣大段一段一號";
+                        item.destination = "到台中市政府";
+                        item.pay_method = "照表收費";
+                        item.car_status = "";
+                        mRecordOrderListData.add(item);
+
+                    }
+                    else
+
+                    {
+                        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
+                        //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                        OrderRecordListItem item = new OrderRecordListItem();
+                        item.image = bm1;
+                        item.order_status = "進行中";
+                        item.order_status_fontColor = getResources().getColor(R.color.btn_bouns_upgrade);
+                        item.time = "2015-12-18 上午07:04";
+                        item.departure = "從台中市台灣大段一段一號";
+                        item.destination = "到台中市政府";
+                        item.pay_method = "$500";
+                        item.car_status = "";
+                        mRecordOrderListData.add(item);
+
+                    }
             }
 
         } catch (Throwable t) {

@@ -1,5 +1,7 @@
 package tw.com.geminihsu.app01;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import tw.com.geminihsu.app01.adapter.BeginOrderRecyclerAdapter;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
@@ -223,7 +226,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     @Override
     public void onListItemClick(View v) {
         //Toast.makeText(this, title, Toast.LENGTH_SHORT).show();
-        //Button take_prize = (Button) v.findViewById(R.id.btn_take);
+        Button take_prize = (Button) v.findViewById(R.id.btn_take);
 
        /*take_prize.setOnClickListener(new View.OnClickListener() {
 
@@ -244,4 +247,6 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         startActivity(question);
 
     }
+
+
 }

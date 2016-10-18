@@ -73,7 +73,7 @@
             android:label="@string/client_take_ride_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".ClientTakeRideSearchActivity"
-            android:label="@string/client_take_ride_title"
+            android:label="@string/client_take_ride_search_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".SendMerchandiseActivity"
             android:label="@string/client_merchanse_send_title"

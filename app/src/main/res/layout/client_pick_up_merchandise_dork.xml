@@ -23,6 +23,7 @@
         android:paddingLeft="20dp"
         android:textSize="@dimen/default_text_address_size_sp"
         android:text="@string/txt_pick_up_airplane"
+        android:textStyle="bold"
         android:textColor="@color/btn_bouns_title"
         />
             <LinearLayout

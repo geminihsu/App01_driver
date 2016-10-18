@@ -158,15 +158,15 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
                 alertDialogBuilder
                         .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
                         .setCancelable(false)
-                        .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                        .setPositiveButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent question = new Intent(getActivity(), ClientTakeRideSearchActivity.class);
                                 startActivity(question);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
                             }
                         });
 

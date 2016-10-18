@@ -22,6 +22,7 @@
         android:paddingTop="10dp"
         android:paddingLeft="20dp"
         android:textSize="@dimen/default_text_address_size_sp"
+        android:textStyle="bold"
         android:text="@string/txt_pick_up_airplane"
         android:textColor="@color/btn_bouns_title"
         />

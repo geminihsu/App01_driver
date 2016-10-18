@@ -90,6 +90,7 @@ public class VerifyCodeActivity extends Activity {
                 }else
                 {
                     Intent question = new Intent(VerifyCodeActivity.this, MenuMainActivity.class);
+                    question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(question);
                 }
             }

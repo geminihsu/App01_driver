@@ -77,6 +77,7 @@ public class PhotoVerifyActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 Intent question = new Intent(PhotoVerifyActivity.this, MenuMainActivity.class);
+                question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(question);
 
                 return true;

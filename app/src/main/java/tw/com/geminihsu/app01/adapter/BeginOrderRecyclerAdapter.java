@@ -18,6 +18,8 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
     private List<BeginOrderListItem> mItemsList;
     private Fragment_BeginOrderInteractive.OnListItemClickListener mListItemClickListener;
 
+
+
     public BeginOrderRecyclerAdapter(List<BeginOrderListItem> itemsList) {
         mItemsList = itemsList;
     }
@@ -93,7 +95,9 @@ public class BeginOrderRecyclerAdapter extends RecyclerView.Adapter<BeginOrderRe
             order_time = (TextView)v.findViewById(R.id.order_time);
 
             btn_take_look = (Button) v.findViewById(R.id.take_look);
+
             btn_take_over = (Button) v.findViewById(R.id.take_over);
+
 
             v.setOnClickListener(this);
         }

@@ -83,6 +83,7 @@ public class MainActivity extends Activity {
                 }else {
                     Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

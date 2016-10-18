@@ -44,6 +44,7 @@
     <string name="merchandise_car_requirement">*車種需求</string>
     <string name="map_location">選擇地點</string>
     <string name="driver_online_check">線上簽收</string>
+    <string name="driver_report_price">等待審核</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -120,6 +121,11 @@
     <string name="menu_send_share_txt_comment">分享您使用的心得</string>
     <string name="menu_send_share_comment">分享APP評分可獲得500點積分</string>
     <string name="menu_send_share_comment_tip">若您覺得APP好用\n請給小費鼓勵</string>
+    <string name="dialog_cancel_report">取消報價</string>
+    <string name="dialog_cancel_report_msg">客戶還在考慮中\n確定放棄這次報價機會嗎？</string>
+    <string name="dialog_btn_cancel_report">取消報價</string>
+    <string name="dialog_btn_give_up_report">放棄報價</string>
+
 
     <string name="btn_logout">登出</string>
 
@@ -207,6 +213,7 @@
     <string name="order_departure">從</string>
     <string name="order_departure_car">發車</string>
     <string name="order_departure_car_record">路上所有訂單</string>
+    <string name="order_change_price">請輸入報價：</string>
 
     <!-- BeginOrderActivity -->
     <string name="tab_real_time">即時</string>
@@ -238,6 +245,8 @@
     <string name="order_online_signature">線上簽收</string>
     <string name="order_pannel_info"><u>使用說明</u></string>
     <string name="menu_cancel_order">取消訂單</string>
+    <string name="menu_sure_take_over">確認接單</string>
+    <string name="menu_give_up_take_over">放棄接單</string>
     <string name="menu_give_up_cancel_order">放棄取消</string>
     <string name="menu_sure_cancel_order">仍要取消</string>
     <string name="menu_cancel_order_warn">如果經常性或惡意取消訂單，可能會受到處罰</string>
@@ -325,7 +334,7 @@
     <string name="txt_wait">稍後，司機正趕來接您</string>
     <string name="txt_car_type">車型</string>
     <string name="txt_car_brand">車牌</string>
-    <string name="txt_car_distance">距您0.8</string>
+    <string name="txt_car_distance">距您0.8公里</string>
     <string name="txt_car_unit">公里</string>
     <string name="txt_car_location">司機在哪</string>
     <string name="txt_car_fee">小費50元</string>
@@ -354,6 +363,7 @@
     <string name="send_merchandise_buyer">*付款方</string>
     <string name="send_merchandise_send">送貨方</string>
     <string name="send_merchandise_recevid">收貨方</string>
+    <string name="send_merchandise_title">詳細貨物資訊</string>
 
     <!-- DriverCommet-->
     <string name="driver_service">司機服務</string>

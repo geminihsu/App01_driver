@@ -2,6 +2,8 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -48,6 +50,7 @@ public class SupportAnswerActivity extends Activity {
     final public static int REPORT_DRIVER= 8;
     final public static int REPORT_APP= 9;
     final public static int ONLINE_CHECK= 10;
+    final public static int REPORT_PRICE= 11;
 
     private int choice = 0;
 
@@ -151,6 +154,10 @@ public class SupportAnswerActivity extends Activity {
         }else if(choice == SupportAnswerActivity.ONLINE_CHECK){
             getActionBar().setTitle(getString(R.string.driver_online_check));
 
+        }else if(choice == SupportAnswerActivity.REPORT_PRICE){
+            getActionBar().setTitle(getString(R.string.driver_report_price));
+            manual.setVisibility(View.VISIBLE);
+            manual.setText("您的報價已提供\n等待客戶審核中");
         }
     }
 
@@ -170,7 +177,7 @@ public class SupportAnswerActivity extends Activity {
             item.setTitle(spanString);
 
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }else if(choice== SupportAnswerActivity.CANCEL_FEEDBACK){
+        }else if(choice== SupportAnswerActivity.CANCEL_FEEDBACK ||choice== SupportAnswerActivity.REPORT_PRICE){
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.menu_sure_cancel_order));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
@@ -191,9 +198,42 @@ public class SupportAnswerActivity extends Activity {
                     b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
                     question.putExtras(b);
                     startActivity(question);
-                }else if(choice== SupportAnswerActivity.SMS_REPORT)
+                }else if(choice== SupportAnswerActivity.SMS_REPORT || choice== SupportAnswerActivity.CANCEL_FEEDBACK)
                 {
-                    finish();
+                    Intent question = new Intent(SupportAnswerActivity.this, MenuMainActivity.class);
+                    question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(question);
+                }else if(choice== SupportAnswerActivity.REPORT_PRICE)
+                {
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                    // set title
+                    alertDialogBuilder.setTitle(getString(R.string.dialog_cancel_report));
+
+                    // set dialog message
+                    alertDialogBuilder
+                            .setMessage(getString(R.string.dialog_cancel_report_msg))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.dialog_btn_cancel_report),new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, close
+                                    // current activity
+                                    Intent question = new Intent(SupportAnswerActivity.this, MenuMainActivity.class);
+                                    question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(question);
+
+                                }
+                            })
+                            .setNegativeButton(getString(R.string.dialog_btn_give_up_report),new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,int id) {
+                                    // if this button is clicked, just close
+                                    // the dialog box and do nothing
+                                    dialog.cancel();
+                                }
+                            });
+                    // create alert dialog
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    // show it
+                    alertDialog.show();
                 }
                 return true;
             case android.R.id.home:

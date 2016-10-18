@@ -1,6 +1,9 @@
 package tw.com.geminihsu.app01.fragment;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +23,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
@@ -144,14 +148,33 @@ public class Fragment_TrainPlanePickUp extends Fragment {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_FIILTER:
-                // Create new fragment and transaction
-                Fragment newFragment = new Fragment_OrderFilter();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                        getActivity());
 
-                transaction.replace(R.id.container, newFragment);
-                transaction.addToBackStack(null);
+                // set title
+                alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
 
-                transaction.commit();
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent question = new Intent(getActivity(), ClientTakeRideSearchActivity.class);
+                                startActivity(question);
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+
+                // show it
+                alertDialog.show();
                 return true;
 
             default:

@@ -178,7 +178,7 @@ limitations under the License.
 				android:layout_height="wrap_content"
 				android:ellipsize="middle"
 				android:textStyle="bold"
-				android:text="@string/service_pick_up_train"
+				android:text="@string/service_pick_up_airplane"
 				android:textColor="@color/btn_bouns_title"
 				/>
 		</LinearLayout>

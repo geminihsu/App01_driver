@@ -6,6 +6,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_About;
 import tw.com.geminihsu.app01.fragment.Fragment_Account;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
 import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01.fragment.Fragment_NotifyList;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
@@ -51,12 +52,12 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	public void setNavigationItemOnClick_waitOrder() {
 		FragmentTransaction fragTran;
-		Fragment_BeginOrderInteractive frag2 = new Fragment_BeginOrderInteractive();
+		Fragment_BeginOrderList frag2 = new Fragment_BeginOrderList();
 		Bundle args2 = new Bundle();
 		args2.putBoolean(Constants.ARG_POSITION, true);
 		frag2.setArguments(args2);
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
-		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderInteractive.class.getSimpleName());
+		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderList.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 		fragTran.addToBackStack(Fragment_BeginOrderInteractive.class.getSimpleName());
 		fragTran.commit();

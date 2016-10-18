@@ -29,10 +29,7 @@ public class Fragment_BeginOrderInteractive extends Fragment {
      */
 
     private boolean wait = false;
-    public static Fragment_BeginOrderInteractive newInstance() {
-        return new Fragment_BeginOrderInteractive();
-    }
-
+    private int option;
     public Fragment_BeginOrderInteractive() {
         // Required empty public constructor
     }
@@ -67,7 +64,10 @@ public class Fragment_BeginOrderInteractive extends Fragment {
 
 
             if(!wait) {
-                beginOrderListItem.order_time = "即時";
+                if(option==0)
+                    beginOrderListItem.order_time = "即時";
+                else
+                    beginOrderListItem.order_time = "2015/12/08 上午07:04";
                 beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
                 beginOrderListItem.button_take_look_visible = View.VISIBLE;
             }else
@@ -87,6 +87,8 @@ public class Fragment_BeginOrderInteractive extends Fragment {
         return view;
     }
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -102,6 +104,9 @@ public class Fragment_BeginOrderInteractive extends Fragment {
         {
             if(data.getBoolean(Constants.ARG_POSITION)==true)
                     wait=true;
+            else
+                   option=data.getInt(Constants.ARG_POSITION);
+
         }
     }
 
@@ -126,4 +131,14 @@ public class Fragment_BeginOrderInteractive extends Fragment {
     public interface OnListItemClickListener {
         void onListItemClick(View v);
     }
+
+    public interface OnBtnLookClickListener {
+        void onLookClick(View v);
+    }
+
+    public interface OnBtnTakeClickListener {
+        void onTakeClick(View v);
+    }
+
+
 }

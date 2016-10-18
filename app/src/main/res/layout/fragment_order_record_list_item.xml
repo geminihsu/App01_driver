@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/bg_gray"
+            android:gravity="center_horizontal"
             android:text="已取消" />
     </LinearLayout>
 
@@ -89,6 +90,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:textColor="@color/red"
+            android:textStyle="bold"
             android:paddingRight="7dp"
             android:visibility="gone" />
     </FrameLayout>

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItem;
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItemAdapter;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.canvas.DrawView;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class ClientTakeRideSearchActivity extends Activity {
@@ -31,9 +33,11 @@ public class ClientTakeRideSearchActivity extends Activity {
     final public static int DRIVER_REPORT_PRICE = 1;
 
     private LinearLayout LinearLayout_info;
+    private LinearLayout circle;
     private TextView reportTitle;
     private TextView reportFee;
     private ListView driverList;
+    private TextView number;
     private int option;
     private final List<DriverReportPriceListItem> mDriverListData = new ArrayList<DriverReportPriceListItem>();;
     private DriverReportPriceListItemAdapter listViewAdapter;
@@ -75,6 +79,24 @@ public class ClientTakeRideSearchActivity extends Activity {
         }
 
         setLister();
+       /* new CountDownTimer(2000,1000){
+
+            @Override
+            public void onFinish() {
+                Intent question = new Intent(ClientTakeRideSearchActivity.this, ClientWaitCarActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+                finish();
+            }
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+               // mTextView.setText("seconds remaining:"+millisUntilFinished/1000);
+            }
+
+        }.start();*/
 
     }
 
@@ -82,9 +104,22 @@ public class ClientTakeRideSearchActivity extends Activity {
     {
         reportTitle = (TextView) findViewById(R.id.txt_forget_password);
         reportFee = (TextView) findViewById(R.id.fee);
+        number = (TextView)findViewById(R.id.number);
+        number.setText("已通知\n2\n輛車");
         driverList = (ListView)findViewById(R.id.listView1);
 
+
         LinearLayout_info = (LinearLayout) findViewById(R.id.info);
+
+        /*final DrawView view=new DrawView(this);
+        view.setMinimumHeight(50);
+        view.setMinimumWidth(50);
+        //通知view组件重绘
+        view.invalidate();
+        view.setLayoutParams(new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT));
+        circle.addView(view);*/
 
     }
 
@@ -148,10 +183,8 @@ public class ClientTakeRideSearchActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                Intent question = new Intent(ClientTakeRideSearchActivity.this, DriverAccountActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, DriverAccountActivity.DRIVER_SERVICE);
-                question.putExtras(b);
+                Intent question = new Intent(ClientTakeRideSearchActivity.this, MenuMainActivity.class);
+                question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(question);
 
                 return true;
@@ -174,10 +207,17 @@ public class ClientTakeRideSearchActivity extends Activity {
                 // for listview 要用的資料
                 DriverReportPriceListItem item = new DriverReportPriceListItem();
 
-                item.driver_name="王小明";
-                item.title ="車神";
-                item.price = "報價：1000元";
-                item.value = "5";
+                if(i%2==0) {
+                    item.driver_name = "王小明";
+                    item.title = "車神";
+                    item.price = "報價：1000元";
+                    item.value = "5";
+                }else{
+                    item.driver_name = "陳大明";
+                    item.title = "車爵";
+                    item.price = "報價：1050元";
+                    item.value = "5";
+                }
 
                 mDriverListData.add(item);
 

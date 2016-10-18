@@ -13,6 +13,7 @@
         android:layout_centerHorizontal="true"
         android:paddingTop="10dp"
         android:paddingLeft="20dp"
+        android:textStyle="bold"
         android:textSize="@dimen/default_text_address_size_sp"
         android:text="@string/txt_pick_up_airplane"
         android:textColor="@color/btn_bouns_title"

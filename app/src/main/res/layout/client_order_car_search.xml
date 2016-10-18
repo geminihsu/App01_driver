@@ -13,9 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:textStyle="bold"
         android:textSize="@dimen/default_text_address_size_sp"
         android:text="@string/txt_search"
-        android:textColor="@color/btn_bouns_title"
+        android:textColor="@color/action_bar_background"
         android:linksClickable="true"
         />
 
@@ -24,63 +25,50 @@
         android:id="@+id/info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_below="@+id/txt_forget_password"
         android:orientation="vertical"
         >
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/circle"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent"
+            android:layout_height="fill_parent"
             android:orientation="horizontal"
+            android:gravity="center_horizontal"
             android:paddingTop="20dp"
             >
             <TextView
-                android:id="@+id/name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/number"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:paddingLeft="80dp"
                 android:ellipsize="middle"
-                android:singleLine="true"
-                android:paddingLeft="20dp"
-                android:text="@string/login_id_title"
-                android:textColor="@color/address_devicename_txt"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:layout_centerHorizontal="true"
+                android:textStyle="bold"
+                android:textSize="@dimen/default_text_address_size_sp"
+                android:text="已通知\n2輛車"
+                android:textColor="@color/btn_bouns_record"
                 />
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text=""
-
-                />
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingBottom="20dp"
-            >
             <TextView
-                android:id="@+id/id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/circle_draw"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
                 android:ellipsize="middle"
+                android:layout_centerHorizontal="true"
                 android:singleLine="true"
                 android:paddingLeft="20dp"
-                android:text="@string/login_password_title"
+                android:textAlignment="center"
+                android:text=""
+                android:background="@drawable/bg_oval_with_gradient"
                 android:textColor="@color/address_devicename_txt"
                 />
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:singleLine="true"
-                android:text=""
 
-                />
-        </LinearLayout>
+        </RelativeLayout>
+
     </LinearLayout>
 
         <LinearLayout
@@ -103,7 +91,8 @@
                 android:singleLine="true"
                 android:paddingLeft="20dp"
                 android:text="@string/txt_fee"
-                android:textColor="@color/address_devicename_txt"
+                android:textStyle="bold"
+                android:textColor="@color/btn_bouns_title"
                 />
             <Spinner android:id="@+id/truck_location"
                 android:layout_width="100dp"
