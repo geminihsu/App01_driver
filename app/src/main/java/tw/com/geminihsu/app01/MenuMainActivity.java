@@ -184,6 +184,9 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                     case R.id.navigation_item_bouns:
                         viewDelegateBase.setNavigationItemOnClick_bounds();
                         return true;
+                    case R.id.navigation_item_driver:
+                        viewDelegateBase.setNavigationItemOnClick_driver();
+                        return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
                         return true;

@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+
 public class MainActivity extends Activity {
 
     private TextView txt_forget_password;
@@ -81,6 +83,7 @@ public class MainActivity extends Activity {
                 {
                     alert();
                 }else {
+                    Constants.Driver = false;
                     Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
                     startActivity(intent);
                     finish();

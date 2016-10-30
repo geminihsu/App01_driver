@@ -7,8 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
@@ -17,18 +17,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import tw.com.geminihsu.app01.adapter.CommentListItem;
-import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
-import tw.com.geminihsu.app01.adapter.DriverReportPriceListItem;
-import tw.com.geminihsu.app01.adapter.DriverReportPriceListItemAdapter;
-import tw.com.geminihsu.app01.adapter.RecommendListItem;
-import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
 public class ClientWaitCarActivity extends Activity {
@@ -41,6 +31,8 @@ public class ClientWaitCarActivity extends Activity {
     private Button shareTakeInfo;
 
 
+    public static final String LINE_PACKAGE_NAME = "jp.naver.line.android";
+    public static final String LINE_CLASS_NAME = "jp.naver.line.android.activity.selectchat.SelectChatActivity";
 
 
 
@@ -128,9 +120,33 @@ public class ClientWaitCarActivity extends Activity {
                                 startActivity(question);
                                 break;
                             case 1:
-                                Intent page = new Intent(ClientWaitCarActivity.this, BookmarksMapListActivity.class);
-                                startActivity(page);
+//                                Intent page = new Intent(ClientWaitCarActivity.this, BookmarksMapListActivity.class);
+//                                startActivity(page);
+                                //發送訊息到line
+                                Intent intent = new Intent(Intent.ACTION_SEND);
+                                intent.setClassName(LINE_PACKAGE_NAME, LINE_CLASS_NAME);
+                                intent.setType("text/plain");
+                                intent.putExtra(Intent.EXTRA_TEXT, "我在2015年12月15日上午09:00搭乘車牌EHE-530車輛，從台中火車站前往台中市政府。");
+                                startActivity(intent);
+
                                 break;
+                            case 2:
+                                //發送訊息到email
+                                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                                emailIntent.setData(Uri.parse("mailto:"));
+                                emailIntent.setType("message/rfc822");
+                                emailIntent.putExtra(Intent.EXTRA_EMAIL  , new String[]{"abc@email.com"});
+                                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "我在搭車");
+                                emailIntent.putExtra(Intent.EXTRA_TEXT   , "我在2015年12月15日上午09:00搭乘車牌EHE-530車輛，從台中火車站前往台中市政府。");
+
+                                try {
+                                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                                    finish();
+                                    //Log.i("Finished sending email...", "");
+                                }
+                                catch (android.content.ActivityNotFoundException ex) {
+                                    Toast.makeText(ClientWaitCarActivity.this, "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                                }
                         }
                     }
                 });

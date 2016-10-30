@@ -1,5 +1,7 @@
 package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate;
 
+import tw.com.geminihsu.app01.DriverAccountActivity;
+import tw.com.geminihsu.app01.DriverIdentityActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.fragment.Fragment_About;
@@ -14,6 +16,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
@@ -141,6 +144,12 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	}
 
+	public void setNavigationItemOnClick_driver() {
+		Intent question = new Intent(mainActivity, DriverIdentityActivity.class);
+		//question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		mainActivity.startActivity(question);
+
+	}
 
 
 	/*更新actionbar 的item*/

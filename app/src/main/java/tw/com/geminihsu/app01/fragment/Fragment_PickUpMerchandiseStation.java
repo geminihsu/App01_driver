@@ -265,7 +265,7 @@ public class Fragment_PickUpMerchandiseStation extends Fragment {
 
         mCommentListData.clear();
         Resources res =getResources();
-        String[] opt=res.getStringArray(R.array.client_take_ride_requirement);
+        String[] opt=res.getStringArray(R.array.client_send_merchandise_requirement);
         try {
             // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
             // GeoDeviceManagement.deviceList.clear();

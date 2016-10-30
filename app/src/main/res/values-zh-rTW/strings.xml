@@ -82,6 +82,10 @@
     <string name="send_valid_code_button">傳送驗證碼</string>
     <string name="check_aggree">我同意</string>
     <string name="check_aggree_info">隱私政策和會員規則</string>
+    <string name="txt_choice_identify">*請選擇你要註冊的身份</string>
+    <string name="check_client">客戶</string>
+    <string name="check_driver">駕駛</string>
+
 
     <!-- MenuMainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -99,6 +103,7 @@
     <string name="account">我的帳戶</string>
     <string name="wallet">我的錢包</string>
     <string name="bouns">積分獎勵</string>
+    <string name="driver">成為司機</string>
 
     <!-- fragment_client_service -->
     <string name="service_info">請選擇需要的服務</string>

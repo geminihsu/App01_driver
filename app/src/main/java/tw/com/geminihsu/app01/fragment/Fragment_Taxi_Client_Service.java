@@ -23,16 +23,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
-public class Fragment_Client_Service extends Fragment {
-
-	private ImageButton taxi;
-    private ImageButton truck;
-    private ImageButton cargo;
+public class Fragment_Taxi_Client_Service extends Fragment {
+	private TextView article ;
+	private ImageButton take_ride;
+    private ImageButton send_merchandise;
+    private ImageButton air_plane;
+    private ImageButton train;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class Fragment_Client_Service extends Fragment {
         //}
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_client_service, container, false);
+        return inflater.inflate(R.layout.fragment_taxi_client_service, container, false);
     }
 
     @Override
@@ -72,9 +74,11 @@ public class Fragment_Client_Service extends Fragment {
 
 	private void findViews()
     {
-        taxi = (ImageButton) getView().findViewById(R.id.normal);
-        truck = (ImageButton) getView().findViewById(R.id.truck);
-        cargo = (ImageButton) getView().findViewById(R.id.dock);
+    	article = (TextView) getView().findViewById(R.id.service_info);
+        take_ride = (ImageButton) getView().findViewById(R.id.normal);
+        send_merchandise = (ImageButton) getView().findViewById(R.id.truck);
+        air_plane = (ImageButton) getView().findViewById(R.id.airplane);
+        train = (ImageButton) getView().findViewById(R.id.train);
     }
 
     @Override
@@ -88,11 +92,34 @@ public class Fragment_Client_Service extends Fragment {
 	
      private void setLister()
      {
-         taxi.setOnClickListener(new View.OnClickListener() {
+         take_ride.setOnClickListener(new View.OnClickListener() {
 
              @Override
              public void onClick(View v) {
-                 Fragment newFragment = new Fragment_Taxi_Client_Service();
+                 Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                 Bundle b = new Bundle();
+                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.TAKE_RIDE);
+                 question.putExtras(b);
+                 startActivity(question);
+             }
+         });
+
+         send_merchandise.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+             public void onClick(View v) {
+                 Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                 Bundle b = new Bundle();
+                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.SEND_MERCHANDISE);
+                 question.putExtras(b);
+                 startActivity(question);
+             }
+         });
+         air_plane.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+             public void onClick(View v) {
+                 Fragment newFragment = new Fragment_ClientAirPlanePickUp();
                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                  transaction.replace(R.id.container, newFragment);
@@ -102,11 +129,11 @@ public class Fragment_Client_Service extends Fragment {
              }
          });
 
-         truck.setOnClickListener(new View.OnClickListener() {
+         train.setOnClickListener(new View.OnClickListener() {
 
              @Override
              public void onClick(View v) {
-                 Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
+                 Fragment newFragment = new Fragment_TrainPlanePickUp();
                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
                  transaction.replace(R.id.container, newFragment);
@@ -115,19 +142,8 @@ public class Fragment_Client_Service extends Fragment {
                  transaction.commit();
              }
          });
-         cargo.setOnClickListener(new View.OnClickListener() {
 
-             @Override
-             public void onClick(View v) {
-                 Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
-                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-                 transaction.replace(R.id.container, newFragment);
-                 transaction.addToBackStack(null);
-
-                 transaction.commit();
-             }
-         });
      }
 	
 

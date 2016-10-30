@@ -71,5 +71,10 @@
             android:checked="true"
             android:icon="@drawable/ic_launcher"
             android:title="@string/bouns"/>
+        <item
+            android:id="@+id/navigation_item_driver"
+            android:checked="true"
+            android:icon="@drawable/ic_launcher"
+            android:title="@string/driver"/>
     </group>
 </menu>

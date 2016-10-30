@@ -30,4 +30,13 @@
                <item>懂英文</item>
                <item>懂日文</item>
         　　    </string-array>
+    <string-array name="client_send_merchandise_requirement">
+        　　    <item>包車專送</item>
+               <item>人工搬運</item>
+        　　    <item>升降尾門</item>
+               <item>帶有手動拖車</item>
+               <item>平板車,可以置放棧板貨</item>
+               <item>箱型車</item>
+               <item>冷涷冷藏功能</item>
+        　　    </string-array>
  </resources>

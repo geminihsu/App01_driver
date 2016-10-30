@@ -66,7 +66,6 @@ limitations under the License.
 			android:ellipsize="middle"
 			android:singleLine="true"
 			android:background="@color/transparent"
-			android:layout_gravity="center_horizontal"
 			android:src="@drawable/ic_maps_local_taxi"
 			/>
 			<TextView
@@ -74,8 +73,7 @@ limitations under the License.
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:textStyle="bold"
-				android:text="@string/service_taxi"
-				android:layout_gravity="center_horizontal"
+				android:text="@string/service_take"
 				android:textColor="@color/btn_bouns_title"
 				/>
 			</LinearLayout>
@@ -83,6 +81,7 @@ limitations under the License.
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
 			android:orientation="vertical"
 			>
 		<ImageButton
@@ -91,7 +90,6 @@ limitations under the License.
 			android:layout_height="wrap_content"
 			android:ellipsize="middle"
 			android:singleLine="true"
-			android:layout_gravity="center_horizontal"
 			android:background="@color/transparent"
 			android:src="@drawable/ic_maps_local_shipping"
 			/>
@@ -101,8 +99,7 @@ limitations under the License.
 				android:layout_height="wrap_content"
 				android:ellipsize="middle"
 				android:textStyle="bold"
-				android:layout_gravity="center_horizontal"
-				android:text="@string/service_truck"
+				android:text="@string/service_send_merchandise"
 				android:textColor="@color/btn_bouns_title"
 				/>
 		</LinearLayout>
@@ -110,26 +107,52 @@ limitations under the License.
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:paddingLeft="20dp"
 			android:orientation="vertical"
 			>
+
 		<ImageButton
-			android:id="@+id/dock"
+			android:id="@+id/train"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:ellipsize="middle"
 			android:singleLine="true"
-			android:layout_gravity="center_horizontal"
 			android:background="@color/transparent"
-			android:src="@drawable/ic_maps_directions_ferry"
+			android:src="@drawable/ic_maps_directions_subway"
 			/>
 			<TextView
-				android:id="@+id/txt_dock"
+				android:id="@+id/txt_train"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:ellipsize="middle"
 				android:textStyle="bold"
-				android:layout_gravity="center_horizontal"
-				android:text="@string/service_big_truck"
+				android:text="@string/service_pick_up_train"
+				android:textColor="@color/btn_bouns_title"
+				/>
+		</LinearLayout>
+		<LinearLayout
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:paddingLeft="20dp"
+			android:orientation="vertical"
+			>
+		<ImageButton
+			android:id="@+id/airplane"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="middle"
+			android:singleLine="true"
+			android:background="@color/transparent"
+			android:src="@drawable/ic_maps_local_airport"
+			/>
+			<TextView
+				android:id="@+id/txt_airplane"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:ellipsize="middle"
+				android:textStyle="bold"
+				android:text="@string/service_pick_up_airplane"
 				android:textColor="@color/btn_bouns_title"
 				/>
 		</LinearLayout>

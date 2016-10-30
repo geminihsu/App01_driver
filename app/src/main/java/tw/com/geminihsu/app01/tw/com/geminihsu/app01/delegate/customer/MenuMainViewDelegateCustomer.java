@@ -77,5 +77,6 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 		super.setNavigationItem(menu);
 		menu.findItem(R.id.navigation_item_order).setVisible(true);
 		menu.findItem(R.id.navigation_item_order_record).setVisible(true);
+		menu.findItem(R.id.navigation_item_driver).setVisible(true);
 	}
 }
