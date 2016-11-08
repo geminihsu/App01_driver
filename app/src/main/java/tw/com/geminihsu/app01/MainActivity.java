@@ -9,10 +9,13 @@ import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 
@@ -77,6 +80,8 @@ public class MainActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Log.d("FCM", "Token:"+token);
                 phone_number = account_phone.getText().toString();
                 password = account_password.getText().toString();
                 if(phone_number.isEmpty()||password.isEmpty())
