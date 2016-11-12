@@ -15,9 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.plus.Account;
 import com.google.firebase.iid.FirebaseInstanceId;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountInfo;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.util.RealmUtil;
 
 public class MainActivity extends Activity {
 
@@ -30,12 +35,13 @@ public class MainActivity extends Activity {
     private String phone_number;
     private String password;
 
-
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
+
     }
 
     @Override
@@ -80,18 +86,24 @@ public class MainActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String token = FirebaseInstanceId.getInstance().getToken();
-                Log.d("FCM", "Token:"+token);
+                //String token = FirebaseInstanceId.getInstance().getToken();
+                //Log.d("FCM", "Token:"+token);
                 phone_number = account_phone.getText().toString();
                 password = account_password.getText().toString();
                 if(phone_number.isEmpty()||password.isEmpty())
                 {
                     alert();
                 }else {
-                    Constants.Driver = false;
-                    Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                    startActivity(intent);
-                    finish();
+
+                    RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+                    AccountInfo user = realmUtil.queryAccount("phoneNumber",phone_number);
+
+                    if(user!=null) {
+                        Constants.Driver = false;
+                        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 }
             }
         });
@@ -119,5 +131,6 @@ public class MainActivity extends Activity {
         // show it
         alertDialog.show();
     }
+
 
 }

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -18,8 +19,12 @@ import java.util.ArrayList;
 //import io.realm.Realm;
 //import io.realm.RealmConfiguration;
 //import io.realm.RealmResults;
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
 //import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountBean;
+import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountInfo;
 import tw.com.geminihsu.app01.tw.com.geminihsu.app01.util.Utility;
 
 public class RegisterActivity extends Activity {
@@ -36,8 +41,8 @@ public class RegisterActivity extends Activity {
 
     private Button verify;
     private CheckBox agree;
-
-    //private Realm realm;
+    private static RegisterActivity instance;
+    private Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,16 @@ public class RegisterActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-
+        mRealm = Realm.getInstance(
+                new RealmConfiguration.Builder(this)
+                        .name("data.realm")
+                        .build()
+        );
     }
+    public static RegisterActivity getInstance() {
+        return instance;
+    }
+
 
     @Override
     protected void onStart() {
@@ -109,7 +122,19 @@ public class RegisterActivity extends Activity {
 
            @Override
            public void onClick(View v) {
-               Constants.Driver = false;
+               mRealm.beginTransaction();
+
+               AccountInfo user = mRealm.createObject(AccountInfo.class);
+               user.setId(id);
+               user.setName(user_name.getText().toString());
+               user.setPhoneNumber(user_phone.getText().toString());
+               user.setIdentify(user_id.getText().toString());
+               user.setPassword(user_password.getText().toString());
+               user.setConfirm_password(user_password_confirm.getText().toString());
+               user.setRecommend_id(recommend_code.getText().toString());
+               mRealm.commitTransaction();
+
+                Constants.Driver = false;
                 Intent question = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
                 startActivity(question);
                //addAccountDetails(null,-1);
