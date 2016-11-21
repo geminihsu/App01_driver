@@ -2,6 +2,8 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,23 +15,31 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
-//import io.realm.Realm;
-//import io.realm.RealmConfiguration;
-//import io.realm.RealmResults;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-//import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountBean;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountInfo;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.util.Utility;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.App01libObjectKey;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class RegisterActivity extends Activity {
 
-    //private static ArrayList<AccountBean> accountDetailsModelArrayList = new ArrayList<>();
+    public final static String BUNDLE_ACCOUNT_INFO = "account";// from
+
+    public final static String TAG = RegisterActivity.class.toString();// from
+
+
     private static int id = 1;
     private TextView clause;
     private EditText user_name;
@@ -41,8 +51,8 @@ public class RegisterActivity extends Activity {
 
     private Button verify;
     private CheckBox agree;
-    private static RegisterActivity instance;
-    private Realm mRealm;
+
+    private static RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +61,8 @@ public class RegisterActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-        mRealm = Realm.getInstance(
-                new RealmConfiguration.Builder(this)
-                        .name("data.realm")
-                        .build()
-        );
-    }
-    public static RegisterActivity getInstance() {
-        return instance;
-    }
 
+    }
 
     @Override
     protected void onStart() {
@@ -122,23 +124,28 @@ public class RegisterActivity extends Activity {
 
            @Override
            public void onClick(View v) {
-               mRealm.beginTransaction();
 
-               AccountInfo user = mRealm.createObject(AccountInfo.class);
-               user.setId(id);
-               user.setName(user_name.getText().toString());
-               user.setPhoneNumber(user_phone.getText().toString());
-               user.setIdentify(user_id.getText().toString());
-               user.setPassword(user_password.getText().toString());
-               user.setConfirm_password(user_password_confirm.getText().toString());
-               user.setRecommend_id(recommend_code.getText().toString());
-               mRealm.commitTransaction();
+               if (checkColumn() && agree.isChecked()) {
+                   final AccountInfo user = new AccountInfo();
+                   user.setId(id);
+                   user.setName(user_name.getText().toString());
+                   user.setPhoneNumber(user_phone.getText().toString());
+                   user.setIdentify(user_id.getText().toString());
+                   user.setPassword(user_password.getText().toString());
+                   user.setConfirm_password(user_password_confirm.getText().toString());
+                   user.setRecommend_id(recommend_code.getText().toString());
+                   user.setRole(Constants.Identify.CLIENT.ordinal());
 
-                Constants.Driver = false;
-                Intent question = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
-                startActivity(question);
-               //addAccountDetails(null,-1);
-               //getAllUsers();
+                   String token = FirebaseInstanceId.getInstance().getToken();
+                   Log.d("FCM", "Token:" + token);
+                   user.setRegisterToken(token);
+
+
+                   sendRegisterRequest(user);
+
+
+               }else
+                   alert();
            }
 
         });
@@ -156,28 +163,10 @@ public class RegisterActivity extends Activity {
         }
     }
 
-   /* public void addAccountDetails(final AccountBean model,final int position) {
-
-        // if (checkColumn()) {
-        AccountBean accountBean = new AccountBean();
-        accountBean.setName(user_name.getText().toString());
-        accountBean.setIdentify(user_id.getText().toString());
-        accountBean.setPhoneNumber(user_phone.getText().toString());
-        accountBean.setLoginPassword(user_password.getText().toString());
-        accountBean.setRecommendedId(recommend_code.getText().toString());
-
-        if (model == null)
-            addDataToRealm(accountBean);
-        else
-            updatePersonDetails(accountBean, position, model.getCode());
-
-
-        //  }
-    }
 
     private boolean checkColumn(){
         //check column not null
-        if (!Utility.isBlankField(user_name) && !Utility.isBlankField(user_id) && !Utility.isBlankField(user_phone) && !Utility.isBlankField(user_password) && !Utility.isBlankField(user_password_confirm) && !Utility.isBlankField(recommend_code))
+        if (!Utility.isBlankField(user_name) && !Utility.isBlankField(user_id) && !Utility.isBlankField(user_phone) && !Utility.isBlankField(user_password) && !Utility.isBlankField(user_password_confirm) )
             {
             //make sure user password the same as user password confirm
             if(user_password.getText().toString().equals(user_password_confirm.getText().toString())) {
@@ -190,6 +179,70 @@ public class RegisterActivity extends Activity {
 
     }
 
+    private void sendRegisterRequest(final AccountInfo user)
+    {
+        String versionName = BuildConfig.VERSION_NAME;
+        final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_REGISTER);
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_USERNAME, user.getPhoneNumber());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_PASSWORD, user.getPassword());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_IDCARD, user.getIdentify());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REALNAME, "哈哈");
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REGISTER_ID, user.getRegisterToken());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_PLATFORM, "android");
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_APP_VERSION, versionName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.e(TAG,jsonObject.toString());
+
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
+                    App01libObjectKey.APP_REGISTER_RESPONSE_CODE connectResult =App01libObjectKey.conversion_register_connect_result(Integer.valueOf(status));
+
+                    if(connectResult.equals(App01libObjectKey.APP_REGISTER_RESPONSE_CODE.K_APP_REGISTER_RESPONSE_CODE_SUCCESS))
+                    {
+                        Constants.Driver = false;
+                        Intent verify = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable(BUNDLE_ACCOUNT_INFO, user);
+                        verify.putExtras(b);
+                        startActivity(verify);
+                    }else
+                    {
+                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+
+                        Toast.makeText(getApplicationContext(),
+                                message,
+                                Toast.LENGTH_LONG).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG,volleyError.getMessage().toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+    }
     /*private void addDataToRealm(AccountBean model) {
         realm.beginTransaction();
 
@@ -233,4 +286,25 @@ public class RegisterActivity extends Activity {
         realm.commitTransaction();
         //personDetailsAdapter.notifyDataSetChanged();
     }*/
+
+    private void alert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.register_error_title));
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_register_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
+
 }

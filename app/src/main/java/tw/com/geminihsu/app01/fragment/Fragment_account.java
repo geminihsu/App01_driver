@@ -16,8 +16,6 @@
 package tw.com.geminihsu.app01.fragment;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,19 +34,11 @@ import android.widget.ListView;
 
 import java.util.ArrayList;
 
-import tw.com.geminihsu.app01.ChangePasswordActivity;
-import tw.com.geminihsu.app01.CommentActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.RecommendActivity;
-import tw.com.geminihsu.app01.SupportAnswerActivity;
-import tw.com.geminihsu.app01.adapter.CommentListItem;
-import tw.com.geminihsu.app01.adapter.RecommendListItem;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.Fragment_AccountDelegateCustomer;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.Fragment_AccountDelegateDriver;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
+import tw.com.geminihsu.app01.delegate.customer.Fragment_AccountDelegateCustomer;
+import tw.com.geminihsu.app01.delegate.driver.Fragment_AccountDelegateDriver;
 
 
 public class Fragment_Account extends Fragment {

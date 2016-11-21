@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.util;
+package tw.com.geminihsu.app01.utils;
 
 import android.widget.EditText;
 

@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class ClientWaitCarActivity extends Activity {
 

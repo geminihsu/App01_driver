@@ -1,7 +1,5 @@
 package tw.com.geminihsu.app01;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,23 +13,20 @@ import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
-import tw.com.geminihsu.app01.adapter.BeginOrderRecyclerAdapter;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
 import tw.com.geminihsu.app01.fragment.Fragment_MerchandiseDorkPickUp;
 import tw.com.geminihsu.app01.fragment.Fragment_Support;
 import tw.com.geminihsu.app01.fragment.Fragment_TrainPlanePickUp;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver.MenuMainViewDelegateDriver;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
+import tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
+import tw.com.geminihsu.app01.delegate.driver.MenuMainViewDelegateDriver;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
         Fragment_BeginOrderInteractive.OnListItemClickListener{

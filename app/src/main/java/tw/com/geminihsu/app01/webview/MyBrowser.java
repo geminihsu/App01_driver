@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.webview;
+package tw.com.geminihsu.app01.webview;
 
 import android.webkit.WebView;
 import android.webkit.WebViewClient;

@@ -21,15 +21,9 @@ import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -47,13 +41,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.com.geminihsu.app01.BookmarksMapListActivity;
-import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MapsActivity;
-import tw.com.geminihsu.app01.MerchandiseOrderActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_PickUpAirPlane extends Fragment {

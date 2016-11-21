@@ -2,13 +2,9 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,9 +13,7 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.CommentListItem;
 import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class CommentActivity extends Activity {
 

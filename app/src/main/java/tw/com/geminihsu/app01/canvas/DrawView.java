@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.canvas;
+package tw.com.geminihsu.app01.canvas;
 
 import android.content.Context;
 import android.graphics.Canvas;

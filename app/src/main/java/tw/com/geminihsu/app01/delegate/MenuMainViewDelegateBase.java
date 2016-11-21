@@ -1,6 +1,5 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate;
+package tw.com.geminihsu.app01.delegate;
 
-import tw.com.geminihsu.app01.DriverAccountActivity;
 import tw.com.geminihsu.app01.DriverIdentityActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
@@ -14,7 +13,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_NotifyList;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 import android.content.Intent;
 import android.os.Bundle;

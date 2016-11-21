@@ -15,7 +15,6 @@
  */
 package tw.com.geminihsu.app01.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -24,9 +23,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_Client_Service extends Fragment {
 

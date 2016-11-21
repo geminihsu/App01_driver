@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -26,7 +25,7 @@ import java.util.List;
 import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_TrainPlanePickUp extends Fragment {
 

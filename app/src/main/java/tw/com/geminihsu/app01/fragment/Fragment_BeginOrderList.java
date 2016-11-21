@@ -19,11 +19,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,17 +32,13 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.MerchandiseOrderActivity;
 import tw.com.geminihsu.app01.OrderProcesssActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItemAdapter;
-import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
-import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_BeginOrderList extends Fragment {
 

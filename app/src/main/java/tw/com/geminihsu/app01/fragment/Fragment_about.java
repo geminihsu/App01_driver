@@ -15,24 +15,16 @@
  */
 package tw.com.geminihsu.app01.fragment;
 
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
-
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.SupportAnswerActivity;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.webview.MyBrowser;
+import tw.com.geminihsu.app01.webview.MyBrowser;
 
 
 public class Fragment_About extends Fragment {

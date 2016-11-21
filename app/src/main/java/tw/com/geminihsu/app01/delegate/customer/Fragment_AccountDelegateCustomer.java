@@ -1,23 +1,18 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.customer;
+package tw.com.geminihsu.app01.delegate.customer;
 
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-
-import java.util.ArrayList;
 
 import tw.com.geminihsu.app01.ChangePasswordActivity;
 import tw.com.geminihsu.app01.CommentActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.RecommendActivity;
 import tw.com.geminihsu.app01.fragment.Fragment_Account;
-import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
 
 public class Fragment_AccountDelegateCustomer extends Fragment_AccountDelegateBase {
 	protected Fragment_Account fragment;

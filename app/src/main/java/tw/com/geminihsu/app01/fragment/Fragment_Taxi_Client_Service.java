@@ -27,7 +27,7 @@ import android.widget.TextView;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_Taxi_Client_Service extends Fragment {
 	private TextView article ;

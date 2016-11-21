@@ -5,26 +5,38 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.style.URLSpan;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.plus.Account;
-import com.google.firebase.iid.FirebaseInstanceId;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountInfo;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.util.RealmUtil;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.App01libObjectKey;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class MainActivity extends Activity {
+    public final static String TAG = MainActivity.class.toString();// from
+
+    public final static int ERROR_USER_INFO = 0;
+    public final static int ERROR_NO_USER = 1;
+
 
     private TextView txt_forget_password;
     private Button btn_register;
@@ -32,29 +44,38 @@ public class MainActivity extends Activity {
     private EditText account_phone;
     private EditText account_password;
 
-    private String phone_number;
-    private String password;
+    private String phone_number="";
+    private String password="";
 
-    private Realm mRealm;
+
+
+    private SharedPreferences configSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
 
-    }
+     }
 
     @Override
     protected void onStart() {
         super.onStart();
         this.findViews();
         this.setLister();
-
+        if (!phone_number.isEmpty() && !password.isEmpty()) {
+            queryAccount();
+        }
 
     }
 
     private void findViews()
     {
+        configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        phone_number = ConfigSharedPreferencesUtil.getUserName(this, configSharedPreferences);
+        password = ConfigSharedPreferencesUtil.getPassword(this, configSharedPreferences);
+
         txt_forget_password = (TextView) findViewById(R.id.txt_forget_password);
 
         btn_register = (Button) findViewById(R.id.register);
@@ -86,46 +107,63 @@ public class MainActivity extends Activity {
         btn_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //String token = FirebaseInstanceId.getInstance().getToken();
-                //Log.d("FCM", "Token:"+token);
+
                 phone_number = account_phone.getText().toString();
                 password = account_password.getText().toString();
                 if(phone_number.isEmpty()||password.isEmpty())
                 {
-                    alert();
+                    alert(ERROR_USER_INFO);
                 }else {
+                    queryAccount();
 
-                    RealmUtil realmUtil = new RealmUtil(MainActivity.this);
-                    AccountInfo user = realmUtil.queryAccount("phoneNumber",phone_number);
-
-                    if(user!=null) {
-                        Constants.Driver = false;
-                        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
                 }
             }
         });
     }
 
+    private void queryAccount(){
+        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+        AccountInfo user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,phone_number);
 
-    private void alert()
+        if(user!=null) {
+            if(user.getPassword().equals(password)) {
+                sendLoginRequest(user);
+            }else
+                alert(ERROR_USER_INFO);
+        }else
+            alert(ERROR_NO_USER);
+
+    }
+
+    private void alert(int error)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
         // set title
         alertDialogBuilder.setTitle(getString(R.string.login_error_title));
 
-        // set dialog message
-        alertDialogBuilder
-                .setMessage(getString(R.string.login_error_msg))
-                .setCancelable(false)
-                .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm),new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,int id) {
-                        Intent intent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
-                        startActivity(intent);
-                    }
-                });
+        if(error==ERROR_USER_INFO) {
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(getApplicationContext(), ForgetPasswordActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+        }else if(error==ERROR_NO_USER)
+        {
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_user_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+        }
         // create alert dialog
         AlertDialog alertDialog = alertDialogBuilder.create();
         // show it
@@ -133,4 +171,65 @@ public class MainActivity extends Activity {
     }
 
 
+    private void sendLoginRequest(AccountInfo user)
+    {
+        final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
+        String versionName = BuildConfig.VERSION_NAME;
+
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY);
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, user.getPhoneNumber());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_PASSWORD, user.getPassword());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_REGISTER_ID, user.getRegisterToken());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_PLATFORM, "android");
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_APP_VERSION, versionName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.e(TAG,jsonObject.toString());
+
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
+                    App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_login_verify_code_result(Integer.valueOf(status));
+
+                    if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_LOGIN_VERIFY_CODE_SUCCESS))
+                    {
+                        Constants.Driver = false;
+                        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }else
+                    {
+                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+
+                        Toast.makeText(getApplicationContext(),
+                                message,
+                                Toast.LENGTH_LONG).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG,volleyError.getMessage().toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+    }
 }

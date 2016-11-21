@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.firebase;
+package tw.com.geminihsu.app01.notifyservice;
 
 import android.util.Log;
 

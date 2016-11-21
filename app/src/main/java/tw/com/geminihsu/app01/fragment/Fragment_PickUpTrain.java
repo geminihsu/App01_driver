@@ -16,6 +16,7 @@
 package tw.com.geminihsu.app01.fragment;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -28,10 +29,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,6 +42,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import tw.com.geminihsu.app01.BookmarksMapListActivity;
@@ -46,7 +50,7 @@ import tw.com.geminihsu.app01.MapsActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_PickUpTrain extends Fragment {
@@ -59,11 +63,14 @@ public class Fragment_PickUpTrain extends Fragment {
     private LinearLayout change;
     private LinearLayout linearLayout_departure;
     private LinearLayout linearLayout_destination;
+    private LinearLayout linearLayout_date_picker;
+
     private ImageButton timerPicker;
     private ImageButton departure;
     private ImageButton stop;
     private ImageButton destination;
     private ImageButton spec;
+    private ImageButton btn_datePicker;
     private TextView show_title;
 
     private Spinner spinner_go_location;
@@ -71,8 +78,15 @@ public class Fragment_PickUpTrain extends Fragment {
     private RadioGroup radiogroup_leave_location;
     private RadioGroup radiogroup_destination_station;
 
+    private RadioGroup radioGroup_type;
+    private RadioButton realtime;
+    private RadioButton reservation;
+
     private EditText leave_train;
     private EditText destination_train;
+    private EditText date;
+    private EditText time;
+
     private ArrayAdapter arrayAdapter_location;
     private ArrayAdapter arrayAdapter_departure;
     private int option;
@@ -80,9 +94,10 @@ public class Fragment_PickUpTrain extends Fragment {
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
     private ClientTakeRideSelectSpecListItemAdapter listViewAdapter;
 
-
+    private DatePickerDialog.OnDateSetListener datePicker;
     private TimePickerDialog.OnTimeSetListener timePicker;
 
+    private Calendar calendar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -130,7 +145,9 @@ public class Fragment_PickUpTrain extends Fragment {
         change = (LinearLayout) getView().findViewById (R.id.change);
         linearLayout_departure = (LinearLayout) getView().findViewById (R.id.layout_depature);
         linearLayout_destination = (LinearLayout) getView().findViewById (R.id.layout_destination);
+        linearLayout_date_picker = (LinearLayout) getView().findViewById(R.id.date_layout);
 
+        btn_datePicker = (ImageButton) getView().findViewById(R.id.date_picker);
         timerPicker = (ImageButton) getView().findViewById(R.id.time_picker);
         departure = (ImageButton) getView().findViewById(R.id.departure);
         stop = (ImageButton) getView().findViewById(R.id.stop);
@@ -141,6 +158,10 @@ public class Fragment_PickUpTrain extends Fragment {
         spinner_leave_location =(Spinner)getActivity().findViewById(R.id.train_leave_location);
         radiogroup_leave_location= (RadioGroup)getActivity().findViewById(R.id.departure_train);
         radiogroup_destination_station =(RadioGroup)getActivity().findViewById(R.id.train);
+        radioGroup_type = (RadioGroup) getActivity().findViewById(R.id.source);
+        realtime = (RadioButton)getActivity().findViewById(R.id.real_radio);
+        reservation = (RadioButton) getActivity().findViewById(R.id.reservation_radio);
+
 
         leave_train = (EditText) getActivity().findViewById(R.id.leave_location);
         destination_train = (EditText)getActivity().findViewById(R.id.destination_map);
@@ -180,6 +201,7 @@ public class Fragment_PickUpTrain extends Fragment {
     private void setLister()
     {
 
+        calendar = Calendar.getInstance();
         timePicker=new TimePickerDialog.OnTimeSetListener() {
             public void onTimeSet(TimePicker view, int hourOfDay,
                                   int minute) {
@@ -197,7 +219,32 @@ public class Fragment_PickUpTrain extends Fragment {
                         true).show();
             }
         });
+        datePicker=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                date.setText(dayOfMonth+ "/" + (month+1) + "/" + year);
+            }
 
+        };
+        btn_datePicker.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(getActivity(), datePicker,
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        radioGroup_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == reservation.getId()) {
+                    linearLayout_date_picker.setVisibility(View.VISIBLE);
+                } else {
+                    linearLayout_date_picker.setVisibility(View.GONE);
+
+                }
+            }
+        });
 
         departure.setOnClickListener(new View.OnClickListener() {
 

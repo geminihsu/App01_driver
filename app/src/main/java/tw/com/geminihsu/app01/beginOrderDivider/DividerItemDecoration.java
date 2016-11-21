@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.beginOrderDivider;
+package tw.com.geminihsu.app01.beginOrderDivider;
 
 import android.content.Context;
 import android.content.res.TypedArray;

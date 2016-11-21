@@ -1,8 +1,6 @@
 package tw.com.geminihsu.app01.fragment;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -22,12 +20,10 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.com.geminihsu.app01.ClientTakeRideActivity;
-import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.MerchandiseOrderActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_MerchandiseDorkPickUp extends Fragment {
 

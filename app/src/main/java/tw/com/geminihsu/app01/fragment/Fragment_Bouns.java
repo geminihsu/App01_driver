@@ -35,7 +35,7 @@ import tw.com.geminihsu.app01.BoundsRecordActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.PrizeListItem;
 import tw.com.geminihsu.app01.adapter.PrizeListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_Bouns extends Fragment {

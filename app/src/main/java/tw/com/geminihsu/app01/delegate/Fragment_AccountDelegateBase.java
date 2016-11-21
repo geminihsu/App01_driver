@@ -1,11 +1,10 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate;
+package tw.com.geminihsu.app01.delegate;
 
 
 import tw.com.geminihsu.app01.fragment.Fragment_Account;
 
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
 public class Fragment_AccountDelegateBase {

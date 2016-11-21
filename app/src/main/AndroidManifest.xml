@@ -89,12 +89,12 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service android:name=".tw.com.geminihsu.app01.firebase.InstanceIDService">
+        <service android:name=".notifyservice.InstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".tw.com.geminihsu.app01.firebase.MessagingService">
+        <service android:name=".notifyservice.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

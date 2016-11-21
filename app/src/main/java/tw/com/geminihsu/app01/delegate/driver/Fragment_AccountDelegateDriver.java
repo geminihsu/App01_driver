@@ -1,14 +1,10 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver;
+package tw.com.geminihsu.app01.delegate.driver;
 
 
 import android.content.Intent;
 import android.content.res.Resources;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
-
-import java.util.ArrayList;
 
 import tw.com.geminihsu.app01.ChangePasswordActivity;
 import tw.com.geminihsu.app01.CommentActivity;
@@ -19,7 +15,7 @@ import tw.com.geminihsu.app01.PhotoVerifyActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.RecommendActivity;
 import tw.com.geminihsu.app01.fragment.Fragment_Account;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
+import tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
 
 public class Fragment_AccountDelegateDriver extends Fragment_AccountDelegateBase {
 	protected Fragment_Account fragment;

@@ -64,6 +64,10 @@
     <string name="register_button">註冊</string>
     <string name="login_error_title">登入失敗</string>
     <string name="login_error_msg">抱歉！\n您輸入的手機號碼或密碼有誤。</string>
+    <string name="login_error_user_msg">請先註冊</string>
+
+    <string name="login_error_register_msg">請輸入正確資料</string>
+
 
     <!--  forget password page -->
     <string name="txt_info">以簡訊傳送新密碼</string>
@@ -85,7 +89,7 @@
     <string name="txt_choice_identify">*請選擇你要註冊的身份</string>
     <string name="check_client">客戶</string>
     <string name="check_driver">駕駛</string>
-
+    <string name="register_error_title">註冊失敗</string>
 
     <!-- MenuMainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -312,6 +316,7 @@
     <string name="txt_take_type">*類型：</string>
     <string name="txt_take_real_time">即時</string>
     <string name="txt_take_reservation">預約</string>
+    <string name="txt_take_date">*日期：</string>
     <string name="txt_take_time">*時間：</string>
     <string name="txt_take_departure">起點：</string>
     <string name="txt_take_stopby">停靠：</string>

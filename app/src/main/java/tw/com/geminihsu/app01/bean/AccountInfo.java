@@ -1,10 +1,12 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm;
+package tw.com.geminihsu.app01.bean;
+
+import java.io.Serializable;
 
 import io.realm.RealmObject;
-import io.realm.annotations.Required;
 
-public class AccountInfo extends RealmObject {
+public class AccountInfo extends RealmObject implements Cloneable ,Serializable {
 
+    private static final long serialVersionUID = 8683739988249633893L;
     private int id;
     private String name;
     private String identify;
@@ -12,7 +14,8 @@ public class AccountInfo extends RealmObject {
     private String password;
     private String confirm_password;
     private String recommend_id;
-
+    private int role;//0:client,1:driver,2:both
+    private String registerToken;
 
     public int getId() {
         return id;
@@ -68,5 +71,21 @@ public class AccountInfo extends RealmObject {
 
     public void setRecommend_id(String recommend_id) {
         this.recommend_id = recommend_id;
+    }
+
+    public int getRole() {
+        return role;
+    }
+
+    public void setRole(int role) {
+        this.role = role;
+    }
+
+    public String getRegisterToken() {
+        return registerToken;
+    }
+
+    public void setRegisterToken(String registerToken) {
+        this.registerToken = registerToken;
     }
 }

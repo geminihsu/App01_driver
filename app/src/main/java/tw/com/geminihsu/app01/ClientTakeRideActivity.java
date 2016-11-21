@@ -3,6 +3,7 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
@@ -11,31 +12,31 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
-import tw.com.geminihsu.app01.adapter.RecommendListItem;
-import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class ClientTakeRideActivity extends Activity {
 
@@ -45,20 +46,29 @@ public class ClientTakeRideActivity extends Activity {
 
     final public static int TAKE_RIDE = 1;
     final public static int SEND_MERCHANDISE= 2;
+    private LinearLayout linearLayout_date_picker;
     private LinearLayout change;
-    private ImageButton timerPicker;
+    private ImageButton btn_datePicker;
+    private ImageButton btn_timerPicker;
     private ImageButton departure;
     private ImageButton stop;
     private ImageButton destination;
     private ImageButton spec;
+    private RadioGroup radioGroup_type;
+    private RadioButton realtime;
+    private RadioButton reservation;
     private TextView show_title;
+    private EditText date;
+    private EditText time;
     private int option;
 
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
     private ClientTakeRideSelectSpecListItemAdapter listViewAdapter;
 
-
+    private DatePickerDialog.OnDateSetListener datePicker;
     private TimePickerDialog.OnTimeSetListener timePicker;
+
+    private Calendar calendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,12 +108,22 @@ public class ClientTakeRideActivity extends Activity {
     private void findViews()
     {
         change = (LinearLayout) findViewById (R.id.change);
-        timerPicker = (ImageButton) findViewById(R.id.time_picker);
+        linearLayout_date_picker = (LinearLayout) findViewById(R.id.date_layout);
+
+        btn_datePicker = (ImageButton) findViewById(R.id.date_picker);
+        btn_timerPicker = (ImageButton) findViewById(R.id.time_picker);
         departure = (ImageButton) findViewById(R.id.departure);
         stop = (ImageButton) findViewById(R.id.stop);
         destination = (ImageButton) findViewById(R.id.destination);
         spec = (ImageButton) findViewById(R.id.spec_option);
         show_title = (TextView) findViewById(R.id.txt_info);
+
+        radioGroup_type = (RadioGroup) findViewById(R.id.source);
+        realtime = (RadioButton)findViewById(R.id.real_radio);
+        reservation = (RadioButton) findViewById(R.id.reservation_radio);
+
+        date = (EditText) findViewById(R.id.date_info);
+        time = (EditText) findViewById(R.id.time_info);
     }
 
 
@@ -120,13 +140,14 @@ public class ClientTakeRideActivity extends Activity {
     private void setLister()
     {
 
+        calendar = Calendar.getInstance();
         timePicker=new TimePickerDialog.OnTimeSetListener() {
             public void onTimeSet(TimePicker view, int hourOfDay,
                                   int minute) {
-
+                time.setText(hourOfDay+ ":" +minute);
             }
         };
-        timerPicker.setOnClickListener(new View.OnClickListener() {
+        btn_timerPicker.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -138,6 +159,32 @@ public class ClientTakeRideActivity extends Activity {
             }
         });
 
+        datePicker=new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                date.setText(dayOfMonth+ "/" + (month+1) + "/" + year);
+            }
+
+        };
+        btn_datePicker.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                new DatePickerDialog(ClientTakeRideActivity.this, datePicker,
+                        calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        radioGroup_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                    public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    if (checkedId == reservation.getId()) {
+                        linearLayout_date_picker.setVisibility(View.VISIBLE);
+                     } else {
+                        linearLayout_date_picker.setVisibility(View.GONE);
+
+                    }
+          }
+        });
 
         departure.setOnClickListener(new View.OnClickListener() {
 

@@ -1,10 +1,10 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.util;
+package tw.com.geminihsu.app01.utils;
 
 import android.content.Context;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.realm.AccountInfo;
+import tw.com.geminihsu.app01.bean.AccountInfo;
 
 /**
  * Created by geminihsu on 16/10/28.
@@ -49,9 +49,25 @@ public class RealmUtil {
         return realm;
     }*/
 
-    public AccountInfo queryAccount(String column,String value) {
+    public AccountInfo queryAccount(String column, String value) {
 
         AccountInfo user = mRealm.where(AccountInfo.class).equalTo(column, value).findFirst();
         return user;
+    }
+
+    public void addAccount(AccountInfo user)
+    {
+        mRealm.beginTransaction();
+
+        AccountInfo accountInfo = mRealm.createObject(AccountInfo.class);
+        accountInfo.setId(user.getId());
+        accountInfo.setName(user.getName());
+        accountInfo.setPhoneNumber(user.getPhoneNumber());
+        accountInfo.setIdentify(user.getIdentify());
+        accountInfo.setPassword(user.getPassword());
+        accountInfo.setConfirm_password(user.getConfirm_password());
+        accountInfo.setRecommend_id(user.getRecommend_id());
+        accountInfo.setRole(user.getRole());
+        mRealm.commitTransaction();
     }
 }

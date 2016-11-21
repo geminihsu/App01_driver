@@ -19,8 +19,8 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.webview.*;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.webview.MyBrowser;
 
 public class SupportAnswerActivity extends Activity {
 

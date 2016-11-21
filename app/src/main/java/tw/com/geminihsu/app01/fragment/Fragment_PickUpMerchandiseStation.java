@@ -45,7 +45,7 @@ import tw.com.geminihsu.app01.MapsActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_PickUpMerchandiseStation extends Fragment {

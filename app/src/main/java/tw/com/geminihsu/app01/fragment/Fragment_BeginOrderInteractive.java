@@ -14,8 +14,8 @@ import java.util.List;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderRecyclerAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.beginOrderDivider.DividerItemDecoration;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.beginOrderDivider.DividerItemDecoration;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_BeginOrderInteractive extends Fragment {

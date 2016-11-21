@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate;
+package tw.com.geminihsu.app01.delegate;
 
 import android.app.Activity;
 import android.view.Menu;

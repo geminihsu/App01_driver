@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.firebase;
+package tw.com.geminihsu.app01.notifyservice;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -53,7 +53,7 @@ public class MessagingService extends FirebaseMessagingService {
         Uri notificationSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notifiBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_launcher)
+                .setSmallIcon(R.drawable.ic_look)
                 .setContentTitle("Firebase Cloud Messaging")
                 .setContentText(body)
                 .setAutoCancel(true)

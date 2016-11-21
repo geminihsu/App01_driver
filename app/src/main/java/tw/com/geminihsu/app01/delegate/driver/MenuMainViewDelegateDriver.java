@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.driver;
+package tw.com.geminihsu.app01.delegate.driver;
 
 
 import android.support.v4.app.Fragment;
@@ -8,9 +8,7 @@ import android.view.Menu;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
-import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
-import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
+import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 
 public class MenuMainViewDelegateDriver extends MenuMainViewDelegateBase {
 	private final String TAG= this.getClass().getSimpleName();

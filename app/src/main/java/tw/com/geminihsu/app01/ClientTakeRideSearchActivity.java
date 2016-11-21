@@ -23,8 +23,8 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItem;
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.canvas.DrawView;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.canvas.DrawView;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class ClientTakeRideSearchActivity extends Activity {
 

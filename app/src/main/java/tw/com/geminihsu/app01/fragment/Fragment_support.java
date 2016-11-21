@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 
 public class Fragment_Support extends Fragment {

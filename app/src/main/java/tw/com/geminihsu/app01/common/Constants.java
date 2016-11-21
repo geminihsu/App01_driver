@@ -1,5 +1,5 @@
 
-package tw.com.geminihsu.app01.tw.com.geminihsu.app01.common;
+package tw.com.geminihsu.app01.common;
 
 
 public class Constants {
@@ -9,6 +9,7 @@ public class Constants {
 	/** <code>ARG_POSITION</code> ARG_POSITION*/
 	final public static String ARG_POSITION = "position";
 
+	final public static String SERVER_URL= "http://app01.cumi.co/api";
 
 	final public static int CONTROL_PANNEL_MANUAL = 3;
 	final public static int CANCEL_ORDER_FEEDBACK = 4;
@@ -22,12 +23,16 @@ public class Constants {
 
 	public enum Identify
 	{
-		CLIENT, DRIVER, ADMINISTRATOR
+		CLIENT, DRIVER, BOTH
 	}
 
 
 	final public static String hotel_latitude = "latitude";
 	final public static String hotel_longitude = "longitude";
+
+	public final static String ACCOUNT_PHONE_NUMBER = "phoneNumber";// from
+	public final static String ACCOUNT_PASSWORD = "password";// from
+
 }
 
 

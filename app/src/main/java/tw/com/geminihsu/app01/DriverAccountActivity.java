@@ -22,7 +22,7 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.CommentListItem;
 import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
-import tw.com.geminihsu.app01.tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class DriverAccountActivity extends Activity {
 
