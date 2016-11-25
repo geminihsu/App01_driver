@@ -169,9 +169,11 @@
     <!-- DriverIdentityActivity -->
     <string name="pick_identity_title">選擇註冊身份</string>
     <string name="pick_identity_info">每個手機只能註冊一種身份</string>
-    <string name="taxi_driver">計程車司機</string>
-    <string name="truck_driver">貨車司機</string>
-    <string name="cargo_driver">貨櫃車司機</string>
+    <string name="taxi_driver">計程車</string>
+    <string name="Uber_driver">UBER</string>
+    <string name="truck_ƒƒdriver">小貨車</string>
+    <string name="cargo_driver">大貨車</string>
+    <string name="trailer_driver">連結車</string>
 
     <!-- DriverLoginActivity -->
     <string name="car_title">車籍資料</string>
@@ -191,6 +193,9 @@
     <string name="photo_car_full">5.車身連車牌照片</string>
     <string name="photo_skip">略過</string>
     <string name="photo_finish">完成</string>
+    <string name="pick_picture_camera">take camera</string>
+    <string name="pick_picture_gallery">picture gallery</string>
+
 
     <!-- Driver_Account_Activity -->
     <string name="driver_account_title_level">車神</string>

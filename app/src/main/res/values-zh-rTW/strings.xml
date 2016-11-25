@@ -1,4 +1,10 @@
 <resources>
+    <!-- for 登入頁面 -->
+    <string name="config_login_phone_number_title">PhoneNumber</string>
+    <string name="config_login_phone_number_key">key_login_default_username</string>
+    <string name="config_login_password_title">Password</string>
+    <string name="config_login_password_key">key_login_default_password</string>
+
 
     <!-- Page Title -->
     <string name="login_page_title">登入帳號</string>
@@ -45,6 +51,8 @@
     <string name="map_location">選擇地點</string>
     <string name="driver_online_check">線上簽收</string>
     <string name="driver_report_price">等待審核</string>
+    <string name="order_record_filter_page_title">訂單篩選</string>
+    <string name="order_process_page_title">訂單處理</string>
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -160,9 +168,12 @@
     <!-- DriverIdentityActivity -->
     <string name="pick_identity_title">選擇註冊身份</string>
     <string name="pick_identity_info">每個手機只能註冊一種身份</string>
-    <string name="taxi_driver">計程車司機</string>
-    <string name="truck_driver">貨車司機</string>
-    <string name="cargo_driver">貨櫃車司機</string>
+    <string name="taxi_driver">計程車</string>
+    <string name="Uber_driver">UBER</string>
+    <string name="truck_driver">小貨車</string>
+    <string name="cargo_driver">大貨車</string>
+    <string name="trailer_driver">連結車</string>
+
 
     <!-- DriverLoginActivity -->
     <string name="car_title">車籍資料</string>
@@ -223,11 +234,14 @@
     <string name="order_departure_car">發車</string>
     <string name="order_departure_car_record">路上所有訂單</string>
     <string name="order_change_price">請輸入報價：</string>
+    <string name="to_order_departure">往</string>
 
     <!-- BeginOrderActivity -->
     <string name="tab_real_time">即時</string>
     <string name="tab_reservation">預約</string>
     <string name="tab_company">車行</string>
+    <string name="list_btn_take_look">查看</string>
+    <string name="list_btn_take_over">搶單</string>
 
 
     <string name="list_btn_order_process">訂單處理</string>
@@ -243,6 +257,9 @@
     <string name="order_date">2015/12/08 上午07:04</string>
     <string name="call_sender">撥給發貨方</string>
     <string name="call_recevier">撥給收貨方</string>
+    <string name="call_client">撥給客戶</string>
+
+
     <!-- OrderProcessActivity Control Panel-->
     <string name="order_information">訂單細節</string>
     <string name="navigation_to_departure">導航到起點</string>
@@ -263,6 +280,9 @@
     <string name="menu_send_sms_txt">將搭車訊息傳給熟人確保安全</string>
     <string name="menu_send_sms_txt_content">簡訊內容</string>
     <string name="menu_send_report_txt_content">檢舉原因</string>
+    <string name="order_change_fee">修改價錢：</string>
+    <string name="order_change_fee_msg">提出修改後的價錢</string>
+    <string name="order_change_fee_edit">$:</string>
 
 
     <!-- MerchandiseOrderActivity Control Panel-->
@@ -332,6 +352,9 @@
     <string name="pick_up_tra_train">台鐵</string>
     <string name="pick_up_thsr_train">高鐵</string>
     <string name="pick_up_train">車站</string>
+    <string name="txt_send_merchandise">選擇站點</string>
+
+
     <!-- ClientOrderCarSearch -->
     <string name="txt_search">正在為您叫車</string>
     <string name="txt_fee">小費</string>
@@ -379,6 +402,18 @@
     <string name="driver_service">司機服務</string>
     <string name="driver_comment">評語：</string>
     <string name="driver_other">其他：</string>
+    <!-- UnitCalculator-->
+    <string name="unit_txt">請輸入尺寸</string>
+    <string name="unit_title1">項次</string>
+    <string name="unit_title2">長度</string>
+    <string name="unit_title3">寬度</string>
+    <string name="unit_title4">高度</string>
+    <string name="unit_title5">箱數</string>
+    <string name="unit_title6">才數</string>
+    <string name="unit">單位:公分</string>
+    <string name="unit_total">合計</string>
+    <string name="unit_total_count">才</string>
+    <string name="unit_total_count_example"><u>5</u></string>
 
 </resources>
 

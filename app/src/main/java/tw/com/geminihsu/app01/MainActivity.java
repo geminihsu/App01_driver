@@ -3,6 +3,7 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +22,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +35,7 @@ import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class MainActivity extends Activity {
     public final static String TAG = MainActivity.class.toString();// from
+    public final static String BUNDLE_ACCESS_KEY = "accesskey";// from
 
     public final static int ERROR_USER_INFO = 0;
     public final static int ERROR_NO_USER = 1;
@@ -47,9 +50,11 @@ public class MainActivity extends Activity {
     private String phone_number="";
     private String password="";
 
-
+    String token ="";
 
     private SharedPreferences configSharedPreferences;
+    private ProgressDialog dialog;
+    private AccountInfo user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,20 +66,42 @@ public class MainActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        //token = FirebaseInstanceId.getInstance().getToken();
+        //Log.d("FCM", "Token:" + token);
+
+        configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        phone_number = ConfigSharedPreferencesUtil.getUserName(this, configSharedPreferences);
+        password = ConfigSharedPreferencesUtil.getPassword(this, configSharedPreferences);
         this.findViews();
         this.setLister();
-        if (!phone_number.isEmpty() && !password.isEmpty()) {
-            queryAccount();
+        if (!phone_number.isEmpty() && !password.isEmpty())
+        {
+            Bundle args = getIntent().getExtras();
+            if(args!=null){
+               user = (AccountInfo)args.getSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO);
+                //already has account so query account from database
+                queryAccount();
+            }else
+            {
+                RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+                user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+
+            }
+                Constants.Driver = false;
+                Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                /*Bundle b = new Bundle();
+                b.putSerializable(BUNDLE_ACCESS_KEY, user.getAccessKey());
+                intent.putExtras(b);*/
+                startActivity(intent);
+                finish();
+
         }
 
     }
 
     private void findViews()
     {
-        configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        phone_number = ConfigSharedPreferencesUtil.getUserName(this, configSharedPreferences);
-        password = ConfigSharedPreferencesUtil.getPassword(this, configSharedPreferences);
 
         txt_forget_password = (TextView) findViewById(R.id.txt_forget_password);
 
@@ -82,7 +109,12 @@ public class MainActivity extends Activity {
         btn_login = (Button) findViewById(R.id.login);
 
         account_phone = (EditText) findViewById(R.id.account_phone);
+        //account_phone.setText(token);
         account_password = (EditText)findViewById(R.id.account_password);
+        if (!phone_number.isEmpty() && !password.isEmpty()) {
+            account_phone.setText(phone_number);
+            account_password.setText(password);
+        }
     }
 
 
@@ -122,11 +154,11 @@ public class MainActivity extends Activity {
     }
 
     private void queryAccount(){
-        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
-        AccountInfo user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,phone_number);
 
         if(user!=null) {
             if(user.getPassword().equals(password)) {
+                dialog = ProgressDialog.show(MainActivity.this, "",
+                        "Loading. Please wait...", true);
                 sendLoginRequest(user);
             }else
                 alert(ERROR_USER_INFO);
@@ -171,7 +203,7 @@ public class MainActivity extends Activity {
     }
 
 
-    private void sendLoginRequest(AccountInfo user)
+    private void sendLoginRequest(final AccountInfo user)
     {
         final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
         String versionName = BuildConfig.VERSION_NAME;
@@ -198,12 +230,21 @@ public class MainActivity extends Activity {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
+                    String accesskey = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY);
                     App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_login_verify_code_result(Integer.valueOf(status));
 
                     if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_LOGIN_VERIFY_CODE_SUCCESS))
                     {
+                       // dialog.cancel();
+                        if(user!=null)
+                           user.setAccessKey(accesskey);
+                        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+                        realmUtil.addAccount(user);
                         Constants.Driver = false;
                         Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                        Bundle b = new Bundle();
+                        b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                        intent.putExtras(b);
                         startActivity(intent);
                         finish();
                     }else

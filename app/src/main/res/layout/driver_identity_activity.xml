@@ -54,7 +54,16 @@
                     android:textColor="@color/white"
                     android:background="@color/btn_bouns_record"
                      />
-
+                <Button
+                    android:id="@+id/uber"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Uber_driver"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@color/btn_bouns_record"
+                    />
                 <Button
                     android:id="@+id/truck"
                     android:layout_width="fill_parent"
@@ -76,6 +85,16 @@
                     android:background="@color/btn_bouns_record"
                     />
 
+                <Button
+                    android:id="@+id/trailer"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/trailer_driver"
+                    android:layout_marginTop="20dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"
+                    android:background="@color/btn_bouns_record"
+                    />
 
 
             </LinearLayout>

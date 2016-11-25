@@ -1,7 +1,13 @@
 package tw.com.geminihsu.app01;
 
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -13,10 +19,12 @@ import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
@@ -27,23 +35,51 @@ import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 import tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01.delegate.driver.MenuMainViewDelegateDriver;
+import tw.com.geminihsu.app01.service.App01Service;
+import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
         Fragment_BeginOrderInteractive.OnListItemClickListener{
+
+
     private final String TAG=this.getClass().getSimpleName();
     private MenuMainViewDelegateBase viewDelegateBase;
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mActionBarDrawerToggle;
     private NavigationView navigationView;
     private ShareActionProvider mShareActionProvider;
+    private App01Service myBinder;
+    private AccountInfo user;
 
+
+    private ServiceConnection myLocalServiceConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(TAG, "NotifyAppServiceBinder_onServiceDisconnected");
+
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(TAG, "NotifyAppServiceBinder_onServiceConnected");
+            Utility info = new Utility(MenuMainActivity.this);
+            myBinder = ((App01Service.App01ServiceServiceBinder) service).getService(info.getAccountInfo());
+            //myBinder.setUserInfo(user);
+            myBinder.startToGetPutNotify();
+        }
+    };
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity_main);
-         // 判斷要用哪一個Delegate
+
+
+        // 判斷要用哪一個Delegate
         if (Constants.Driver) {
 
             viewDelegateBase = new MenuMainViewDelegateDriver(this);
@@ -54,6 +90,10 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
          // 加入主頁面fragment
         viewDelegateBase.setContentLayoutFragment();
+
+        //call service
+        Intent serviceIntent = new Intent(this, App01Service.class);
+        bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
 
 
     }

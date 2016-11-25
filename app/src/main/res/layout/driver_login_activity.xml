@@ -46,6 +46,7 @@
                      android:textColor="@color/address_devicename_txt"
                      />
                  <EditText
+                     android:id="@+id/car_brand_name"
                      android:layout_width="fill_parent"
                      android:layout_height="wrap_content"
                      android:ellipsize="middle"
@@ -70,6 +71,7 @@
                     android:textColor="@color/address_devicename_txt"
                     />
                 <EditText
+                    android:id="@+id/car_cc_number"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
@@ -94,6 +96,7 @@
                         android:textColor="@color/address_devicename_txt"
                         />
                     <EditText
+                        android:id="@+id/car_release_year"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
@@ -119,6 +122,7 @@
                         android:textColor="@color/address_devicename_txt"
                         />
                     <EditText
+                        android:id="@+id/car_type_id"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
@@ -144,6 +148,7 @@
                         android:textColor="@color/address_devicename_txt"
                         />
                     <EditText
+                        android:id="@+id/car_work_licence_number"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"

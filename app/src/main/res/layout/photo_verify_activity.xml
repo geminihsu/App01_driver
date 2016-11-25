@@ -4,9 +4,6 @@
     android:layout_height="fill_parent"
     android:background="@color/bg_gray"
      >
-
-
-
             <LinearLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
@@ -45,7 +42,15 @@
                      android:text="@string/photo_licence_type"
                      android:textColor="@color/address_devicename_txt"
                      />
+                 <ImageView
+                        android:id="@+id/car_work_image"
+                        android:layout_width="300dp"
+                        android:layout_height="400dp"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
+                      />
                  <ImageButton
+                     android:id="@+id/btn_car_work_image"
                      android:layout_width="wrap_content"
                      android:layout_height="wrap_content"
                      android:layout_marginRight="20dp"
@@ -71,7 +76,15 @@
                     android:text="@string/photo_id"
                     android:textColor="@color/address_devicename_txt"
                     />
+                    <ImageView
+                        android:id="@+id/car_driver_id"
+                        android:layout_width="300dp"
+                        android:layout_height="400dp"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
+                        />
                     <ImageButton
+                        android:id="@+id/btn_car_driver_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
@@ -97,7 +110,15 @@
                         android:text="@string/photo_drive_licence"
                         android:textColor="@color/address_devicename_txt"
                         />
+                    <ImageView
+                        android:id="@+id/car_driver_licence"
+                        android:layout_width="300dp"
+                        android:layout_height="400dp"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
+                        />
                     <ImageButton
+                        android:id="@+id/btn_car_driver_licence"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
@@ -123,7 +144,15 @@
                         android:text="@string/photo_business＿license"
                         android:textColor="@color/address_devicename_txt"
                         />
+                    <ImageView
+                        android:id="@+id/car_work_licence_image"
+                        android:layout_width="300dp"
+                        android:layout_height="400dp"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
+                        />
                     <ImageButton
+                        android:id="@+id/btn_car_work_licence_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
@@ -149,7 +178,15 @@
                         android:text="@string/photo_car_full"
                         android:textColor="@color/address_devicename_txt"
                         />
+                    <ImageView
+                        android:id="@+id/car_image"
+                        android:layout_width="300dp"
+                        android:layout_height="400dp"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
+                        />
                     <ImageButton
+                        android:id="@+id/btn_car_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"

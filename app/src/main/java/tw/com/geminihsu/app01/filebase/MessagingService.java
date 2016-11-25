@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.notifyservice;
+package tw.com.geminihsu.app01.filebase;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,16 +15,14 @@ import com.google.firebase.messaging.RemoteMessage;
 import tw.com.geminihsu.app01.MainActivity;
 import tw.com.geminihsu.app01.R;
 
-/**
- * Created by NgocTri on 8/9/2016.
- */
+
 public class MessagingService extends FirebaseMessagingService {
     private static final String TAG = "MyFirebaseMsgService";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 
-        Log.d(TAG, "FROM:" + remoteMessage.getFrom());
+        Log.e(TAG, "FROM:" + remoteMessage.getFrom());
 
         //Check if the message contains data
         if(remoteMessage.getData().size() > 0) {

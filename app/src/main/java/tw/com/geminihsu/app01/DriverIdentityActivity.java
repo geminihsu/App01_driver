@@ -9,13 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import tw.com.geminihsu.app01.common.Constants;
+
 public class DriverIdentityActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
     private Button taxi_register;
+    private Button uber_register;
     private Button truck_register;
     private Button cargo_register;
+    private Button trailer_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +47,10 @@ public class DriverIdentityActivity extends Activity {
     private void findViews()
     {
         taxi_register =  (Button) findViewById(R.id.taxi);
+        uber_register =  (Button) findViewById(R.id.uber);
         truck_register = (Button) findViewById(R.id.truck);
         cargo_register = (Button) findViewById(R.id.cargo);
+        trailer_register = (Button) findViewById(R.id.trailer);
     }
 
 
@@ -57,9 +63,20 @@ public class DriverIdentityActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
-                //Bundle b = new Bundle();
-                //b.putInt(Constants.ARG_POSITION, prize_position);
-                //question.putExtras(b);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        uber_register.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                question.putExtras(b);
                 startActivity(question);
             }
         });
@@ -68,9 +85,9 @@ public class DriverIdentityActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
-                //Bundle b = new Bundle();
-                //b.putInt(Constants.ARG_POSITION, prize_position);
-                //question.putExtras(b);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                question.putExtras(b);
                 startActivity(question);
             }
         });
@@ -79,9 +96,20 @@ public class DriverIdentityActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
-                //Bundle b = new Bundle();
-                //b.putInt(Constants.ARG_POSITION, prize_position);
-                //question.putExtras(b);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
+        trailer_register.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                question.putExtras(b);
                 startActivity(question);
             }
         });

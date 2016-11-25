@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "459553266889",
-    "firebase_url": "https://app01-146317.firebaseio.com",
-    "project_id": "app01-146317",
-    "storage_bucket": "app01-146317.appspot.com"
+    "project_number": "589360701153",
+    "firebase_url": "https://app01-94a66.firebaseio.com",
+    "project_id": "app01-94a66",
+    "storage_bucket": "app01-94a66.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:459553266889:android:d7ce115bd8efcdf0",
+        "mobilesdk_app_id": "1:589360701153:android:d7ce115bd8efcdf0",
         "android_client_info": {
           "package_name": "tw.com.geminihsu.app01"
         }
       },
       "oauth_client": [
         {
-          "client_id": "459553266889-du6b1u8s3e9ss37a0ddo9k3ftmo4imb2.apps.googleusercontent.com",
+          "client_id": "589360701153-887meqb4t6d4j7q2rg90hfveh3nemsmk.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "tw.com.geminihsu.app01",
@@ -23,13 +23,13 @@
           }
         },
         {
-          "client_id": "459553266889-q3fop97ea58plnerghsqh8i7u6vtbmg6.apps.googleusercontent.com",
+          "client_id": "589360701153-n4r8t5k66dcl41649552r4sdahltm8lh.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC2G5mAelxmhRFvQ5Fg2QXvn7tP2T9fqAE"
+          "current_key": "AIzaSyBz00ihZrZw1KebWyLOPVlQ2lX1K9YK00E"
         }
       ],
       "services": {
@@ -40,7 +40,7 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "459553266889-q3fop97ea58plnerghsqh8i7u6vtbmg6.apps.googleusercontent.com",
+              "client_id": "589360701153-n4r8t5k66dcl41649552r4sdahltm8lh.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

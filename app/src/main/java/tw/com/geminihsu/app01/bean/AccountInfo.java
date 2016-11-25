@@ -5,7 +5,6 @@ import java.io.Serializable;
 import io.realm.RealmObject;
 
 public class AccountInfo extends RealmObject implements Cloneable ,Serializable {
-
     private static final long serialVersionUID = 8683739988249633893L;
     private int id;
     private String name;
@@ -16,6 +15,8 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
     private String recommend_id;
     private int role;//0:client,1:driver,2:both
     private String registerToken;
+    private String accessKey;
+
 
     public int getId() {
         return id;
@@ -87,5 +88,12 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
 
     public void setRegisterToken(String registerToken) {
         this.registerToken = registerToken;
+    }
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
     }
 }

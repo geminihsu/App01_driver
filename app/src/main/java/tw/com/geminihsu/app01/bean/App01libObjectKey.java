@@ -14,7 +14,8 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_VERIFY = "m_reg_resend";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_PASSWORD = "m_forget_sendsms";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY = "m_auth_user";
-
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_PUSH_NOTIFICATION = "p_get";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_DELETE_PUSH_NOTIFICATION = "p_delete";
 
     //send register json to server attribute
     public static final String APP_OBJECT_KEY_REGISTER_USERNAME = "username";
@@ -48,6 +49,7 @@ public class App01libObjectKey {
     //received json from server attribute
     public static final String APP_OBJECT_KEY_ACCOUNT_INFO_STATUS = "status";
     public static final String APP_OBJECT_KEY_DEVICE_INFO_MESSAGE = "message";
+    public static final String APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY = "accesskey";
 
     public enum APP_REGISTER_RESPONSE_CODE
     {
@@ -155,6 +157,25 @@ public class App01libObjectKey {
         }
     };
 
+    public enum APP_GET_PUSH_RESPONSE_CODE
+    {
+        K_APP_GET_PUSH_CODE_SUCCESS (100)  ,
+        K_APP_GET_PUSH_CODE_ACCOUNT_EXPIRED (708),
+        K_APP_GET_PUSH_CODE_ACCOUNT_NO_SMS_VERIFY(704),
+        K_APP_GET_PUSH_CODE_ACCOUNT_NO_EXSIT (701),
+        K_APP_GET_PUSH_CODE_ENTER_ERROR (900);
+
+        private int value;
+
+        private APP_GET_PUSH_RESPONSE_CODE(int value) {
+            this.value = value;
+        }
+
+        public int value() {
+            return value;
+        }
+    };
+
     public static APP_REGISTER_RESPONSE_CODE conversion_register_connect_result(int index) {
         if (index >= 0) {
             if (index == 100) {
@@ -190,7 +211,7 @@ public class App01libObjectKey {
             if (index == 401) {
                 return APP_ACCOUNT_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_VERIFY_CODE_DATABASE_ERROR;
             }
-            if (index == 702) {
+            if (index == 712) {
                 return APP_ACCOUNT_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_VERIFY_CODE_USER_EXIST;
             }
             if (index == 801) {
@@ -293,4 +314,24 @@ public class App01libObjectKey {
         return null;
     }
 
+    public static APP_GET_PUSH_RESPONSE_CODE conversion_get_put_notification_result(int index) {
+        if (index >= 0) {
+            if (index == 100) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS;
+            }
+            if (index == 708) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_EXPIRED;
+            }
+            if (index == 701) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_NO_EXSIT;
+            }
+            if (index == 704) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_NO_SMS_VERIFY;
+            }
+            if (index == 900) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ENTER_ERROR;
+            }
+        }
+        return null;
+    }
 }

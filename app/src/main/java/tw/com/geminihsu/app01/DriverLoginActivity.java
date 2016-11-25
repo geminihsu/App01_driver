@@ -10,14 +10,17 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
 
 public class DriverLoginActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
+    public final static String BUNDLE_DRIVER_ACCOUNT_INFO = "driver_account";// from
 
     private LinearLayout linearLayout_form;
 
@@ -25,7 +28,13 @@ public class DriverLoginActivity extends Activity {
 
     final public static int CLAUSE = 1;
     final public static int SUGGESTION= 2;
+    private EditText car_brand_name;
+    private EditText car_cc_number;
+    private EditText car_release_year;
+    private EditText car_type_id;
+    private EditText car_licence_number;
 
+    private DriverIdentifyInfo driverIdentifyInfo;
     private int choice = 0;
 
     @Override
@@ -43,11 +52,12 @@ public class DriverLoginActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
+        driverIdentifyInfo = new DriverIdentifyInfo();
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 choice = bundle.getInt(Constants.ARG_POSITION);
-                displayLayout();
+                displayLayout(choice);
             }else
             {
                 //Error!!!!
@@ -68,17 +78,19 @@ public class DriverLoginActivity extends Activity {
     {
         linearLayout_form = (LinearLayout) findViewById(R.id.form);
 
-        /*String url = "www.google.com";
+        car_brand_name = (EditText) findViewById(R.id.car_brand_name);
+        car_cc_number = (EditText) findViewById(R.id.car_cc_number);
+        car_release_year = (EditText) findViewById(R.id.car_release_year);
+        car_type_id = (EditText) findViewById(R.id.car_type_id);
+        car_licence_number = (EditText) findViewById(R.id.car_work_licence_number);
 
-        browser.getSettings().setLoadsImagesAutomatically(true);
-        browser.getSettings().setJavaScriptEnabled(true);
-        browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        browser.loadUrl(url);*/
+
+
     }
 
 
 
-    private void displayLayout()
+    private void displayLayout(int identify)
     {
 
     }
@@ -107,7 +119,16 @@ public class DriverLoginActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 //將表單資料送出後回到主畫面
+                driverIdentifyInfo.setCar_brand(car_brand_name.getText().toString());
+                driverIdentifyInfo.setCar_cc(car_cc_number.getText().toString());
+                driverIdentifyInfo.setCar_born(car_release_year.getText().toString());
+                driverIdentifyInfo.setCar_number(car_type_id.getText().toString());
+                driverIdentifyInfo.setCar_reg(car_licence_number.getText().toString());
+                driverIdentifyInfo.setDtype(""+choice);
                 Intent question = new Intent(this, PhotoVerifyActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(BUNDLE_DRIVER_ACCOUNT_INFO, driverIdentifyInfo);
+                question.putExtras(b);
                 startActivity(question);
                 return true;
             case android.R.id.home:

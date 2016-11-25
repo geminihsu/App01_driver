@@ -150,9 +150,12 @@ public class VerifyCodeActivity extends Activity {
 
 
                         //insert new account database
-                        RealmUtil data = new RealmUtil(VerifyCodeActivity.this);
-                        data.addAccount(accountInfo);
-                        Intent question = new Intent(VerifyCodeActivity.this, MenuMainActivity.class);
+                        //RealmUtil data = new RealmUtil(VerifyCodeActivity.this);
+                        //data.addAccount(accountInfo);
+                        Intent question = new Intent(VerifyCodeActivity.this, MainActivity.class);
+                        Bundle b = new Bundle();
+                        b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
+                        question.putExtras(b);
                         question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(question);
 

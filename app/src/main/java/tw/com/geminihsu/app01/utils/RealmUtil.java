@@ -68,6 +68,26 @@ public class RealmUtil {
         accountInfo.setConfirm_password(user.getConfirm_password());
         accountInfo.setRecommend_id(user.getRecommend_id());
         accountInfo.setRole(user.getRole());
+        accountInfo.setAccessKey(user.getAccessKey());
+        accountInfo.setRegisterToken(user.getRegisterToken());
+        mRealm.copyToRealm(accountInfo);
+        mRealm.commitTransaction();
+    }
+
+    public void updateAccount(AccountInfo user)
+    {
+        ///mRealm.beginTransaction();
+        AccountInfo accountInfo = new AccountInfo();
+        accountInfo.setId(user.getId());
+        accountInfo.setName(user.getName());
+        accountInfo.setPhoneNumber(user.getPhoneNumber());
+        accountInfo.setIdentify(user.getIdentify());
+        accountInfo.setPassword(user.getPassword());
+        accountInfo.setConfirm_password(user.getConfirm_password());
+        accountInfo.setRecommend_id(user.getRecommend_id());
+        accountInfo.setRole(user.getRole());
+        accountInfo.setAccessKey(user.getAccessKey());
+        mRealm.copyToRealmOrUpdate(accountInfo);
         mRealm.commitTransaction();
     }
 }

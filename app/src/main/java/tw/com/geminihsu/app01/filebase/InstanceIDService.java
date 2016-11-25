@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.notifyservice;
+package tw.com.geminihsu.app01.filebase;
 
 import android.util.Log;
 
@@ -13,6 +13,6 @@ public class InstanceIDService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         String token = FirebaseInstanceId.getInstance().getToken();
-        Log.d("FCM", "Token:"+token);
+        Log.e("FCM", "Token:"+token);
     }
 }
