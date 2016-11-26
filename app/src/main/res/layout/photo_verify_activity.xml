@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/bg_gray"
-     >
-            <LinearLayout
+    android:orientation="vertical"
+    android:fillViewport="false">
+<LinearLayout
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/bg_gray">
+
+<LinearLayout
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -32,6 +37,7 @@
                  android:orientation="horizontal"
                  android:paddingTop="20dp"
                  >
+
                  <TextView
                      android:id="@+id/brand_name"
                      android:layout_width="wrap_content"
@@ -42,31 +48,37 @@
                      android:text="@string/photo_licence_type"
                      android:textColor="@color/address_devicename_txt"
                      />
+                    <ImageButton
+                        android:id="@+id/btn_car_work_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="20dp"
+                        android:src="@drawable/ic_image_camera_alt"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="right"
+                        android:background="@color/transparent"
+                        android:text=""
+
+                        />
+
                  <ImageView
                         android:id="@+id/car_work_image"
-                        android:layout_width="300dp"
-                        android:layout_height="400dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/brand_name"
                         android:src="@drawable/car_android"
                         android:visibility="gone"
-                      />
-                 <ImageButton
-                     android:id="@+id/btn_car_work_image"
-                     android:layout_width="wrap_content"
-                     android:layout_height="wrap_content"
-                     android:layout_marginRight="20dp"
-                     android:src="@drawable/ic_image_camera_alt"
-                     android:layout_alignParentRight="true"
-                     android:background="@color/transparent"
-                     android:text=""
 
-                     />
+                      />
+
              </RelativeLayout>
                 <RelativeLayout
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
                 >
-                <TextView
+
+                    <TextView
                     android:id="@+id/id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -76,13 +88,6 @@
                     android:text="@string/photo_id"
                     android:textColor="@color/address_devicename_txt"
                     />
-                    <ImageView
-                        android:id="@+id/car_driver_id"
-                        android:layout_width="300dp"
-                        android:layout_height="400dp"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
-                        />
                     <ImageButton
                         android:id="@+id/btn_car_driver_id"
                         android:layout_width="wrap_content"
@@ -93,6 +98,16 @@
                         android:background="@color/transparent"
                         android:text=""
 
+                        />
+
+                    <ImageView
+                        android:id="@+id/car_driver_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/id"
+                        android:src="@drawable/car_android"
+                        android:visibility="gone"
                         />
             </RelativeLayout>
                 <RelativeLayout
@@ -110,14 +125,7 @@
                         android:text="@string/photo_drive_licence"
                         android:textColor="@color/address_devicename_txt"
                         />
-                    <ImageView
-                        android:id="@+id/car_driver_licence"
-                        android:layout_width="300dp"
-                        android:layout_height="400dp"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
-                        />
-                    <ImageButton
+                   <ImageButton
                         android:id="@+id/btn_car_driver_licence"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -126,7 +134,16 @@
                         android:layout_alignParentRight="true"
                         android:background="@color/transparent"
                         android:text=""
+                        />
 
+                    <ImageView
+                        android:id="@+id/car_driver_licence"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/car_android"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/phone"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -144,13 +161,6 @@
                         android:text="@string/photo_business＿license"
                         android:textColor="@color/address_devicename_txt"
                         />
-                    <ImageView
-                        android:id="@+id/car_work_licence_image"
-                        android:layout_width="300dp"
-                        android:layout_height="400dp"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
-                        />
                     <ImageButton
                         android:id="@+id/btn_car_work_licence_image"
                         android:layout_width="wrap_content"
@@ -161,6 +171,14 @@
                         android:background="@color/transparent"
                         android:text=""
 
+                        />
+                    <ImageView
+                        android:id="@+id/car_work_licence_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/car_android"
+                        android:layout_below="@+id/type"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -178,13 +196,7 @@
                         android:text="@string/photo_car_full"
                         android:textColor="@color/address_devicename_txt"
                         />
-                    <ImageView
-                        android:id="@+id/car_image"
-                        android:layout_width="300dp"
-                        android:layout_height="400dp"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
-                        />
+
                     <ImageButton
                         android:id="@+id/btn_car_image"
                         android:layout_width="wrap_content"
@@ -196,6 +208,15 @@
                         android:text=""
 
                         />
+                     <ImageView
+                        android:id="@+id/car_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/car_android"
+                         android:layout_below="@+id/licence"
+                        android:visibility="gone"
+                        />
                 </RelativeLayout>
             </LinearLayout>
-</RelativeLayout>
+   </LinearLayout>
+</ScrollView>

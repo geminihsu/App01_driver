@@ -16,6 +16,8 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY = "m_auth_user";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_PUSH_NOTIFICATION = "p_get";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_DELETE_PUSH_NOTIFICATION = "p_delete";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_UPLOAD_IMAGE = "m_upload_img";
+
 
     //send register json to server attribute
     public static final String APP_OBJECT_KEY_REGISTER_USERNAME = "username";
@@ -44,6 +46,12 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_LOGIN_REGISTER_ID = "registration_id";
     public static final String APP_OBJECT_KEY_LOGIN_PLATFORM = "devicePlatform";
     public static final String APP_OBJECT_KEY_LOGIN_APP_VERSION = "appVer";
+
+    //send post image json to server attribute
+    public static final String APP_OBJECT_KEY_IMAGE_USERNAME = "username";
+    public static final String APP_OBJECT_KEY_IMAGE_ACCESSKEY = "accesskey";
+    public static final String APP_OBJECT_KEY_IMAGE_UPLOAD_TYPE = "uploadtype";
+    public static final String APP_OBJECT_KEY_IMAGE_UPLOAD_IMAGE_DATA = "images";
 
 
     //received json from server attribute

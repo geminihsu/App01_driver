@@ -52,6 +52,8 @@
     <string name="map_location">選擇地點</string>
     <string name="driver_online_check">線上簽收</string>
     <string name="driver_report_price">等待審核</string>
+    <string name="camera_title">拍攝相片</string>
+
 
     <!--司機登入的流程-->
     <string name="driver_idenity_page_title">選擇身份</string>
@@ -171,7 +173,7 @@
     <string name="pick_identity_info">每個手機只能註冊一種身份</string>
     <string name="taxi_driver">計程車</string>
     <string name="Uber_driver">UBER</string>
-    <string name="truck_ƒƒdriver">小貨車</string>
+    <string name="truck_driver">小貨車</string>
     <string name="cargo_driver">大貨車</string>
     <string name="trailer_driver">連結車</string>
 
@@ -409,5 +411,11 @@
     <string name="unit_total">合計</string>
     <string name="unit_total_count">才</string>
     <string name="unit_total_count_example"><u>5</u></string>
+
+    //Camera2RawFragment
+    <string name="request_permission">This app needs camera permission.</string>
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+
 </resources>
 

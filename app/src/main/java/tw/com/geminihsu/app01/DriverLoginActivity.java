@@ -13,8 +13,10 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class DriverLoginActivity extends Activity {
 
@@ -119,6 +121,10 @@ public class DriverLoginActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 //將表單資料送出後回到主畫面
+                Utility info = new Utility(DriverLoginActivity.this);
+                AccountInfo user = info.getAccountInfo();
+                driverIdentifyInfo.setName(user.getPhoneNumber());
+                driverIdentifyInfo.setAccesskey(user.getAccessKey());
                 driverIdentifyInfo.setCar_brand(car_brand_name.getText().toString());
                 driverIdentifyInfo.setCar_cc(car_cc_number.getText().toString());
                 driverIdentifyInfo.setCar_born(car_release_year.getText().toString());

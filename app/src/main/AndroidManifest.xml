@@ -84,6 +84,9 @@
         <activity android:name=".MerchandiseUnitcalculatorActivity"
             android:label="@string/merchandise_calculator"
             android:configChanges="orientation|screenSize"/>
+        <activity android:name=".CameraActivity"
+            android:label="@string/camera_title"
+            android:configChanges="orientation|screenSize"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

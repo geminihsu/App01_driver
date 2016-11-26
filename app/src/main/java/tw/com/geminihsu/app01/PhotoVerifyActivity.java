@@ -5,11 +5,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,9 +22,36 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-import tw.com.geminihsu.app01.common.Constants;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
-public class PhotoVerifyActivity extends Activity {
+import java.io.File;
+import java.io.IOException;
+
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.ImageUtils;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.URICovertStringPathUtil;
+
+public class PhotoVerifyActivity extends Activity implements Response.ErrorListener,Response.Listener{
+    private String TAG = PhotoVerifyActivity.class.toString();
+
+    private static final int CAMERA=1;
+    private static final int PICK_IMAGE_REQUEST = 2;
+
+    private static final int ID_CAMERA=3;
+    private static final int PICK_ID_IMAGE_REQUEST = 4;
+
+    private static final int LICENCE_CAMERA=5;
+    private static final int PICK_LICENCE_IMAGE_REQUEST = 6;
+
+    private static final int WORK_LICENCE_CAMERA=7;
+    private static final int PICK_WORK_LICENCE_IMAGE_REQUEST = 8;
+
+    private static final int CAR_CAMERA=9;
+    private static final int PICK_CAR_IMAGE_REQUEST = 10;
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -34,6 +66,13 @@ public class PhotoVerifyActivity extends Activity {
     private ImageView car_driver_licence;
     private ImageView car_work_licence_image;
     private ImageView car_image;
+
+    private String imageContentURI;
+
+    private int scaleWidth;
+    private int scaleHeight;
+
+    private DriverIdentifyInfo driverInfo;
 
 
 
@@ -53,6 +92,8 @@ public class PhotoVerifyActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
+        Bundle args = getIntent().getExtras();
+        driverInfo = (DriverIdentifyInfo) args.getSerializable(DriverLoginActivity.BUNDLE_DRIVER_ACCOUNT_INFO);
 
         this.setLister();
 
@@ -70,6 +111,7 @@ public class PhotoVerifyActivity extends Activity {
         btn_car_image = (ImageButton) findViewById(R.id.btn_car_image);
 
         car_work_image = (ImageView) findViewById(R.id.car_work_image);
+
         car_driver_id = (ImageView) findViewById(R.id.car_driver_id);
         car_driver_licence = (ImageView) findViewById(R.id.car_driver_licence);
         car_work_licence_image = (ImageView) findViewById(R.id.car_work_licence_image);
@@ -105,8 +147,8 @@ public class PhotoVerifyActivity extends Activity {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
-                                        //Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
-                                        //startActivityForResult(intent, CAMERA);
+                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
+                                        startActivityForResult(intent, CAMERA);
                                         break;
                                     case 1:
                                         Intent gallery = new Intent();
@@ -114,7 +156,7 @@ public class PhotoVerifyActivity extends Activity {
                                         gallery.setType("image/*");
                                         gallery.setAction(Intent.ACTION_GET_CONTENT);
                                         // Always show the chooser (if there are multiple options available)
-                                       // startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE_REQUEST);
+                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE_REQUEST);
                                         break;
                                  /*   case 2:
                                         Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
@@ -126,6 +168,184 @@ public class PhotoVerifyActivity extends Activity {
                 builderSingle.show();
             }
         });
+
+        btn_car_driver_id.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        PhotoVerifyActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                arrayAdapter.add(getString(R.string.pick_picture_gallery));
+                //arrayAdapter.add("YouTube");
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+                                switch (which){
+                                    case 0:
+                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
+                                        startActivityForResult(intent, ID_CAMERA);
+                                        break;
+                                    case 1:
+                                        Intent gallery = new Intent();
+                                        // Show only images, no videos or anything else
+                                        gallery.setType("image/*");
+                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
+                                        // Always show the chooser (if there are multiple options available)
+                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_ID_IMAGE_REQUEST);
+                                        break;
+                                 /*   case 2:
+                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
+                                        startActivity(question);
+                                        break;*/
+                                }
+                            }
+                        });
+                builderSingle.show();
+            }
+        });
+        btn_car_driver_licence.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        PhotoVerifyActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                arrayAdapter.add(getString(R.string.pick_picture_gallery));
+                //arrayAdapter.add("YouTube");
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+                                switch (which){
+                                    case 0:
+                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
+                                        startActivityForResult(intent, LICENCE_CAMERA);
+                                        break;
+                                    case 1:
+                                        Intent gallery = new Intent();
+                                        // Show only images, no videos or anything else
+                                        gallery.setType("image/*");
+                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
+                                        // Always show the chooser (if there are multiple options available)
+                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_LICENCE_IMAGE_REQUEST);
+                                        break;
+                                 /*   case 2:
+                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
+                                        startActivity(question);
+                                        break;*/
+                                }
+                            }
+                        });
+                builderSingle.show();
+            }
+        });
+        btn_car_work_licence_image.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        PhotoVerifyActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                arrayAdapter.add(getString(R.string.pick_picture_gallery));
+                //arrayAdapter.add("YouTube");
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+                                switch (which){
+                                    case 0:
+                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
+                                        startActivityForResult(intent, WORK_LICENCE_CAMERA);
+                                        break;
+                                    case 1:
+                                        Intent gallery = new Intent();
+                                        // Show only images, no videos or anything else
+                                        gallery.setType("image/*");
+                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
+                                        // Always show the chooser (if there are multiple options available)
+                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_WORK_LICENCE_IMAGE_REQUEST);
+                                        break;
+                                 /*   case 2:
+                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
+                                        startActivity(question);
+                                        break;*/
+                                }
+                            }
+                        });
+                builderSingle.show();
+            }
+        });
+        btn_car_image.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        PhotoVerifyActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                arrayAdapter.add(getString(R.string.pick_picture_gallery));
+                //arrayAdapter.add("YouTube");
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+                                switch (which){
+                                    case 0:
+                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
+                                        startActivityForResult(intent, CAR_CAMERA);
+                                        break;
+                                    case 1:
+                                        Intent gallery = new Intent();
+                                        // Show only images, no videos or anything else
+                                        gallery.setType("image/*");
+                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
+                                        // Always show the chooser (if there are multiple options available)
+                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_CAR_IMAGE_REQUEST);
+                                        break;
+                                 /*   case 2:
+                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
+                                        startActivity(question);
+                                        break;*/
+                                }
+                            }
+                        });
+                builderSingle.show();
+            }
+        });
+    }
+
+    @Override
+    //Get the size of the Image view after the
+    //Activity has completely loaded
+    public void onWindowFocusChanged(boolean hasFocus){
+        super.onWindowFocusChanged(hasFocus);
+        scaleWidth=car_driver_id.getWidth();
+        scaleHeight=car_work_image.getHeight();
     }
 
 
@@ -163,4 +383,241 @@ public class PhotoVerifyActivity extends Activity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case CAMERA:
+                String path = data.getStringExtra("image");
+                File imgFile = new File(path);
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path, scaleWidth, scaleHeight);
+                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                    imageContentURI = path;
+                    car_work_image.setImageBitmap(myBitmap);
+                }
+                break;
+            case PICK_IMAGE_REQUEST:
+                String realPath;
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11)
+                    realPath = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19)
+                    realPath = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+                    // SDK > 19 (Android 4.4)
+                else
+                    realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
+                Uri uri = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
+                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath, 300, 400);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.e(TAG, uri.toString());
+                    imageContentURI = realPath;
+                    car_work_image.setImageBitmap(bitmap);
+                    car_work_image.setVisibility(View.VISIBLE);
+                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(bitmap,driverInfo);
+                    // post_image.RequestMultiPart(this,this,img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case ID_CAMERA:
+                String path1 = data.getStringExtra("image");
+                File imgFile1 = new File(path1);
+                if (imgFile1.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path1, scaleWidth, scaleHeight);
+                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                    imageContentURI = path1;
+                    car_driver_id.setImageBitmap(myBitmap);
+                }
+                break;
+            case PICK_ID_IMAGE_REQUEST:
+                String realPath1;
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11)
+                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19)
+                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+                    // SDK > 19 (Android 4.4)
+                else
+                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
+                Uri uri1 = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri1);
+                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath1, 300, 400);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.e(TAG, uri1.toString());
+                    imageContentURI = realPath1;
+                    car_driver_id.setImageBitmap(bitmap);
+                    car_driver_id.setVisibility(View.VISIBLE);
+                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(bitmap,driverInfo);
+                    // post_image.RequestMultiPart(this,this,img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case LICENCE_CAMERA:
+                String path2 = data.getStringExtra("image");
+                File imgFile2 = new File(path2);
+                if (imgFile2.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path2, scaleWidth, scaleHeight);
+                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                    imageContentURI = path2;
+                    car_driver_licence.setImageBitmap(myBitmap);
+                }
+                break;
+            case PICK_LICENCE_IMAGE_REQUEST:
+                String realPath2;
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11)
+                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19)
+                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+                    // SDK > 19 (Android 4.4)
+                else
+                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
+                Uri uri2 = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri2);
+                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath2, 300, 400);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.e(TAG, uri2.toString());
+                    imageContentURI = realPath2;
+                    car_driver_licence.setImageBitmap(bitmap);
+                    car_driver_licence.setVisibility(View.VISIBLE);
+                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(bitmap,driverInfo);
+                    // post_image.RequestMultiPart(this,this,img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case WORK_LICENCE_CAMERA:
+                String path3 = data.getStringExtra("image");
+                File imgFile3 = new File(path3);
+                if (imgFile3.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path3, scaleWidth, scaleHeight);
+                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                    imageContentURI = path3;
+                    car_work_licence_image.setImageBitmap(myBitmap);
+                }
+                break;
+            case PICK_WORK_LICENCE_IMAGE_REQUEST:
+                String realPath3;
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11)
+                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19)
+                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+                    // SDK > 19 (Android 4.4)
+                else
+                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
+                Uri uri3 = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri3);
+                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath3, 300, 400);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.e(TAG, uri3.toString());
+                    imageContentURI = realPath3;
+                    car_work_licence_image.setImageBitmap(bitmap);
+                    car_work_licence_image.setVisibility(View.VISIBLE);
+                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(bitmap,driverInfo);
+                    // post_image.RequestMultiPart(this,this,img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case CAR_CAMERA:
+                String path4 = data.getStringExtra("image");
+                File imgFile4 = new File(path4);
+                if (imgFile4.exists()) {
+                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path4, scaleWidth, scaleHeight);
+                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                    imageContentURI = path4;
+                    car_image.setImageBitmap(myBitmap);
+                }
+                break;
+            case PICK_CAR_IMAGE_REQUEST:
+                String realPath4;
+                // SDK < API11
+                if (Build.VERSION.SDK_INT < 11)
+                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+
+                    // SDK >= 11 && SDK < 19
+                else if (Build.VERSION.SDK_INT < 19)
+                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+
+                    // SDK > 19 (Android 4.4)
+                else
+                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
+                Uri uri4 = data.getData();
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri4);
+                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath4, 300, 400);
+                    // Log.d(TAG, String.valueOf(bitmap));
+
+                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                    Log.e(TAG, uri4.toString());
+                    imageContentURI = realPath4;
+                    car_image.setImageBitmap(bitmap);
+                    car_image.setVisibility(View.VISIBLE);
+                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(bitmap,driverInfo);
+                    // post_image.RequestMultiPart(this,this,img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onErrorResponse(VolleyError error) {
+        Log.e("",error.toString());
+    }
+
+    @Override
+    public void onResponse(Object response) {
+        Log.e("",response.toString());
+    }
 }
