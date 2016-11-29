@@ -126,7 +126,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
         super.onStart();
         this.findViews();
         Bundle args = getIntent().getExtras();
-        driverInfo = (DriverIdentifyInfo) args.getSerializable(DriverLoginActivity.BUNDLE_DRIVER_ACCOUNT_INFO);
+        if(args!=null)
+         driverInfo = (DriverIdentifyInfo) args.getSerializable(DriverLoginActivity.BUNDLE_DRIVER_ACCOUNT_INFO);
 
         this.setLister();
         if(getRegisterDriverBroadcastReceiver!=null)
