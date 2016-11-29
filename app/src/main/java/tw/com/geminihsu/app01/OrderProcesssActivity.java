@@ -20,7 +20,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class OrderProcesssActivity extends Activity {
 
@@ -40,6 +45,9 @@ public class OrderProcesssActivity extends Activity {
     private TextView information;
     private TextView send_method;
     private TextView payment;
+    private TextView from;
+    private TextView location;
+
     private ImageView detail;
     private ImageView departure;
     private ImageView destination;
@@ -50,7 +58,9 @@ public class OrderProcesssActivity extends Activity {
     private ImageView online_check;
 
 
-    private int choice;
+    private String ticket_id;
+    private NormalOrder order;
+    private JsonPutsUtil sendDataRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +69,20 @@ public class OrderProcesssActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(this);
+        sendDataRequest.setDriverRequestFinishOrderManagerCallBackFunction(new JsonPutsUtil.DriverRequestFinishOrderManagerCallBackFunction() {
 
+
+            @Override
+            public void driverFinishOrder(NormalOrder order) {
+                //doneAlert();
+                Intent question = new Intent(OrderProcesssActivity.this, DriverCommentActivity.class);
+                Bundle b = new Bundle();
+                b.putString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
 
     }
 
@@ -70,13 +93,10 @@ public class OrderProcesssActivity extends Activity {
         this.setLister();
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
-            if (bundle.containsKey(Constants.ARG_POSITION)){
-                choice = bundle.getInt(Constants.ARG_POSITION);
-                displayLayout();
-            }else
-            {
-                //Error!!!!
-            }
+            ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
+            RealmUtil info = new RealmUtil(OrderProcesssActivity.this);
+            order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+            displayLayout();
         }
         else
         {
@@ -94,6 +114,8 @@ public class OrderProcesssActivity extends Activity {
         information = (TextView) findViewById(R.id.txt_pannel_info);
         send_method = (TextView) findViewById(R.id.send_method);
         payment = (TextView) findViewById(R.id.payment);
+        from  = (TextView) findViewById(R.id.txt_from);
+        location = (TextView) findViewById(R.id.txt_dest);
 
         linearLayout_sender = (LinearLayout) findViewById(R.id.sender);
         linearLayout_receiver = (LinearLayout) findViewById(R.id.receiver);
@@ -114,17 +136,19 @@ public class OrderProcesssActivity extends Activity {
     }
 
     private void displayLayout() {
-        if(choice == PASSENGER)
-        {
-            send_method.setText("一般載客(小費:50元)");
+        //if(choice == PASSENGER)
+        //{
+            send_method.setText("一般載客(費用:"+order.getPrice()+"元)");
             payment.setText("照表收費");
+            from.setText(order.getBegin_address());
+            location.setText(order.getEnd_address());
             linearLayout_change_price.setVisibility(View.GONE);
             linearLayout_online_check_price.setVisibility(View.GONE);
             linearLayout_sender.setVisibility(View.GONE);
             linearLayout_receiver.setVisibility(View.GONE);
             linearLayout_call_panel_merchandise.setVisibility(View.GONE);
             linearLayout_call_panel_client.setVisibility(View.VISIBLE);
-        }
+       // }
     }
 
 
@@ -237,24 +261,10 @@ public class OrderProcesssActivity extends Activity {
 
         @Override
         public void onClick(View v) {
-            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderProcesssActivity.this);
-            // set title
-            alertDialogBuilder.setTitle(getString(R.string.dialog_finish_order));
 
-            // set dialog message
-            alertDialogBuilder
-                    .setMessage(getString(R.string.dialog_finish_order_message))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog,int id) {
+            sendDataRequest.driverFinishOrder(order);
 
-                        }
-                    });
 
-            // create alert dialog
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            // show it
-            alertDialog.show();
         }
     });
         online_payment.setOnClickListener(new View.OnClickListener() {
@@ -343,6 +353,7 @@ public class OrderProcesssActivity extends Activity {
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
 
 }

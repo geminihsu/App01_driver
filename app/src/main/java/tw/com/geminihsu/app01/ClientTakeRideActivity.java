@@ -14,6 +14,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,13 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.bean.OrderLocationBean;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class ClientTakeRideActivity extends Activity {
 
@@ -70,6 +77,8 @@ public class ClientTakeRideActivity extends Activity {
 
     private Calendar calendar;
 
+    private JsonPutsUtil sendDataRequest;
+    private DriverIdentifyInfo driver;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +86,20 @@ public class ClientTakeRideActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(ClientTakeRideActivity.this);
+        sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
 
+            @Override
+            public void createNormalOrder(NormalOrder order) {
+
+                Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                //Bundle b = new Bundle();
+                //b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                //intent.putExtras(b);
+                startActivity(intent);
+                //finish();
+            }
+        });
 
     }
 
@@ -315,8 +337,52 @@ public class ClientTakeRideActivity extends Activity {
                             })
                             .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
-                                    startActivity(question);
+
+                                    // Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
+                                   // startActivity(question);
+                                    Utility info = new Utility(ClientTakeRideActivity.this);
+                                    driver = info.getDriverAccountInfo();
+                                    OrderLocationBean begin_location = new OrderLocationBean();
+                                    begin_location.setId(1);
+                                    begin_location.setLatitude("24.09133");
+                                    begin_location.setLongitude("120.540315");
+                                    begin_location.setZipcode("404");
+                                    begin_location.setAddress("台中市北區市政路172號");
+
+                                    OrderLocationBean stop_location = new OrderLocationBean();
+                                    stop_location.setId(2);
+                                    stop_location.setLatitude("24.14411");
+                                    stop_location.setLongitude("120.679567");
+                                    stop_location.setZipcode("400");
+                                    stop_location.setAddress("台中市中區柳川里成功路300號");
+
+
+                                    OrderLocationBean end_location = new OrderLocationBean();
+                                    end_location.setId(3);
+                                    end_location.setLatitude("24.14411");
+                                    end_location.setLongitude("120.679567");
+                                    end_location.setZipcode("400");
+                                    end_location.setAddress("台中市南區興大路145號");
+
+
+                                    NormalOrder order = new NormalOrder();
+                                    order.setUser_id(driver.getId());
+                                    order.setUser_uid(driver.getUid());
+                                    order.setUser_name(driver.getName());
+                                    order.setAccesskey(driver.getAccesskey());
+                                    order.setBegin(begin_location);
+                                    order.setEnd(end_location);
+                                    order.setDtype(driver.getDtype());
+                                    order.setBegin_address(begin_location.getAddress());
+                                    order.setStop_address(stop_location.getAddress());
+                                    order.setEnd_address(end_location.getAddress());
+                                    order.setPrice("1000");
+                                    order.setTip("0");
+                                    order.setTicket_status("0");
+
+                                    sendDataRequest.putCreateNormalOrder(order);
+
+
                                 }
                             });
 

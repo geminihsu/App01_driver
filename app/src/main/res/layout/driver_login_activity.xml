@@ -51,7 +51,7 @@
                      android:layout_height="wrap_content"
                      android:ellipsize="middle"
                      android:singleLine="true"
-                     android:text=""
+                     android:text="Audi奧迪"
 
                      />
              </LinearLayout>
@@ -76,7 +76,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
                     android:singleLine="true"
-                    android:text=""
+                    android:text="1800"
 
                     />
             </LinearLayout>
@@ -101,7 +101,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="2005"
 
 
                         />
@@ -127,7 +127,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="ABY-7121"
 
 
                         />
@@ -153,7 +153,7 @@
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
-                        android:text=""
+                        android:text="A12345678"
 
 
                         />

@@ -74,6 +74,9 @@
     <string name="login_error_title">登入失敗</string>
     <string name="login_error_msg">抱歉！\n您輸入的手機號碼或密碼有誤。</string>
     <string name="login_error_user_msg">請先註冊</string>
+    <string name="login_error_gps">為開啟定位</string>
+    <string name="login_error_gps_msg">請開啟定位</string>
+
 
     <string name="login_error_register_msg">請輸入正確資料</string>
 

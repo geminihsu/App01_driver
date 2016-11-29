@@ -212,6 +212,8 @@ public class RegisterActivity extends Activity {
 
                     if(connectResult.equals(App01libObjectKey.APP_REGISTER_RESPONSE_CODE.K_APP_REGISTER_RESPONSE_CODE_SUCCESS))
                     {
+                        int uid = jsonObject.getInt(App01libObjectKey.APP_OBJECT_KEY_UID);
+                        user.setUid(""+uid);
                         Constants.Driver = false;
                         Intent verify = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
                         Bundle b = new Bundle();

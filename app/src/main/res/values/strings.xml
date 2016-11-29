@@ -75,6 +75,8 @@
     <string name="login_error_msg">抱歉！\n您輸入的手機號碼或密碼有誤。</string>
     <string name="login_error_user_msg">請先註冊</string>
     <string name="login_error_register_msg">請輸入正確資料</string>
+    <string name="login_error_gps">Location Service Disabled</string>
+    <string name="login_error_gps_msg">Please enable location servies</string>
 
 
     <!--  forget password page -->

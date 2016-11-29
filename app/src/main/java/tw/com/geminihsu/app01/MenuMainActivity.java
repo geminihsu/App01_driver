@@ -1,13 +1,15 @@
 package tw.com.geminihsu.app01;
 
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
@@ -24,6 +26,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.location.LocationListener;
+
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
@@ -36,14 +40,12 @@ import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 import tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01.delegate.driver.MenuMainViewDelegateDriver;
 import tw.com.geminihsu.app01.service.App01Service;
-import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
-import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
-        Fragment_BeginOrderInteractive.OnListItemClickListener{
+        Fragment_BeginOrderInteractive.OnListItemClickListener,LocationListener {
 
-
+    public final static int ERROR_NO_GPS = 2;
     private final String TAG=this.getClass().getSimpleName();
     private MenuMainViewDelegateBase viewDelegateBase;
     private DrawerLayout mDrawerLayout;
@@ -69,6 +71,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             myBinder = ((App01Service.App01ServiceServiceBinder) service).getService(info.getAccountInfo());
             //myBinder.setUserInfo(user);
             myBinder.startToGetPutNotify();
+            myBinder.App01ServiceCheckGPS();
         }
     };
 
@@ -77,7 +80,13 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity_main);
+        LocationManager service = (LocationManager) getSystemService(LOCATION_SERVICE);
+        boolean enabled = service
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
 
+        if (!enabled) {
+            alert(ERROR_NO_GPS);
+        }
 
         // 判斷要用哪一個Delegate
         if (Constants.Driver) {
@@ -240,6 +249,13 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (myLocalServiceConnection != null && MenuMainActivity.this!= null )
+             unbindService(myLocalServiceConnection);
+
+    }
     // Call to update the share intent
     private void setShareIntent(Intent shareIntent) {
         if (mShareActionProvider != null) {
@@ -267,5 +283,34 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
     }
 
+    private void alert(int error)
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.login_error_gps));
 
+        if(error==ERROR_NO_GPS)
+        {
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_gps_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+        }
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
+
+
+    @Override
+    public void onLocationChanged(Location location) {
+        int lat = (int) (location.getLatitude());
+        int lng = (int) (location.getLongitude());
+        Log.e(TAG,"Latitude:"+lat+",Longitude:"+lng);
+    }
 }

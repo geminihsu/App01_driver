@@ -33,7 +33,14 @@ public class Constants {
 	final public static String hotel_longitude = "longitude";
 
 	public final static String ACCOUNT_PHONE_NUMBER = "phoneNumber";// from
+	public final static String ACCOUNT_USERNAME = "user_name";// from
 	public final static String ACCOUNT_PASSWORD = "password";// from
+
+	public final static String ACCOUNT_NAME = "name";// from
+
+	public final static String ACCOUNT_DRIVER_UID = "uid";// from
+
+	public final static String ORDER_TICKET_ID = "ticket_id";// from
 
 	public enum APP_REGISTER_DRIVER_TYPE
 	{

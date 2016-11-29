@@ -1,11 +1,14 @@
 package tw.com.geminihsu.app01.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import io.realm.RealmObject;
 
 public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serializable {
     private int id;
+    private String uid;
+    private String did;//註冊司機成功，從Server回傳的did
     private String name;
     private String accesskey;
     private String dtype;
@@ -17,6 +20,7 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
     private String car_special;
     private String car_files;
     private String car_imgs;
+    //private ArrayList<ImageBean> imageList;
 
 
 
@@ -26,6 +30,22 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getDid() {
+        return did;
+    }
+
+    public void setDid(String did) {
+        this.did = did;
     }
 
     public String getName() {
@@ -115,4 +135,11 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
     public void setCar_imgs(String car_imgs) {
         this.car_imgs = car_imgs;
     }
+    /*public ArrayList<ImageBean> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(ArrayList<ImageBean> imageList) {
+        this.imageList = imageList;
+    }*/
 }

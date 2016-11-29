@@ -156,6 +156,7 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 	public void setNavigationItem(Menu menu) {
 		//先全部隱藏
 		super.setNavigationItem(menu);
+
 	}
 
 

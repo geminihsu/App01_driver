@@ -1,12 +1,18 @@
 package tw.com.geminihsu.app01.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
@@ -43,6 +49,12 @@ public class App01Service extends Service {
 
     private GetPushNotifyInfo_Thread getPushNotifyInfo_thread_Thread;
     private AccountInfo accountInfo;
+    //Check user location
+    private LocationListener listener;
+    private LocationManager locationManager;
+    private  JsonPutsUtil sendrequest;
+
+
 
     @Nullable
     @Override
@@ -56,10 +68,10 @@ public class App01Service extends Service {
         public App01Service getService(AccountInfo user)
         {
             accountInfo = user;
+            sendrequest = new JsonPutsUtil(App01Service.this);
             Log.d(TAG, "[App01Service]_onBind() executed");
             return App01Service.this;
         }
-
 
 
     }
@@ -72,6 +84,43 @@ public class App01Service extends Service {
 
         getPushNotifyInfo_thread_Thread = new GetPushNotifyInfo_Thread();
         getPushNotifyInfo_thread_Thread.start();
+
+    }
+
+    public void App01ServiceCheckGPS(){
+        listener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Intent i = new Intent("location_update");
+                i.putExtra("longitude",location.getLongitude());
+                i.putExtra("latitude",location.getLatitude());
+                sendBroadcast(i);
+                Log.e(TAG, "Longitude:"+location.getLongitude()+",Latitude:"+location.getLatitude());
+                sendrequest.putsUserGPSLocation(location.getLongitude(),location.getLatitude(),accountInfo);
+            }
+
+            @Override
+            public void onStatusChanged(String s, int i, Bundle bundle) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String s) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String s) {
+                Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        };
+
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        //noinspection MissingPermission
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3000,0,listener);
 
     }
 
@@ -104,63 +153,18 @@ public class App01Service extends Service {
 
     private void sendCommandToRequestNotification() {
 
-        /*final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_GET_PUSH_NOTIFICATION);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, user.getPhoneNumber());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY, user.getAccessKey());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.e(TAG,jsonObject.toString());
-
-                try {
-                    // Parsing json object response
-                    // response will be a json object
-                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE connectResult =App01libObjectKey.conversion_get_put_notification_result(Integer.valueOf(status));
-
-                    if(connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS))
-                    {
-                       Log.e(TAG,"get push!!!!");
-                    }else
-                    {
-                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
-
-                        Toast.makeText(getApplicationContext(),
-                                message,
-                                Toast.LENGTH_LONG).show();
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e(TAG,volleyError.getMessage().toString());
-            }
-        });
-        requestQueue.add(jsonObjectRequest);*/
-        JsonPutsUtil sendrequest = new JsonPutsUtil(this);
         sendrequest.getPushNotification(accountInfo);
 
 
     }
 
-    public void setUserInfo(AccountInfo user){
-        accountInfo = user;
-    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(locationManager != null){
+            //noinspection MissingPermission
+            locationManager.removeUpdates(listener);
+        }
+    }
 }

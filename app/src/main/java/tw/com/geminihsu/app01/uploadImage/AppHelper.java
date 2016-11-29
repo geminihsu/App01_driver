@@ -1,4 +1,4 @@
-package tw.com.geminihsu.app01.utils;
+package tw.com.geminihsu.app01.uploadImage;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;

@@ -4,7 +4,11 @@ import android.content.Context;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.bean.ImageBean;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 
 /**
  * Created by geminihsu on 16/10/28.
@@ -55,12 +59,43 @@ public class RealmUtil {
         return user;
     }
 
+    public DriverIdentifyInfo queryDriver(String column, String value) {
+
+        DriverIdentifyInfo driverIdentifyInfo = mRealm.where(DriverIdentifyInfo.class).equalTo(column, value).findFirst();
+        return driverIdentifyInfo;
+    }
+
+    public NormalOrder queryOrder(String column, String value) {
+
+        NormalOrder order = mRealm.where(NormalOrder.class).equalTo(column, value).findFirst();
+        return order;
+    }
+
+    public RealmResults<NormalOrder> queryOrderList(String column, String value) {
+
+        RealmResults<NormalOrder> orders = mRealm.where(NormalOrder.class).equalTo(column, value).findAll();
+        return orders;
+    }
+
+    public RealmResults<DriverIdentifyInfo> queryAllDriver() {
+
+        RealmResults<DriverIdentifyInfo> drivers= mRealm.where(DriverIdentifyInfo.class).findAll();
+        return drivers;
+    }
+
+    public RealmResults<ImageBean> queryImage(String column, String value) {
+
+        RealmResults<ImageBean> file = mRealm.where(ImageBean.class).equalTo(column, value).findAll();
+        return file;
+    }
+
     public void addAccount(AccountInfo user)
     {
         mRealm.beginTransaction();
 
         AccountInfo accountInfo = mRealm.createObject(AccountInfo.class);
         accountInfo.setId(user.getId());
+        accountInfo.setUid(user.getUid());
         accountInfo.setName(user.getName());
         accountInfo.setPhoneNumber(user.getPhoneNumber());
         accountInfo.setIdentify(user.getIdentify());
@@ -73,6 +108,76 @@ public class RealmUtil {
         mRealm.copyToRealm(accountInfo);
         mRealm.commitTransaction();
     }
+
+    public void addImageFileInfo(ImageBean image)
+    {
+        mRealm.beginTransaction();
+
+        ImageBean imageBean = mRealm.createObject(ImageBean.class);
+        imageBean.setUser_id(image.getUser_id());
+        imageBean.setUser_name(image.getUser_name());
+        imageBean.setUploadtype(image.getUploadtype());
+        imageBean.setFile_id(image.getFile_id());
+        imageBean.setFile_url(image.getFile_url());
+        mRealm.copyToRealm(imageBean);
+        mRealm.commitTransaction();
+    }
+
+    public void addDriverInfo(DriverIdentifyInfo driver)
+    {
+        mRealm.beginTransaction();
+
+        DriverIdentifyInfo driverIdentifyInfo = mRealm.createObject(DriverIdentifyInfo.class);
+        driverIdentifyInfo.setId(driver.getId());
+        driverIdentifyInfo.setUid(driver.getUid());
+        driverIdentifyInfo.setDid(driver.getDid());
+        driverIdentifyInfo.setName(driver.getName());
+        driverIdentifyInfo.setAccesskey(driver.getAccesskey());
+        driverIdentifyInfo.setDtype(driver.getDtype());
+        driverIdentifyInfo.setCar_number(driver.getCar_number());
+        driverIdentifyInfo.setCar_brand(driver.getCar_brand());
+        driverIdentifyInfo.setCar_born(driver.getCar_born());
+        driverIdentifyInfo.setCar_reg(driver.getCar_reg());
+        driverIdentifyInfo.setCar_cc(driver.getCar_cc());
+        driverIdentifyInfo.setCar_special(driver.getCar_special());
+        driverIdentifyInfo.setCar_files(driver.getCar_files());
+        driverIdentifyInfo.setCar_imgs(driver.getCar_imgs());
+
+
+        mRealm.copyToRealm(driverIdentifyInfo);
+        mRealm.commitTransaction();
+    }
+
+    public void addNormalOrder(NormalOrder order)
+    {
+        mRealm.beginTransaction();
+
+        NormalOrder normalOrder = mRealm.createObject(NormalOrder.class);
+        normalOrder.setOrder_id(order.getOrder_id());
+        normalOrder.setUser_id(order.getUser_id());
+        normalOrder.setUser_uid(order.getUser_uid());
+        normalOrder.setUser_did(order.getUser_did());
+        normalOrder.setUser_name(order.getUser_name());
+        normalOrder.setAccesskey(order.getAccesskey());
+        normalOrder.setDtype(order.getDtype());
+
+        normalOrder.setBegin_address(order.getBegin().getAddress());
+        //normalOrder.setStop_address(order.getStop().getAddress());
+        normalOrder.setEnd_address(order.getEnd().getAddress());
+        normalOrder.setCargo_size(order.getCargo_size());
+        normalOrder.setCargo_imgs(order.getCargo_imgs());
+        normalOrder.setCar_special(order.getCar_special());
+        normalOrder.setRemark(order.getRemark());
+        normalOrder.setPrice(order.getPrice());
+        normalOrder.setTip(order.getTip());
+        normalOrder.setTicket_id(order.getTicket_id());
+        normalOrder.setTicket_status(order.getTicket_status());
+
+        mRealm.copyToRealm(normalOrder);
+        mRealm.commitTransaction();
+    }
+
+
 
     public void updateAccount(AccountInfo user)
     {
@@ -89,5 +194,14 @@ public class RealmUtil {
         accountInfo.setAccessKey(user.getAccessKey());
         mRealm.copyToRealmOrUpdate(accountInfo);
         mRealm.commitTransaction();
+    }
+
+    public void clearDB() {
+        mRealm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.clear(NormalOrder.class);
+            }
+        });
     }
 }

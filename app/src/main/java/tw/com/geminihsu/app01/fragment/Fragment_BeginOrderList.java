@@ -32,23 +32,29 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmResults;
+import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.MerchandiseOrderActivity;
 import tw.com.geminihsu.app01.OrderProcesssActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItemAdapter;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class Fragment_BeginOrderList extends Fragment {
-
+    public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
     private ListView listView;
     private final List<BeginOrderListItem> mRecordOrderListData = new ArrayList<BeginOrderListItem>();;
     private BeginOrderListItemAdapter listViewAdapter;
 
     private boolean wait = false;
     private int option;
-     private int MAXSIZE=10;
+    private JsonPutsUtil sendDataRequest;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -68,6 +74,19 @@ public class Fragment_BeginOrderList extends Fragment {
     public void onStart() {
         super.onStart();
         this.findViews();
+        sendDataRequest = new JsonPutsUtil(getActivity());
+        sendDataRequest.setDriverRequestTakeOverOrderManagerCallBackFunction(new JsonPutsUtil.DriverRequestTakeOverOrderManagerCallBackFunction() {
+
+
+            @Override
+            public void driverTakeOverOrder(NormalOrder order) {
+                Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
+                Bundle b = new Bundle();
+                b.putString(BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
         Bundle data=getArguments();
         if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
         {
@@ -107,7 +126,7 @@ public class Fragment_BeginOrderList extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                final BeginOrderListItem order = mRecordOrderListData.get(position);
+                final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
 
                 final Button takeLook = (Button) v.findViewById(R.id.take_look);
 
@@ -117,7 +136,7 @@ public class Fragment_BeginOrderList extends Fragment {
                     public void onClick(View v) {
                         Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
                         Bundle b = new Bundle();
-                        if(order.order_title.equals("一般搭乘(小費:50元)"))
+                        if(orderItem.order_title.equals("一般搭乘(小費:50元)"))
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                         else
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
@@ -132,8 +151,8 @@ public class Fragment_BeginOrderList extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        if (!wait){
-                            if (order.order_title.equals("一般搭乘(小費:50元)")) {
+                        //if (!wait){
+                         //   if (order.order_title.equals("一般搭乘(小費:50元)")) {
                                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                                 // set title
                                 alertDialogBuilder.setTitle(getString(R.string.menu_sure_take_over));
@@ -146,11 +165,12 @@ public class Fragment_BeginOrderList extends Fragment {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 // if this button is clicked, close
                                                 // current activity
-                                                Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
+                                                sendDataRequest.driverTakeOverOrder(orderItem.order);
+                                                /*  Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                                                 Bundle b = new Bundle();
                                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                                                 question.putExtras(b);
-                                                startActivity(question);
+                                                startActivity(question);*/
 
 
                                             }
@@ -165,7 +185,7 @@ public class Fragment_BeginOrderList extends Fragment {
                                 AlertDialog alertDialog = alertDialogBuilder.create();
                                 // show it
                                 alertDialog.show();
-                            } else {
+                          /*  } else {
 
                                 final Dialog dialog = new Dialog(getActivity());
                                 dialog.setContentView(R.layout.dialog_enter_change_price_layout);
@@ -193,8 +213,8 @@ public class Fragment_BeginOrderList extends Fragment {
                                 });
 
                                 dialog.show();
-                            }
-                        }else
+                            }*/
+                     /*}else
                         {
                             Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                             Bundle b = new Bundle();
@@ -204,7 +224,7 @@ public class Fragment_BeginOrderList extends Fragment {
                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
                             question.putExtras(b);
                             startActivity(question);
-                        }
+                        }*/
                     }
 
                 });
@@ -247,12 +267,14 @@ public class Fragment_BeginOrderList extends Fragment {
     /* 從 xml 取得 OrderRecord 清單 */
     private void getDataFromDB() {
 
+        Utility orders = new Utility(getActivity());
+        RealmResults<NormalOrder> data=orders.getAccountOrderList();
         mRecordOrderListData.clear();
         try {
             // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
             // GeoDeviceManagement.deviceList.clear();
 
-            for (int i = 0; i < 10; i++) {
+          /*  for (int i = 0; i < 10; i++) {
                 BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
                 if(i%2==0)
                     beginOrderListItem.order_title = "一般搭乘(小費:50元)";
@@ -261,6 +283,33 @@ public class Fragment_BeginOrderList extends Fragment {
                 beginOrderListItem.departure = "從:台中市大道一段1號";
                 beginOrderListItem.destination = "到:台中市政府";
 
+
+                if(!wait) {
+                    if(option==0)
+                        beginOrderListItem.order_time = "即時";
+                    else
+                        beginOrderListItem.order_time = "2015/12/08 上午07:04";
+                    beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
+                    beginOrderListItem.button_take_look_visible = View.VISIBLE;
+                }else
+                {
+                    beginOrderListItem.order_time = "2015-12-08 上午07:04";
+                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                    beginOrderListItem.button_take_look_visible = View.GONE;
+
+                }
+                mRecordOrderListData.add(beginOrderListItem);
+            }*/
+
+            for (NormalOrder order: data) {
+                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
+                //if(i%2==0)
+                    beginOrderListItem.order_title = "一般搭乘(費用:"+order.getPrice()+"元)";
+                //else
+                //    beginOrderListItem.order_title = "貨物快送(小費:80元)";
+                beginOrderListItem.departure = "從:"+order.getBegin_address();
+                beginOrderListItem.destination = "到:"+order.getEnd_address();
+                beginOrderListItem.order=order;
 
                 if(!wait) {
                     if(option==0)

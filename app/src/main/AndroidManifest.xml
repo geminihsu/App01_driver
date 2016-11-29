@@ -121,4 +121,9 @@
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.raw" />
 
+    <!-- get gps location -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+
+
 </manifest>

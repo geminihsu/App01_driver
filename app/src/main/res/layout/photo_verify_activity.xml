@@ -177,6 +177,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/car_android"
+                        android:layout_centerHorizontal="true"
                         android:layout_below="@+id/type"
                         android:visibility="gone"
                         />
@@ -213,7 +214,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/car_android"
-                         android:layout_below="@+id/licence"
+                        android:layout_centerHorizontal="true"
+                        android:layout_below="@+id/licence"
                         android:visibility="gone"
                         />
                 </RelativeLayout>

@@ -3,8 +3,11 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -28,15 +31,21 @@ import com.android.volley.VolleyError;
 import java.io.File;
 import java.io.IOException;
 
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ImageUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.URICovertStringPathUtil;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil.ServerRequestDataManagerCallBackFunction;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class PhotoVerifyActivity extends Activity implements Response.ErrorListener,Response.Listener{
     private String TAG = PhotoVerifyActivity.class.toString();
+    private JsonPutsUtil sendDataRequest;
 
     private static final int CAMERA=1;
     private static final int PICK_IMAGE_REQUEST = 2;
@@ -75,6 +84,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
     private DriverIdentifyInfo driverInfo;
 
 
+    private BroadcastReceiver getRegisterDriverBroadcastReceiver;
 
 
     @Override
@@ -84,7 +94,30 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(PhotoVerifyActivity.this);
+        sendDataRequest.setServerRequestDataManagerCallBackFunction(new ServerRequestDataManagerCallBackFunction() {
+            @Override
+            public void registerDriver(DriverIdentifyInfo driverIdentifyInfo) {
 
+                Log.e(TAG,"get request from server");
+                if(!driverIdentifyInfo.getDid().equals("")) {
+
+                   // JsonPutsUtil changeStatus = new JsonPutsUtil(PhotoVerifyActivity.this);
+                   // changeStatus.driverWorkIdentity(driverIdentifyInfo);
+                    //Utility user = new Utility(PhotoVerifyActivity.this);
+                    //AccountInfo driver = user.getAccountInfo();
+                    //driver.setRole(1);
+                    //database.updateAccount(driver);
+                    Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                    //Bundle b = new Bundle();
+                    //b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                    //intent.putExtras(b);
+                    startActivity(intent);
+                    //finish();
+                }
+            }
+
+        });
 
     }
 
@@ -96,6 +129,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
         driverInfo = (DriverIdentifyInfo) args.getSerializable(DriverLoginActivity.BUNDLE_DRIVER_ACCOUNT_INFO);
 
         this.setLister();
+        if(getRegisterDriverBroadcastReceiver!=null)
+            registerReceiver((getRegisterDriverBroadcastReceiver), new IntentFilter("register_driver"));
 
 
 
@@ -350,6 +385,17 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
 
     @Override
+    public void onDestroy() {
+
+        if (getRegisterDriverBroadcastReceiver != null&&getRegisterDriverBroadcastReceiver.isOrderedBroadcast()){
+            unregisterReceiver(getRegisterDriverBroadcastReceiver);
+            getRegisterDriverBroadcastReceiver=null;
+        }
+
+        super.onDestroy();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
@@ -369,10 +415,30 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 Constants.Driver = true;
-                Intent question = new Intent(PhotoVerifyActivity.this, MenuMainActivity.class);
+                /*Intent question = new Intent(PhotoVerifyActivity.this, MenuMainActivity.class);
                 question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(question);
-
+                startActivity(question);*/
+                RealmUtil database = new RealmUtil(PhotoVerifyActivity.this);
+                RealmResults<ImageBean> file =database.queryImage(Constants.ACCOUNT_USERNAME, driverInfo.getName());
+                String car_imgs = "";
+                for(ImageBean image : file)
+                {
+                    if(image.getUploadtype().equals("a6"))
+                        driverInfo.setCar_imgs(image.getFile_id());
+                    else {
+                        car_imgs+= image.getFile_id()+",";
+                       // driverInfo.setCar_files(car_imgs);
+                    }
+                    Log.e(TAG,"image id:"+image.getFile_id());
+                }
+                int index=car_imgs.lastIndexOf(",");
+                String tmp = car_imgs.substring(0,index);
+                car_imgs = tmp;
+                driverInfo.setCar_files(car_imgs);
+                //driverInfo.setCar_files("61,62,63,64");
+                Log.e(TAG,"driverInfo info:"+driverInfo.getDtype());
+                //JsonPutsUtil sendRegister = new JsonPutsUtil(PhotoVerifyActivity.this);
+                sendDataRequest.registerDriverAccount(driverInfo);
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
@@ -422,11 +488,13 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri.toString());
                     imageContentURI = realPath;
-                    car_work_image.setImageBitmap(bitmap);
+                    //car_work_image.setImageBitmap(bitmap);
                     car_work_image.setVisibility(View.VISIBLE);
+                    car_work_image.setImageResource(R.drawable.ic_camera_72x72);
                     JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(bitmap,driverInfo);
+                    post_image.postImageToServer(driverInfo,car_work_image,"a1");
+                    //Log.e(TAG,"USER:"+driverInfo.getAccesskey());
                     // post_image.RequestMultiPart(this,this,img);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -466,12 +534,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri1.toString());
                     imageContentURI = realPath1;
-                    car_driver_id.setImageBitmap(bitmap);
+                    //car_driver_id.setImageBitmap(bitmap);
+                    car_driver_id.setImageResource(R.drawable.ic_camera_72x72);
                     car_driver_id.setVisibility(View.VISIBLE);
                     JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(bitmap,driverInfo);
+                    //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
+                    post_image.postImageToServer(driverInfo,car_driver_id,"a3");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -510,12 +581,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri2.toString());
                     imageContentURI = realPath2;
-                    car_driver_licence.setImageBitmap(bitmap);
+                    //car_driver_licence.setImageBitmap(bitmap);
+                    car_driver_licence.setImageResource(R.drawable.ic_camera_72x72);
                     car_driver_licence.setVisibility(View.VISIBLE);
                     JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(bitmap,driverInfo);
+                    //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
+                    post_image.postImageToServer(driverInfo,car_driver_licence,"a4");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -554,12 +628,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri3.toString());
                     imageContentURI = realPath3;
-                    car_work_licence_image.setImageBitmap(bitmap);
+                    //car_work_licence_image.setImageBitmap(bitmap);
+                    car_work_licence_image.setImageResource(R.drawable.ic_camera_72x72);
                     car_work_licence_image.setVisibility(View.VISIBLE);
                     JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(bitmap,driverInfo);
+                   // post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
+                    post_image.postImageToServer(driverInfo,car_work_licence_image,"a5");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -598,12 +675,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri4.toString());
                     imageContentURI = realPath4;
-                    car_image.setImageBitmap(bitmap);
                     car_image.setVisibility(View.VISIBLE);
+                    car_image.setImageResource(R.drawable.ic_camera_72x72);
+
                     JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(bitmap,driverInfo);
+                    //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
+                    post_image.postImageToServer(driverInfo,car_image,"a6");
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

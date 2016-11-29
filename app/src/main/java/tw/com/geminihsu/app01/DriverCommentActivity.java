@@ -14,15 +14,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class DriverCommentActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
     private ImageView driver_info;
-
+    private JsonPutsUtil sendDataRequest;
+    private String ticket_id;
+    private RatingBar score;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +38,16 @@ public class DriverCommentActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(this);
+        sendDataRequest.setDriverRequestClientCommentManagerCallBackFunction(new JsonPutsUtil.DriverRequestClientCommentManagerCallBackFunction() {
 
+
+            @Override
+            public void driverAskComment(NormalOrder order) {
+                Intent question = new Intent(DriverCommentActivity.this, MenuMainActivity.class);
+                startActivity(question);
+            }
+        });
 
     }
 
@@ -40,16 +57,19 @@ public class DriverCommentActivity extends Activity {
         this.findViews();
 
         this.setLister();
+        Bundle bundle = this.getIntent().getExtras();
+        if (bundle != null) {
+            ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
+        }
 
 
 
-
-    }
+        }
 
     private void findViews()
     {
         driver_info = (ImageView)findViewById(R.id.image);
-
+        score = (RatingBar) findViewById(R.id.rating_level);
     }
 
 
@@ -88,29 +108,7 @@ public class DriverCommentActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-               /* Intent question = new Intent(DriverCommentActivity.this, SupportAnswerActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_APP);
-                question.putExtras(b);
-                startActivity(question);*/
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DriverCommentActivity.this);
-                // set title
-                alertDialogBuilder.setTitle(getString(R.string.dialog_finish_order));
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage(getString(R.string.dialog_finish_order_message))
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog,int id) {
-                               finish();
-                            }
-                        });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                // show it
-                alertDialog.show();
+                doneAlert();
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
@@ -119,6 +117,30 @@ public class DriverCommentActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void doneAlert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DriverCommentActivity.this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.dialog_finish_order));
+
+        // set dialog messagex
+        alertDialogBuilder
+                .setMessage(getString(R.string.dialog_finish_order_message))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,int id) {
+                        RealmUtil info = new RealmUtil(DriverCommentActivity.this);
+                        NormalOrder order =info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                        sendDataRequest.commentOrder(order,(int)score.getRating());
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
     }
 
 }

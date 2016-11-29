@@ -123,6 +123,7 @@ public class DriverLoginActivity extends Activity {
                 //將表單資料送出後回到主畫面
                 Utility info = new Utility(DriverLoginActivity.this);
                 AccountInfo user = info.getAccountInfo();
+                driverIdentifyInfo.setUid(user.getUid());
                 driverIdentifyInfo.setName(user.getPhoneNumber());
                 driverIdentifyInfo.setAccesskey(user.getAccessKey());
                 driverIdentifyInfo.setCar_brand(car_brand_name.getText().toString());

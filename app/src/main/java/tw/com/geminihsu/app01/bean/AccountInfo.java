@@ -6,7 +6,9 @@ import io.realm.RealmObject;
 
 public class AccountInfo extends RealmObject implements Cloneable ,Serializable {
     private static final long serialVersionUID = 8683739988249633893L;
+
     private int id;
+    private String uid;
     private String name;
     private String identify;
     private String phoneNumber;
@@ -17,11 +19,19 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
     private String registerToken;
     private String accessKey;
 
+    //private DriverIdentifyInfo driverIdentifyInfo;
+
 
     public int getId() {
         return id;
     }
 
+    public String getUid() {
+        return uid;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
     public void setId(int id) {
         this.id = id;
     }

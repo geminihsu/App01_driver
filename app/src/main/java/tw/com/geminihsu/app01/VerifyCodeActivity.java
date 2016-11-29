@@ -140,6 +140,7 @@ public class VerifyCodeActivity extends Activity {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
+
                     App01libObjectKey.APP_ACCOUNT_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_verify_code_result(Integer.valueOf(status));
 
                     if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_VERIFY_CODE_SUCCESS))

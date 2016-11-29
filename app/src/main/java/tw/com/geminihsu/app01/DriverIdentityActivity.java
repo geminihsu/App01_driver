@@ -64,7 +64,7 @@ public class DriverIdentityActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
                 Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -75,7 +75,7 @@ public class DriverIdentityActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
                 Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -86,7 +86,7 @@ public class DriverIdentityActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
                 Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -97,7 +97,7 @@ public class DriverIdentityActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
                 Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -108,7 +108,7 @@ public class DriverIdentityActivity extends Activity {
             public void onClick(View v) {
                 Intent question = new Intent(DriverIdentityActivity.this, DriverLoginActivity.class);
                 Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal());
+                b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
             }

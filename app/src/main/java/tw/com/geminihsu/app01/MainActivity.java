@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -27,8 +28,10 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
@@ -37,9 +40,11 @@ public class MainActivity extends Activity {
     public final static String TAG = MainActivity.class.toString();// from
     public final static String BUNDLE_ACCESS_KEY = "accesskey";// from
 
+
     public final static int ERROR_USER_INFO = 0;
     public final static int ERROR_NO_USER = 1;
 
+    public final static int ERROR_NO_GPS = 2;
 
     private TextView txt_forget_password;
     private Button btn_register;
@@ -55,11 +60,14 @@ public class MainActivity extends Activity {
     private SharedPreferences configSharedPreferences;
     private ProgressDialog dialog;
     private AccountInfo user;
+    private DriverIdentifyInfo driverIdentifyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
+
+
 
      }
 
@@ -85,10 +93,15 @@ public class MainActivity extends Activity {
             }else
             {
                 RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+                realmUtil.clearDB();
                 user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
-
+                driverIdentifyInfo = realmUtil.queryDriver(Constants.ACCOUNT_DRIVER_UID, user.getUid());
+                RealmResults<DriverIdentifyInfo> drivers = realmUtil.queryAllDriver();
             }
+               if(driverIdentifyInfo==null)
                 Constants.Driver = false;
+               else
+                Constants.Driver = true;
                 Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
                 /*Bundle b = new Bundle();
                 b.putSerializable(BUNDLE_ACCESS_KEY, user.getAccessKey());
@@ -190,6 +203,18 @@ public class MainActivity extends Activity {
                     .setMessage(getString(R.string.login_error_user_msg))
                     .setCancelable(false)
                     .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+        }
+        else if(error==ERROR_NO_GPS)
+        {
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_gps))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.login_error_gps_msg), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                             startActivity(intent);
