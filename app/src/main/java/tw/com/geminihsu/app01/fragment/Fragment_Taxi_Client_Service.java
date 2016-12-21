@@ -35,6 +35,7 @@ public class Fragment_Taxi_Client_Service extends Fragment {
     private ImageButton send_merchandise;
     private ImageButton air_plane;
     private ImageButton train;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {

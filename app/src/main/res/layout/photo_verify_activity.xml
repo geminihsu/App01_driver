@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:fillViewport="false">
-<LinearLayout
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/bg_gray">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true">
+
 
 <LinearLayout
                 android:id="@+id/info"
@@ -31,6 +28,17 @@
                     android:textSize="@dimen/default_text_address_size_sp"
                     android:textColor="@color/btn_bouns_record"
                     />
+        <!-- 為了Demo，先給訂一個版本固定上傳一個圖檔 !-->
+         <ImageView
+                   android:id="@+id/test_image"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerHorizontal="true"
+                   android:layout_below="@+id/brand_name"
+                   android:src="@drawable/ic_camera_72x72"
+                   android:visibility="gone"
+
+                  />
                 <RelativeLayout
                  android:layout_width="fill_parent"
                  android:layout_height="match_parent"
@@ -67,8 +75,8 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/brand_name"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
+                        android:src="@drawable/ic_editor_insert_photo"
+
 
                       />
 
@@ -106,8 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/id"
-                        android:src="@drawable/car_android"
-                        android:visibility="gone"
+                        android:src="@drawable/ic_editor_insert_photo"
                         />
             </RelativeLayout>
                 <RelativeLayout
@@ -140,10 +147,9 @@
                         android:id="@+id/car_driver_licence"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/car_android"
+                        android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/phone"
-                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -176,10 +182,9 @@
                         android:id="@+id/car_work_licence_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/car_android"
+                        android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/type"
-                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -213,12 +218,10 @@
                         android:id="@+id/car_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/car_android"
+                        android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/licence"
-                        android:visibility="gone"
                         />
                 </RelativeLayout>
             </LinearLayout>
-   </LinearLayout>
 </ScrollView>

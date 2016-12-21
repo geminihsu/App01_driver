@@ -1,13 +1,18 @@
 package tw.com.geminihsu.app01;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.NavigationView;
@@ -44,7 +49,15 @@ import tw.com.geminihsu.app01.utils.Utility;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
         Fragment_BeginOrderInteractive.OnListItemClickListener,LocationListener {
+    private static final String[] INITIAL_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
 
+    private static final String[] LOCATION_PERMS={
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+    private static final int INITIAL_REQUEST=1337;
+    private static final int LOCATION_REQUEST=100;
     public final static int ERROR_NO_GPS = 2;
     private final String TAG=this.getClass().getSimpleName();
     private MenuMainViewDelegateBase viewDelegateBase;
@@ -76,6 +89,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     };
 
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,8 +102,10 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             alert(ERROR_NO_GPS);
         }
 
+        Utility info = new Utility(MenuMainActivity.this);
+
         // 判斷要用哪一個Delegate
-        if (Constants.Driver) {
+        if(info.getDriverAccountInfo()!=null) {
 
             viewDelegateBase = new MenuMainViewDelegateDriver(this);
         } else {
@@ -100,11 +116,18 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
          // 加入主頁面fragment
         viewDelegateBase.setContentLayoutFragment();
 
-        //call service
-        Intent serviceIntent = new Intent(this, App01Service.class);
-        bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
 
+       /* if (!canAccessLocation()) {
+            requestPermissions(INITIAL_PERMS,INITIAL_REQUEST);
+        }*/
 
+        if (canAccessLocation()) {
+            Intent serviceIntent = new Intent(this, App01Service.class);
+            bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
+        }
+        else {
+            requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
+        }
     }
 
     @Override
@@ -228,8 +251,8 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                     case R.id.navigation_item_bouns:
                         viewDelegateBase.setNavigationItemOnClick_bounds();
                         return true;
-                    case R.id.navigation_item_driver:
-                        viewDelegateBase.setNavigationItemOnClick_driver();
+                    case R.id.navigation_item_logOut:
+                        viewDelegateBase.setNavigationItemOnClick__logOut();
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -252,7 +275,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (myLocalServiceConnection != null && MenuMainActivity.this!= null )
+        if (myLocalServiceConnection != null && MenuMainActivity.this!= null&&canAccessLocation() )
              unbindService(myLocalServiceConnection);
 
     }
@@ -312,5 +335,33 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         int lat = (int) (location.getLatitude());
         int lng = (int) (location.getLongitude());
         Log.e(TAG,"Latitude:"+lat+",Longitude:"+lng);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode) {
+
+
+            case LOCATION_REQUEST:
+                if (canAccessLocation()) {
+                    //call service
+                    Intent serviceIntent = new Intent(this, App01Service.class);
+                    bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
+
+                }
+                else {
+                    //bzzzt();
+                }
+                break;
+        }
+    }
+
+    private boolean canAccessLocation() {
+        return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private boolean hasPermission(String perm) {
+        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
     }
 }

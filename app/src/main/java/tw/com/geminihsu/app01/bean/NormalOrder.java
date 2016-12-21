@@ -26,7 +26,9 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
     private String price;
     private String tip;
     private String ticket_id;
-    private String ticket_status;
+    private String ticket_status;//0:未接單 1:進行中 2:已結案
+    private String orderdate;
+    private String target;//0:person, 1:merchandise
 
     public int getOrder_id() {
         return order_id;
@@ -194,5 +196,21 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
 
     public void setTicket_status(String ticket_status) {
         this.ticket_status = ticket_status;
+    }
+
+    public String getOrderdate() {
+        return orderdate;
+    }
+
+    public void setOrderdate(String orderdate) {
+        this.orderdate = orderdate;
+    }
+
+    public String getTarget() {
+        return target;
+    }
+
+    public void setTarget(String target) {
+        this.target = target;
     }
 }

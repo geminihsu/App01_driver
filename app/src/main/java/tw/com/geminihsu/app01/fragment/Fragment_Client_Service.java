@@ -21,10 +21,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +48,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.R;
@@ -83,8 +91,12 @@ public class Fragment_Client_Service extends Fragment {
         View view = inflater.inflate(R.layout.fragment_client_service, container, false);
         mapView = (MapView) view.findViewById(R.id.fragment_embedded_map_view_mapview);
         mapView.onCreate(savedInstanceState);
-        setMapView(37.37044279,-122.00614899);
+        //setMapView(37.37044279,-122.00614899);
 
+        if(!runtime_permissions())
+        {
+            setMapView(37.37044279,-122.00614899);
+        }
         return view;
     }
 
@@ -93,8 +105,8 @@ public class Fragment_Client_Service extends Fragment {
         super.onStart();
         this.findViews();
         setLister();
-        if(getCurrentGPSLocationBroadcastReceiver!=null)
-            getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
+        //if(getCurrentGPSLocationBroadcastReceiver!=null)
+          //  getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
 
 
     }
@@ -121,33 +133,17 @@ public class Fragment_Client_Service extends Fragment {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
+            //Creating a LatLng Object to store Coordinates
+            LatLng latLng = new LatLng(latitude, longitude);
+
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
-            MapsInitializer.initialize(this.getActivity());
+            MapsInitializer.initialize(getActivity());
             LatLngBounds.Builder builder = new LatLngBounds.Builder();
             builder.include(new LatLng(latitude, longitude));
-            final LatLngBounds bounds = builder.build();
-            googleMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
-                @Override
-                public void onMapLoaded() {
-                     googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 30));
-                }
-            });
-            googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-                @Override
-                public void onCameraChange(CameraPosition arg0) {
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 30));
-                }
-            });
-            // begin new code:
-            int width = getResources().getDisplayMetrics().widthPixels;
-            int height = getResources().getDisplayMetrics().heightPixels;
-            int padding = (int) (width * 0.12); // offset from edges of the map 12% of screen
 
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, width, height, padding);
-            // end of new code
-
-            googleMap.animateCamera(cu);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         }
     }
     @Override
@@ -340,8 +336,16 @@ public class Fragment_Client_Service extends Fragment {
              }
          });
      }
-	
 
+    private boolean runtime_permissions() {
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
+
+            return true;
+        }
+        return false;
+    }
 
 
 }

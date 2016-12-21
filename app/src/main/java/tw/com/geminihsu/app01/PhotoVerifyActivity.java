@@ -1,6 +1,7 @@
 package tw.com.geminihsu.app01;
 
-
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -45,6 +47,11 @@ import tw.com.geminihsu.app01.utils.Utility;
 
 public class PhotoVerifyActivity extends Activity implements Response.ErrorListener,Response.Listener{
     private String TAG = PhotoVerifyActivity.class.toString();
+    private static final String[] INITIAL_PERMS={
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.CAMERA
+    };
+    private static final int INITIAL_REQUEST=1337;
     private JsonPutsUtil sendDataRequest;
 
     private static final int CAMERA=1;
@@ -75,6 +82,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
     private ImageView car_driver_licence;
     private ImageView car_work_licence_image;
     private ImageView car_image;
+    private ImageView test_image;
 
     private String imageContentURI;
 
@@ -85,7 +93,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
 
     private BroadcastReceiver getRegisterDriverBroadcastReceiver;
-
+    private JsonPutsUtil post_image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +102,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
         sendDataRequest = new JsonPutsUtil(PhotoVerifyActivity.this);
         sendDataRequest.setServerRequestDataManagerCallBackFunction(new ServerRequestDataManagerCallBackFunction() {
             @Override
@@ -152,7 +161,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
         car_driver_licence = (ImageView) findViewById(R.id.car_driver_licence);
         car_work_licence_image = (ImageView) findViewById(R.id.car_work_licence_image);
         car_image = (ImageView) findViewById(R.id.car_image);
-
+        test_image = (ImageView) findViewById(R.id.test_image);
 
 
     }
@@ -178,15 +187,46 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 builderSingle.setAdapter(
                         arrayAdapter,
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
+                                        if(checkSelfPermission(Manifest.permission.CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.CAMERA)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, CAMERA);
                                         break;
                                     case 1:
+                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                        // Should we show an explanation?
+                                        if (shouldShowRequestPermissionRationale(
+                                                Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                            // Explain to the user why we need to read the contacts
+                                        }
+
+                                        requestPermissions(INITIAL_PERMS,
+                                                INITIAL_REQUEST);
+
+                                        // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                        // app-defined int constant
+                                    }
                                         Intent gallery = new Intent();
                                         // Show only images, no videos or anything else
                                         gallery.setType("image/*");
@@ -221,15 +261,46 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 builderSingle.setAdapter(
                         arrayAdapter,
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
+                                        if(checkSelfPermission(Manifest.permission.CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.CAMERA)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, ID_CAMERA);
                                         break;
                                     case 1:
+                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent gallery = new Intent();
                                         // Show only images, no videos or anything else
                                         gallery.setType("image/*");
@@ -263,15 +334,46 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 builderSingle.setAdapter(
                         arrayAdapter,
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
+                                        if(checkSelfPermission(Manifest.permission.CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.CAMERA)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, LICENCE_CAMERA);
                                         break;
                                     case 1:
+                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent gallery = new Intent();
                                         // Show only images, no videos or anything else
                                         gallery.setType("image/*");
@@ -305,15 +407,46 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 builderSingle.setAdapter(
                         arrayAdapter,
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
+                                        if(checkSelfPermission(Manifest.permission.CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.CAMERA)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, WORK_LICENCE_CAMERA);
                                         break;
                                     case 1:
+                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent gallery = new Intent();
                                         // Show only images, no videos or anything else
                                         gallery.setType("image/*");
@@ -347,15 +480,47 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 builderSingle.setAdapter(
                         arrayAdapter,
                         new DialogInterface.OnClickListener() {
+                            @TargetApi(Build.VERSION_CODES.M)
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
                                     case 0:
+                                        if(checkSelfPermission(Manifest.permission.CAMERA)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.CAMERA)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
+                                        car_work_image.setVisibility(View.VISIBLE);
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, CAR_CAMERA);
                                         break;
                                     case 1:
+                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                != PackageManager.PERMISSION_GRANTED) {
+
+                                            // Should we show an explanation?
+                                            if (shouldShowRequestPermissionRationale(
+                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                                                // Explain to the user why we need to read the contacts
+                                            }
+
+                                            requestPermissions(INITIAL_PERMS,
+                                                    INITIAL_REQUEST);
+
+                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                                            // app-defined int constant
+                                        }
                                         Intent gallery = new Intent();
                                         // Show only images, no videos or anything else
                                         gallery.setType("image/*");
@@ -458,15 +623,23 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             case CAMERA:
                 String path = data.getStringExtra("image");
                 File imgFile = new File(path);
+
                 if (imgFile.exists()) {
                     Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path, scaleWidth, scaleHeight);
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path;
                     car_work_image.setImageBitmap(myBitmap);
                 }
+
+                //File img = new File(realPath);
+                post_image.postImageToServer(driverInfo,test_image,"a1");
+
                 break;
             case PICK_IMAGE_REQUEST:
                 String realPath;
+                Log.e(TAG, data.toString());
+                Uri uri = data.getData();
+
                 // SDK < API11
                 if (Build.VERSION.SDK_INT < 11)
                     realPath = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
@@ -477,9 +650,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                     // SDK > 19 (Android 4.4)
                 else
-                    realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
-
-                Uri uri = data.getData();
+                    realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, uri);
 
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
@@ -487,14 +658,14 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     // Log.d(TAG, String.valueOf(bitmap));
 
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                    Log.e(TAG, uri.toString());
+
                     imageContentURI = realPath;
-                    //car_work_image.setImageBitmap(bitmap);
+                    car_work_image.setImageBitmap(bitmap);
                     car_work_image.setVisibility(View.VISIBLE);
-                    car_work_image.setImageResource(R.drawable.ic_camera_72x72);
-                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //car_work_image.setImageResource(R.drawable.sunshine);
+                   // JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(driverInfo,car_work_image,"a1");
+                    post_image.postImageToServer(driverInfo,test_image,"a1");
                     //Log.e(TAG,"USER:"+driverInfo.getAccesskey());
                     // post_image.RequestMultiPart(this,this,img);
                 } catch (IOException e) {
@@ -509,6 +680,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path1;
                     car_driver_id.setImageBitmap(myBitmap);
+                    post_image.postImageToServer(driverInfo,test_image,"a3");
+
                 }
                 break;
             case PICK_ID_IMAGE_REQUEST:
@@ -535,14 +708,14 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri1.toString());
                     imageContentURI = realPath1;
-                    //car_driver_id.setImageBitmap(bitmap);
-                    car_driver_id.setImageResource(R.drawable.ic_camera_72x72);
-                    car_driver_id.setVisibility(View.VISIBLE);
-                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    car_driver_id.setImageBitmap(bitmap);
+                    //car_driver_id.setImageResource(R.drawable.ic_camera_72x72);
+                    //car_driver_id.setVisibility(View.VISIBLE);
+                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,car_driver_id,"a3");
+                    post_image.postImageToServer(driverInfo,test_image,"a3");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -556,6 +729,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path2;
                     car_driver_licence.setImageBitmap(myBitmap);
+                    post_image.postImageToServer(driverInfo,test_image,"a4");
+
                 }
                 break;
             case PICK_LICENCE_IMAGE_REQUEST:
@@ -582,14 +757,14 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri2.toString());
                     imageContentURI = realPath2;
-                    //car_driver_licence.setImageBitmap(bitmap);
-                    car_driver_licence.setImageResource(R.drawable.ic_camera_72x72);
-                    car_driver_licence.setVisibility(View.VISIBLE);
-                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    car_driver_licence.setImageBitmap(bitmap);
+                    //car_driver_licence.setImageResource(R.drawable.ic_camera_72x72);
+                    //car_driver_licence.setVisibility(View.VISIBLE);
+                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,car_driver_licence,"a4");
+                    post_image.postImageToServer(driverInfo,test_image,"a4");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -603,6 +778,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path3;
                     car_work_licence_image.setImageBitmap(myBitmap);
+                    post_image.postImageToServer(driverInfo,test_image,"a5");
+
                 }
                 break;
             case PICK_WORK_LICENCE_IMAGE_REQUEST:
@@ -629,14 +806,14 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri3.toString());
                     imageContentURI = realPath3;
-                    //car_work_licence_image.setImageBitmap(bitmap);
-                    car_work_licence_image.setImageResource(R.drawable.ic_camera_72x72);
-                    car_work_licence_image.setVisibility(View.VISIBLE);
-                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    car_work_licence_image.setImageBitmap(bitmap);
+                    //car_work_licence_image.setImageResource(R.drawable.ic_camera_72x72);
+                    //car_work_licence_image.setVisibility(View.VISIBLE);
+                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
                    // post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,car_work_licence_image,"a5");
+                    post_image.postImageToServer(driverInfo,test_image,"a5");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -650,6 +827,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path4;
                     car_image.setImageBitmap(myBitmap);
+                    post_image.postImageToServer(driverInfo,test_image,"a6");
+
                 }
                 break;
             case PICK_CAR_IMAGE_REQUEST:
@@ -676,14 +855,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView imageView = (ImageView) findViewById(R.id.imageView);
                     Log.e(TAG, uri4.toString());
                     imageContentURI = realPath4;
-                    car_image.setVisibility(View.VISIBLE);
-                    car_image.setImageResource(R.drawable.ic_camera_72x72);
+                    //car_image.setVisibility(View.VISIBLE);
+                    //car_image.setImageResource(R.drawable.ic_camera_72x72);
+                    car_image.setImageBitmap(bitmap);
 
-                    JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,car_image,"a6");
+                    post_image.postImageToServer(driverInfo,test_image,"a6");
 
                 } catch (IOException e) {
                     e.printStackTrace();

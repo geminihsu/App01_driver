@@ -1,6 +1,7 @@
 package tw.com.geminihsu.app01.delegate;
 
 import tw.com.geminihsu.app01.DriverIdentityActivity;
+import tw.com.geminihsu.app01.MainActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.fragment.Fragment_About;
@@ -16,7 +17,9 @@ import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 import tw.com.geminihsu.app01.common.Constants;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 
@@ -112,8 +115,16 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 		fragTran.addToBackStack(Fragment_About.class.getSimpleName());
 		fragTran.commit();
 	}
-    public void setNavigationItemOnClick_share() {
+    public void setNavigationItemOnClick__logOut() {
+		SharedPreferences configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mainActivity);
 
+		configSharedPreferences.edit().putString(mainActivity.getString(R.string.config_login_phone_number_key), "").commit();
+		configSharedPreferences.edit().putString(mainActivity.getString(R.string.config_login_password_key), "").commit();
+
+		Intent i = new Intent();
+		i.setClass(mainActivity, MainActivity.class);
+		i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		mainActivity.startActivity(i);
 	}
 
 

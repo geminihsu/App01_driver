@@ -53,6 +53,7 @@ public class RealmUtil {
         return realm;
     }*/
 
+
     public AccountInfo queryAccount(String column, String value) {
 
         AccountInfo user = mRealm.where(AccountInfo.class).equalTo(column, value).findFirst();
@@ -172,6 +173,8 @@ public class RealmUtil {
         normalOrder.setTip(order.getTip());
         normalOrder.setTicket_id(order.getTicket_id());
         normalOrder.setTicket_status(order.getTicket_status());
+        normalOrder.setOrderdate(order.getOrderdate());
+        normalOrder.setTarget(order.getTarget());
 
         mRealm.copyToRealm(normalOrder);
         mRealm.commitTransaction();
@@ -182,7 +185,8 @@ public class RealmUtil {
     public void updateAccount(AccountInfo user)
     {
         ///mRealm.beginTransaction();
-        AccountInfo accountInfo = new AccountInfo();
+        AccountInfo accountInfo = mRealm.where(AccountInfo.class).equalTo("id", user.getId()).findFirst();
+        mRealm.beginTransaction();
         accountInfo.setId(user.getId());
         accountInfo.setName(user.getName());
         accountInfo.setPhoneNumber(user.getPhoneNumber());

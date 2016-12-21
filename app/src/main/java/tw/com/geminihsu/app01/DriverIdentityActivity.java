@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
 
 public class DriverIdentityActivity extends Activity {
@@ -20,6 +21,7 @@ public class DriverIdentityActivity extends Activity {
     private Button truck_register;
     private Button cargo_register;
     private Button trailer_register;
+    private DriverIdentifyInfo driverIdentifyInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +37,13 @@ public class DriverIdentityActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+        Bundle args = getIntent().getExtras();
+        if(args!=null)
+            driverIdentifyInfo = (DriverIdentifyInfo) args.getSerializable(DriverLoginActivity.BUNDLE_DRIVER_ACCOUNT_INFO);
+
         this.findViews();
+       // Bundle bundle = this.getIntent().getExtras();
+
 
         this.setLister();
 
@@ -51,6 +59,28 @@ public class DriverIdentityActivity extends Activity {
         truck_register = (Button) findViewById(R.id.truck);
         cargo_register = (Button) findViewById(R.id.cargo);
         trailer_register = (Button) findViewById(R.id.trailer);
+
+        if(driverIdentifyInfo!=null) {
+            String type = driverIdentifyInfo.getDtype();
+            Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
+            if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                taxi_register.setEnabled(false);
+                taxi_register.setBackground(getDrawable(R.color.bg_gray));
+            }
+            else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                uber_register.setEnabled(false);
+                uber_register.setBackground(getDrawable(R.color.bg_gray));
+            }else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK) {
+                truck_register.setEnabled(false);
+                truck_register.setBackground(getDrawable(R.color.bg_gray));
+            }else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO) {
+                cargo_register.setEnabled(false);
+                cargo_register.setBackground(getDrawable(R.color.bg_gray));
+            }else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER) {
+                trailer_register.setEnabled(false);
+                trailer_register.setBackground(getDrawable(R.color.bg_gray));
+            }
+        }
     }
 
 

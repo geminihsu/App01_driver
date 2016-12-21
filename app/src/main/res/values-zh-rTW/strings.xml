@@ -120,6 +120,7 @@
     <string name="wallet">我的錢包</string>
     <string name="bouns">積分獎勵</string>
     <string name="driver">成為司機</string>
+    <string name="logOut">登出</string>
 
     <!-- fragment_client_service -->
     <string name="service_info">請選擇需要的服務</string>
@@ -177,6 +178,13 @@
     <string name="truck_driver">小貨車</string>
     <string name="cargo_driver">大貨車</string>
     <string name="trailer_driver">連結車</string>
+
+    <!--fragment_Account -->
+    <string name="txt_change_account">修改密碼</string>
+    <string name="txt_obtain_comment">獲得評語</string>
+    <string name="txt_apply_driver">成為司機</string>
+    <string name="txt_recommend_friend">我推薦的好友</string>
+    <string name="txt_driver_identity">選擇司機身份</string>
 
 
     <!-- DriverLoginActivity -->
@@ -335,6 +343,7 @@
     <string name="txt_verify_code_warm">驗證碼將於60秒後失效</string>
     <string name="txt_verify_code_warm_qestion"><u>沒收到簡訊驗證碼嗎？</u></string>
     <string name="txt_verify_info">簡訊已發送</string>
+    <string name="txt_new_password">請輸入新密碼</string>
 
 
     <!-- ClientTakeRideActivity Control Panel-->
@@ -409,6 +418,7 @@
     <string name="driver_service">司機服務</string>
     <string name="driver_comment">評語：</string>
     <string name="driver_other">其他：</string>
+    <string name="client_comment">給予評分</string>
     <!-- UnitCalculator-->
     <string name="unit_txt">請輸入尺寸</string>
     <string name="unit_title1">項次</string>

@@ -14,8 +14,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.TextView;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
@@ -24,6 +27,8 @@ import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class DriverCommentActivity extends Activity {
+    final public static int CLIENT_COMMENT = 1;
+    public final static String BUNDLE_CLIENT = "client";// from
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -31,6 +36,12 @@ public class DriverCommentActivity extends Activity {
     private JsonPutsUtil sendDataRequest;
     private String ticket_id;
     private RatingBar score;
+    private TextView customer_name;
+
+    private LinearLayout linearLayout_client_info;
+    private LinearLayout linearLayout_client_comment;
+
+    private NormalOrder order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,8 +71,24 @@ public class DriverCommentActivity extends Activity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
-        }
 
+            if (bundle.containsKey(BUNDLE_CLIENT)) {
+                //判斷是客戶評分還是司機評分
+                int client = bundle.getInt(BUNDLE_CLIENT);
+                if (client == CLIENT_COMMENT)
+                {
+                    RealmUtil info = new RealmUtil(DriverCommentActivity.this);
+                    order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                    Utility user = new Utility(this);
+                    AccountInfo userInfo = user.getAccountInfo();
+                    customer_name.setText(userInfo.getName());
+                    linearLayout_client_info.setVisibility(View.VISIBLE);
+                    linearLayout_client_comment.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+        }
 
 
         }
@@ -70,6 +97,10 @@ public class DriverCommentActivity extends Activity {
     {
         driver_info = (ImageView)findViewById(R.id.image);
         score = (RatingBar) findViewById(R.id.rating_level);
+        customer_name = (TextView) findViewById(R.id.customer_name);
+
+        linearLayout_client_info = (LinearLayout)findViewById(R.id.customer_info);
+        linearLayout_client_comment = (LinearLayout)findViewById(R.id.customer_change);
     }
 
 
@@ -127,12 +158,12 @@ public class DriverCommentActivity extends Activity {
 
         // set dialog messagex
         alertDialogBuilder
-                .setMessage(getString(R.string.dialog_finish_order_message))
+                .setMessage("完成訂單時間"+order.getOrderdate()+"，恭喜您獲得績分200點")
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.dialog_finish_order_comfirm),new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog,int id) {
-                        RealmUtil info = new RealmUtil(DriverCommentActivity.this);
-                        NormalOrder order =info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                       // RealmUtil info = new RealmUtil(DriverCommentActivity.this);
+                       // NormalOrder order =info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
                         sendDataRequest.commentOrder(order,(int)score.getRating());
                     }
                 });

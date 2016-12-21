@@ -13,8 +13,11 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_METHOD_VERIFY = "m_reg_verify";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_VERIFY = "m_reg_resend";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_PASSWORD = "m_forget_sendsms";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_MODIFY_PASSWORD = "m_forget_modify";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY = "m_auth_user";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_PUSH_NOTIFICATION = "p_get";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_USER_INFORMATION = "m_fetch_user";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_DRIVER_INFORMATION = "m_get_driver";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_DELETE_PUSH_NOTIFICATION = "p_delete";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_UPLOAD_IMAGE = "m_upload_img";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_REGISTER_DRIVER = "m_apply_driver";
@@ -29,6 +32,10 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_TAKE_OVER_ORDER = "t_order";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_FINISH_ORDER = "t_finish";
     public static final String APP_OBJECT_KEY_PUTS_COMMENT_ORDER = "t_assess";
+    public static final String APP_OBJECT_KEY_PUTS_DRIVER_RECOMMEND_ORDER = "t_match";
+
+
+
 
 
     //send register json to server attribute
@@ -50,6 +57,10 @@ public class App01libObjectKey {
     //send re-send password json to server attribute
     public static final String APP_OBJECT_KEY_RE_SEND_PASSWORD_USERNAME = "username";
     public static final String APP_OBJECT_KEY_RE_SEND_PASSWORD_IDCARD = "idcard";
+
+    //send re-forgot-modify password json to server attribute
+    public static final String APP_OBJECT_KEY_RE_SEND_VERIFY_CODE = "verifycode";
+    public static final String APP_OBJECT_KEY_RE_SEND_NEW_PASSWORD = "new_password";
 
 
     //send login json to server attribute
@@ -83,6 +94,8 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_USERNAME = "username";
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_ACCESSKEY = "accesskey";
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_BEG = "beg";
+    public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP = "stop";
+    public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_END = "end";
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_LAT = "lat";
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_LNG = "lng";
     public static final String APP_OBJECT_KEY_QUICK_TAXI_ORDER_ZIPCODE = "zipcode";
@@ -123,6 +136,7 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_SEND_ORDER_COMMENT_SCORE = "stars";
     public static final String APP_OBJECT_KEY_CLEAR_NOTIFICATION = "pid";
     public static final String APP_OBJECT_KEY_NOTIFICATION_ID = "id";
+    public static final String APP_OBJECT_KEY_USER_REALNAME = "realname";
 
 
     //send user location json to server attribute
@@ -388,6 +402,26 @@ public class App01libObjectKey {
         }
     };
 
+    public enum APP_DRIVER_RECOMMEND_ORDER
+    {
+        K_APP_DRIVER_RECOMMEND_ORDER_SUCCESS (100),
+        K_APP_DRIVER_RECOMMEND_ORDER_EXPIRED (708),
+        K_APP_DRIVER_NO_WORK (836),
+        K_APP_DRIVER_RECOMMEND_ORDER_SMS_VERIFY(704),
+        K_APP_DRIVER_DRIVER_RECOMMEND_NO_EXSIT (701),
+        K_APP_DRIVER_RECOMMEND_ORDER_ERROR (900);
+
+        private int value;
+
+        private APP_DRIVER_RECOMMEND_ORDER(int value) {
+            this.value = value;
+        }
+
+        public int value() {
+            return value;
+        }
+    };
+
     public static APP_REGISTER_RESPONSE_CODE conversion_register_connect_result(int index) {
         if (index >= 0) {
             if (index == 100) {
@@ -620,25 +654,25 @@ public class App01libObjectKey {
         return null;
     }
 
-    public static APP_ACCOUNT_PUTS_USER_GPS_CODE conversion_get_put_user_location_result(int index) {
+    public static APP_DRIVER_RECOMMEND_ORDER conversion_get_put_driver_recommend_order_result(int index) {
         if (index >= 0) {
             if (index == 100) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_SUCCESS;
-            }
-            if (index == 401) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_DATABASE_ERROR;
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_RECOMMEND_ORDER_SUCCESS;
             }
             if (index == 708) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_EXPIRED;
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_RECOMMEND_ORDER_EXPIRED;
             }
             if (index == 701) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_NO_ACCOUNT;
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_DRIVER_RECOMMEND_NO_EXSIT;
             }
             if (index == 704) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_DATABASE_ERROR;
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_RECOMMEND_ORDER_SMS_VERIFY;
+            }
+            if (index == 836) {
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_NO_WORK;
             }
             if (index == 900) {
-                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_ENTER_ERROR;
+                return APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_RECOMMEND_ORDER_ERROR;
             }
         }
         return null;
@@ -722,4 +756,31 @@ public class App01libObjectKey {
         return null;
     }
 
+
+    public static APP_ACCOUNT_PUTS_USER_GPS_CODE conversion_get_put_user_location_result(int index) {
+        if (index >= 0) {
+            if (index == 100) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_SUCCESS;
+            }
+            if (index == 401) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_DATABASE_ERROR;
+            }
+            if (index == 708) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_EXPIRED;
+            }
+            if (index == 701) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_NO_ACCOUNT;
+            }
+            if (index == 704) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_DATABASE_ERROR;
+            }
+            if (index == 401) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_DATABASE_ERROR;
+            }
+            if (index == 900) {
+                return APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_ENTER_ERROR;
+            }
+        }
+        return null;
+    }
 }

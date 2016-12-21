@@ -1,5 +1,8 @@
 package tw.com.geminihsu.app01;
 
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -17,6 +20,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.common.Constants;
 
 public class MapsActivity extends FragmentActivity implements
         OnMapReadyCallback,
@@ -40,6 +51,7 @@ public class MapsActivity extends FragmentActivity implements
 
     //Google ApiClient
     private GoogleApiClient googleApiClient;
+    private int provide_location;
 
 
     @Override
@@ -71,6 +83,10 @@ public class MapsActivity extends FragmentActivity implements
     protected void onStart() {
         googleApiClient.connect();
         super.onStart();
+        Bundle args = getIntent().getExtras();
+        if(args!=null)
+            provide_location = args.getInt(Constants.ARG_POSITION);
+
     }
 
     @Override
@@ -116,6 +132,29 @@ public class MapsActivity extends FragmentActivity implements
 
         //Displaying current coordinates in toast
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        //Displaying current coordinates in toast
+        List<Address> addresses = null;
+
+        Geocoder gc = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = gc.getFromLocation(latitude, longitude, 10);
+        } catch (IOException e) {}
+
+
+        Toast.makeText(this, addresses.get(0).getAddressLine(0), Toast.LENGTH_LONG).show();
+
+        Intent i=new Intent();
+        Bundle b=new Bundle();
+        b.putSerializable(Constants.BUNDLE_LOCATION, (ArrayList<Address>)addresses);
+        b.putString(Constants.BUNDLE_MAP_LATITUDE,""+ latitude);
+        b.putString(Constants.BUNDLE_MAP_LONGITUDE,""+ longitude);
+        i.putExtras(b);
+        if(provide_location == Constants.DEPARTURE_QUERY_GPS)
+            setResult(Constants.DEPARTURE_QUERY_GPS,i);
+        else
+        if(provide_location == Constants.DESTINATION_QUERY_GPS)
+            setResult(Constants.DESTINATION_QUERY_GPS,i);
     }
 
     @Override

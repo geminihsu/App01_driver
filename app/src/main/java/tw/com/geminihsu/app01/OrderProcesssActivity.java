@@ -44,6 +44,7 @@ public class OrderProcesssActivity extends Activity {
 
     private TextView information;
     private TextView send_method;
+    private TextView date;
     private TextView payment;
     private TextView from;
     private TextView location;
@@ -61,6 +62,7 @@ public class OrderProcesssActivity extends Activity {
     private String ticket_id;
     private NormalOrder order;
     private JsonPutsUtil sendDataRequest;
+    private int option;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +81,7 @@ public class OrderProcesssActivity extends Activity {
                 Intent question = new Intent(OrderProcesssActivity.this, DriverCommentActivity.class);
                 Bundle b = new Bundle();
                 b.putString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
+                b.putInt(DriverCommentActivity.BUNDLE_CLIENT,DriverCommentActivity.CLIENT_COMMENT);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -93,6 +96,7 @@ public class OrderProcesssActivity extends Activity {
         this.setLister();
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
+            option=bundle.getInt(Constants.ARG_POSITION);
             ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
             RealmUtil info = new RealmUtil(OrderProcesssActivity.this);
             order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
@@ -116,6 +120,7 @@ public class OrderProcesssActivity extends Activity {
         payment = (TextView) findViewById(R.id.payment);
         from  = (TextView) findViewById(R.id.txt_from);
         location = (TextView) findViewById(R.id.txt_dest);
+        date = (TextView) findViewById(R.id.date);
 
         linearLayout_sender = (LinearLayout) findViewById(R.id.sender);
         linearLayout_receiver = (LinearLayout) findViewById(R.id.receiver);
@@ -136,10 +141,11 @@ public class OrderProcesssActivity extends Activity {
     }
 
     private void displayLayout() {
-        //if(choice == PASSENGER)
-        //{
-            send_method.setText("一般載客(費用:"+order.getPrice()+"元)");
+        if(option == PASSENGER)
+        {
+            send_method.setText("一般載客");
             payment.setText("照表收費");
+            date.setText(order.getOrderdate());
             from.setText(order.getBegin_address());
             location.setText(order.getEnd_address());
             linearLayout_change_price.setVisibility(View.GONE);
@@ -148,7 +154,7 @@ public class OrderProcesssActivity extends Activity {
             linearLayout_receiver.setVisibility(View.GONE);
             linearLayout_call_panel_merchandise.setVisibility(View.GONE);
             linearLayout_call_panel_client.setVisibility(View.VISIBLE);
-       // }
+        }
     }
 
 

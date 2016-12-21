@@ -91,9 +91,123 @@
 
 
     </LinearLayout>
-
     <LinearLayout
-        android:id="@+id/change"
+        android:id="@+id/customer_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+        <LinearLayout
+            android:id="@+id/customerPannel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:orientation="vertical"
+            android:layout_centerVertical="true" >
+
+            <ImageView
+                android:id="@+id/customerimage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_image_camera_alt" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/imagestatusPannel"
+            android:layout_toRightOf="@id/imagePannel"
+            android:orientation="vertical" >
+            <LinearLayout
+                android:id="@+id/customercomment"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/customer_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="middle"
+                    android:paddingTop="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:singleLine="true"
+                    android:text="黃師傅"
+                    android:textColor="@color/address_devicename_txt"
+                    />
+
+                <RatingBar
+                    android:id="@+id/customer_rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="5"
+                    android:layout_gravity="center_vertical"
+                    android:isIndicator="true"
+                    style="?android:attr/ratingBarStyleSmall"
+                    />
+            </LinearLayout>
+
+            <!-- android:autoLink="all" -->
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+    <LinearLayout
+    android:id="@+id/change"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:layout_below="@+id/info"
+    android:layout_marginTop="20dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/password"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        >
+        <TextView
+            android:id="@+id/level_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:text="@string/driver_service"
+            android:textColor="@color/btn_bouns_title"
+            />
+        <RatingBar
+            android:id="@+id/rating_level"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:rating="5"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="10dp"
+            android:isIndicator="true"
+            style="?android:attr/ratingBarStyleIndicator"
+            />
+    </LinearLayout>
+
+
+</LinearLayout>
+    <LinearLayout
+        android:id="@+id/customer_change"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -102,9 +216,10 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
+        android:visibility="gone"
         >
         <LinearLayout
-            android:id="@+id/password"
+            android:id="@+id/customer_password"
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -112,18 +227,18 @@
             android:paddingBottom="20dp"
             >
             <TextView
-                android:id="@+id/level_title"
+                android:id="@+id/customer_level_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:layout_gravity="center_horizontal"
                 android:textSize="@dimen/default_text_address_size_sp"
-                android:text="@string/driver_service"
+                android:text="@string/client_comment"
                 android:textColor="@color/btn_bouns_title"
                 />
             <RatingBar
-                android:id="@+id/rating_level"
+                android:id="@+id/customer_rating_level"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"

@@ -14,7 +14,12 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class MerchandiseOrderActivity extends Activity {
 
@@ -35,12 +40,18 @@ public class MerchandiseOrderActivity extends Activity {
     private TextView merchandise_car_requirement_spec;
     private TextView merchandise_title;
 
+    private TextView passeger_name;
+    private TextView passenger_address;
+    private TextView passenger_address_destination;
+
+
     final public static int MERCHANDISE = 0;
     final public static int SEND_MERCHANDISE = 1;
     final public static int PASSENGER = 2;
     final public static int CLIENT_SEND_MERCHANDISE = 3;
 
     private int choice = 0;
+    private NormalOrder order;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +72,15 @@ public class MerchandiseOrderActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 choice = bundle.getInt(Constants.ARG_POSITION);
+                //order = (NormalOrder)bundle.getSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID);
+                String ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
+                RealmUtil info = new RealmUtil(MerchandiseOrderActivity.this);
+                order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                Utility user = new Utility(this);
+                AccountInfo userInfo = user.getAccountInfo();
+                passeger_name.setText(userInfo.getName());
+                passenger_address.setText(order.getBegin_address());
+                passenger_address_destination.setText(order.getEnd_address());
                 displayLayout();
             }else
             {
@@ -91,6 +111,12 @@ public class MerchandiseOrderActivity extends Activity {
         merchandise_car_requirement = (TextView) findViewById(R.id.send_content);
         merchandise_car_requirement_spec = (TextView) findViewById(R.id.send_merchandise_content);
         merchandise_title= (TextView) findViewById(R.id.txt_info);
+
+        passeger_name = (TextView)findViewById(R.id.passeger_name);
+        passenger_address = (TextView)findViewById(R.id.passenger_address);
+
+        passenger_address_destination = (TextView)findViewById(R.id.passenger_address_destination);
+
     }
 
 
@@ -226,6 +252,7 @@ public class MerchandiseOrderActivity extends Activity {
                 Intent question = new Intent(MerchandiseOrderActivity.this, SendMerchandiseActivity.class);
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION, SendMerchandiseActivity.CLIENT_SEND_MERCHANDISE);
+                b.putSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID,order);
                 question.putExtras(b);
                 startActivity(question);
                 return true;

@@ -9,24 +9,21 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class ChangePasswordActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
 
-    private LinearLayout linearLayout_form;
-
-    final public static int QUESTION = 0;
-
-    final public static int CLAUSE = 1;
-    final public static int SUGGESTION= 2;
-
-    private int choice = 0;
-
+    private EditText name_edit;
+    private EditText id_edit;
+    private EditText phone_edit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,8 +42,8 @@ public class ChangePasswordActivity extends Activity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
-                choice = bundle.getInt(Constants.ARG_POSITION);
-                displayLayout();
+               // choice = bundle.getInt(Constants.ARG_POSITION);
+                findViews();
             }else
             {
                 //Error!!!!
@@ -65,7 +62,7 @@ public class ChangePasswordActivity extends Activity {
 
     private void findViews()
     {
-        linearLayout_form = (LinearLayout) findViewById(R.id.form);
+        //linearLayout_form = (LinearLayout) findViewById(R.id.form);
 
         /*String url = "www.google.com";
 
@@ -73,14 +70,25 @@ public class ChangePasswordActivity extends Activity {
         browser.getSettings().setJavaScriptEnabled(true);
         browser.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         browser.loadUrl(url);*/
+        name_edit = (EditText) findViewById(R.id.name_edit);
+        id_edit = (EditText) findViewById(R.id.id_edit);
+        phone_edit = (EditText) findViewById(R.id.phone_edit);
+        Utility account = new Utility(this);
+        AccountInfo accountInfo = account.getAccountInfo();
+        name_edit.setText(accountInfo.getName());
+        name_edit.setEnabled(false);
+        id_edit.setText(accountInfo.getIdentify());
+        id_edit.setEnabled(false);
+        phone_edit.setText(accountInfo.getPhoneNumber());
+        phone_edit.setEnabled(false);
+
+
+
     }
 
 
 
-    private void displayLayout()
-    {
 
-    }
 
     private void setLister()
     {

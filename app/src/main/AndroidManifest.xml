@@ -119,7 +119,7 @@
 
     <!-- A camera with RAW capability is required to use this application -->
     <uses-feature android:name="android.hardware.camera" />
-    <uses-feature android:name="android.hardware.camera.raw" />
+    <uses-feature android:name="Manifest.permission.CAMERA" />
 
     <!-- get gps location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>

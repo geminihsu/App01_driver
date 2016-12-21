@@ -56,27 +56,30 @@ public class Utility {
 
         String phone_number = ConfigSharedPreferencesUtil.getUserName(mContext, configSharedPreferences);
         RealmUtil data = new RealmUtil(mContext);
-        AccountInfo userinfo = data.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+        AccountInfo userinfo = null;
+        userinfo  = data.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+        DriverIdentifyInfo user = null;
 
-        DriverIdentifyInfo accountInfo = data.queryDriver(Constants.ACCOUNT_NAME, userinfo.getPhoneNumber());
-
-        DriverIdentifyInfo user = new DriverIdentifyInfo();
-        user.setId(accountInfo.getId());
-        user.setUid(accountInfo.getUid());
-        user.setDid(accountInfo.getDid());
-        user.setName(accountInfo.getName());
-        user.setDtype(accountInfo.getDtype());
-        user.setAccesskey(accountInfo.getAccesskey());
-        user.setCar_number(accountInfo.getCar_number());
-        user.setCar_brand(accountInfo.getCar_brand());
-        user.setCar_born(accountInfo.getCar_born());
-        user.setCar_reg(accountInfo.getCar_reg());
-        user.setCar_cc(accountInfo.getCar_cc());
-        user.setCar_special(accountInfo.getCar_special());
-        user.setCar_files(accountInfo.getCar_files());
-        user.setCar_imgs(accountInfo.getCar_imgs());
-
-
+        if(userinfo!=null) {
+            DriverIdentifyInfo accountInfo = data.queryDriver(Constants.ACCOUNT_NAME, userinfo.getPhoneNumber());
+            if (accountInfo != null) {
+                user = new DriverIdentifyInfo();
+                user.setId(accountInfo.getId());
+                user.setUid(accountInfo.getUid());
+                user.setDid(accountInfo.getDid());
+                user.setName(accountInfo.getName());
+                user.setDtype(accountInfo.getDtype());
+                user.setAccesskey(accountInfo.getAccesskey());
+                user.setCar_number(accountInfo.getCar_number());
+                user.setCar_brand(accountInfo.getCar_brand());
+                user.setCar_born(accountInfo.getCar_born());
+                user.setCar_reg(accountInfo.getCar_reg());
+                user.setCar_cc(accountInfo.getCar_cc());
+                user.setCar_special(accountInfo.getCar_special());
+                user.setCar_files(accountInfo.getCar_files());
+                user.setCar_imgs(accountInfo.getCar_imgs());
+            }
+        }
         return user;
     }
 

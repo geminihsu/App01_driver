@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
-                android:text="Gemini"
+                android:text="測試"
 
                 />
         </LinearLayout>

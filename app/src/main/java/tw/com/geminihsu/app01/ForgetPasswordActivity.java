@@ -4,6 +4,7 @@ package tw.com.geminihsu.app01;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
 import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
@@ -26,9 +27,13 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
+import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class ForgetPasswordActivity extends Activity {
@@ -38,8 +43,8 @@ public class ForgetPasswordActivity extends Activity {
     private EditText id_card;
     private Button send;
 
-    private RequestQueue requestQueue ;
-    private JSONObject obj;
+   // private RequestQueue requestQueue ;
+    private JsonPutsUtil forgot_password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +59,26 @@ public class ForgetPasswordActivity extends Activity {
         super.onStart();
         this.findViews();
         setLister();
-        requestQueue = Volley.newRequestQueue(getApplicationContext());
+       // requestQueue = Volley.newRequestQueue(getApplicationContext());
+        forgot_password = new JsonPutsUtil(ForgetPasswordActivity.this);
+        forgot_password.setmClientSmsVerifyDataManagerCallBackFunctionn(new JsonPutsUtil.ClientSmsVerifyDataManagerCallBackFunction() {
 
+
+            @Override
+            public void verifyClient(AccountInfo accountInfo) {
+
+            }
+
+            @Override
+            public void reSendSMS(AccountInfo accountInfo) {
+                Intent intent = new Intent(getApplicationContext(), VerifyCodeActivity.class);
+                Bundle b=new Bundle();
+                b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO,accountInfo);
+                b.putInt(VerifyCodeActivity.BUNDLE_NEW_PASSWORD,VerifyCodeActivity.VERIFY_NEW_PASSWORD);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -74,15 +97,19 @@ public class ForgetPasswordActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                if(!phone_number.getText().toString().isEmpty()&&!id_card.getText().toString().isEmpty())
-                    sendReSendRequest();
+                if(!phone_number.getText().toString().isEmpty()&&!id_card.getText().toString().isEmpty()) {
+                    AccountInfo accountInfo = new AccountInfo();
+                    accountInfo.setPhoneNumber(phone_number.getText().toString());
+                    accountInfo.setIdentify(id_card.getText().toString());
+                    forgot_password.sendReSendPasswordRequest(accountInfo);
+                }
 
             }
 
         });
     }
 
-    private void sendReSendRequest()
+    /*private void sendReSendRequest()
     {
         obj = new JSONObject();
 
@@ -147,7 +174,7 @@ public class ForgetPasswordActivity extends Activity {
         });
         requestQueue.add(jsonObjectRequest);
 
-    }
+    }*/
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

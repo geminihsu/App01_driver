@@ -158,12 +158,13 @@
                         android:textColor="@color/btn_bouns_title"
                         />
                     <EditText
+                        android:id="@+id/departure_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
-                        android:text=""
+                        android:text="台中火車站"
 
                         />
                     <ImageButton
@@ -195,7 +196,7 @@
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
-                        android:text=""
+                        android:text="繼光街口"
 
                         />
                     <ImageButton
@@ -222,12 +223,13 @@
                         android:textColor="@color/btn_bouns_title"
                         />
                     <EditText
+                        android:id="@+id/destination_address"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
-                        android:text=""
+                        android:text="台中市政府"
 
                         />
                     <ImageButton

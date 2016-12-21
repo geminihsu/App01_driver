@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -15,32 +14,22 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
-import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class MainActivity extends Activity {
     public final static String TAG = MainActivity.class.toString();// from
     public final static String BUNDLE_ACCESS_KEY = "accesskey";// from
 
-
+    private static int id = 1;
     public final static int ERROR_USER_INFO = 0;
     public final static int ERROR_NO_USER = 1;
 
@@ -61,15 +50,61 @@ public class MainActivity extends Activity {
     private ProgressDialog dialog;
     private AccountInfo user;
     private DriverIdentifyInfo driverIdentifyInfo;
+    private AlertDialog alertDialog;
+    private JsonPutsUtil sendDataRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
 
+        sendDataRequest = new JsonPutsUtil(MainActivity.this);
+        sendDataRequest.setClientLoginDataManagerCallBackFunction(new JsonPutsUtil.ClientLoginDataManagerCallBackFunction() {
+
+            @Override
+            public void loginClient(AccountInfo accountInfo) {
+                Constants.Driver = false;
+                Intent intent = new Intent(MainActivity.this, MenuMainActivity.class);
+                //Bundle b = new Bundle();
+                //b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                //intent.putExtras(b);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void loginDriver(DriverIdentifyInfo driver) {
+                Constants.Driver = true;
+                Intent intent = new Intent(MainActivity.this, MenuMainActivity.class);
+                //Bundle b = new Bundle();
+                //b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                //intent.putExtras(b);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+        }
+
+    @Override
+    protected void onPause()
+    {
+       super.onPause();
+       if(alertDialog!=null)
+       {
+           alertDialog.dismiss();
+           alertDialog = null;
+       }
+
+        if(dialog!=null)
+        {
+            dialog.dismiss();
+            dialog = null;
+        }
 
 
-     }
+
+    }
 
     @Override
     protected void onStart() {
@@ -86,28 +121,25 @@ public class MainActivity extends Activity {
         if (!phone_number.isEmpty() && !password.isEmpty())
         {
             Bundle args = getIntent().getExtras();
+            //Log.e(TAG,"args"+args.toString());
             if(args!=null){
-               user = (AccountInfo)args.getSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO);
-                //already has account so query account from database
-                queryAccount();
+                if (args.containsKey(RegisterActivity.BUNDLE_ACCOUNT_INFO)) {
+                    user = (AccountInfo) args.getSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO);
+                    //already has account so query account from database
+                    if (user != null) {
+                        queryAccount();
+                        Log.e(TAG, "command");
+                    }
+                }else
+                {
+                    changeActivity();
+
+                }
             }else
             {
-                RealmUtil realmUtil = new RealmUtil(MainActivity.this);
-                realmUtil.clearDB();
-                user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
-                driverIdentifyInfo = realmUtil.queryDriver(Constants.ACCOUNT_DRIVER_UID, user.getUid());
-                RealmResults<DriverIdentifyInfo> drivers = realmUtil.queryAllDriver();
+
+                changeActivity();
             }
-               if(driverIdentifyInfo==null)
-                Constants.Driver = false;
-               else
-                Constants.Driver = true;
-                Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                /*Bundle b = new Bundle();
-                b.putSerializable(BUNDLE_ACCESS_KEY, user.getAccessKey());
-                intent.putExtras(b);*/
-                startActivity(intent);
-                finish();
 
         }
 
@@ -159,6 +191,16 @@ public class MainActivity extends Activity {
                 {
                     alert(ERROR_USER_INFO);
                 }else {
+                    if(user ==null)
+                    {
+                        user = new AccountInfo();
+                        user.setId(id);
+                        user.setPhoneNumber(phone_number);
+                        user.setPassword(password);
+                        String token = FirebaseInstanceId.getInstance().getToken();
+                        user.setRegisterToken(token);
+
+                    }
                     queryAccount();
 
                 }
@@ -168,15 +210,16 @@ public class MainActivity extends Activity {
 
     private void queryAccount(){
 
-        if(user!=null) {
-            if(user.getPassword().equals(password)) {
-                dialog = ProgressDialog.show(MainActivity.this, "",
+        //if(user!=null) {
+         //   if(user.getPassword().equals(password)) {
+                if(dialog == null)
+                   dialog = ProgressDialog.show(MainActivity.this, "",
                         "Loading. Please wait...", true);
-                sendLoginRequest(user);
-            }else
-                alert(ERROR_USER_INFO);
-        }else
-            alert(ERROR_NO_USER);
+                sendDataRequest.sendLoginRequest(user);
+       //     }else
+       //         alert(ERROR_USER_INFO);
+       // }else
+       //     alert(ERROR_NO_USER);
 
     }
 
@@ -216,86 +259,41 @@ public class MainActivity extends Activity {
                     .setCancelable(false)
                     .setNegativeButton(getString(R.string.login_error_gps_msg), new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
+                            alertDialog.dismiss();
+                            alertDialog = null;
                             Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
                             startActivity(intent);
                         }
                     });
         }
         // create alert dialog
-        AlertDialog alertDialog = alertDialogBuilder.create();
-        // show it
-        alertDialog.show();
-    }
-
-
-    private void sendLoginRequest(final AccountInfo user)
-    {
-        final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
-        String versionName = BuildConfig.VERSION_NAME;
-
-
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, user.getPhoneNumber());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_PASSWORD, user.getPassword());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_REGISTER_ID, user.getRegisterToken());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_PLATFORM, "android");
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_APP_VERSION, versionName);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if(alertDialog==null) {
+            alertDialog = alertDialogBuilder.create();
+            // show it
+            alertDialog.show();
         }
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.e(TAG,jsonObject.toString());
-
-                try {
-                    // Parsing json object response
-                    // response will be a json object
-                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    String accesskey = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY);
-                    App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_login_verify_code_result(Integer.valueOf(status));
-
-                    if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_LOGIN_VERIFY_CODE_SUCCESS))
-                    {
-                       // dialog.cancel();
-                        if(user!=null)
-                           user.setAccessKey(accesskey);
-                        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
-                        realmUtil.addAccount(user);
-                        Constants.Driver = false;
-                        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                        Bundle b = new Bundle();
-                        b.putString(BUNDLE_ACCESS_KEY, accesskey);
-                        intent.putExtras(b);
-                        startActivity(intent);
-                        finish();
-                    }else
-                    {
-                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
-
-                        Toast.makeText(getApplicationContext(),
-                                message,
-                                Toast.LENGTH_LONG).show();
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e(TAG,volleyError.getMessage().toString());
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-
     }
+
+
+    private void changeActivity()
+    {
+        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
+        //realmUtil.clearDB();
+        user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+        driverIdentifyInfo = realmUtil.queryDriver(Constants.ACCOUNT_DRIVER_UID, user.getUid());
+        RealmResults<DriverIdentifyInfo> drivers = realmUtil.queryAllDriver();
+        Log.e(TAG,"got driver!!");
+        if(driverIdentifyInfo==null)
+            Constants.Driver = false;
+        else
+            Constants.Driver = true;
+        Log.e(TAG,"database");
+        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                /*Bundle b = new Bundle();
+                b.putSerializable(BUNDLE_ACCESS_KEY, user.getAccessKey());
+                intent.putExtras(b);*/
+        startActivity(intent);
+        finish();
+    }
+
 }

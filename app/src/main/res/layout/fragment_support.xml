@@ -3,9 +3,74 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
 	android:orientation="vertical" android:id="@+id/main_layout" >
-		<ListView
+	<LinearLayout
+		android:id="@+id/info"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="40dp"
+		android:layout_marginLeft="20dp"
+		android:layout_marginRight="20dp"
+		android:orientation="vertical"
+		>
+
+	<Button
+		android:id="@+id/changePassword"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/txt_change_account"
+		android:layout_marginTop="20dp"
+		android:textStyle="bold"
+		android:textColor="@color/white"
+		android:background="@color/btn_bouns_record"
+		/>
+	<Button
+		android:id="@+id/obtain_comment"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/txt_obtain_comment"
+		android:layout_marginTop="20dp"
+		android:textStyle="bold"
+		android:textColor="@color/white"
+		android:background="@color/btn_bouns_record"
+		/>
+	<Button
+		android:id="@+id/recommend_friend"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/txt_recommend_friend"
+		android:layout_marginTop="20dp"
+		android:textStyle="bold"
+		android:textColor="@color/white"
+		android:background="@color/btn_bouns_record"
+		/>
+	<Button
+		android:id="@+id/apply_driver"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/txt_apply_driver"
+		android:layout_marginTop="20dp"
+		android:textStyle="bold"
+		android:textColor="@color/white"
+		android:background="@color/btn_bouns_record"
+		/>
+		<Button
+			android:id="@+id/driver_identity"
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/txt_driver_identity"
+			android:layout_marginTop="20dp"
+			android:textStyle="bold"
+			android:textColor="@color/white"
+			android:background="@color/btn_bouns_record"
+			/>
+
+
+	<ListView
 			android:id="@+id/listView1"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
-			android:drawSelectorOnTop="false" />
+			android:drawSelectorOnTop="false"
+	        android:visibility="gone"
+		/>
+		</LinearLayout>
 </LinearLayout>

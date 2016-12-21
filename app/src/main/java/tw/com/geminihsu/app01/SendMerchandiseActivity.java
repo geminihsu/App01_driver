@@ -15,7 +15,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.bean.OrderLocationBean;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class SendMerchandiseActivity extends Activity {
 
@@ -25,7 +30,8 @@ public class SendMerchandiseActivity extends Activity {
     private LinearLayout target;
 
     private int choice = 0;
-
+    private NormalOrder order;
+    private JsonPutsUtil sendDataRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +39,19 @@ public class SendMerchandiseActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(SendMerchandiseActivity.this);
+        sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
 
+            @Override
+            public void createNormalOrder(NormalOrder order) {
+
+                Intent question = new Intent(SendMerchandiseActivity.this, ClientTakeRideSearchActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, ClientTakeRideSearchActivity.DRIVER_REPORT_PRICE);
+                question.putExtras(b);
+                startActivity(question);
+            }
+        });
 
     }
 
@@ -45,6 +63,8 @@ public class SendMerchandiseActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 choice = bundle.getInt(Constants.ARG_POSITION);
+                order = (NormalOrder)bundle.getSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID);
+
                 displayLayout();
             }else
             {
@@ -109,15 +129,13 @@ public class SendMerchandiseActivity extends Activity {
 
                 // set dialog message
                 alertDialogBuilder
-                        .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
+                        .setMessage(order.getOrderdate()+"\n從:台中火車站\n停:繼光街口\n到:台中市政府")
                         .setCancelable(false)
                         .setPositiveButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent question = new Intent(SendMerchandiseActivity.this, ClientTakeRideSearchActivity.class);
-                                Bundle b = new Bundle();
-                                b.putInt(Constants.ARG_POSITION, ClientTakeRideSearchActivity.DRIVER_REPORT_PRICE);
-                                question.putExtras(b);
-                                startActivity(question);
+                                sendDataRequest.putCreateNormalOrder(order);
+                                //createMechardiseOrder(1);
+
                             }
                         })
                         .setNegativeButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
@@ -139,6 +157,56 @@ public class SendMerchandiseActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void createMechardiseOrder(String target)
+    {
+        Utility info = new Utility(SendMerchandiseActivity.this);
+
+        AccountInfo driver = info.getAccountInfo();
+        OrderLocationBean begin_location = new OrderLocationBean();
+        begin_location.setId(1);
+        begin_location.setLatitude("24.09133");
+        begin_location.setLongitude("120.540315");
+        begin_location.setZipcode("404");
+        begin_location.setAddress("台中市北區市政路172號");
+
+        OrderLocationBean stop_location = new OrderLocationBean();
+        stop_location.setId(2);
+        stop_location.setLatitude("24.14411");
+        stop_location.setLongitude("120.679567");
+        stop_location.setZipcode("400");
+        stop_location.setAddress("台中市中區柳川里成功路300號");
+
+
+        OrderLocationBean end_location = new OrderLocationBean();
+        end_location.setId(3);
+        end_location.setLatitude("24.14411");
+        end_location.setLongitude("120.679567");
+        end_location.setZipcode("400");
+        end_location.setAddress("台中市南區興大路145號");
+
+
+
+        NormalOrder order = new NormalOrder();
+        order.setUser_id(driver.getId());
+        order.setUser_uid(driver.getUid());
+        order.setUser_name(driver.getPhoneNumber());
+        order.setAccesskey(driver.getAccessKey());
+        order.setBegin(begin_location);
+        order.setEnd(end_location);
+        order.setDtype("4");
+        order.setBegin_address(begin_location.getAddress());
+        order.setStop_address(stop_location.getAddress());
+        order.setEnd_address(end_location.getAddress());
+        order.setPrice("1000");
+        order.setTip("0");
+        order.setTicket_status("0");
+        //order.setOrderdate(time.getText().toString());
+        order.setTarget(target);
+
+        //sendDataRequest.putCreateNormalOrder(order);
+
     }
 
 }

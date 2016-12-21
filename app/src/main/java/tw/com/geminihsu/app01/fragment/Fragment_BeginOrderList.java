@@ -40,6 +40,7 @@ import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItemAdapter;
+import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
@@ -48,6 +49,8 @@ import tw.com.geminihsu.app01.utils.Utility;
 
 public class Fragment_BeginOrderList extends Fragment {
     public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
+    public final static String BUNDLE_ORDER_TICKET = "ticket";// from
+
     private ListView listView;
     private final List<BeginOrderListItem> mRecordOrderListData = new ArrayList<BeginOrderListItem>();;
     private BeginOrderListItemAdapter listViewAdapter;
@@ -82,6 +85,7 @@ public class Fragment_BeginOrderList extends Fragment {
             public void driverTakeOverOrder(NormalOrder order) {
                 Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                 Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.PASSENGER);
                 b.putString(BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
                 question.putExtras(b);
                 startActivity(question);
@@ -90,13 +94,17 @@ public class Fragment_BeginOrderList extends Fragment {
         Bundle data=getArguments();
         if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
         {
-            if(data.getBoolean(Constants.ARG_POSITION)==true)
-                wait=true;
-            else
+            //if(data.getBoolean(Constants.ARG_POSITION)==true)
+            //    wait=true;
+           // else
                 option=data.getInt(Constants.ARG_POSITION);
 
         }
-           getDataFromDB();
+
+        Utility info = new Utility(getActivity());
+        if(info.getDriverAccountInfo()!=null&&Constants.Driver==true)
+            sendDataRequest.queryRecommendOrderList(info.getDriverAccountInfo());
+        getDataFromDB();
         // 建立ListItemAdapter
         listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
@@ -136,10 +144,11 @@ public class Fragment_BeginOrderList extends Fragment {
                     public void onClick(View v) {
                         Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
                         Bundle b = new Bundle();
-                        if(orderItem.order_title.equals("一般搭乘(小費:50元)"))
+                        if(orderItem.order.getTarget().equals("1"))
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                         else
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
+                        b.putString(BUNDLE_ORDER_TICKET_ID,orderItem.order.getTicket_id());
                         question.putExtras(b);
                         startActivity(question);
                     }
@@ -304,9 +313,13 @@ public class Fragment_BeginOrderList extends Fragment {
             for (NormalOrder order: data) {
                 BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
                 //if(i%2==0)
-                    beginOrderListItem.order_title = "一般搭乘(費用:"+order.getPrice()+"元)";
-                //else
-                //    beginOrderListItem.order_title = "貨物快送(小費:80元)";
+                OrderRecordListItem item = new OrderRecordListItem();
+                Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)) {
+                    beginOrderListItem.order_title = "貨物快送(費用:" + order.getPrice() + "元)";
+                }
+                else
+                    beginOrderListItem.order_title = "一般搭乘(照表收費)";
                 beginOrderListItem.departure = "從:"+order.getBegin_address();
                 beginOrderListItem.destination = "到:"+order.getEnd_address();
                 beginOrderListItem.order=order;

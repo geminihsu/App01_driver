@@ -11,10 +11,10 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,14 +31,16 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
 import tw.com.geminihsu.app01.bean.AccountInfo;
-import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.bean.LocationAddress;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.bean.OrderLocationBean;
 import tw.com.geminihsu.app01.common.Constants;
@@ -46,6 +48,8 @@ import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class ClientTakeRideActivity extends Activity {
+    private final String TAG = ClientTakeRideActivity.class.toString();
+    public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -67,6 +71,8 @@ public class ClientTakeRideActivity extends Activity {
     private TextView show_title;
     private EditText date;
     private EditText time;
+    private EditText departure_address;
+    private EditText destination_address;
     private int option;
 
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
@@ -78,7 +84,10 @@ public class ClientTakeRideActivity extends Activity {
     private Calendar calendar;
 
     private JsonPutsUtil sendDataRequest;
-    private DriverIdentifyInfo driver;
+    private AccountInfo driver;
+
+    private LocationAddress departure_detail;
+    private LocationAddress destination_detail;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,6 +155,14 @@ public class ClientTakeRideActivity extends Activity {
 
         date = (EditText) findViewById(R.id.date_info);
         time = (EditText) findViewById(R.id.time_info);
+        departure_address = (EditText) findViewById(R.id.departure_address);
+        destination_address = (EditText) findViewById(R.id.destination_address);
+
+
+        Date dateIfo=new Date();
+        time.setText(new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss").format(dateIfo));
+        //Log.e(TAG,new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss").format(date));
+
     }
 
 
@@ -229,8 +246,11 @@ public class ClientTakeRideActivity extends Activity {
 
                                 switch (which){
                                     case 0:
-                                        Intent question = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
-                                        startActivity(question);
+                                        Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.DEPARTURE_QUERY_GPS);
                                         break;
                                     case 1:
                                         Intent page = new Intent(ClientTakeRideActivity.this, BookmarksMapListActivity.class);
@@ -256,8 +276,37 @@ public class ClientTakeRideActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
-                startActivity(question);
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(ClientTakeRideActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        ClientTakeRideActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pop_map_option1));
+                arrayAdapter.add(getString(R.string.pop_map_option2));
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+
+                                switch (which){
+                                    case 0:
+                                        Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.DESTINATION_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.DESTINATION_QUERY_GPS);
+                                        break;
+                                    case 1:
+                                        Intent page = new Intent(ClientTakeRideActivity.this, BookmarksMapListActivity.class);
+                                        startActivity(page);
+                                        break;
+                                }
+                            }
+                        });
+                builderSingle.show();
             }
         });
 
@@ -320,6 +369,17 @@ public class ClientTakeRideActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 if (option == ClientTakeRideActivity.TAKE_RIDE) {
+                    String departure_address_info;
+                    if(departure_detail!=null)
+                        departure_address_info=departure_detail.getAddress();
+                    else
+                        departure_address_info = departure_address.getText().toString();
+                    String destination_address_info;
+                    if(departure_detail!=null)
+                        destination_address_info=destination_detail.getAddress();
+                    else
+                        destination_address_info = destination_address.getText().toString();
+
                     AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                             this);
 
@@ -328,7 +388,7 @@ public class ClientTakeRideActivity extends Activity {
 
                     // set dialog message
                     alertDialogBuilder
-                            .setMessage("2015/12/08 上午07:04\n從:台中火車站\n停:繼光街口\n到:台中市政府")
+                            .setMessage(time.getText().toString()+"\n從:"+departure_address_info+"\n停:繼光街口\n到:"+destination_address_info)
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -338,50 +398,13 @@ public class ClientTakeRideActivity extends Activity {
                             .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
 
-                                    // Intent question = new Intent(ClientTakeRideActivity.this, ClientTakeRideSearchActivity.class);
-                                   // startActivity(question);
-                                    Utility info = new Utility(ClientTakeRideActivity.this);
-                                    driver = info.getDriverAccountInfo();
-                                    OrderLocationBean begin_location = new OrderLocationBean();
-                                    begin_location.setId(1);
-                                    begin_location.setLatitude("24.09133");
-                                    begin_location.setLongitude("120.540315");
-                                    begin_location.setZipcode("404");
-                                    begin_location.setAddress("台中市北區市政路172號");
-
-                                    OrderLocationBean stop_location = new OrderLocationBean();
-                                    stop_location.setId(2);
-                                    stop_location.setLatitude("24.14411");
-                                    stop_location.setLongitude("120.679567");
-                                    stop_location.setZipcode("400");
-                                    stop_location.setAddress("台中市中區柳川里成功路300號");
-
-
-                                    OrderLocationBean end_location = new OrderLocationBean();
-                                    end_location.setId(3);
-                                    end_location.setLatitude("24.14411");
-                                    end_location.setLongitude("120.679567");
-                                    end_location.setZipcode("400");
-                                    end_location.setAddress("台中市南區興大路145號");
-
-
-                                    NormalOrder order = new NormalOrder();
-                                    order.setUser_id(driver.getId());
-                                    order.setUser_uid(driver.getUid());
-                                    order.setUser_name(driver.getName());
-                                    order.setAccesskey(driver.getAccesskey());
-                                    order.setBegin(begin_location);
-                                    order.setEnd(end_location);
-                                    order.setDtype(driver.getDtype());
-                                    order.setBegin_address(begin_location.getAddress());
-                                    order.setStop_address(stop_location.getAddress());
-                                    order.setEnd_address(end_location.getAddress());
-                                    order.setPrice("1000");
-                                    order.setTip("0");
-                                    order.setTicket_status("0");
-
-                                    sendDataRequest.putCreateNormalOrder(order);
-
+                                    if(option == TAKE_RIDE)
+                                        if(departure_detail!=null)
+                                         createTaxiOrder(""+option);
+                                        else
+                                         createTempTaxiOrder(""+option);
+                                    else
+                                    createMechardiseOrder(""+option);
 
                                 }
                             });
@@ -393,9 +416,11 @@ public class ClientTakeRideActivity extends Activity {
                     alertDialog.show();
                 }else
                 {
+                    NormalOrder order = createMechardiseOrder(""+SEND_MERCHANDISE);
                     Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
                     Bundle b = new Bundle();
                     b.putInt(Constants.ARG_POSITION, MerchandiseOrderActivity.SEND_MERCHANDISE);
+                    b.putSerializable(BUNDLE_ORDER_TICKET_ID, order);
                     question.putExtras(b);
                     startActivity(question);
                 }
@@ -436,4 +461,225 @@ public class ClientTakeRideActivity extends Activity {
             Toast.makeText(ClientTakeRideActivity.this, "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
+    private NormalOrder createMechardiseOrder(String target)
+    {
+        Utility info = new Utility(ClientTakeRideActivity.this);
+        driver = info.getAccountInfo();
+        OrderLocationBean begin_location = new OrderLocationBean();
+        begin_location.setId(1);
+        begin_location.setLatitude("24.09133");
+        begin_location.setLongitude("120.540315");
+        begin_location.setZipcode("404");
+        begin_location.setAddress("台中市北區市政路172號");
+
+        OrderLocationBean stop_location = new OrderLocationBean();
+        stop_location.setId(2);
+        stop_location.setLatitude("24.14411");
+        stop_location.setLongitude("120.679567");
+        stop_location.setZipcode("400");
+        stop_location.setAddress("台中市中區柳川里成功路300號");
+
+
+        OrderLocationBean end_location = new OrderLocationBean();
+        end_location.setId(3);
+        end_location.setLatitude("24.14411");
+        end_location.setLongitude("120.679567");
+        end_location.setZipcode("400");
+        end_location.setAddress("台中市南區興大路145號");
+
+
+
+        NormalOrder order = new NormalOrder();
+        order.setUser_id(driver.getId());
+        order.setUser_uid(driver.getUid());
+        order.setUser_name(driver.getPhoneNumber());
+        order.setAccesskey(driver.getAccessKey());
+        order.setBegin(begin_location);
+        order.setEnd(end_location);
+        order.setDtype("4");
+        order.setBegin_address(begin_location.getAddress());
+        order.setStop_address(stop_location.getAddress());
+        order.setEnd_address(end_location.getAddress());
+        order.setPrice("1000");
+        order.setTip("0");
+        order.setTicket_status("0");
+        order.setOrderdate(time.getText().toString());
+        order.setTarget(target);
+
+       //sendDataRequest.putCreateNormalOrder(order);
+        return order;
+
+    }
+
+    private void createTaxiOrder(String target)
+    {
+
+        Utility info = new Utility(ClientTakeRideActivity.this);
+        driver = info.getAccountInfo();
+        OrderLocationBean begin_location = new OrderLocationBean();
+        begin_location.setId(1);
+        begin_location.setLatitude(""+departure_detail.getLatitude());
+        begin_location.setLongitude(""+departure_detail.getLongitude());
+        begin_location.setZipcode("404");
+        begin_location.setAddress(departure_detail.getAddress());
+
+        OrderLocationBean stop_location = new OrderLocationBean();
+        stop_location.setId(2);
+        stop_location.setLatitude("24.14411");
+        stop_location.setLongitude("120.679567");
+        stop_location.setZipcode("400");
+        stop_location.setAddress("台中市中區柳川里成功路300號");
+
+
+        OrderLocationBean end_location = new OrderLocationBean();
+        end_location.setId(3);
+        end_location.setLatitude(""+destination_detail.getLatitude());
+        end_location.setLongitude(""+destination_detail.getLongitude());
+        end_location.setZipcode("400");
+        end_location.setAddress(destination_detail.getAddress());
+
+
+
+        NormalOrder order = new NormalOrder();
+        order.setUser_id(driver.getId());
+        order.setUser_uid(driver.getUid());
+        order.setUser_name(driver.getPhoneNumber());
+        order.setAccesskey(driver.getAccessKey());
+        order.setDtype("1");
+        order.setBegin(begin_location);
+        order.setEnd(end_location);
+        order.setBegin_address(begin_location.getAddress());
+        order.setStop_address(stop_location.getAddress());
+        order.setEnd_address(end_location.getAddress());
+        order.setTicket_status("0");
+        order.setOrderdate(time.getText().toString());
+        order.setTarget(target);
+
+        sendDataRequest.putCreateQuickTaxiOrder(order);
+
+    }
+
+
+    private void createTempTaxiOrder(String target)
+    {
+
+        Utility info = new Utility(ClientTakeRideActivity.this);
+        driver = info.getAccountInfo();
+        OrderLocationBean begin_location = new OrderLocationBean();
+        begin_location.setId(1);
+        begin_location.setLatitude("24.09133");
+        begin_location.setLongitude("120.540315");
+        begin_location.setZipcode("404");
+        begin_location.setAddress(departure_address.getText().toString());
+
+        OrderLocationBean stop_location = new OrderLocationBean();
+        stop_location.setId(2);
+        stop_location.setLatitude("24.14411");
+        stop_location.setLongitude("120.679567");
+        stop_location.setZipcode("400");
+        stop_location.setAddress("台中市中區柳川里成功路300號");
+
+
+        OrderLocationBean end_location = new OrderLocationBean();
+        end_location.setId(3);
+        end_location.setLatitude("24.14411");
+        end_location.setLongitude("120.679567");
+        end_location.setZipcode("400");
+        end_location.setAddress(destination_address.getText().toString());
+
+
+
+        NormalOrder order = new NormalOrder();
+        order.setUser_id(driver.getId());
+        order.setUser_uid(driver.getUid());
+        order.setUser_name(driver.getPhoneNumber());
+        order.setAccesskey(driver.getAccessKey());
+        order.setDtype("1");
+        order.setBegin(begin_location);
+        order.setEnd(end_location);
+        order.setBegin_address(begin_location.getAddress());
+        order.setStop_address(stop_location.getAddress());
+        order.setEnd_address(end_location.getAddress());
+        order.setTicket_status("0");
+        order.setOrderdate(time.getText().toString());
+        order.setTarget(target);
+
+        sendDataRequest.putCreateQuickTaxiOrder(order);
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case Constants.DEPARTURE_QUERY_GPS:
+                ArrayList<Address> locationInfo=null;
+                if(data!=null) {
+                    departure_detail = new LocationAddress();
+                    locationInfo =(ArrayList<Address>) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    departure_detail.setLatitude(Double.valueOf(latitude));
+                    departure_detail.setLongitude(Double.valueOf(longitude));
+                    //departure_address.setText(locationInfo.get(0).getAddressLine(0));
+                    showAddressList(locationInfo,departure_address,departure_detail);
+                }
+            break;
+            case Constants.DESTINATION_QUERY_GPS:
+                ArrayList<Address> locationInfo2=null;
+                if(data!=null) {
+                    destination_detail = new LocationAddress();
+                    locationInfo2 =(ArrayList<Address>) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    destination_detail.setLatitude(Double.valueOf(latitude));
+                    destination_detail.setLongitude(Double.valueOf(longitude));
+                    //departure_address.setText(locationInfo.get(0).getAddressLine(0));
+                    showAddressList(locationInfo2,destination_address,destination_detail);
+                }
+            break;
+        }
+        }
+    private void showAddressList(ArrayList<Address> address, final EditText showAddress, final LocationAddress locationAddress)
+    {
+        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ClientTakeRideActivity.this);
+        builderSingle.setTitle("You address:");
+
+        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                ClientTakeRideActivity.this,
+                android.R.layout.select_dialog_item);
+
+
+        for(int i=  0 ;i<address.size();i++)
+        {
+            Address _address = address.get(i);
+            for(int j = 0 ;j<_address.getMaxAddressLineIndex();j++)
+                arrayAdapter.add(_address.getAddressLine(j));
+        }
+        builderSingle.setNegativeButton(
+                "cancel",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+
+        builderSingle.setAdapter(
+                arrayAdapter,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String strName = arrayAdapter.getItem(which);
+                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
+                                ClientTakeRideActivity.this);
+                        locationAddress.setAddress(strName);
+                        showAddress.setText(strName);
+
+                    }
+                });
+        builderSingle.show();
+    }
+
 }

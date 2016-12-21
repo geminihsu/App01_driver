@@ -32,9 +32,14 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItemAdapter;
+import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class Fragment_OrderRecord extends Fragment {
 
@@ -62,7 +67,8 @@ public class Fragment_OrderRecord extends Fragment {
     public void onStart() {
         super.onStart();
         this.findViews();
-           getDataFromDB();
+         //  getDataFromDB();
+        getOrderList();
         // 建立ListItemAdapter
         listViewAdapter = new OrderRecordListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
@@ -168,6 +174,115 @@ public class Fragment_OrderRecord extends Fragment {
                         mRecordOrderListData.add(item);
 
                     }
+            }
+
+        } catch (Throwable t) {
+            Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /* 從 xml 取得 OrderRecord 清單
+    private void getDataFromDB() {
+        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
+        Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
+
+        mRecordOrderListData.clear();
+        try {
+            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
+            // GeoDeviceManagement.deviceList.clear();
+            for (int i = 0; i < MAXSIZE; i++) {
+
+                if(i%3==0) {
+                    //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    item.image = bm1;
+                    item.order_status = "已取消";
+                    item.order_status_fontColor = getResources().getColor(R.color.bg_gray);
+                    item.time = "2015-12-18 上午07:04";
+                    item.departure = "從台中市台灣大段一段一號";
+                    item.destination = "到台中市政府";
+                    item.pay_method = "照表收費";
+                    item.car_status = "一般搭乘";
+                    mRecordOrderListData.add(item);
+
+                }else if(i%3==1) {
+                    //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    item.image = bm2;
+                    item.order_status = "已完成";
+                    item.order_status_fontColor = getResources().getColor(R.color.address_devicename_txt);
+                    item.time = "2015-12-18 上午07:04";
+                    item.departure = "從台中市台灣大段一段一號";
+                    item.destination = "到台中市政府";
+                    item.pay_method = "照表收費";
+                    item.car_status = "";
+                    mRecordOrderListData.add(item);
+
+                }
+                else
+
+                {
+                    //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    item.image = bm3;
+                    item.order_status = "進行中";
+                    item.order_status_fontColor = getResources().getColor(R.color.btn_bouns_upgrade);
+                    item.time = "2015-12-18 上午07:04";
+                    item.departure = "從台中市台灣大段一段一號";
+                    item.destination = "到台中市政府";
+                    item.pay_method = "$500";
+                    item.car_status = "";
+                    mRecordOrderListData.add(item);
+
+                }
+            }
+
+        } catch (Throwable t) {
+            Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }*/
+
+    /* 從 xml 取得 OrderRecord 清單 */
+    private void getOrderList() {
+        Bitmap bm1 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_taxi);
+        Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_airport);
+        Bitmap bm3 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_maps_local_shipping);
+
+        Utility orders = new Utility(getActivity());
+        RealmResults<NormalOrder> data=orders.getAccountOrderList();
+
+        mRecordOrderListData.clear();
+        try {
+            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
+            // GeoDeviceManagement.deviceList.clear();
+            for (NormalOrder order : data) {
+
+
+                    //Bitmap bm2 = BitmapFactory.decodeResource(getResources(), R.drawable.ic_online);
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                    if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO))
+                    {
+                        item.image = bm3;
+                        item.pay_method = "$"+order.getPrice()+"元";
+                        item.car_status = "";
+                    }
+                    else if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI)) {
+                        item.image = bm1;
+                        item.pay_method = "跳錶收費";
+                        item.car_status = "一般搭乘";
+                        item.car_status_Visibility = View.VISIBLE;
+                    }
+                    item.order_status = "已完成";
+                    item.order_status_fontColor = getResources().getColor(R.color.btn_bouns_upgrade);
+                    item.time = order.getOrderdate();
+                    item.departure = "從:"+order.getBegin_address();
+                    item.destination = "到:"+order.getEnd_address();
+
+                    //item.car_status = "";
+                    mRecordOrderListData.add(item);
+
             }
 
         } catch (Throwable t) {

@@ -31,6 +31,7 @@ import org.json.JSONObject;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class RegisterActivity extends Activity {
@@ -53,7 +54,7 @@ public class RegisterActivity extends Activity {
     private CheckBox agree;
 
     private static RequestQueue requestQueue;
-
+    private JsonPutsUtil sendDataRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +63,18 @@ public class RegisterActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
 
+        sendDataRequest = new JsonPutsUtil(RegisterActivity.this);
+        sendDataRequest.setClientRegisterDataManagerCallBackFunction(new JsonPutsUtil.ClientRegisterDataManagerCallBackFunction() {
+
+            @Override
+            public void registerClient(AccountInfo accountInfo) {
+                Intent verify = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable(BUNDLE_ACCOUNT_INFO, accountInfo);
+                verify.putExtras(b);
+                startActivity(verify);
+            }
+        });
     }
 
     @Override
@@ -141,7 +154,7 @@ public class RegisterActivity extends Activity {
                    user.setRegisterToken(token);
 
 
-                   sendRegisterRequest(user);
+                   sendDataRequest.sendRegisterRequest(user);
 
 
                }else
@@ -179,72 +192,7 @@ public class RegisterActivity extends Activity {
 
     }
 
-    private void sendRegisterRequest(final AccountInfo user)
-    {
-        String versionName = BuildConfig.VERSION_NAME;
-        final RequestQueue requestQueue = Volley.newRequestQueue(getApplicationContext());
 
-
-        JSONObject obj = new JSONObject();
-
-        try {
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_REGISTER);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_USERNAME, user.getPhoneNumber());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_PASSWORD, user.getPassword());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_IDCARD, user.getIdentify());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REALNAME, "哈哈");
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REGISTER_ID, user.getRegisterToken());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_PLATFORM, "android");
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_REGISTER_APP_VERSION, versionName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.e(TAG,jsonObject.toString());
-
-                try {
-                    // Parsing json object response
-                    // response will be a json object
-                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    App01libObjectKey.APP_REGISTER_RESPONSE_CODE connectResult =App01libObjectKey.conversion_register_connect_result(Integer.valueOf(status));
-
-                    if(connectResult.equals(App01libObjectKey.APP_REGISTER_RESPONSE_CODE.K_APP_REGISTER_RESPONSE_CODE_SUCCESS))
-                    {
-                        int uid = jsonObject.getInt(App01libObjectKey.APP_OBJECT_KEY_UID);
-                        user.setUid(""+uid);
-                        Constants.Driver = false;
-                        Intent verify = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
-                        Bundle b = new Bundle();
-                        b.putSerializable(BUNDLE_ACCOUNT_INFO, user);
-                        verify.putExtras(b);
-                        startActivity(verify);
-                    }else
-                    {
-                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
-
-                        Toast.makeText(getApplicationContext(),
-                                message,
-                                Toast.LENGTH_LONG).show();
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e(TAG,volleyError.getMessage().toString());
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
-    }
     /*private void addDataToRealm(AccountBean model) {
         realm.beginTransaction();
 

@@ -28,9 +28,11 @@ public class Constants {
 		CLIENT, DRIVER, BOTH
 	}
 
-
-	final public static String hotel_latitude = "latitude";
-	final public static String hotel_longitude = "longitude";
+	public static final int DEPARTURE_QUERY_GPS = 3;
+	public static final int DESTINATION_QUERY_GPS = 4;
+	public static final String BUNDLE_LOCATION = "map";
+	public static final String BUNDLE_MAP_LATITUDE = "latitude";
+	public static final String BUNDLE_MAP_LONGITUDE = "longitude";
 
 	public final static String ACCOUNT_PHONE_NUMBER = "phoneNumber";// from
 	public final static String ACCOUNT_USERNAME = "user_name";// from
@@ -63,19 +65,19 @@ public class Constants {
 
 	public static Constants.APP_REGISTER_DRIVER_TYPE conversion_register_driver_account_result(int index) {
 		if (index >= 0) {
-			if (index == 0) {
+			if (index == 1) {
 				return Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI;
 			}
-			if (index == 1) {
+			if (index == 2) {
 				return Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER;
 			}
-			if (index == 2) {
+			if (index == 3) {
 				return Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK;
 			}
-			if (index == 3) {
+			if (index == 4) {
 				return APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO;
 		}
-			if (index == 4) {
+			if (index == 5) {
 				return APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER;
 			}
 		}

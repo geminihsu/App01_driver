@@ -41,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
+                android:gravity="center_horizontal"
                 android:text=""
 
                 />
@@ -60,13 +61,49 @@
         android:layout_below="@+id/info"
         android:linksClickable="true"
         />
+    <LinearLayout
+        android:id="@+id/linearLayout_new_password"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:paddingTop="20dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/txt_forget_password"
+        android:visibility="gone"
 
+        >
+        <TextView
+            android:id="@+id/txt_new_password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/address_devicename_txt"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:text="@string/txt_new_password"
+            />
+        <EditText
+            android:id="@+id/edit_new_password"
+            android:layout_width="fill_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:layout_centerInParent="true"
+            android:ellipsize="middle"
+            android:background="@color/white"
+            android:gravity="center_horizontal|center_vertical"
+            android:singleLine="true"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:text="12"
+
+            />
+    </LinearLayout>
         <LinearLayout
             android:id="@+id/password"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_below="@+id/txt_forget_password"
+            android:layout_below="@+id/linearLayout_new_password"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:paddingTop="20dp"
