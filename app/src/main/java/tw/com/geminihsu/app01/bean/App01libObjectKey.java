@@ -34,6 +34,7 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_COMMENT_ORDER = "t_assess";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_RECOMMEND_ORDER = "t_match";
 
+    public static final String APP_OBJECT_KEY_PUTS_CONTENT_DETAIL = "c_get_all";
 
 
 
@@ -141,6 +142,47 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_USER_TREE = "tree";
     public static final String APP_OBJECT_KEY_USER_CLIENT_TICKETS = "client_tickets";
     public static final String APP_OBJECT_KEY_USER_DRIVER_TICKETS = "driver_tickets";
+    public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION = "locations";
+
+
+    //get Server Content information
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CONTENTS = "contents";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_COUNTYS = "countys";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DTYPE = "dtype";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_UTYPE = "utype";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CARBRAND = "carbrand";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DSPECIAL = "dspecial";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_BOOKMARK = "bookmark";
+
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CONTENTS_CODE = "code";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CONTENTS_TITLE = "title";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CONTENTS_CONTENT = "content";
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_COUNTYS_ID = "id";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_COUNTYS_NAME = "name";
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE = "dtype";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE_CHT = "dtype_cht";
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DRIVER_IMAGE_UTYPE = "utype";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DRIVER_IMAGE_UTYPE_NAME = "utype_cht";
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CARBRAND_ID = "id";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_CARBRAND_NAME = "name";
+
+
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_ID = "id";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_DTYPE = "dtype";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_DTPYE_CHT = "dtype_cht";
+    public static final String APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_CONTENT = "content";
+
+
+    public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION_ID = "id";
+    public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION_LOCATION = "location";
+    public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION_LAT = "lat";
+    public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION_LNG = "lng";
+
 
     //get User tree information from sever
     public static final String APP_OBJECT_KEY_USER_TREE_LV = "lv";
@@ -269,6 +311,7 @@ public class App01libObjectKey {
         K_APP_GET_PUSH_CODE_ACCOUNT_EXPIRED (708),
         K_APP_GET_PUSH_CODE_ACCOUNT_NO_SMS_VERIFY(704),
         K_APP_GET_PUSH_CODE_ACCOUNT_NO_EXSIT (701),
+        K_APP_GET_PUSH_CODE_ACCOUNT_NOT_DRIVER (9301),
         K_APP_GET_PUSH_CODE_ENTER_ERROR (900);
 
         private int value;
@@ -587,6 +630,10 @@ public class App01libObjectKey {
             }
             if (index == 900) {
                 return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ENTER_ERROR;
+            }
+
+            if (index == 9301) {
+                return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_NOT_DRIVER;
             }
         }
         return null;

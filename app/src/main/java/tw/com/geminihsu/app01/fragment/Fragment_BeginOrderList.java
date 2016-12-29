@@ -102,7 +102,7 @@ public class Fragment_BeginOrderList extends Fragment {
         }
 
         Utility info = new Utility(getActivity());
-        if(info.getDriverAccountInfo()!=null&&Constants.Driver==true)
+        if(info.getDriverAccountInfo()!=null)
             sendDataRequest.queryRecommendOrderList(info.getDriverAccountInfo());
         getDataFromDB();
         // 建立ListItemAdapter

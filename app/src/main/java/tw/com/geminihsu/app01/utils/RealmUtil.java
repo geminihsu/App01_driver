@@ -13,7 +13,14 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.serverbean.ServerCarbrand;
+import tw.com.geminihsu.app01.serverbean.ServerContents;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.serverbean.ServerCountys;
+import tw.com.geminihsu.app01.serverbean.ServerDriverType;
+import tw.com.geminihsu.app01.serverbean.ServerImageType;
+import tw.com.geminihsu.app01.serverbean.ServerSpecial;
 
 /**
  * Created by geminihsu on 16/10/28.
@@ -101,6 +108,17 @@ public class RealmUtil {
         return file;
     }
 
+    public ServerContents queryServerContent(String column, String value) {
+
+        ServerContents info = mRealm.where(ServerContents.class).equalTo(column, value).findFirst();
+        return info;
+    }
+
+    public RealmResults<ServerBookmark> queryServerBookmark() {
+
+        RealmResults<ServerBookmark> info = mRealm.where(ServerBookmark.class).findAll();
+        return info;
+    }
     public void addAccount(AccountInfo user)
     {
         mRealm.beginTransaction();
@@ -197,6 +215,96 @@ public class RealmUtil {
     }
 
 
+    public void addServerContents(ServerContents data)
+    {
+        mRealm.beginTransaction();
+
+        ServerContents info = mRealm.createObject(ServerContents.class);
+        info.setCode(data.getCode());
+        info.setTitle(data.getTitle());
+        info.setContent(data.getContent());
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
+    public void addServerCountys(ServerCountys data)
+    {
+        mRealm.beginTransaction();
+
+        ServerCountys info = mRealm.createObject(ServerCountys.class);
+        info.setId(data.getId());
+        info.setName(data.getName());
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
+    public void addServerDriverType(ServerDriverType data)
+    {
+        mRealm.beginTransaction();
+
+        ServerDriverType info = mRealm.createObject(ServerDriverType.class);
+        info.setDtype(data.getDtype());
+        info.setDtype_cht(data.getDtype_cht());
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
+    public void addServerImageType(ServerImageType data)
+    {
+        mRealm.beginTransaction();
+
+        ServerImageType info = mRealm.createObject(ServerImageType.class);
+        info.setUtype(data.getUtype());
+        info.setUtype_cht(data.getUtype_cht());
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
+    public void addServerCarBrand(ServerCarbrand data)
+    {
+        mRealm.beginTransaction();
+
+        ServerCarbrand info = mRealm.createObject(ServerCarbrand.class);
+        info.setId(data.getId());
+        info.setName(data.getName());
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
+    public void addServerSpecial(ServerSpecial data)
+    {
+        mRealm.beginTransaction();
+
+        ServerSpecial info = mRealm.createObject(ServerSpecial.class);
+        info.setId(data.getId());
+        info.setDtype(data.getDtype());
+        info.setDtype_cht(data.getDtype_cht());
+        info.setContent(data.getContent());
+
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+    public void addServerBookMark(ServerBookmark data)
+    {
+        mRealm.beginTransaction();
+
+        ServerBookmark info = mRealm.createObject(ServerBookmark.class);
+        info.setId(data.getId());
+        info.setLocation(data.getLocation());
+        info.setLat(data.getLat());
+        info.setLng(data.getLng());
+
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
+
 
     public void updateAccount(AccountInfo user)
     {
@@ -257,11 +365,11 @@ public class RealmUtil {
         mRealm.commitTransaction();
     }
 
-    public void clearDB() {
+    public void clearDB(final Class table) {
         mRealm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                realm.clear(NormalOrder.class);
+                realm.clear(table);
             }
         });
     }

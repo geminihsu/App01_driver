@@ -78,7 +78,7 @@ public class Fragment_Support extends Fragment {
     {
         listView = (ListView) getView().findViewById(R.id.listView1);
 
-
+        listView.setVisibility(View.VISIBLE);
 
         Resources res =getResources();
         String[] menu=res.getStringArray(R.array.support_menu);

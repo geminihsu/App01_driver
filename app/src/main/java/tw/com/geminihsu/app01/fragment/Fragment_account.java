@@ -38,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
@@ -71,6 +72,7 @@ public class Fragment_Account extends Fragment {
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_LOGOUT = 0x0001;
 
+    private LinearLayout linearLayout_accountMenu;
     private Fragment_AccountDelegateBase viewDelegateBase;
     private Button btn_change_password;
     private Button btn_obtain_comment;
@@ -155,6 +157,8 @@ public class Fragment_Account extends Fragment {
         ListAdapter adapter = new ArrayAdapter<>(getActivity() , android.R.layout.simple_list_item_1 ,menu);
 
         listView.setAdapter(adapter);*/
+        linearLayout_accountMenu = (LinearLayout) getView().findViewById(R.id.info);
+        linearLayout_accountMenu.setVisibility(View.VISIBLE);
         btn_change_password = (Button) getView().findViewById(R.id.changePassword);
         btn_obtain_comment = (Button) getView().findViewById(R.id.obtain_comment);
         btn_recommend_friend = (Button) getView().findViewById(R.id.recommend_friend);
@@ -235,12 +239,12 @@ public class Fragment_Account extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_LOGOUT, Menu.NONE, getString(R.string.btn_logout));
+       /* MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_LOGOUT, Menu.NONE, getString(R.string.btn_logout));
         SpannableString spanString = new SpannableString(item.getTitle().toString());
         spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
         item.setTitle(spanString);
 
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
         super.onCreateOptionsMenu(menu,inflater);
     }
 

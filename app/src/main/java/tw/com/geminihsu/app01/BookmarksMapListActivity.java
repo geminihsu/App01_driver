@@ -4,6 +4,8 @@ package tw.com.geminihsu.app01;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -11,13 +13,18 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.adapter.BookmarkListItem;
 import tw.com.geminihsu.app01.adapter.BookmarkListItemAdapter;
 import tw.com.geminihsu.app01.adapter.RecommendListItem;
 import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
+import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class BookmarksMapListActivity extends Activity {
 
@@ -92,11 +99,13 @@ public class BookmarksMapListActivity extends Activity {
     /* 從 xml 取得 OrderRecord 清單 */
     private void getDataFromDB() {
 
+        RealmUtil data = new RealmUtil(this);
+        RealmResults<ServerBookmark> bookmarks = data.queryServerBookmark();
         mBookmarkListData.clear();
         try {
             // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
             // GeoDeviceManagement.deviceList.clear();
-            for (int i = 0; i < MAXSIZE; i++) {
+            for (int i = 0; i < bookmarks.size(); i++) {
                 // for listview 要用的資料
                 BookmarkListItem item = new BookmarkListItem();
 
@@ -104,8 +113,17 @@ public class BookmarksMapListActivity extends Activity {
                     item.check=true;
                 else
                     item.check=false;
-                item.book_title = "住家：";
-                item.book_address = "台中市市民大道一段一號二樓";
+                item.book_title = bookmarks.get(i).getLocation()+":\t";
+
+                List<Address> addresses = null;
+
+                Geocoder gc = new Geocoder(this, Locale.getDefault());
+                try {
+                    addresses = gc.getFromLocation(Double.parseDouble(bookmarks.get(i).getLat()), Double.parseDouble(bookmarks.get(i).getLng()), 10);
+                } catch (IOException e) {}
+
+
+                item.book_address =addresses.get(0).getAddressLine(0);
 
                 mBookmarkListData.add(item);
 

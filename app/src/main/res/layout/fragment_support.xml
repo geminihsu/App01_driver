@@ -11,6 +11,7 @@
 		android:layout_marginLeft="20dp"
 		android:layout_marginRight="20dp"
 		android:orientation="vertical"
+		android:visibility="gone"
 		>
 
 	<Button
@@ -65,12 +66,13 @@
 			/>
 
 
-	<ListView
-			android:id="@+id/listView1"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:drawSelectorOnTop="false"
-	        android:visibility="gone"
-		/>
+
 		</LinearLayout>
+    <ListView
+        android:id="@+id/listView1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:drawSelectorOnTop="false"
+        android:visibility="gone"
+        />
 </LinearLayout>

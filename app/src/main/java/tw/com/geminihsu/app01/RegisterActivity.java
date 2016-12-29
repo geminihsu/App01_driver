@@ -86,6 +86,7 @@ public class RegisterActivity extends Activity {
                 b.putSerializable(BUNDLE_ACCOUNT_INFO, accountInfo);
                 verify.putExtras(b);
                 startActivity(verify);
+                finish();
             }
         });
     }
@@ -159,7 +160,7 @@ public class RegisterActivity extends Activity {
                    if(info.getAccountInfo()!=null)
                    {
                        //將就得資料清除
-                       info.clearData();
+                       info.clearData(AccountInfo.class);
                    }
                    final AccountInfo user = new AccountInfo();
                    user.setId(id);

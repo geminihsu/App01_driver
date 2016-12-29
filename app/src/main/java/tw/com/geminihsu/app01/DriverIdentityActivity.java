@@ -97,6 +97,7 @@ public class DriverIdentityActivity extends Activity {
                 b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
+                finish();
             }
         });
         uber_register.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +109,7 @@ public class DriverIdentityActivity extends Activity {
                 b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
+                finish();
             }
         });
         truck_register.setOnClickListener(new View.OnClickListener() {
@@ -119,6 +121,7 @@ public class DriverIdentityActivity extends Activity {
                 b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
+                finish();
             }
         });
         cargo_register.setOnClickListener(new View.OnClickListener() {
@@ -130,6 +133,7 @@ public class DriverIdentityActivity extends Activity {
                 b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
+                finish();
             }
         });
         trailer_register.setOnClickListener(new View.OnClickListener() {
@@ -141,6 +145,7 @@ public class DriverIdentityActivity extends Activity {
                 b.putInt(Constants.ARG_POSITION, Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER.ordinal()+1);
                 question.putExtras(b);
                 startActivity(question);
+                finish();
             }
         });
 

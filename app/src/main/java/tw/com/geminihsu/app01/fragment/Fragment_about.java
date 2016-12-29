@@ -22,8 +22,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import tw.com.geminihsu.app01.R;
+import tw.com.geminihsu.app01.serverbean.ServerContents;
+import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.webview.MyBrowser;
 
 
@@ -31,6 +35,7 @@ public class Fragment_About extends Fragment {
 
     private ListView listView;
     private WebView browser;
+    private TextView about;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -72,8 +77,14 @@ public class Fragment_About extends Fragment {
     private void findViews()
     {
         browser = (WebView) getView().findViewById(R.id.webview);
-        browser.setWebViewClient(new MyBrowser("www.google.com"));
-        browser.setVisibility(View.VISIBLE);
+        //browser.setWebViewClient(new MyBrowser("www.google.com"));
+        //browser.setVisibility(View.VISIBLE);
+
+        about = (TextView) getView().findViewById(R.id.content);
+        about.setVisibility(View.VISIBLE);
+        RealmUtil data = new RealmUtil(getActivity());
+        ServerContents info = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"about");
+        about.setText("\t\t\t\t"+info.getContent());
         /*String url = "www.google.com";
 
         browser.getSettings().setLoadsImagesAutomatically(true);

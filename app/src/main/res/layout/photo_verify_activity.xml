@@ -76,7 +76,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/brand_name"
                         android:src="@drawable/ic_editor_insert_photo"
-
+                        android:visibility="gone"
 
                       />
 
@@ -114,6 +114,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/id"
+                        android:visibility="gone"
                         android:src="@drawable/ic_editor_insert_photo"
                         />
             </RelativeLayout>
@@ -150,6 +151,7 @@
                         android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/phone"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -185,6 +187,7 @@
                         android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/type"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
                 <RelativeLayout
@@ -221,6 +224,7 @@
                         android:src="@drawable/ic_editor_insert_photo"
                         android:layout_centerHorizontal="true"
                         android:layout_below="@+id/licence"
+                        android:visibility="gone"
                         />
                 </RelativeLayout>
             </LinearLayout>

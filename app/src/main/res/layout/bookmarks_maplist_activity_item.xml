@@ -20,7 +20,7 @@
             android:id="@+id/address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="middle"
+            android:ellipsize="end"
             android:singleLine="true"
             android:layout_gravity="center_vertical"
             android:text="台中市一段一號一樓"

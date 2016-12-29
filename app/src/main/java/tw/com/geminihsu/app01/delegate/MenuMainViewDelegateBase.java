@@ -15,6 +15,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
 import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.fragment.Fragment_Support;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -90,9 +91,15 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	}
 
-	public void setNavigationItemOnClick_Support() {
+	public void setNavigationItemOnClick_support() {
 
-
+		FragmentTransaction fragTran;
+		Fragment_Support frag2 = new Fragment_Support();
+		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
+		fragTran.replace(R.id.container, frag2, Fragment_Support.class.getSimpleName());
+		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+		fragTran.addToBackStack(Fragment_Support.class.getSimpleName());
+		fragTran.commit();
 	}
 
 	public void setNavigationItemOnClick_notify() {

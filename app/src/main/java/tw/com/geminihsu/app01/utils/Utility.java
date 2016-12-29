@@ -95,9 +95,9 @@ public class Utility {
         return  orders;
       }
 
-    public void clearData(){
+    public void clearData(final Class table){
         RealmUtil data = new RealmUtil(mContext);
-        data.clearDB();
+        data.clearDB(table);
     }
 
 }

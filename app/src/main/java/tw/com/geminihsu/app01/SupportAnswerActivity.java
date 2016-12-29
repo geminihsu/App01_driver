@@ -19,7 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.serverbean.ServerContents;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 import tw.com.geminihsu.app01.webview.MyBrowser;
 
 public class SupportAnswerActivity extends Activity {
@@ -35,6 +38,7 @@ public class SupportAnswerActivity extends Activity {
     private LinearLayout linearLayout_app_report;
     private LinearLayout linearLayout_fee_report;
     private TextView manual;
+    private TextView content;
     private Spinner spinner_reason;
     private ArrayAdapter arrayAdapter_reason;
 
@@ -103,6 +107,7 @@ public class SupportAnswerActivity extends Activity {
 
 
         manual = (TextView) findViewById(R.id.manual);
+        content = (TextView) findViewById(R.id.content);
 
         spinner_reason = (Spinner)findViewById(R.id.reason);
 
@@ -120,16 +125,37 @@ public class SupportAnswerActivity extends Activity {
             linearLayout_form.setVisibility(View.VISIBLE);
         } else if (choice == SupportAnswerActivity.CLAUSE){
             getActionBar().setTitle(getString(R.string.clause_page_title));
-        browser.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
+            RealmUtil data = new RealmUtil(this);
+            ServerContents info = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"reg01");
+            ServerContents privacy = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"reg02");
+
+            content.setText("\t\t\t\t"+info.getContent()+"\n\n"+"\t\t\t\t"+privacy.getContent());
+            //browser.setVisibility(View.VISIBLE);
         } else if(choice == SupportAnswerActivity.QUESTION){
             getActionBar().setTitle(getString(R.string.question_page_title));
-            browser.setVisibility(View.VISIBLE);
+            //browser.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
+            RealmUtil data = new RealmUtil(this);
+            ServerContents info = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"qanda");
+            content.setText("\t\t\t\t"+info.getContent());
+
         }else if(choice == SupportAnswerActivity.INSURANCE_INFO){
             getActionBar().setTitle(getString(R.string.client_merchandise_insurance_title));
-            browser.setVisibility(View.VISIBLE);
+            //browser.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
+            RealmUtil data = new RealmUtil(this);
+            ServerContents info = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"safe1");
+            content.setText("\t\t\t\t"+info.getContent());
+
         }else if(choice == SupportAnswerActivity.MERCHANDISE_RESTRICT){
             getActionBar().setTitle(getString(R.string.client_merchandise_restrict_title));
-            browser.setVisibility(View.VISIBLE);
+            //browser.setVisibility(View.VISIBLE);
+            content.setVisibility(View.VISIBLE);
+            RealmUtil data = new RealmUtil(this);
+            ServerContents info = data.queryServerContent(Constants.SERVER_CONTENT_CODE,"lim01");
+            content.setText("\t\t\t\t"+info.getContent());
+
         }
         else if(choice == SupportAnswerActivity.MANUAL){
             getActionBar().setTitle(getString(R.string.order_pannel_info));

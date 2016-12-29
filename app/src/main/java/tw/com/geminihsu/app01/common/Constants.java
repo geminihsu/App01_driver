@@ -46,6 +46,8 @@ public class Constants {
 	public final static String ACCOUNT_DRIVER_UID = "uid";// from
 
 	public final static String ORDER_TICKET_ID = "ticket_id";// from
+	public final static String SERVER_CONTENT_CODE = "code";// from
+
 
 	public enum APP_REGISTER_DRIVER_TYPE
 	{

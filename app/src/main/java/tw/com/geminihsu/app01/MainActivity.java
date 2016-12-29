@@ -28,12 +28,14 @@ import com.packetzoom.speed.PacketZoomClient;
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
+import tw.com.geminihsu.app01.serverbean.ServerContents;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
 import tw.com.geminihsu.app01.utils.FileUtil;
 import tw.com.geminihsu.app01.utils.FormatUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class MainActivity extends Activity {
     public final static String TAG = MainActivity.class.toString();// from
@@ -155,6 +157,7 @@ public class MainActivity extends Activity {
         password = ConfigSharedPreferencesUtil.getPassword(this, configSharedPreferences);
         this.findViews();
         this.setLister();
+
         if (!phone_number.isEmpty() && !password.isEmpty())
         {
                     changeActivity();
@@ -359,17 +362,6 @@ public class MainActivity extends Activity {
 
     private void changeActivity()
     {
-        RealmUtil realmUtil = new RealmUtil(MainActivity.this);
-        //realmUtil.clearDB();
-        user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
-        driverIdentifyInfo = realmUtil.queryDriver(Constants.ACCOUNT_DRIVER_UID, user.getUid());
-        RealmResults<DriverIdentifyInfo> drivers = realmUtil.queryAllDriver();
-        Log.e(TAG,"got driver!!");
-        if(driverIdentifyInfo==null)
-            Constants.Driver = false;
-        else
-            Constants.Driver = true;
-        Log.e(TAG,"database");
         Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
                 /*Bundle b = new Bundle();
                 b.putSerializable(BUNDLE_ACCESS_KEY, user.getAccessKey());
@@ -400,7 +392,9 @@ public class MainActivity extends Activity {
 
                     String filePath = Environment.getExternalStorageDirectory()+Constants.SDACRD_DIR_APP_ROOT;
                     FileUtil.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑
-
+                    Utility data = new Utility(this);
+                    data.clearData(ServerContents.class);
+                    sendDataRequest.sendRequestServerContentDetail();
                 } else {
 
                     // permission denied, boo! Disable the

@@ -68,6 +68,11 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 	}
 
 	@Override
+	public void setNavigationItemOnClick_support() {
+		super.setNavigationItemOnClick_support();
+	}
+
+	@Override
 	public void setNavigationItemOnClick_pastOrder() {
 		super.setNavigationItemOnClick_pastOrder();
 	}

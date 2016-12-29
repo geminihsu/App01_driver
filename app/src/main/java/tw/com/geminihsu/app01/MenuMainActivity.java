@@ -224,10 +224,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
                         return true;
                     case R.id.navigation_item_support:
-                        Fragment_Support support = new Fragment_Support();
-                        android.support.v4.app.FragmentTransaction support_historyTransaction = getSupportFragmentManager().beginTransaction();
-                        support_historyTransaction.replace(R.id.container, support);
-                        support_historyTransaction.commit();
+                        viewDelegateBase.setNavigationItemOnClick_support();
                         return true;
                     case R.id.navigation_item_notification:
                         viewDelegateBase.setNavigationItemOnClick_notify();

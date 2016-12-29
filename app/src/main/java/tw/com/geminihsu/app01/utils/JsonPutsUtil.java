@@ -43,7 +43,14 @@ import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.serverbean.ServerCarbrand;
+import tw.com.geminihsu.app01.serverbean.ServerContents;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.serverbean.ServerCountys;
+import tw.com.geminihsu.app01.serverbean.ServerDriverType;
+import tw.com.geminihsu.app01.serverbean.ServerImageType;
+import tw.com.geminihsu.app01.serverbean.ServerSpecial;
 import tw.com.geminihsu.app01.uploadImage.AppHelper;
 import tw.com.geminihsu.app01.uploadImage.VolleyMultipartRequest;
 import tw.com.geminihsu.app01.uploadImage.VolleySingleton;
@@ -516,7 +523,7 @@ public class JsonPutsUtil {
 
 
                             RealmUtil database = new RealmUtil(mContext);
-                            database.clearDB();
+                            database.clearDB(AccountInfo.class);
                             database.addAccount(user);
                             //設定檔顯示登入的帳號密碼
                             SharedPreferences  configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -1070,6 +1077,7 @@ public class JsonPutsUtil {
                             if(id.equals(orderId))
                             {
                                 //取得訂單詳細資料
+
                             }
                             // JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
 //                            for (int i = 0; i < info.length(); i++){
@@ -1428,9 +1436,24 @@ public class JsonPutsUtil {
                         int did = jsonObject.getInt(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DID);
                         driverIdentifyInfo.setDid(""+did);
                         RealmUtil database = new RealmUtil(mContext);
-                        AccountInfo user = database.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, driverIdentifyInfo.getName());
-                        user.setRole(Constants.Identify.BOTH.ordinal());
-                        database.updateAccount(user);
+                        AccountInfo userInfo = database.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, driverIdentifyInfo.getName());
+                        if(userInfo!=null)
+                        {
+                            //更新資料庫裡面的密碼欄位
+                            AccountInfo new_user = new AccountInfo();
+                            new_user.setId(userInfo.getId());
+                            new_user.setUid(userInfo.getUid());
+                            new_user.setName(userInfo.getName());
+                            new_user.setPhoneNumber(userInfo.getPhoneNumber());
+                            new_user.setIdentify(userInfo.getIdentify());
+                            new_user.setPassword(userInfo.getPassword());
+                            new_user.setConfirm_password(userInfo.getConfirm_password());
+                            new_user.setRecommend_id(userInfo.getRecommend_id());
+                            new_user.setRole(Constants.Identify.BOTH.ordinal());
+                            new_user.setAccessKey(userInfo.getAccessKey());
+                            //user.setPassword(newPassword);
+                            database.updateAccount(new_user);
+                        };
 
                         database.addDriverInfo(driverIdentifyInfo);
                         if (mServerRequestDataManagerCallBackFunction!=null)
@@ -1741,6 +1764,9 @@ public class JsonPutsUtil {
                         imageInfo.setFile_url(url);
                         RealmUtil data = new RealmUtil(mContext);
                         data.addImageFileInfo(imageInfo);
+                        if (mDriverRegisterUploadPhotoManagerCallBackFunction!=null)
+                            mDriverRegisterUploadPhotoManagerCallBackFunction.uploadStatusSuccess(imageInfo);
+
                         //imagelist.add(imageInfo);
                         //info.setImageList(imagelist);
 
@@ -1895,6 +1921,219 @@ public class JsonPutsUtil {
         VolleySingleton.getInstance(mContext).addToRequestQueue(multipartRequest);
     }
 
+    public void sendRequestServerContentDetail()
+    {
+
+        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_CONTENT_DETAIL);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                Log.e(TAG,"[sendGetServerContentDetail]:"+jsonObject.toString());
+
+                try {
+                    // Parsing json object response
+                    // response will be a json object
+                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
+
+                    App01libObjectKey.APP_ACCOUNT_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_verify_code_result(Integer.valueOf(status));
+
+                    if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_VERIFY_CODE_SUCCESS))
+                    {
+                        String contents = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CONTENTS);
+                        if(!contents.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CONTENTS);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String code = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CONTENTS_CODE);
+                                String title = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CONTENTS_TITLE);
+                                String content = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CONTENTS_CONTENT);
+                                ServerContents site = new ServerContents();
+                                site.setCode(code);
+                                site.setTitle(title);
+                                site.setContent(content);
+                                database.addServerContents(site);
+
+                            }
+                        }
+
+                        String countys = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_COUNTYS);
+                        if(!countys.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_COUNTYS);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String id = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_COUNTYS_ID);
+                                String name = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_COUNTYS_NAME);
+
+                                ServerCountys site = new ServerCountys();
+                                site.setId(id);
+                                site.setName(name);
+                                database.addServerCountys(site);
+
+                            }
+                        }
+
+                        String dtype = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE);
+                        if(!dtype.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE);
+                                String name = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE_CHT);
+
+                                ServerDriverType site = new ServerDriverType();
+                                site.setDtype(type);
+                                site.setDtype_cht(name);
+                                database.addServerDriverType(site);
+
+                            }
+                        }
+
+                        String utype = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_UTYPE);
+                        if(!utype.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_UTYPE);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DRIVER_IMAGE_UTYPE);
+                                String name = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DRIVER_IMAGE_UTYPE_NAME);
+
+                                ServerImageType site = new ServerImageType();
+                                site.setUtype(type);
+                                site.setUtype_cht(name);
+                                database.addServerImageType(site);
+
+                            }
+                        }
+
+                        String carbrand = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CARBRAND);
+                        if(!carbrand.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CARBRAND);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CARBRAND_ID);
+                                String name = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_CARBRAND_NAME);
+
+                                ServerCarbrand site = new ServerCarbrand();
+                                site.setId(type);
+                                site.setName(name);
+                                database.addServerCarBrand(site);
+
+                            }
+                        }
+
+                        String dspecial = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL);
+                        if(!dspecial.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String id = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_ID);
+                                String s_dtype = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_DTYPE);
+                                String s_dtype_cht = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_DTPYE_CHT);
+                                String content = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DSPECIAL_CONTENT);
+
+
+                                ServerSpecial site = new ServerSpecial();
+                                site.setId(id);
+                                site.setDtype(s_dtype);
+                                site.setDtype_cht(s_dtype_cht);
+                                site.setContent(content);
+                                database.addServerSpecial(site);
+
+                            }
+                        }
+                        String bookmark = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_BOOKMARK);
+                        if(!bookmark.equals("null")){
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_BOOKMARK);
+                            RealmUtil database = new RealmUtil(mContext);
+                            JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION);
+                            //JSONObject data = info.getJSONObject("data");
+
+                            for (int i = 0; i < info.length(); i++) {
+                                //gets each JSON object within the JSON array
+                                JSONObject object = info.getJSONObject(i);
+                                String id = object.getString(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_ID);
+                                String location = object.getString(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LOCATION);
+                                String lat = object.getString(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LAT);
+                                String lng = object.getString(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LNG);
+
+
+
+                                ServerBookmark site = new ServerBookmark();
+                                site.setId(id);
+                                site.setLocation(location);
+                                site.setLat(lat);
+                                site.setLng(lng);
+                                database.addServerBookMark(site);
+
+                            }
+                        }
+
+                            }else
+                    {
+                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+
+                        Toast.makeText(mContext,
+                                message,
+                                Toast.LENGTH_LONG).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Toast.makeText(mContext,
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(TAG,volleyError.getMessage().toString());
+            }
+        });
+        requestQueue.add(jsonObjectRequest);
+
+    }
+
     //callback fucntion
     private ClientRegisterDataManagerCallBackFunction mClientRegisterDataManagerCallBackFunction;
 
@@ -2021,6 +2260,21 @@ public class JsonPutsUtil {
 
 
     }
+
+    //註冊司機上傳圖片的callback
+    private DriverRegisterUploadPhotoManagerCallBackFunction mDriverRegisterUploadPhotoManagerCallBackFunction;
+
+    public void setDriverRegisterUploadPhotoManagerCallBackFunction(DriverRegisterUploadPhotoManagerCallBackFunction driverRegisterUploadPhotoManagerCallBackFunction) {
+        mDriverRegisterUploadPhotoManagerCallBackFunction = driverRegisterUploadPhotoManagerCallBackFunction;
+
+    }
+
+    public interface DriverRegisterUploadPhotoManagerCallBackFunction {
+        public void uploadStatusSuccess(ImageBean photo);
+        public void uploadFail(boolean error);
+
+    }
+
 
     private void sendNotification(String title,String body) {
 

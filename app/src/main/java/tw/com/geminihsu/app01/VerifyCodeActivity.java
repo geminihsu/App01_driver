@@ -82,6 +82,7 @@ public class VerifyCodeActivity extends Activity {
                 //question.putExtras(b);
                 question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(question);
+                finish();
             }
 
             @Override
@@ -99,6 +100,7 @@ public class VerifyCodeActivity extends Activity {
                                 //question.putExtras(b);
                                 question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(question);
+                                finish();
 
 
                             }
@@ -126,6 +128,7 @@ public class VerifyCodeActivity extends Activity {
                 //question.putExtras(b);
                 question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                  startActivity(question);
+                finish();
             }
         });
 

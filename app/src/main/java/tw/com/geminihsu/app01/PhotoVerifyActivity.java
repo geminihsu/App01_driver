@@ -43,6 +43,7 @@ import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.URICovertStringPathUtil;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil.ServerRequestDataManagerCallBackFunction;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil.DriverRegisterUploadPhotoManagerCallBackFunction;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class PhotoVerifyActivity extends Activity implements Response.ErrorListener,Response.Listener{
@@ -51,6 +52,18 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.CAMERA
     };
+
+
+    //上傳圖片類型 utype
+    private static final String PHOTO_TYPE_ID="a1";
+    private static final String PHOTO_TYPE_HEALTH="a2";
+    private static final String PHOTO_TYPE_DRIVER="a3";
+    private static final String PHOTO_TYPE_CAR="a4";
+    private static final String PHOTO_TYPE_LICENSE="a5";
+    private static final String PHOTO_TYPE_CAR_BODY="a6";
+    private static final String PHOTO_TYPE_TAXI_INSURANCE="a7";
+
+
     private static final int INITIAL_REQUEST=1337;
     private JsonPutsUtil sendDataRequest;
 
@@ -108,11 +121,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             @Override
             public void registerDriver(DriverIdentifyInfo driverIdentifyInfo) {
 
-                Log.e(TAG,"get request from server");
-                if(!driverIdentifyInfo.getDid().equals("")) {
+                Log.e(TAG, "get request from server");
+                if (!driverIdentifyInfo.getDid().equals("")) {
 
-                   // JsonPutsUtil changeStatus = new JsonPutsUtil(PhotoVerifyActivity.this);
-                   // changeStatus.driverWorkIdentity(driverIdentifyInfo);
+                    // JsonPutsUtil changeStatus = new JsonPutsUtil(PhotoVerifyActivity.this);
+                    // changeStatus.driverWorkIdentity(driverIdentifyInfo);
                     //Utility user = new Utility(PhotoVerifyActivity.this);
                     //AccountInfo driver = user.getAccountInfo();
                     //driver.setRole(1);
@@ -127,7 +140,30 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             }
 
         });
+        post_image.setDriverRegisterUploadPhotoManagerCallBackFunction(new DriverRegisterUploadPhotoManagerCallBackFunction() {
 
+
+            @Override
+            public void uploadStatusSuccess(ImageBean photo) {
+                if(photo.getUploadtype().equals(PHOTO_TYPE_ID))
+                    btn_car_work_image.setImageResource(R.drawable.ic_file_cloud_done);
+                else  if(photo.getUploadtype().equals(PHOTO_TYPE_DRIVER))
+                    btn_car_driver_id.setImageResource(R.drawable.ic_file_cloud_done);
+                else  if(photo.getUploadtype().equals(PHOTO_TYPE_CAR))
+                    btn_car_driver_licence.setImageResource(R.drawable.ic_file_cloud_done);
+                else  if(photo.getUploadtype().equals(PHOTO_TYPE_LICENSE))
+                    btn_car_work_licence_image.setImageResource(R.drawable.ic_file_cloud_done);
+                else  if(photo.getUploadtype().equals(PHOTO_TYPE_CAR_BODY))
+                    btn_car_image.setImageResource(R.drawable.ic_file_cloud_done);
+
+
+            }
+
+            @Override
+            public void uploadFail(boolean error) {
+
+            }
+        });
     }
 
     @Override
@@ -589,7 +625,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 String car_imgs = "";
                 for(ImageBean image : file)
                 {
-                    if(image.getUploadtype().equals("a6"))
+                    if(image.getUploadtype().equals(PHOTO_TYPE_CAR_BODY))
                         driverInfo.setCar_imgs(image.getFile_id());
                     else {
                         car_imgs+= image.getFile_id()+",";
@@ -632,7 +668,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 }
 
                 //File img = new File(realPath);
-                post_image.postImageToServer(driverInfo,test_image,"a1");
+                post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_ID);
 
                 break;
             case PICK_IMAGE_REQUEST:
@@ -661,11 +697,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                     imageContentURI = realPath;
                     car_work_image.setImageBitmap(bitmap);
-                    car_work_image.setVisibility(View.VISIBLE);
+                    //car_work_image.setVisibility(View.VISIBLE);
                     //car_work_image.setImageResource(R.drawable.sunshine);
                    // JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(driverInfo,test_image,"a1");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_ID);
                     //Log.e(TAG,"USER:"+driverInfo.getAccesskey());
                     // post_image.RequestMultiPart(this,this,img);
                 } catch (IOException e) {
@@ -680,7 +716,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path1;
                     car_driver_id.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,"a3");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_DRIVER);
 
                 }
                 break;
@@ -715,7 +751,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,"a3");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_DRIVER);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -729,7 +765,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path2;
                     car_driver_licence.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,"a4");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR);
 
                 }
                 break;
@@ -764,7 +800,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,"a4");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -778,7 +814,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path3;
                     car_work_licence_image.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,"a5");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_LICENSE);
 
                 }
                 break;
@@ -813,7 +849,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                    // post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,"a5");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_LICENSE);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -827,7 +863,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path4;
                     car_image.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,"a6");
+                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR_BODY);
 
                 }
                 break;
