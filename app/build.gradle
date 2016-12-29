@@ -1,4 +1,10 @@
 apply plugin: 'com.android.application'
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 
 android {
     compileSdkVersion 23
@@ -43,5 +49,8 @@ dependencies {
     //get gps location
     compile 'com.google.android.gms:play-services-location:9.0.1'
     compile 'com.google.android.gms:play-services-maps:9.0.1'
+    compile(name:'pz-android-sdk-3.2.19', ext:'aar')
+
+
 }
 apply plugin: 'com.google.gms.google-services'

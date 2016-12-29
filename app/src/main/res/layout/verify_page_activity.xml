@@ -42,6 +42,7 @@
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:gravity="center_horizontal"
+                android:inputType="number"
                 android:text=""
 
                 />

@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -52,6 +53,8 @@ public class VerifyCodeActivity extends Activity {
     private JsonPutsUtil sendDataRequest;
     private LinearLayout linearLayout_new_password;
     private int new_password_request;
+    private CountDownTimer checkEnterTimer;
+    private TextView txt_countDownMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +77,9 @@ public class VerifyCodeActivity extends Activity {
                 //RealmUtil data = new RealmUtil(VerifyCodeActivity.this);
                 //data.addAccount(accountInfo);
                 Intent question = new Intent(VerifyCodeActivity.this, MainActivity.class);
-                Bundle b = new Bundle();
-                b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
-                question.putExtras(b);
+                //Bundle b = new Bundle();
+                //b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
+                //question.putExtras(b);
                 question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(question);
             }
@@ -91,9 +94,9 @@ public class VerifyCodeActivity extends Activity {
                         .setPositiveButton(getString(R.string.dialog_get_on_car_comfirm),new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 Intent question = new Intent(VerifyCodeActivity.this, MainActivity.class);
-                                Bundle b = new Bundle();
-                                b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
-                                question.putExtras(b);
+                                //Bundle b = new Bundle();
+                                //b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
+                                //question.putExtras(b);
                                 question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 startActivity(question);
 
@@ -106,7 +109,43 @@ public class VerifyCodeActivity extends Activity {
                 // show it
                 alertDialog.show();
             }
+
+            @Override
+            public void modifyPassword(AccountInfo accountInfo) {
+                configSharedPreferences.edit().putString(getString(R.string.config_login_phone_number_key), accountInfo.getPhoneNumber()).commit();
+                configSharedPreferences.edit().putString(getString(R.string.config_login_password_key), accountInfo.getPassword()).commit();
+
+
+
+                //insert new account database
+                //RealmUtil data = new RealmUtil(VerifyCodeActivity.this);
+                //data.addAccount(accountInfo);
+                Intent question = new Intent(VerifyCodeActivity.this, MainActivity.class);
+                //Bundle b = new Bundle();
+                //b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, accountInfo);
+                //question.putExtras(b);
+                question.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                 startActivity(question);
+            }
         });
+
+        checkEnterTimer = new CountDownTimer(60000,1000){
+
+            @Override
+            public void onFinish() {
+                txt_countDownMsg.setText("Time Out!!");
+                finish();
+            }
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+                String value= String.valueOf(millisUntilFinished/1000);
+                String message = getResources().getString(R.string.txt_verify_code_warm);
+                String result = String.format(message, value);
+                txt_countDownMsg.setText(result);
+            }
+
+        }.start();
 
         }
 
@@ -122,11 +161,24 @@ public class VerifyCodeActivity extends Activity {
             if (bundle.containsKey(BUNDLE_NEW_PASSWORD)) {
                 //判斷是驗證密碼還是重新發送密碼
                 new_password_request = bundle.getInt(BUNDLE_NEW_PASSWORD);
-                if (new_password_request == VERIFY_NEW_PASSWORD)
+                if (new_password_request == VERIFY_NEW_PASSWORD) {
+                    error.setVisibility(View.GONE);
                     linearLayout_new_password.setVisibility(View.VISIBLE);
+                }
 
             }
 
+        }
+
+    }
+
+    @Override
+    protected void onStop(){
+        super.onStop();
+        if(checkEnterTimer!=null)
+        {
+            checkEnterTimer.cancel();
+            checkEnterTimer = null;
         }
 
     }
@@ -142,6 +194,7 @@ public class VerifyCodeActivity extends Activity {
         code = (EditText) findViewById(R.id.code);
         code.setText("1234");
         new_password = (EditText)findViewById(R.id.edit_new_password);
+        txt_countDownMsg = (TextView)findViewById(R.id.txt_forget_password);
     }
 
 
@@ -171,6 +224,8 @@ public class VerifyCodeActivity extends Activity {
                     }
             }
         });
+
+
     }
 
 

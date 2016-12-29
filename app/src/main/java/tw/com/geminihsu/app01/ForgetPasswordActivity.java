@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextWatcher;
 import android.text.style.URLSpan;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,6 +35,7 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.FormatUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 
@@ -78,6 +81,11 @@ public class ForgetPasswordActivity extends Activity {
                 intent.putExtras(b);
                 startActivity(intent);
             }
+
+            @Override
+            public void modifyPassword(AccountInfo accountInfo) {
+
+            }
         });
     }
 
@@ -85,7 +93,9 @@ public class ForgetPasswordActivity extends Activity {
     private void findViews()
     {
         phone_number = (EditText) findViewById(R.id.phone);
+        phone_number.addTextChangedListener(checkPhoneFormat);
         id_card = (EditText) findViewById(R.id.id);
+        id_card.addTextChangedListener(checkIdentityFormat);
 
         send = (Button) findViewById(R.id.resend);
     }
@@ -109,73 +119,56 @@ public class ForgetPasswordActivity extends Activity {
         });
     }
 
-    /*private void sendReSendRequest()
-    {
-        obj = new JSONObject();
 
-        try {
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_PASSWORD);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_RE_SEND_PASSWORD_USERNAME, phone_number.getText().toString());
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_RE_SEND_PASSWORD_IDCARD, id_card.getText().toString());
 
-        } catch (JSONException e) {
-            e.printStackTrace();
+    private TextWatcher checkIdentityFormat= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
         }
-        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.SERVER_URL,obj,new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject jsonObject) {
-                Log.e(TAG,jsonObject.toString());
 
-                try {
-                    // Parsing json object response
-                    // response will be a json object
-                    String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    App01libObjectKey.APP_ACCOUNT_RE_SEND_PASSWORD_RESPONSE connectResult =App01libObjectKey.conversion_resend_password_result(Integer.valueOf(status));
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_RE_SEND_PASSWORD_RESPONSE.K_APP_ACCOUNT_RE_SEND_PASSWORD_SUCCESS))
-                    {
-                        RealmUtil realmUtil = new RealmUtil(ForgetPasswordActivity.this);
-                        AccountInfo user = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,phone_number.getText().toString());
+        }
 
-                        if(user==null)
-                        {
-                            user = new AccountInfo();
-                            user.setPhoneNumber(phone_number.getText().toString());
-                            user.setIdentify(id_card.getText().toString());
-                        }
-                        Constants.Driver = false;
-                        Intent verify = new Intent(ForgetPasswordActivity.this, VerifyCodeActivity.class);
-                        Bundle b = new Bundle();
-                        b.putSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO, user);
-                        verify.putExtras(b);
-                        startActivity(verify);
-                    }else
-                    {
-                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
 
-                        Toast.makeText(getApplicationContext(),
-                                message,
-                                Toast.LENGTH_LONG).show();
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
+        @Override
+        public void afterTextChanged(Editable s) {
+            //判斷是否為身分證格式
+            if (!FormatUtils.isIdNoFormat(temp.toString())) {
+                //TODO:身份證錯誤處理
+                id_card.setError(getString(R.string.login_error_register_msg));
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.e(TAG,volleyError.getMessage().toString());
-            }
-        });
-        requestQueue.add(jsonObjectRequest);
+        }
 
-    }*/
-    @Override
+
+    };
+
+    private TextWatcher checkPhoneFormat= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length()<10 || s.length()>10) {
+                phone_number.setError(getString(R.string.login_error_register_msg));
+            }
+        }
+    };
+        @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:

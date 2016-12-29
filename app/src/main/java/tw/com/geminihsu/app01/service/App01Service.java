@@ -88,6 +88,9 @@ public class App01Service extends Service {
     }
 
     public void App01ServiceCheckGPS(){
+
+        Log.d(TAG, "[App01ServiceBinder]App01ServiceCheckGPS() executed");
+
         listener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
@@ -158,6 +161,10 @@ public class App01Service extends Service {
 
     }
 
+    public void stopToGetNotifyInfo() {
+        if (getPushNotifyInfo_thread_Thread != null)
+            getPushNotifyInfo_thread_Thread.stopThisThread();
+    }
 
     @Override
     public void onDestroy() {

@@ -39,6 +39,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
+                android:inputType="number"
                 android:text=""
 
                 />

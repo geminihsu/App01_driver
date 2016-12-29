@@ -1,14 +1,21 @@
 package tw.com.geminihsu.app01;
 
 
+import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +23,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.packetzoom.speed.PacketZoomClient;
 
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
+import tw.com.geminihsu.app01.utils.FileUtil;
+import tw.com.geminihsu.app01.utils.FormatUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 
@@ -52,12 +62,21 @@ public class MainActivity extends Activity {
     private DriverIdentifyInfo driverIdentifyInfo;
     private AlertDialog alertDialog;
     private JsonPutsUtil sendDataRequest;
-
+    // Storage Permissions
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
 
+
+        checkStoragePermissions(this);
+
+        PacketZoomClient.init(this, "94b97bbd9abc75566da2986103633926", "fd768b12976c15dc82dd18006bb802e3922bcb8a");
         sendDataRequest = new JsonPutsUtil(MainActivity.this);
         sendDataRequest.setClientLoginDataManagerCallBackFunction(new JsonPutsUtil.ClientLoginDataManagerCallBackFunction() {
 
@@ -81,6 +100,24 @@ public class MainActivity extends Activity {
                 //intent.putExtras(b);
                 startActivity(intent);
                 finish();
+            }
+
+            @Override
+            public void loginError(boolean error) {
+                if(error)
+                {
+                    if(alertDialog!=null)
+                    {
+                        alertDialog.dismiss();
+                        alertDialog = null;
+                    }
+
+                    if(dialog!=null)
+                    {
+                        dialog.dismiss();
+                        dialog = null;
+                    }
+                }
             }
         });
 
@@ -120,26 +157,7 @@ public class MainActivity extends Activity {
         this.setLister();
         if (!phone_number.isEmpty() && !password.isEmpty())
         {
-            Bundle args = getIntent().getExtras();
-            //Log.e(TAG,"args"+args.toString());
-            if(args!=null){
-                if (args.containsKey(RegisterActivity.BUNDLE_ACCOUNT_INFO)) {
-                    user = (AccountInfo) args.getSerializable(RegisterActivity.BUNDLE_ACCOUNT_INFO);
-                    //already has account so query account from database
-                    if (user != null) {
-                        queryAccount();
-                        Log.e(TAG, "command");
-                    }
-                }else
-                {
                     changeActivity();
-
-                }
-            }else
-            {
-
-                changeActivity();
-            }
 
         }
 
@@ -154,8 +172,12 @@ public class MainActivity extends Activity {
         btn_login = (Button) findViewById(R.id.login);
 
         account_phone = (EditText) findViewById(R.id.account_phone);
+        account_phone.addTextChangedListener(checkPhoneFormat);
+
         //account_phone.setText(token);
         account_password = (EditText)findViewById(R.id.account_password);
+        account_password.addTextChangedListener(checkIdentityFormat);
+
         if (!phone_number.isEmpty() && !password.isEmpty()) {
             account_phone.setText(phone_number);
             account_password.setText(password);
@@ -193,15 +215,29 @@ public class MainActivity extends Activity {
                 }else {
                     if(user ==null)
                     {
-                        user = new AccountInfo();
-                        user.setId(id);
-                        user.setPhoneNumber(phone_number);
-                        user.setPassword(password);
-                        String token = FirebaseInstanceId.getInstance().getToken();
-                        user.setRegisterToken(token);
+                        RealmUtil info = new RealmUtil(MainActivity.this);
+                        user = info.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+                        if(user == null) {
+                            //發現資料庫沒有資料，直接去跟Server下登入命令要資料
+                            user = new AccountInfo();
+                            user.setId(id);
+                            user.setPhoneNumber(phone_number);
+                            user.setPassword(password);
+                            String token = FirebaseInstanceId.getInstance().getToken();
+                            user.setRegisterToken(token);
+                            queryAccount();
+                        }else
+                        {
 
-                    }
-                    queryAccount();
+                            configSharedPreferences.edit().putString(getString(R.string.config_login_phone_number_key), user.getPhoneNumber()).commit();
+                            configSharedPreferences.edit().putString(getString(R.string.config_login_password_key), user.getPassword()).commit();
+
+                            //發現資料庫有資料直接登入
+                            changeActivity();
+                        }
+
+                    }else
+                       queryAccount();
 
                 }
             }
@@ -215,14 +251,60 @@ public class MainActivity extends Activity {
                 if(dialog == null)
                    dialog = ProgressDialog.show(MainActivity.this, "",
                         "Loading. Please wait...", true);
-                sendDataRequest.sendLoginRequest(user);
+                sendDataRequest.sendLoginRequest(user,false);
        //     }else
        //         alert(ERROR_USER_INFO);
        // }else
        //     alert(ERROR_NO_USER);
 
     }
+    private TextWatcher checkIdentityFormat= new TextWatcher() {
+        private CharSequence temp;
 
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            //判斷是否為身分證格式
+            if (!FormatUtils.isIdNoFormat(temp.toString())) {
+                //TODO:身份證錯誤處理
+                account_password.setError(getString(R.string.login_error_register_msg));
+            }
+        }
+
+
+    };
+
+    private TextWatcher checkPhoneFormat= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (s.length()<10 || s.length()>10) {
+                account_phone.setError(getString(R.string.login_error_register_msg));
+            }
+        }
+    };
     private void alert(int error)
     {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
@@ -295,5 +377,42 @@ public class MainActivity extends Activity {
         startActivity(intent);
         finish();
     }
+
+
+    private void checkStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if(permission != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_STORAGE: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    String filePath = Environment.getExternalStorageDirectory()+Constants.SDACRD_DIR_APP_ROOT;
+                    FileUtil.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+    }
+
 
 }

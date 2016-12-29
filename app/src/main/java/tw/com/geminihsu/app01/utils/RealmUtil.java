@@ -1,29 +1,40 @@
 package tw.com.geminihsu.app01.utils;
 
 import android.content.Context;
+import android.os.Environment;
+
+import java.io.File;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmResults;
+import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.common.Constants;
 
 /**
  * Created by geminihsu on 16/10/28.
  */
 public class RealmUtil {
+
+    private File EXPORT_REALM_PATH = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+    private String EXPORT_REALM_FILE_NAME = "App01.realm";
+
     private static  RealmUtil sIntance;
     public final Context mContext;
-    private String realmName = "realm_demo.realm";
     private Realm mRealm;
     public RealmUtil(Context mContext) {
+        File file = new File(Environment.getExternalStorageDirectory()+ Constants.SDACRD_DIR_APP_ROOT);
 
+        //if(!file.exists())
+         //   file.mkdir();
         this.mContext = mContext;
         mRealm = Realm.getInstance(
-                new RealmConfiguration.Builder(mContext)
-                        .name("data.realm")
+                new RealmConfiguration.Builder(file)
+                        .name(mContext.getString(R.string.app_database_name))
                         .build()
         );
     }
@@ -98,6 +109,7 @@ public class RealmUtil {
         accountInfo.setId(user.getId());
         accountInfo.setUid(user.getUid());
         accountInfo.setName(user.getName());
+        accountInfo.setLevel(user.getLevel());
         accountInfo.setPhoneNumber(user.getPhoneNumber());
         accountInfo.setIdentify(user.getIdentify());
         accountInfo.setPassword(user.getPassword());
@@ -106,6 +118,8 @@ public class RealmUtil {
         accountInfo.setRole(user.getRole());
         accountInfo.setAccessKey(user.getAccessKey());
         accountInfo.setRegisterToken(user.getRegisterToken());
+        accountInfo.setClient_ticket_id(user.getClient_ticket_id());
+        accountInfo.setDriver_ticket_id(user.getDriver_ticket_id());
         mRealm.copyToRealm(accountInfo);
         mRealm.commitTransaction();
     }
@@ -165,8 +179,10 @@ public class RealmUtil {
         normalOrder.setBegin_address(order.getBegin().getAddress());
         //normalOrder.setStop_address(order.getStop().getAddress());
         normalOrder.setEnd_address(order.getEnd().getAddress());
+        normalOrder.setCargo_type(order.getCargo_type());
         normalOrder.setCargo_size(order.getCargo_size());
         normalOrder.setCargo_imgs(order.getCargo_imgs());
+        normalOrder.setTimebegin(order.getTimebegin());
         normalOrder.setCar_special(order.getCar_special());
         normalOrder.setRemark(order.getRemark());
         normalOrder.setPrice(order.getPrice());
@@ -185,18 +201,59 @@ public class RealmUtil {
     public void updateAccount(AccountInfo user)
     {
         ///mRealm.beginTransaction();
-        AccountInfo accountInfo = mRealm.where(AccountInfo.class).equalTo("id", user.getId()).findFirst();
+        int new_Id = user.getId();
+        String new_uId = user.getUid();
+        String new_name = user.getName();
+        String new_phoneNumber = user.getPhoneNumber();
+        String new_Identify = user.getIdentify();
+        String new_password = user.getPassword();
+        String new_confirm_password = user.getPassword();
+        String new_recommend_id = user.getRecommend_id();
+        String new_level = user.getLevel();
+        String new_client_ticket_id = user.getClient_ticket_id();
+        String new_driver_ticket_id = user.getDriver_ticket_id();
+        int new_role = user.getRole();
+        String new_accessKey = user.getAccessKey();
+
+
+
+        AccountInfo accountInfo = mRealm.where(AccountInfo.class).equalTo(Constants.ACCOUNT_PHONE_NUMBER, user.getPhoneNumber()).findFirst();
         mRealm.beginTransaction();
-        accountInfo.setId(user.getId());
-        accountInfo.setName(user.getName());
-        accountInfo.setPhoneNumber(user.getPhoneNumber());
-        accountInfo.setIdentify(user.getIdentify());
-        accountInfo.setPassword(user.getPassword());
-        accountInfo.setConfirm_password(user.getConfirm_password());
-        accountInfo.setRecommend_id(user.getRecommend_id());
-        accountInfo.setRole(user.getRole());
-        accountInfo.setAccessKey(user.getAccessKey());
-        mRealm.copyToRealmOrUpdate(accountInfo);
+        if(accountInfo ==null){
+            AccountInfo account = mRealm.createObject(AccountInfo.class);
+            account.setUid(new_uId);
+            account.setId(new_Id);
+            account.setName(new_name);
+            account.setLevel(new_level);
+            account.setPhoneNumber(new_phoneNumber);
+            account.setIdentify(new_Identify);
+            account.setPassword(new_password);
+            account.setConfirm_password(new_confirm_password);
+            account.setRecommend_id(new_recommend_id);
+            account.setRole(new_role);
+            account.setAccessKey(new_accessKey);
+            account.setClient_ticket_id(new_client_ticket_id);
+            account.setDriver_ticket_id(new_driver_ticket_id);
+            account.setLevel(new_level);
+
+        }else{
+            accountInfo.setId(new_Id);
+            accountInfo.setUid(new_uId);
+            accountInfo.setName(new_name);
+            accountInfo.setLevel(new_level);
+            accountInfo.setPhoneNumber(new_phoneNumber);
+            accountInfo.setIdentify(new_Identify);
+            accountInfo.setPassword(new_password);
+            accountInfo.setConfirm_password(new_confirm_password);
+            accountInfo.setRecommend_id(new_recommend_id);
+            accountInfo.setRole(new_role);
+            accountInfo.setAccessKey(new_accessKey);
+            accountInfo.setClient_ticket_id(new_client_ticket_id);
+            accountInfo.setDriver_ticket_id(new_driver_ticket_id);
+
+            mRealm.copyToRealmOrUpdate(accountInfo);
+        }
+
         mRealm.commitTransaction();
     }
 
@@ -207,5 +264,13 @@ public class RealmUtil {
                 realm.clear(NormalOrder.class);
             }
         });
+    }
+
+    public Realm getmRealm() {
+        return mRealm;
+    }
+
+    public void setmRealm(Realm mRealm) {
+        this.mRealm = mRealm;
     }
 }

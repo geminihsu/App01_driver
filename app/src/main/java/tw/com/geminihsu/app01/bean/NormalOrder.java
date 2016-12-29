@@ -20,7 +20,9 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
     private String stop_address;
     private String end_address;
     private String cargo_size;
+    private String cargo_type;//** 1=一般搭乘,2=貨物快送,3=車站接送,4=機場快送
     private String cargo_imgs;
+    private String timebegin;//** 開始時間，請填入unix_timestamp，預約單加延遲
     private String car_special;
     private String remark;
     private String price;
@@ -212,5 +214,21 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
 
     public void setTarget(String target) {
         this.target = target;
+    }
+
+    public String getCargo_type() {
+        return cargo_type;
+    }
+
+    public void setCargo_type(String cargo_type) {
+        this.cargo_type = cargo_type;
+    }
+
+    public String getTimebegin() {
+        return timebegin;
+    }
+
+    public void setTimebegin(String timebegin) {
+        this.timebegin = timebegin;
     }
 }

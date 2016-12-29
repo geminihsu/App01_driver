@@ -137,6 +137,17 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_CLEAR_NOTIFICATION = "pid";
     public static final String APP_OBJECT_KEY_NOTIFICATION_ID = "id";
     public static final String APP_OBJECT_KEY_USER_REALNAME = "realname";
+    public static final String APP_OBJECT_KEY_USER_LEVEL = "level";
+    public static final String APP_OBJECT_KEY_USER_TREE = "tree";
+    public static final String APP_OBJECT_KEY_USER_CLIENT_TICKETS = "client_tickets";
+    public static final String APP_OBJECT_KEY_USER_DRIVER_TICKETS = "driver_tickets";
+
+    //get User tree information from sever
+    public static final String APP_OBJECT_KEY_USER_TREE_LV = "lv";
+    public static final String APP_OBJECT_KEY_USER_TREE_LAST_WATERING = "last_watering";
+    public static final String APP_OBJECT_KEY_USER_TREE_NEXT = "next";
+    public static final String APP_OBJECT_KEY_USER_TREE_STATUS = "status";
+
 
 
     //send user location json to server attribute

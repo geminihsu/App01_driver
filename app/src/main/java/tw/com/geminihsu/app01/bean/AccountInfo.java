@@ -3,14 +3,18 @@ package tw.com.geminihsu.app01.bean;
 import java.io.Serializable;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class AccountInfo extends RealmObject implements Cloneable ,Serializable {
     private static final long serialVersionUID = 8683739988249633893L;
 
+
     private int id;
     private String uid;
     private String name;
+    private String level;
     private String identify;
+    @PrimaryKey
     private String phoneNumber;
     private String password;
     private String confirm_password;
@@ -19,6 +23,9 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
     private String registerToken;
     private String accessKey;
 
+
+    private String client_ticket_id;
+    private String driver_ticket_id;
     //private DriverIdentifyInfo driverIdentifyInfo;
 
 
@@ -105,5 +112,29 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
 
     public void setAccessKey(String accessKey) {
         this.accessKey = accessKey;
+    }
+
+    public String getLevel() {
+        return level;
+    }
+
+    public void setLevel(String level) {
+        this.level = level;
+    }
+
+    public String getClient_ticket_id() {
+        return client_ticket_id;
+    }
+
+    public void setClient_ticket_id(String client_ticket_id) {
+        this.client_ticket_id = client_ticket_id;
+    }
+
+    public String getDriver_ticket_id() {
+        return driver_ticket_id;
+    }
+
+    public void setDriver_ticket_id(String driver_ticket_id) {
+        this.driver_ticket_id = driver_ticket_id;
     }
 }

@@ -60,6 +60,7 @@
     <string name="driver_login_page_title">司機登入</string>
     <!-- login page -->
     <string name="app_name">App01</string>
+    <string name="app_database_name">App01.realm</string>
     <string name="portal_login">Log In</string>
     <string name="portal_clean">Sign Out</string>
     <string name="login_id_title">*手機</string>
@@ -340,10 +341,11 @@
 
     <!-- VerifyCodeActivity Control Panel-->
     <string name="txt_verify_code">請輸入4碼簡訊驗證碼</string>
-    <string name="txt_verify_code_warm">驗證碼將於60秒後失效</string>
+    <string name="txt_verify_code_warm">驗證碼將於%s秒後失效</string>
     <string name="txt_verify_code_warm_qestion"><u>沒收到簡訊驗證碼嗎？</u></string>
     <string name="txt_verify_info">簡訊已發送</string>
     <string name="txt_new_password">請輸入新密碼</string>
+    <string name="txt_password_finish">密碼已更新</string>
 
 
     <!-- ClientTakeRideActivity Control Panel-->

@@ -38,6 +38,7 @@ import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.RegisterActivity;
 import tw.com.geminihsu.app01.VerifyCodeActivity;
 import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.AccountTreeInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
@@ -240,8 +241,26 @@ public class JsonPutsUtil {
                             user.setPassword(newPassword);
                             String token = FirebaseInstanceId.getInstance().getToken();
                             user.setRegisterToken(token);
+                            sendLoginRequest(user,false);
+                        }else{
+                            //更新資料庫裡面的密碼欄位
+                            AccountInfo new_user = new AccountInfo();
+                            new_user.setId(user.getId());
+                            new_user.setUid(user.getUid());
+                            new_user.setName(user.getName());
+                            new_user.setPhoneNumber(user.getPhoneNumber());
+                            new_user.setIdentify(user.getIdentify());
+                            new_user.setPassword(newPassword);
+                            new_user.setConfirm_password(newPassword);
+                            new_user.setRecommend_id(user.getRecommend_id());
+                            new_user.setRole(user.getRole());
+                            new_user.setAccessKey(user.getAccessKey());
+                            //user.setPassword(newPassword);
+                            realmUtil.updateAccount(new_user);
+                            sendLoginRequest(new_user,true);
                         }
-                        sendLoginRequest(user);
+
+
                         //if (mClientSmsVerifyDataManagerCallBackFunction !=null)
                         //    mClientSmsVerifyDataManagerCallBackFunction.reSendSMS(user);
 
@@ -304,9 +323,10 @@ public class JsonPutsUtil {
                     if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_VERIFY_CODE_SUCCESS))
                     {
 
-                        if (mClientSmsVerifyDataManagerCallBackFunction !=null)
-                            mClientSmsVerifyDataManagerCallBackFunction.verifyClient(user);
+                        //if (mClientSmsVerifyDataManagerCallBackFunction !=null)
+                         //  mClientSmsVerifyDataManagerCallBackFunction.verifyClient(user);
 
+                        sendLoginRequest(user,true);
 
 
                     }else
@@ -336,7 +356,7 @@ public class JsonPutsUtil {
 
     }
 
-    public void sendLoginRequest(final AccountInfo user)
+    public void sendLoginRequest(final AccountInfo user, final boolean isRegister)
     {
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         String versionName = BuildConfig.VERSION_NAME;
@@ -363,18 +383,50 @@ public class JsonPutsUtil {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    String accesskey = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY);
                     App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE connectResult =App01libObjectKey.conversion_login_verify_code_result(Integer.valueOf(status));
 
                     if(connectResult.equals(App01libObjectKey.APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE.K_APP_ACCOUNT_LOGIN_VERIFY_CODE_SUCCESS))
                     {
-                        user.setAccessKey(accesskey);
-                        getUserInfo(user);
+                        String accesskey = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY);
+                        RealmUtil realmUtil = new RealmUtil(mContext);
+                        AccountInfo userInfo = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,user.getPhoneNumber());
+                        if(userInfo!=null)
+                        {
+                            //更新資料庫裡面的密碼欄位
+                            AccountInfo new_user = new AccountInfo();
+                            new_user.setId(userInfo.getId());
+                            new_user.setUid(userInfo.getUid());
+                            new_user.setName(userInfo.getName());
+                            new_user.setPhoneNumber(userInfo.getPhoneNumber());
+                            new_user.setIdentify(userInfo.getIdentify());
+                            new_user.setPassword(userInfo.getPassword());
+                            new_user.setConfirm_password(userInfo.getConfirm_password());
+                            new_user.setRecommend_id(userInfo.getRecommend_id());
+                            new_user.setRole(userInfo.getRole());
+                            new_user.setAccessKey(accesskey);
+                            //user.setPassword(newPassword);
+                            realmUtil.updateAccount(new_user);
+                            if (mClientSmsVerifyDataManagerCallBackFunction !=null)
+                                mClientSmsVerifyDataManagerCallBackFunction.verifyClient(new_user);
+
+                        }else
+                        {
+                            user.setAccessKey(accesskey);
+                            if(isRegister) {
+                                realmUtil.addAccount(user);
+
+                                if (mClientSmsVerifyDataManagerCallBackFunction != null)
+                                    mClientSmsVerifyDataManagerCallBackFunction.verifyClient(user);
+                            }else
+                                getUserInfo(user);
+                        }
 
 
                     }else
                     {
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+                        if (mClientLoginDataManagerCallBackFunction != null)
+                            mClientLoginDataManagerCallBackFunction.loginError(true);
 
                         Toast.makeText(mContext,
                                 message,
@@ -429,11 +481,42 @@ public class JsonPutsUtil {
                         if(!datas.equals("null")){
                             //JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                             JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
-                            String id = data.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_ID);
+                            int id = Integer.valueOf(data.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_ID));
                             String did = data.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DID);
+                            String level = data.getString(App01libObjectKey.APP_OBJECT_KEY_USER_LEVEL);
+                            String realname = data.getString(App01libObjectKey.APP_OBJECT_KEY_USER_REALNAME);
+                            String client_ticket = data.optString(App01libObjectKey.APP_OBJECT_KEY_USER_CLIENT_TICKETS);
+                            String driver_ticket = data.optString(App01libObjectKey.APP_OBJECT_KEY_USER_DRIVER_TICKETS);
+                            JSONObject tree = data.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_USER_TREE);
 
-                            user.setUid(id);
+                            int tree_lv = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_LV);
+                            int tree_last_watering = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_LAST_WATERING);
+                            int tree_next = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_NEXT);
+                            int tree_status = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_STATUS);
+
+
+                            user.setUid(did);
+                            user.setId(id);
+                            user.setConfirm_password(user.getPassword());
+                            user.setLevel(level);
+                            user.setName(realname);
+                            user.setDriver_ticket_id(driver_ticket);
+                            user.setClient_ticket_id(client_ticket);
+
+                            AccountTreeInfo treeInfo = new AccountTreeInfo();
+                            treeInfo.setUser_id(user.getId());
+                            treeInfo.setUser_uid(""+user.getId());
+                            treeInfo.setUser_did(did);
+                            treeInfo.setAccesskey(user.getAccessKey());
+                            treeInfo.setUser_name(user.getName());
+                            treeInfo.setLv(tree_lv);
+                            treeInfo.setLast_watering(tree_last_watering);
+                            treeInfo.setNext(tree_next);
+                            treeInfo.setStatus(tree_status);
+
+
                             RealmUtil database = new RealmUtil(mContext);
+                            database.clearDB();
                             database.addAccount(user);
                             //設定檔顯示登入的帳號密碼
                             SharedPreferences  configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -449,7 +532,7 @@ public class JsonPutsUtil {
 
                             }else {
                                 if (mClientSmsVerifyDataManagerCallBackFunction !=null)
-                                    mClientSmsVerifyDataManagerCallBackFunction.reSendSMS(user);
+                                    mClientSmsVerifyDataManagerCallBackFunction.modifyPassword(user);
 
 
                                 if (mClientLoginDataManagerCallBackFunction != null)
@@ -466,6 +549,8 @@ public class JsonPutsUtil {
                         Toast.makeText(mContext,
                                 message,
                                 Toast.LENGTH_LONG).show();
+                        if (mClientLoginDataManagerCallBackFunction != null)
+                            mClientLoginDataManagerCallBackFunction.loginError(true);
 
                     }
 
@@ -598,7 +683,7 @@ public class JsonPutsUtil {
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, Constants.SERVER_URL, obj, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject jsonObject) {
-                Log.e(TAG, jsonObject.toString());
+                Log.e(TAG,"[getPushNotification]:"+ jsonObject.toString());
 
                 try {
                     // Parsing json object response
@@ -637,6 +722,11 @@ public class JsonPutsUtil {
                             }
                         }
                         Log.e(TAG, "get push!!!!");
+
+                    } else if (connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_EXPIRED))
+                    {
+                      //發現驗證失敗，所以重新登入
+                        sendLoginRequest(user,false);
 
                     } else {
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
@@ -906,7 +996,7 @@ public class JsonPutsUtil {
                     if (connectResult.equals(App01libObjectKey.APP_DRIVER_RECOMMEND_ORDER.K_APP_DRIVER_RECOMMEND_ORDER_SUCCESS)) {
                         Log.e(TAG, "get push!!!!");
                         String datas = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
-                        if(datas!=null)
+                        if(!datas.isEmpty())
                         {
                             JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                             String queryId="";
@@ -1338,6 +1428,10 @@ public class JsonPutsUtil {
                         int did = jsonObject.getInt(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DID);
                         driverIdentifyInfo.setDid(""+did);
                         RealmUtil database = new RealmUtil(mContext);
+                        AccountInfo user = database.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, driverIdentifyInfo.getName());
+                        user.setRole(Constants.Identify.BOTH.ordinal());
+                        database.updateAccount(user);
+
                         database.addDriverInfo(driverIdentifyInfo);
                         if (mServerRequestDataManagerCallBackFunction!=null)
                             mServerRequestDataManagerCallBackFunction.registerDriver(driverIdentifyInfo);
@@ -1825,6 +1919,7 @@ public class JsonPutsUtil {
     public interface ClientSmsVerifyDataManagerCallBackFunction {
         public void verifyClient(AccountInfo accountInfo);
         public void reSendSMS(AccountInfo accountInfo);
+        public void modifyPassword(AccountInfo accountInfo);
 
     }
 
@@ -1840,6 +1935,7 @@ public class JsonPutsUtil {
     public interface ClientLoginDataManagerCallBackFunction {
         public void loginClient(AccountInfo accountInfo);
         public void loginDriver(DriverIdentifyInfo driver);
+        public void loginError(boolean error);
 
     }
 

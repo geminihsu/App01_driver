@@ -24,30 +24,28 @@ public class Utility {
         mContext = context;
     }
 
-    public static boolean isBlankField(EditText etPersonData) {
-        return etPersonData.getText().toString().trim().equals("");
-    }
-
     public AccountInfo getAccountInfo() {
         SharedPreferences configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
         String phone_number = ConfigSharedPreferencesUtil.getUserName(mContext, configSharedPreferences);
         RealmUtil data = new RealmUtil(mContext);
-        AccountInfo accountInfo = data.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
+        AccountInfo accountInfo = null;
 
+        accountInfo = data.queryAccount(Constants.ACCOUNT_PHONE_NUMBER, phone_number);
         AccountInfo user = new AccountInfo();
-        user.setId(accountInfo.getId());
-        user.setUid(accountInfo.getUid());
-        user.setName(accountInfo.getName());
-        user.setPhoneNumber(accountInfo.getPhoneNumber());
-        user.setIdentify(accountInfo.getIdentify());
-        user.setPassword(accountInfo.getPassword());
-        user.setConfirm_password(accountInfo.getConfirm_password());
-        user.setRecommend_id(accountInfo.getRecommend_id());
-        user.setRole(accountInfo.getRole());
-        user.setAccessKey(accountInfo.getAccessKey());
-        user.setRegisterToken(accountInfo.getRegisterToken());
-
+        if(accountInfo!=null) {
+            user.setId(accountInfo.getId());
+            user.setUid(accountInfo.getUid());
+            user.setName(accountInfo.getName());
+            user.setPhoneNumber(accountInfo.getPhoneNumber());
+            user.setIdentify(accountInfo.getIdentify());
+            user.setPassword(accountInfo.getPassword());
+            user.setConfirm_password(accountInfo.getConfirm_password());
+            user.setRecommend_id(accountInfo.getRecommend_id());
+            user.setRole(accountInfo.getRole());
+            user.setAccessKey(accountInfo.getAccessKey());
+            user.setRegisterToken(accountInfo.getRegisterToken());
+        }
         return user;
     }
 
@@ -96,4 +94,10 @@ public class Utility {
         NormalOrder mOrder = new NormalOrder();
         return  orders;
       }
+
+    public void clearData(){
+        RealmUtil data = new RealmUtil(mContext);
+        data.clearDB();
     }
+
+}

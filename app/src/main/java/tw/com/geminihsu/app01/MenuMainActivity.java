@@ -15,8 +15,11 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
@@ -45,6 +48,7 @@ import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
 import tw.com.geminihsu.app01.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01.delegate.driver.MenuMainViewDelegateDriver;
 import tw.com.geminihsu.app01.service.App01Service;
+import tw.com.geminihsu.app01.utils.RealmBackupRestore;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
@@ -121,13 +125,14 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             requestPermissions(INITIAL_PERMS,INITIAL_REQUEST);
         }*/
 
-        if (canAccessLocation()) {
+        //RealmBackupRestore realmBackupRestore = new RealmBackupRestore(this);
+        //realmBackupRestore.backup();
+
+        if(!runtime_permissions()){
             Intent serviceIntent = new Intent(this, App01Service.class);
             bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
         }
-        else {
-            requestPermissions(LOCATION_PERMS, LOCATION_REQUEST);
-        }
+
     }
 
     @Override
@@ -137,6 +142,8 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         this.setLister();
 
     }
+
+
 
     private void findViews() {
 
@@ -275,9 +282,8 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (myLocalServiceConnection != null && MenuMainActivity.this!= null&&canAccessLocation() )
-             unbindService(myLocalServiceConnection);
-
+        myBinder.stopToGetNotifyInfo();
+        unbindService(myLocalServiceConnection);
     }
     // Call to update the share intent
     private void setShareIntent(Intent shareIntent) {
@@ -337,22 +343,27 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         Log.e(TAG,"Latitude:"+lat+",Longitude:"+lng);
     }
 
+    private boolean runtime_permissions() {
+        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
+
+            return true;
+        }
+        return false;
+    }
+
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        switch(requestCode) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == 100){
+            if( grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                Intent serviceIntent = new Intent(this, App01Service.class);
+                bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
 
-
-            case LOCATION_REQUEST:
-                if (canAccessLocation()) {
-                    //call service
-                    Intent serviceIntent = new Intent(this, App01Service.class);
-                    bindService(serviceIntent, myLocalServiceConnection, Context.BIND_AUTO_CREATE);
-
-                }
-                else {
-                    //bzzzt();
-                }
-                break;
+            }else {
+                runtime_permissions();
+            }
         }
     }
 
@@ -360,8 +371,13 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         return(hasPermission(Manifest.permission.ACCESS_FINE_LOCATION));
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+
+    @SuppressLint("NewApi")
     private boolean hasPermission(String perm) {
-        return(PackageManager.PERMISSION_GRANTED==checkSelfPermission(perm));
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            return (PackageManager.PERMISSION_GRANTED == checkSelfPermission(perm));
+        }else
+            return false;
     }
 }

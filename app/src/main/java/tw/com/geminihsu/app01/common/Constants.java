@@ -11,6 +11,9 @@ public class Constants {
 	/** <code>ARG_POSITION</code> ARG_POSITION*/
 	final public static String ARG_POSITION = "position";
 
+	/** <code>SDACRD_DIR_APP</code> */
+	final public static String SDACRD_DIR_APP_ROOT = "/App01/";
+
 	final public static String SERVER_URL= "http://app01.cumi.co/api";
 
 	final public static int CONTROL_PANNEL_MANUAL = 3;
@@ -83,6 +86,8 @@ public class Constants {
 		}
 		return null;
 	}
+
+
 }
 
 

@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,10 +30,13 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.realm.Realm;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.App01libObjectKey;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.FormatUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class RegisterActivity extends Activity {
@@ -50,15 +55,23 @@ public class RegisterActivity extends Activity {
     private EditText user_password_confirm;
     private EditText recommend_code;
 
+    private boolean isVerifyId,isVerifyPhone,isVerifyPassword;
+
     private Button verify;
     private CheckBox agree;
+    private boolean debug =true;
 
-    private static RequestQueue requestQueue;
     private JsonPutsUtil sendDataRequest;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_page_activity);
+        if(debug)
+        {
+            isVerifyId = true;
+            isVerifyPhone = true;
+            isVerifyPassword = true;
+        }
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
@@ -98,9 +111,12 @@ public class RegisterActivity extends Activity {
 
         user_name = (EditText) findViewById(R.id.id_name);
         user_id = (EditText) findViewById(R.id.identity);
+        user_id.addTextChangedListener(checkIdentityFormat);
         user_phone = (EditText) findViewById(R.id.user_phone);
+        user_phone.addTextChangedListener(checkPhoneFormat);
         user_password = (EditText) findViewById(R.id.user_password);
         user_password_confirm = (EditText) findViewById(R.id.edit_password_confirm);
+        user_password_confirm.addTextChangedListener(checkPassword);
         recommend_code = (EditText) findViewById(R.id.code);
 
     }
@@ -138,7 +154,13 @@ public class RegisterActivity extends Activity {
            @Override
            public void onClick(View v) {
 
-               if (checkColumn() && agree.isChecked()) {
+               if (checkColumn() && agree.isChecked()&&isVerifyPhone&&isVerifyPassword&&isVerifyId) {
+                   Utility info = new Utility(RegisterActivity.this);
+                   if(info.getAccountInfo()!=null)
+                   {
+                       //將就得資料清除
+                       info.clearData();
+                   }
                    final AccountInfo user = new AccountInfo();
                    user.setId(id);
                    user.setName(user_name.getText().toString());
@@ -164,6 +186,86 @@ public class RegisterActivity extends Activity {
         });
     }
 
+    private TextWatcher checkIdentityFormat= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            //判斷是否為身分證格式
+            if (!FormatUtils.isIdNoFormat(temp.toString())) {
+                //TODO:身份證錯誤處理
+                isVerifyId = false;
+                user_id.setError(getString(R.string.login_error_register_msg));
+            }else
+                isVerifyId =true;
+        }
+
+
+    };
+
+    private TextWatcher checkPhoneFormat= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            /*if (!FormatUtils.isPhoneNumberValid(temp.toString())) {
+                user_phone.setError(getString(R.string.login_error_register_msg));
+                isVerifyPhone = false;
+            }else
+                isVerifyPhone = true;*/
+        }
+
+
+    };
+
+    private TextWatcher checkPassword= new TextWatcher() {
+        private CharSequence temp;
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!FormatUtils.isConfirmPassword(temp.toString(),user_password.getText().toString())) {
+                user_password_confirm.setError(getString(R.string.login_error_register_msg));
+                isVerifyPassword = false;
+            }else
+                isVerifyPassword = true;
+        }
+
+
+    };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -179,7 +281,7 @@ public class RegisterActivity extends Activity {
 
     private boolean checkColumn(){
         //check column not null
-        if (!Utility.isBlankField(user_name) && !Utility.isBlankField(user_id) && !Utility.isBlankField(user_phone) && !Utility.isBlankField(user_password) && !Utility.isBlankField(user_password_confirm) )
+        if (!FormatUtils.isBlankField(user_name) && !FormatUtils.isBlankField(user_id) && !FormatUtils.isBlankField(user_phone) && !FormatUtils.isBlankField(user_password) && !FormatUtils.isBlankField(user_password_confirm) )
             {
             //make sure user password the same as user password confirm
             if(user_password.getText().toString().equals(user_password_confirm.getText().toString())) {

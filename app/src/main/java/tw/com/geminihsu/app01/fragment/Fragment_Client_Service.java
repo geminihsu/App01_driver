@@ -25,6 +25,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -93,6 +94,7 @@ public class Fragment_Client_Service extends Fragment {
         mapView.onCreate(savedInstanceState);
         //setMapView(37.37044279,-122.00614899);
 
+        googleMap = mapView.getMap();
         if(!runtime_permissions())
         {
             setMapView(37.37044279,-122.00614899);
@@ -105,8 +107,8 @@ public class Fragment_Client_Service extends Fragment {
         super.onStart();
         this.findViews();
         setLister();
-        //if(getCurrentGPSLocationBroadcastReceiver!=null)
-          //  getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
+        if(getCurrentGPSLocationBroadcastReceiver!=null)
+            getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
 
 
     }
@@ -117,10 +119,14 @@ public class Fragment_Client_Service extends Fragment {
 
             googleMap = mapView.getMap();
 
-            /*googleMap.addMarker(new MarkerOptions()
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_communication_location_on))
-                    .anchor(0.0f, 1.0f)
-                    .position(new LatLng(latitude, longitude)));*/
+            //Creating a LatLng Object to store Coordinates
+            LatLng latLng = new LatLng(latitude, longitude);
+
+            //Adding marker to map
+            googleMap.addMarker(new MarkerOptions()
+                    .position(latLng) //setting position
+                    .draggable(true) //Making the marker draggable
+                    .title("Current Location")); //Adding a title
             googleMap.getUiSettings().setMyLocationButtonEnabled(false);
 
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -133,9 +139,6 @@ public class Fragment_Client_Service extends Fragment {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            //Creating a LatLng Object to store Coordinates
-            LatLng latLng = new LatLng(latitude, longitude);
-
             googleMap.setMyLocationEnabled(true);
             googleMap.getUiSettings().setZoomControlsEnabled(true);
             MapsInitializer.initialize(getActivity());
@@ -146,6 +149,7 @@ public class Fragment_Client_Service extends Fragment {
             googleMap.animateCamera(CameraUpdateFactory.zoomTo(17));
         }
     }
+
     @Override
     public void onResume() {
         getActivity().setTitle("");
@@ -165,14 +169,16 @@ public class Fragment_Client_Service extends Fragment {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                if(!test) {
+              //  if(!test) {
                     // textView.append("\n" +intent.getExtras().get("coordinates"));
+                if (intent.getExtras().containsKey("longitude")) {
                     double longitude = (double) intent.getExtras().get("longitude");
                     double latitude = (double) intent.getExtras().get("latitude");
                     googleMap.clear();
                     setMapView(longitude, latitude);
-                    test=true;
+                    //test = true;
                 }
+               // }
             }
         };
     }
@@ -188,8 +194,10 @@ public class Fragment_Client_Service extends Fragment {
     @Override
 	public void onStop() {
 		super.onStop();
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
-
+        if (getCurrentGPSLocationBroadcastReceiver != null&&getCurrentGPSLocationBroadcastReceiver.isOrderedBroadcast()){
+            getActivity().unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
+            getCurrentGPSLocationBroadcastReceiver=null;
+        }
 
     }
 
@@ -347,5 +355,15 @@ public class Fragment_Client_Service extends Fragment {
         return false;
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 100) {
 
+            setMapView(37.37044279,-122.00614899);
+        } else {
+            runtime_permissions();
+            // }
+        }
+    }
 }
