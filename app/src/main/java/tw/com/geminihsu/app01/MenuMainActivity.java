@@ -87,6 +87,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             Utility info = new Utility(MenuMainActivity.this);
             myBinder = ((App01Service.App01ServiceServiceBinder) service).getService(info.getAccountInfo());
             //myBinder.setUserInfo(user);
+            myBinder.requestServerContentDetail();
             myBinder.startToGetPutNotify();
             myBinder.App01ServiceCheckGPS();
         }

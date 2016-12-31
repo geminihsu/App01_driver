@@ -33,6 +33,9 @@ public class Constants {
 
 	public static final int DEPARTURE_QUERY_GPS = 3;
 	public static final int DESTINATION_QUERY_GPS = 4;
+	public static final int DESTINATION_QUERY_BOOKMARK = 5;
+	public static final int DEPARTURE_QUERY_BOOKMARK = 6;
+	public static final int DISPLAY_USER_LOCATION = 7;
 	public static final String BUNDLE_LOCATION = "map";
 	public static final String BUNDLE_MAP_LATITUDE = "latitude";
 	public static final String BUNDLE_MAP_LONGITUDE = "longitude";
@@ -46,8 +49,11 @@ public class Constants {
 	public final static String ACCOUNT_DRIVER_UID = "uid";// from
 
 	public final static String ORDER_TICKET_ID = "ticket_id";// from
+	public final static String ORDER_TICKET_STATUS = "ticket_status";// from
+
 	public final static String SERVER_CONTENT_CODE = "code";// from
 
+	public final static String SERVER_SPECIAL = "dtype";// from
 
 	public enum APP_REGISTER_DRIVER_TYPE
 	{

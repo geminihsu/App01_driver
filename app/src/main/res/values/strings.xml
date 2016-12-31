@@ -46,6 +46,7 @@
     <string name="driver_price_report_title">司機報價中</string>
     <string name="driver_price_report_check_title">司機資訊</string>
     <string name="driver_comment_title">司機評分</string>
+    <string name="client_comment_title">客戶評分</string>
     <string name="driver_report">檢舉司機</string>
     <string name="app_report">APP評分</string>
     <string name="merchandise_calculator">才數計算機</string>
@@ -130,8 +131,10 @@
     <string name="service_pick_up_train">車站接送</string>
     <string name="service_pick_up_airplane">機場接送</string>
     <string name="service_taxi">計程車</string>
-    <string name="service_truck">貨車</string>
-    <string name="service_big_truck">貨櫃車</string>
+    <string name="service_uber">Uber</string>
+    <string name="service_truck">小貨車</string>
+    <string name="service_big_truck">大貨車</string>
+    <string name="service_trailer">連結車</string>
 
 
 
@@ -296,6 +299,14 @@
     <string name="order_change_fee">修改價錢：</string>
     <string name="order_change_fee_msg">提出修改後的價錢</string>
     <string name="order_change_fee_edit">$:</string>
+    <string name="order_finish_make_sure_title">完成訂單</string>
+    <string name="order_finish_make_sure_content">確定要將此訂單結案?</string>
+    <string name="order_finish_make_sure_ok">確定完成</string>
+    <string name="order_finish_make_sure_cancel">取消完成</string>
+
+    <string name="order_finish_title">訂單處理</string>
+    <string name="order_finish_ok">操作成功</string>
+
     <!-- MerchandiseOrderActivity Control Panel-->
     <string name="merchandise_comment">查看評價</string>
     <string name="merchant">發貨方</string>

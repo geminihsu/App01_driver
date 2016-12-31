@@ -13,6 +13,13 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.serverbean.ServerCarbrand;
+import tw.com.geminihsu.app01.serverbean.ServerContents;
+import tw.com.geminihsu.app01.serverbean.ServerCountys;
+import tw.com.geminihsu.app01.serverbean.ServerDriverType;
+import tw.com.geminihsu.app01.serverbean.ServerImageType;
+import tw.com.geminihsu.app01.serverbean.ServerSpecial;
 
 /**
  * Created by Shreya Kotak on 04/05/16.
@@ -95,9 +102,28 @@ public class Utility {
         return  orders;
       }
 
+    public RealmResults<NormalOrder> getWaitOrderList() {
+
+        RealmUtil data = new RealmUtil(mContext);
+        RealmResults<NormalOrder> orders= data.queryOrderList(Constants.ORDER_TICKET_STATUS, "1");
+
+        return  orders;
+    }
+
     public void clearData(final Class table){
         RealmUtil data = new RealmUtil(mContext);
         data.clearDB(table);
     }
 
+    public void clearServerInfoData(){
+        RealmUtil data = new RealmUtil(mContext);
+        data.clearDB(ServerBookmark.class);
+        data.clearDB(ServerCarbrand.class);
+        data.clearDB(ServerCountys.class);
+        data.clearDB(ServerDriverType.class);
+        data.clearDB(ServerImageType.class);
+        data.clearDB(ServerContents.class);
+        data.clearDB(ServerSpecial.class);
+
+    }
 }

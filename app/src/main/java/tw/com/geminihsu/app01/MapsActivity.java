@@ -87,6 +87,11 @@ public class MapsActivity extends FragmentActivity implements
         if(args!=null)
             provide_location = args.getInt(Constants.ARG_POSITION);
 
+        if(provide_location == Constants.DISPLAY_USER_LOCATION)
+        {
+            longitude = args.getDouble("lng");
+            latitude = args.getDouble("lat");
+        }
     }
 
     @Override
@@ -108,6 +113,14 @@ public class MapsActivity extends FragmentActivity implements
             //moving the map to location
             moveMap();
         }
+    }
+
+    //Getting current location
+    private void displayUserLocation() {
+        mMap.clear();
+
+        moveMap();
+
     }
 
     //Function to move the map
@@ -169,7 +182,10 @@ public class MapsActivity extends FragmentActivity implements
 
     @Override
     public void onConnected(Bundle bundle) {
-        getCurrentLocation();
+        if(provide_location != Constants.DISPLAY_USER_LOCATION)
+          getCurrentLocation();
+        else
+            displayUserLocation();
     }
 
     @Override

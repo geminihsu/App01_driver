@@ -46,8 +46,8 @@ public class MenuMainViewDelegateDriver extends MenuMainViewDelegateBase {
 		//menu.findItem(R.id.navigation_item_order_record).setVisible(true);
 		menu.findItem(R.id.navigation_item_begin).setVisible(true);
 		//menu.findItem(R.id.navigation_item_order_filter).setVisible(true);
-		//menu.findItem(R.id.navigation_item_wait).setVisible(true);
-		menu.findItem(R.id.navigation_item_order_past).setVisible(true);
+		menu.findItem(R.id.navigation_item_wait).setVisible(true);
+		//menu.findItem(R.id.navigation_item_order_past).setVisible(true);
 		menu.findItem(R.id.navigation_item_logOut).setVisible(true);
 
 	}

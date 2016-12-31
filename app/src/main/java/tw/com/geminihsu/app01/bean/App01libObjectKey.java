@@ -33,6 +33,9 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_FINISH_ORDER = "t_finish";
     public static final String APP_OBJECT_KEY_PUTS_COMMENT_ORDER = "t_assess";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_RECOMMEND_ORDER = "t_match";
+    public static final String APP_OBJECT_KEY_PUTS_ACCOUNT_COMMENT = "m_get_assess";
+    public static final String APP_OBJECT_KEY_PUTS_DRIVER_LOCATION = "m_get_location";
+
 
     public static final String APP_OBJECT_KEY_PUTS_CONTENT_DETAIL = "c_get_all";
 
@@ -109,12 +112,19 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_ORDER_BEG = "beg";
     public static final String APP_OBJECT_KEY_ORDER_STOP = "stop";
     public static final String APP_OBJECT_KEY_ORDER_END = "end";
+    public static final String APP_OBJECT_KEY_ORDER_CARGO_TYPE = "cargo_type";
     public static final String APP_OBJECT_KEY_ORDER_CARGO_SIZE= "cargo_size";
     public static final String APP_OBJECT_KEY_ORDER_CARGO_IMAGES = "cargo_imgs";
     public static final String APP_OBJECT_KEY_ORDER_CARGO_SPECIAL = "car_special";
+    public static final String APP_OBJECT_KEY_ORDER_TIME_BEGIN = "timebegin";
     public static final String APP_OBJECT_KEY_ORDER_REMARK = "remark";
     public static final String APP_OBJECT_KEY_ORDER_PRICE = "price";
     public static final String APP_OBJECT_KEY_ORDER_TIP = "tip";
+    public static final String APP_OBJECT_KEY_ORDER_STATUS = "status";
+    public static final String APP_OBJECT_KEY_ORDER_STATUS_CHT = "status_cht";
+    public static final String APP_OBJECT_KEY_ORDER_TIMEBEGIN = "timebegin";
+    public static final String APP_OBJECT_KEY_ORDER_CLIENT = "client";
+
 
     //send create normal order beg json to server attribute
     public static final String APP_OBJECT_KEY_ORDER_LAT = "lat";
@@ -122,16 +132,25 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_ORDER_ZIPCODE = "zipcode";
     public static final String APP_OBJECT_KEY_ORDER_ADDRESS = "address";
 
+    //received normal order address attribute
+    public static final String APP_OBJECT_KEY_QUERY_ORDER_LATLNG = "latlng";//經緯度以逗號隔開
+    public static final String APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE = "zipcode";
+    public static final String APP_OBJECT_KEY_QUERY_ORDER_ADDRESS = "address";
+
+
     //received json from server attribute
     public static final String APP_OBJECT_KEY_ACCOUNT_INFO_STATUS = "status";
     public static final String APP_OBJECT_KEY_DEVICE_INFO_MESSAGE = "message";
     public static final String APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE = "datas";
     public static final String APP_OBJECT_KEY_NOTIFICATION_INFO_TICKET_ID = "ticket_id";
+    public static final String APP_OBJECT_KEY_NOTIFICATION_INFO_TYPE = "type";
     public static final String APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY = "accesskey";
     public static final String APP_OBJECT_KEY_UID = "uid";
+    public static final String APP_OBJECT_KEY_CLIENT_UID = "client_uid";
     public static final String APP_OBJECT_KEY_UPLOAD_FILE_ID = "file_id";
     public static final String APP_OBJECT_KEY_UPLOAD_FILE_URL = "file_url";
     public static final String APP_OBJECT_KEY_DRIVER_DID = "did";
+    public static final String APP_OBJECT_KEY_DRIVER_DRIVER_DID = "driver_did";
     public static final String APP_OBJECT_KEY_DRIVER_TICKET_ID = "ticket_id";
     public static final String APP_OBJECT_KEY_SEND_NOTIFICATION_MESSAGE = "message";
     public static final String APP_OBJECT_KEY_SEND_ORDER_COMMENT_SCORE = "stars";
@@ -197,6 +216,12 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_UPLOAD_GPS_ACCESSKEY = "accesskey";
     public static final String APP_OBJECT_KEY_UPLOAD_GPS_LONGITUDE = "lat";
     public static final String APP_OBJECT_KEY_UPLOAD_GPS_LATITUDE = "lng";
+
+    //send request user location json to server attribute
+    public static final String APP_OBJECT_KEY_GET_USER_GPS_USERNAME = "username";
+    public static final String APP_OBJECT_KEY_GET_USER_ACCESSKEY = "accesskey";
+    public static final String APP_OBJECT_KEY_GET_USER_UID = "uid";
+
 
 
     public enum APP_REGISTER_RESPONSE_CODE

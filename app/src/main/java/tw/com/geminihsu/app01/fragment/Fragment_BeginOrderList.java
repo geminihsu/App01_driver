@@ -17,6 +17,7 @@ package tw.com.geminihsu.app01.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -45,6 +46,7 @@ import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class Fragment_BeginOrderList extends Fragment {
@@ -58,6 +60,9 @@ public class Fragment_BeginOrderList extends Fragment {
     private boolean wait = false;
     private int option;
     private JsonPutsUtil sendDataRequest;
+    private ProgressDialog progressDialog_loading;
+    private ArrayList<NormalOrder> orders;
+    private RealmUtil database;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -77,6 +82,7 @@ public class Fragment_BeginOrderList extends Fragment {
     public void onStart() {
         super.onStart();
         this.findViews();
+        orders = new ArrayList<NormalOrder>();
         sendDataRequest = new JsonPutsUtil(getActivity());
         sendDataRequest.setDriverRequestTakeOverOrderManagerCallBackFunction(new JsonPutsUtil.DriverRequestTakeOverOrderManagerCallBackFunction() {
 
@@ -87,24 +93,71 @@ public class Fragment_BeginOrderList extends Fragment {
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.PASSENGER);
                 b.putString(BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
+               // b.putSerializable(BUNDLE_ORDER_TICKET, order);
                 question.putExtras(b);
                 startActivity(question);
+            }
+        });
+        sendDataRequest.setDriverRecommendationOrderListManagerCallBackFunction(new JsonPutsUtil.DriverRecommendationOrderListManagerCallBackFunction() {
+
+            @Override
+            public void getWaitOrderListSuccess(RealmResults<NormalOrder> orders) {
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading=null;
+                }
+                getDataFromServer(orders);
+                listViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void getOrderListSuccess(RealmResults<NormalOrder> orders) {
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading=null;
+                }
+                getDataFromServer(orders);
+                listViewAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void getOrderListFail(boolean error) {
+                if(error)
+                {
+                    if(progressDialog_loading!=null) {
+                        progressDialog_loading.dismiss();
+                        progressDialog_loading=null;
+                    }
+                }
             }
         });
         Bundle data=getArguments();
         if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
         {
-            //if(data.getBoolean(Constants.ARG_POSITION)==true)
-            //    wait=true;
-           // else
+            if(data.getBoolean(Constants.ARG_POSITION)==true)
+                wait=true;
+             else
                 option=data.getInt(Constants.ARG_POSITION);
 
         }
-
+        database = new RealmUtil(getActivity());
         Utility info = new Utility(getActivity());
-        if(info.getDriverAccountInfo()!=null)
-            sendDataRequest.queryRecommendOrderList(info.getDriverAccountInfo());
-        getDataFromDB();
+        //if(info.getDriverAccountInfo()!=null&&!data.getBoolean(Constants.ARG_POSITION)) {
+         if(!wait) {
+             progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                     "Loading. Please wait...", true);
+             info.clearData(NormalOrder.class);
+             sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+         }else {
+             if(progressDialog_loading==null) {
+                 progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                         "Loading. Please wait...", true);
+             }
+
+             info.clearData(NormalOrder.class);
+             sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
+            //getDataFromDB();
+        }
         // 建立ListItemAdapter
         listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
@@ -129,6 +182,7 @@ public class Fragment_BeginOrderList extends Fragment {
 
     }
 
+
     private void  setLister()
     {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -149,6 +203,7 @@ public class Fragment_BeginOrderList extends Fragment {
                         else
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
                         b.putString(BUNDLE_ORDER_TICKET_ID,orderItem.order.getTicket_id());
+                        b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
                         question.putExtras(b);
                         startActivity(question);
                     }
@@ -160,7 +215,7 @@ public class Fragment_BeginOrderList extends Fragment {
                     @Override
                     public void onClick(View v) {
 
-                        //if (!wait){
+                        if (!wait){
                          //   if (order.order_title.equals("一般搭乘(小費:50元)")) {
                                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
                                 // set title
@@ -223,17 +278,18 @@ public class Fragment_BeginOrderList extends Fragment {
 
                                 dialog.show();
                             }*/
-                     /*}else
+                     }else
                         {
                             Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                             Bundle b = new Bundle();
-                            if(order.order_title.equals("一般搭乘(小費:50元)"))
+                            if(orderItem.order.getDtype().equals("1"))
                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                             else
                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
+                            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
                             question.putExtras(b);
                             startActivity(question);
-                        }*/
+                        }
                     }
 
                 });
@@ -245,8 +301,21 @@ public class Fragment_BeginOrderList extends Fragment {
     @Override
 	public void onStop() {
 		super.onStop();
-
+        if(progressDialog_loading!=null) {
+            progressDialog_loading.dismiss();
+            progressDialog_loading =null;
+        }
 	}
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        if(progressDialog_loading!=null) {
+            progressDialog_loading.dismiss();
+            progressDialog_loading =null;
+        }
+    }
 
 
     @Override
@@ -273,11 +342,11 @@ public class Fragment_BeginOrderList extends Fragment {
     }
 
 
-    /* 從 xml 取得 OrderRecord 清單 */
+    /* 從 table 取得 OrderRecord 清單 */
     private void getDataFromDB() {
 
         Utility orders = new Utility(getActivity());
-        RealmResults<NormalOrder> data=orders.getAccountOrderList();
+        RealmResults<NormalOrder> data=orders.getWaitOrderList();
         mRecordOrderListData.clear();
         try {
             // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
@@ -324,6 +393,39 @@ public class Fragment_BeginOrderList extends Fragment {
                 beginOrderListItem.destination = "到:"+order.getEnd_address();
                 beginOrderListItem.order=order;
 
+
+                {
+                    beginOrderListItem.order_time = "2015-12-08 上午07:04";
+                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                    beginOrderListItem.button_take_look_visible = View.GONE;
+
+                }
+                mRecordOrderListData.add(beginOrderListItem);
+            }
+
+        } catch (Throwable t) {
+            Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /* 從 xml 取得 OrderRecord 清單 */
+    private void getDataFromServer(RealmResults<NormalOrder> orders) {
+
+        mRecordOrderListData.clear();
+        try {
+            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
+            // GeoDeviceManagement.deviceList.clear();
+
+          /*  for (int i = 0; i < 10; i++) {
+                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
+                if(i%2==0)
+                    beginOrderListItem.order_title = "一般搭乘(小費:50元)";
+                else
+                    beginOrderListItem.order_title = "貨物快送(小費:80元)";
+                beginOrderListItem.departure = "從:台中市大道一段1號";
+                beginOrderListItem.destination = "到:台中市政府";
+
+
                 if(!wait) {
                     if(option==0)
                         beginOrderListItem.order_time = "即時";
@@ -339,12 +441,44 @@ public class Fragment_BeginOrderList extends Fragment {
 
                 }
                 mRecordOrderListData.add(beginOrderListItem);
+            }*/
+
+            for (NormalOrder order: orders) {
+                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
+                //if(i%2==0)
+                OrderRecordListItem item = new OrderRecordListItem();
+                Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)) {
+                    beginOrderListItem.order_title = "貨物快送(費用:" + order.getPrice() + "元)";
+                }
+                else
+                    beginOrderListItem.order_title = "一般搭乘(照表收費)";
+                beginOrderListItem.departure = "從:"+order.getBegin_address();
+                beginOrderListItem.destination = "到:"+order.getEnd_address();
+                beginOrderListItem.order=order;
+
+                if(!wait) {
+                    if(option==0)
+                        beginOrderListItem.order_time = "即時";
+                    else
+                        beginOrderListItem.order_time = "2015/12/08 上午07:04";
+                    beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
+                    beginOrderListItem.button_take_look_visible = View.VISIBLE;
+                }else
+                {
+                    beginOrderListItem.order_time = "訂單狀態：進行中";
+                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                    beginOrderListItem.button_take_look_visible = View.GONE;
+
+                }
+                mRecordOrderListData.add(beginOrderListItem);
             }
 
         } catch (Throwable t) {
             Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 }

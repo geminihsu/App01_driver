@@ -392,9 +392,7 @@ public class MainActivity extends Activity {
 
                     String filePath = Environment.getExternalStorageDirectory()+Constants.SDACRD_DIR_APP_ROOT;
                     FileUtil.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑
-                    Utility data = new Utility(this);
-                    data.clearData(ServerContents.class);
-                    sendDataRequest.sendRequestServerContentDetail();
+
                 } else {
 
                     // permission denied, boo! Disable the

@@ -2,15 +2,21 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -19,10 +25,12 @@ import java.util.List;
 import java.util.Locale;
 
 import io.realm.RealmResults;
+import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BookmarkListItem;
 import tw.com.geminihsu.app01.adapter.BookmarkListItemAdapter;
 import tw.com.geminihsu.app01.adapter.RecommendListItem;
 import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
+import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 
@@ -31,11 +39,9 @@ public class BookmarksMapListActivity extends Activity {
     private ListView listView;
     private final List<BookmarkListItem> mBookmarkListData = new ArrayList<BookmarkListItem>();;
     private BookmarkListItemAdapter listViewAdapter;
+    private int provide_location;
 
-    private int MAXSIZE=3;
 
-
-    private int choice = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +58,10 @@ public class BookmarksMapListActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
-        getDataFromDB();
-        listViewAdapter = new BookmarkListItemAdapter(BookmarksMapListActivity.this, 0, mBookmarkListData);
-        listView.setAdapter(listViewAdapter);
-        listViewAdapter.notifyDataSetChanged();
-
-
+        setLister();
+        Bundle args = getIntent().getExtras();
+        if(args!=null)
+            provide_location = args.getInt(Constants.ARG_POSITION);
 
 
 
@@ -68,18 +72,53 @@ public class BookmarksMapListActivity extends Activity {
         listView = (ListView)findViewById(R.id.listView1);
         getDataFromDB();
 
+
+
+    }
+
+
+    private void setLister()
+    {
         listViewAdapter = new BookmarkListItemAdapter(BookmarksMapListActivity.this, 0, mBookmarkListData);
 
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
 
-    }
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, final int position, long id) {
+
+                final BookmarkListItem orderItem = mBookmarkListData.get(position);
+
+                final ServerBookmark info = orderItem.bookmark;
+
+                final RadioButton select = (RadioButton) v.findViewById(R.id.title);
+
+                orderItem.check=!orderItem.check;
+                if(orderItem.check) {
+                    ServerBookmark bookmark = new ServerBookmark();
+                    bookmark.setId(info.getId());
+                    bookmark.setLat(info.getLat());
+                    bookmark.setLng(info.getLng());
+                    bookmark.setLocation(info.getLocation());
+                    bookmark.setStreetAddress(info.getStreetAddress());
 
 
+                    Intent i = new Intent();
+                    Bundle b = new Bundle();
+                    b.putSerializable(Constants.BUNDLE_LOCATION, bookmark);
+                    i.putExtras(b);
+                    if (provide_location == Constants.DEPARTURE_QUERY_BOOKMARK)
+                        setResult(Constants.DEPARTURE_QUERY_BOOKMARK, i);
+                    else if (provide_location == Constants.DESTINATION_QUERY_BOOKMARK)
+                        setResult(Constants.DESTINATION_QUERY_BOOKMARK, i);
 
-    private void displayLayout()
-    {
+                }
+                mBookmarkListData.set(position,orderItem);
+                listViewAdapter.notifyDataSetChanged();
 
+
+            }
+        });
     }
 
     @Override
@@ -109,22 +148,12 @@ public class BookmarksMapListActivity extends Activity {
                 // for listview 要用的資料
                 BookmarkListItem item = new BookmarkListItem();
 
-                if(i==0)
-                    item.check=true;
-                else
-                    item.check=false;
+
                 item.book_title = bookmarks.get(i).getLocation()+":\t";
 
-                List<Address> addresses = null;
+                 item.book_address =bookmarks.get(i).getStreetAddress();
 
-                Geocoder gc = new Geocoder(this, Locale.getDefault());
-                try {
-                    addresses = gc.getFromLocation(Double.parseDouble(bookmarks.get(i).getLat()), Double.parseDouble(bookmarks.get(i).getLng()), 10);
-                } catch (IOException e) {}
-
-
-                item.book_address =addresses.get(0).getAddressLine(0);
-
+                item.bookmark = bookmarks.get(i);
                 mBookmarkListData.add(item);
 
 

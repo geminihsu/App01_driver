@@ -10,6 +10,7 @@ public class LocationAddress implements Cloneable ,Serializable {
     private static final long serialVersionUID = 7318969003680718433L;
     private double longitude;
     private double latitude;
+    private String location;
     private String address;
 
     public double getLongitude() {
@@ -34,6 +35,15 @@ public class LocationAddress implements Cloneable ,Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public LocationAddress clone()  {

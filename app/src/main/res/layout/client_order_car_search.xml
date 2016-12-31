@@ -50,7 +50,7 @@
                 android:layout_centerHorizontal="true"
                 android:textStyle="bold"
                 android:textSize="@dimen/default_text_address_size_sp"
-                android:text="已通知\n2輛車"
+                android:text=""
                 android:textColor="@color/btn_bouns_record"
                 />
             <TextView
@@ -81,6 +81,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:paddingTop="20dp"
+            android:visibility="gone"
             >
 
             <TextView

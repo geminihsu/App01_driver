@@ -77,13 +77,8 @@ public class OrderProcesssActivity extends Activity {
 
             @Override
             public void driverFinishOrder(NormalOrder order) {
-                //doneAlert();
-                Intent question = new Intent(OrderProcesssActivity.this, DriverCommentActivity.class);
-                Bundle b = new Bundle();
-                b.putString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
-                b.putInt(DriverCommentActivity.BUNDLE_CLIENT,DriverCommentActivity.CLIENT_COMMENT);
-                question.putExtras(b);
-                startActivity(question);
+                finishOrder();
+
             }
         });
 
@@ -98,8 +93,12 @@ public class OrderProcesssActivity extends Activity {
         if (bundle != null) {
             option=bundle.getInt(Constants.ARG_POSITION);
             ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
-            RealmUtil info = new RealmUtil(OrderProcesssActivity.this);
-            order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+            order = (NormalOrder)bundle.getSerializable(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET);
+
+            if(order==null) {
+                RealmUtil info = new RealmUtil(OrderProcesssActivity.this);
+                order = info.queryOrder(Constants.ORDER_TICKET_ID, ticket_id);
+            }
             displayLayout();
         }
         else
@@ -144,8 +143,12 @@ public class OrderProcesssActivity extends Activity {
         if(option == PASSENGER)
         {
             send_method.setText("一般載客");
-            payment.setText("照表收費");
-            date.setText(order.getOrderdate());
+            if(order.getDtype().equals("1"))
+                payment.setText("跳表計費");
+            else
+            payment.setText("價格:"+order.getPrice()+"元\t小費" +
+                    ":"+order.getTip()+"元");
+            date.setText("即時");
             from.setText(order.getBegin_address());
             location.setText(order.getEnd_address());
             linearLayout_change_price.setVisibility(View.GONE);
@@ -268,7 +271,31 @@ public class OrderProcesssActivity extends Activity {
         @Override
         public void onClick(View v) {
 
-            sendDataRequest.driverFinishOrder(order);
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(OrderProcesssActivity.this);
+            // set title
+            alertDialogBuilder.setTitle(getString(R.string.order_finish_make_sure_title));
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(getString(R.string.order_finish_make_sure_content))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.order_finish_make_sure_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            // if this button is clicked, close
+                            sendDataRequest.driverFinishOrder(order);
+                        }
+                    })
+                    .setNegativeButton(getString(R.string.order_finish_make_sure_cancel), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+
+                        }
+                    });
+            // create alert dialog
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            // show it
+            alertDialog.show();
+
 
 
         }
@@ -360,6 +387,29 @@ public class OrderProcesssActivity extends Activity {
         }
     }
 
+    public void finishOrder()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.order_finish_title));
+
+            alertDialogBuilder
+                    .setMessage(getString(R.string.order_finish_ok))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.order_finish_make_sure_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Intent question = new Intent(OrderProcesssActivity.this, MenuMainActivity.class);
+
+                            startActivity(question);
+                            finish();
+                        }
+                    });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
 
 
 }

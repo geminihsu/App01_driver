@@ -13,6 +13,7 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.bean.NormalOrder;
+import tw.com.geminihsu.app01.bean.OrderLocationBean;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.serverbean.ServerCarbrand;
 import tw.com.geminihsu.app01.serverbean.ServerContents;
@@ -108,6 +109,8 @@ public class RealmUtil {
         return file;
     }
 
+
+
     public ServerContents queryServerContent(String column, String value) {
 
         ServerContents info = mRealm.where(ServerContents.class).equalTo(column, value).findFirst();
@@ -119,6 +122,13 @@ public class RealmUtil {
         RealmResults<ServerBookmark> info = mRealm.where(ServerBookmark.class).findAll();
         return info;
     }
+
+    public RealmResults<ServerSpecial> queryServerSpecial(String column, String value) {
+
+        RealmResults<ServerSpecial> info = mRealm.where(ServerSpecial.class).equalTo(column, value).findAll();
+        return info;
+    }
+
     public void addAccount(AccountInfo user)
     {
         mRealm.beginTransaction();
@@ -299,7 +309,7 @@ public class RealmUtil {
         info.setLocation(data.getLocation());
         info.setLat(data.getLat());
         info.setLng(data.getLng());
-
+        info.setStreetAddress(data.getStreetAddress());
 
         mRealm.copyToRealm(info);
         mRealm.commitTransaction();
@@ -360,6 +370,102 @@ public class RealmUtil {
             accountInfo.setDriver_ticket_id(new_driver_ticket_id);
 
             mRealm.copyToRealmOrUpdate(accountInfo);
+        }
+
+        mRealm.commitTransaction();
+    }
+
+    public void updateOrder(NormalOrder order)
+    {
+        ///mRealm.beginTransaction();
+        int new_Id = order.getOrder_id();
+        OrderLocationBean new_beginLocation =order.getBegin();
+        String new_orderDate =order.getOrderdate();
+        String new_orderDtype = order.getDtype();
+        String new_orderTicket_id = order.getTicket_id();
+        String new_orderTarget = order.getTarget();
+        String new_orderEnd_address = order.getEnd_address();
+        OrderLocationBean new_endLocation = order.getEnd();
+        String new_orderAccesskey = order.getAccesskey();
+        String new_orderBegin_address = order.getBegin_address();
+        String new_orderCar_special = order.getCar_special();
+        String new_orderCargo_imgs = order.getCargo_imgs();
+        int new_orderOrder_id = order.getOrder_id();
+        String new_orderOrderPrice = order.getPrice();
+        String new_orderOrderCargo_size = order.getCargo_size();
+        String new_orderOrderCargo_type = order.getCargo_type();
+        String new_orderOrderRemark = order.getRemark();
+        OrderLocationBean new_orderOrderStop = order.getStop();
+        String new_orderOrderTimebegin = order.getTimebegin();
+        String new_orderOrderTip = order.getTip();
+        String new_orderUser_did = order.getUser_did();
+        int new_orderUser_id = order.getUser_id();
+        String new_orderUser_name = order.getUser_name();
+        String new_orderStop_address =order.getStop_address();
+        String new_orderUser_uid =order.getUser_uid();
+        String new_orderUser_ticketStatus = order.getTicket_status();
+
+
+
+        NormalOrder old_order = mRealm.where(NormalOrder.class).equalTo(Constants.ORDER_TICKET_ID, order.getTicket_id()).findFirst();
+        mRealm.beginTransaction();
+        if(old_order ==null){
+            NormalOrder new_order= mRealm.createObject(NormalOrder.class);
+            new_order.setUser_id(new_orderUser_id);
+            new_order.setUser_name(new_orderUser_name);
+            new_order.setUser_did(new_orderUser_did);
+            new_order.setAccesskey(new_orderAccesskey);
+            new_order.setRemark(new_orderOrderRemark);
+            new_order.setEnd(new_endLocation);
+            new_order.setDtype(new_orderDtype);
+            new_order.setOrderdate(new_orderDate);
+            new_order.setTicket_status(new_orderUser_ticketStatus);
+            new_order.setBegin(new_beginLocation);
+            new_order.setBegin_address(new_orderBegin_address);
+            new_order.setCar_special(new_orderCar_special);
+            new_order.setCargo_imgs(new_orderCargo_imgs);
+            new_order.setCargo_size(new_orderOrderCargo_size);
+            new_order.setStop_address(new_orderStop_address);
+            new_order.setCargo_type(new_orderOrderCargo_type);
+            new_order.setEnd_address(new_orderEnd_address);
+            new_order.setOrder_id(new_orderOrder_id);
+            new_order.setTarget(new_orderTarget);
+            new_order.setTimebegin(new_orderOrderTimebegin);
+            new_order.setPrice(new_orderOrderPrice);
+            new_order.setTicket_id(new_orderTicket_id);
+            new_order.setTip(new_orderOrderTip);
+            new_order.setUser_uid(new_orderUser_uid);
+            new_order.setStop(new_orderOrderStop);
+
+
+        }else{
+            old_order.setUser_id(new_orderUser_id);
+            old_order.setUser_name(new_orderUser_name);
+            old_order.setUser_did(new_orderUser_did);
+            old_order.setAccesskey(new_orderAccesskey);
+            old_order.setRemark(new_orderOrderRemark);
+            old_order.setEnd(new_endLocation);
+            old_order.setDtype(new_orderDtype);
+            old_order.setOrderdate(new_orderDate);
+            old_order.setTicket_status(new_orderUser_ticketStatus);
+            old_order.setBegin(new_beginLocation);
+            old_order.setBegin_address(new_orderBegin_address);
+            old_order.setCar_special(new_orderCar_special);
+            old_order.setCargo_imgs(new_orderCargo_imgs);
+            old_order.setCargo_size(new_orderOrderCargo_size);
+            old_order.setStop_address(new_orderStop_address);
+            old_order.setCargo_type(new_orderOrderCargo_type);
+            old_order.setEnd_address(new_orderEnd_address);
+            old_order.setOrder_id(new_orderOrder_id);
+            old_order.setTarget(new_orderTarget);
+            old_order.setTimebegin(new_orderOrderTimebegin);
+            old_order.setPrice(new_orderOrderPrice);
+            old_order.setTicket_id(new_orderTicket_id);
+            old_order.setTip(new_orderOrderTip);
+            old_order.setUser_uid(new_orderUser_uid);
+            old_order.setStop(new_orderOrderStop);
+
+            mRealm.copyToRealmOrUpdate(old_order);
         }
 
         mRealm.commitTransaction();

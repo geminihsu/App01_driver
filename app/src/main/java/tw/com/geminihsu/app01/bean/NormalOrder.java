@@ -2,6 +2,7 @@ package tw.com.geminihsu.app01.bean;
 import java.io.Serializable;
 
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 public class NormalOrder extends RealmObject implements Cloneable ,Serializable {
 
@@ -27,6 +28,7 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
     private String remark;
     private String price;
     private String tip;
+    @PrimaryKey
     private String ticket_id;
     private String ticket_status;//0:未接單 1:進行中 2:已結案
     private String orderdate;
@@ -231,4 +233,6 @@ public class NormalOrder extends RealmObject implements Cloneable ,Serializable 
     public void setTimebegin(String timebegin) {
         this.timebegin = timebegin;
     }
+
+
 }

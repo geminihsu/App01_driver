@@ -13,6 +13,10 @@
             android:singleLine="true"
             android:text="住家："
             android:paddingLeft="20dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:checked="false"
+            android:focusableInTouchMode="false"
             android:layout_alignParentLeft="true"
             android:textColor="@color/btn_bouns_title"
             />

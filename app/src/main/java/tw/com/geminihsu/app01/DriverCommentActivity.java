@@ -28,6 +28,7 @@ import tw.com.geminihsu.app01.utils.Utility;
 
 public class DriverCommentActivity extends Activity {
     final public static int CLIENT_COMMENT = 1;
+    final public static int DRIVER_COMMENT = 2;
     public final static String BUNDLE_CLIENT = "client";// from
 
     //actionBar item Id
@@ -42,6 +43,8 @@ public class DriverCommentActivity extends Activity {
     private LinearLayout linearLayout_client_comment;
 
     private NormalOrder order;
+
+    private int client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,14 +74,14 @@ public class DriverCommentActivity extends Activity {
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
-
+            RealmUtil info = new RealmUtil(DriverCommentActivity.this);
+            order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
             if (bundle.containsKey(BUNDLE_CLIENT)) {
                 //判斷是客戶評分還是司機評分
-                int client = bundle.getInt(BUNDLE_CLIENT);
+                client = bundle.getInt(BUNDLE_CLIENT);
                 if (client == CLIENT_COMMENT)
                 {
-                    RealmUtil info = new RealmUtil(DriverCommentActivity.this);
-                    order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                    setTitle(getString(R.string.client_comment));
                     Utility user = new Utility(this);
                     AccountInfo userInfo = user.getAccountInfo();
                     customer_name.setText(userInfo.getName());
@@ -139,7 +142,13 @@ public class DriverCommentActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                doneAlert();
+                if (client == CLIENT_COMMENT)
+                {
+                    doneAlert();
+                }else
+                {
+                    sendDataRequest.commentOrder(order,(int)score.getRating());
+                }
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

@@ -72,10 +72,12 @@ public class MerchandiseOrderActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 choice = bundle.getInt(Constants.ARG_POSITION);
-                //order = (NormalOrder)bundle.getSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID);
-                String ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
-                RealmUtil info = new RealmUtil(MerchandiseOrderActivity.this);
-                order = info.queryOrder(Constants.ORDER_TICKET_ID,ticket_id);
+                order = (NormalOrder)bundle.getSerializable(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET);
+               if(order==null) {
+                   String ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
+                   RealmUtil info = new RealmUtil(MerchandiseOrderActivity.this);
+                   order = info.queryOrder(Constants.ORDER_TICKET_ID, ticket_id);
+               }
                 Utility user = new Utility(this);
                 AccountInfo userInfo = user.getAccountInfo();
                 passeger_name.setText(userInfo.getName());
@@ -249,12 +251,15 @@ public class MerchandiseOrderActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_TAKE:
-                Intent question = new Intent(MerchandiseOrderActivity.this, SendMerchandiseActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, SendMerchandiseActivity.CLIENT_SEND_MERCHANDISE);
-                b.putSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID,order);
-                question.putExtras(b);
-                startActivity(question);
+                if(choice != PASSENGER) {
+                    Intent question = new Intent(MerchandiseOrderActivity.this, SendMerchandiseActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Constants.ARG_POSITION, SendMerchandiseActivity.CLIENT_SEND_MERCHANDISE);
+                    b.putSerializable(ClientTakeRideActivity.BUNDLE_ORDER_TICKET_ID, order);
+                    question.putExtras(b);
+                    startActivity(question);
+                }else
+                    finish();
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

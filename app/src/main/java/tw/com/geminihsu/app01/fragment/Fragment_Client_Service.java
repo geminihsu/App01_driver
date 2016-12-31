@@ -63,9 +63,18 @@ public class Fragment_Client_Service extends Fragment {
     private LinearLayout linearLayout_taxi_service;
     private LinearLayout linearLayout_client_service;
 
+    private LinearLayout linearLayout_take_ride;
+    private LinearLayout linearLayout_send_merchandise;
+    private LinearLayout linearLayout_air_plane;
+    private LinearLayout linearLayout_train;
+
     private ImageButton taxi;
-    private ImageButton truck;
+    private ImageButton uber;
     private ImageButton cargo;
+    private ImageButton truck;
+    private ImageButton trailer;
+
+
     private ImageButton take_ride;
     private ImageButton send_merchandise;
     private ImageButton air_plane;
@@ -75,7 +84,7 @@ public class Fragment_Client_Service extends Fragment {
     private GoogleMap googleMap;
     private BroadcastReceiver getCurrentGPSLocationBroadcastReceiver;
 
-    private boolean test = false;
+    private Constants.APP_REGISTER_DRIVER_TYPE dataType;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -105,6 +114,7 @@ public class Fragment_Client_Service extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         this.findViews();
         setLister();
         if(getCurrentGPSLocationBroadcastReceiver!=null)
@@ -154,7 +164,6 @@ public class Fragment_Client_Service extends Fragment {
     public void onResume() {
         getActivity().setTitle("");
         super.onResume();
-        test = false;
         if (mapView != null) {
             mapView.onResume();
         }
@@ -194,7 +203,7 @@ public class Fragment_Client_Service extends Fragment {
     @Override
 	public void onStop() {
 		super.onStop();
-        if (getCurrentGPSLocationBroadcastReceiver != null&&getCurrentGPSLocationBroadcastReceiver.isOrderedBroadcast()){
+        if (getCurrentGPSLocationBroadcastReceiver != null){
             getActivity().unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
             getCurrentGPSLocationBroadcastReceiver=null;
         }
@@ -210,7 +219,7 @@ public class Fragment_Client_Service extends Fragment {
                // Log.e(TAG, "Error while attempting MapView.onDestroy(), ignoring exception", e);
             }
         }
-        if (getCurrentGPSLocationBroadcastReceiver != null&&getCurrentGPSLocationBroadcastReceiver.isOrderedBroadcast()){
+        if (getCurrentGPSLocationBroadcastReceiver != null){
             getActivity().unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
             getCurrentGPSLocationBroadcastReceiver=null;
         }
@@ -232,10 +241,19 @@ public class Fragment_Client_Service extends Fragment {
         linearLayout_taxi_service = (LinearLayout) getView().findViewById(R.id.taxi_linearLayout);
         linearLayout_client_service = (LinearLayout) getView().findViewById(R.id.camera1_linearLayout);
 
+        linearLayout_take_ride = (LinearLayout) getView().findViewById(R.id.taxi_take_ride_linearLayout);
+        linearLayout_send_merchandise = (LinearLayout) getView().findViewById(R.id.taxi_send_merchandise_linearLayout);
+        linearLayout_air_plane = (LinearLayout) getView().findViewById(R.id.taxi_send_pick_airport_linearLayout);
+        linearLayout_train = (LinearLayout) getView().findViewById(R.id.taxi_send_pick_train_linearLayout);
+
+
 
         taxi = (ImageButton) getView().findViewById(R.id.normal);
+        uber = (ImageButton) getView().findViewById(R.id.uber);
         truck = (ImageButton) getView().findViewById(R.id.truck);
         cargo = (ImageButton) getView().findViewById(R.id.dock);
+        trailer = (ImageButton) getView().findViewById(R.id.trailer);
+
 
         take_ride = (ImageButton) getView().findViewById(R.id.taxi_normal);
         send_merchandise = (ImageButton) getView().findViewById(R.id.taxi_truck);
@@ -257,12 +275,26 @@ public class Fragment_Client_Service extends Fragment {
 	
      private void setLister()
      {
+         //第一層
          taxi.setOnClickListener(new View.OnClickListener() {
 
              @Override
              public void onClick(View v) {
                  linearLayout_taxi_service.setVisibility(View.VISIBLE);
                  linearLayout_client_service.setVisibility(View.GONE);
+                 linearLayout_send_merchandise.setVisibility(View.GONE);
+                 dataType = Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI;
+             }
+         });
+
+         uber.setOnClickListener(new View.OnClickListener() {
+
+             @Override
+             public void onClick(View v) {
+                 linearLayout_taxi_service.setVisibility(View.VISIBLE);
+                 linearLayout_client_service.setVisibility(View.GONE);
+                 dataType = Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER;
+
              }
          });
 
@@ -270,29 +302,45 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
-                 Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
-                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                 linearLayout_taxi_service.setVisibility(View.VISIBLE);
+                 linearLayout_client_service.setVisibility(View.GONE);
+                 linearLayout_take_ride.setVisibility(View.GONE);
+                 linearLayout_air_plane.setVisibility(View.GONE);
+                 linearLayout_train.setVisibility(View.GONE);
+                 dataType = Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK;
 
-                 transaction.replace(R.id.container, newFragment);
-                 transaction.addToBackStack(null);
 
-                 transaction.commit();
+
              }
          });
          cargo.setOnClickListener(new View.OnClickListener() {
 
              @Override
              public void onClick(View v) {
-                 Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
-                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                 linearLayout_taxi_service.setVisibility(View.VISIBLE);
+                 linearLayout_client_service.setVisibility(View.GONE);
+                 linearLayout_take_ride.setVisibility(View.GONE);
+                 linearLayout_air_plane.setVisibility(View.GONE);
+                 linearLayout_train.setVisibility(View.GONE);
+                 dataType = Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO;
+          }
+         });
 
-                 transaction.replace(R.id.container, newFragment);
-                 transaction.addToBackStack(null);
+         trailer.setOnClickListener(new View.OnClickListener() {
 
-                 transaction.commit();
+             @Override
+             public void onClick(View v) {
+                 linearLayout_taxi_service.setVisibility(View.VISIBLE);
+                 linearLayout_client_service.setVisibility(View.GONE);
+                 linearLayout_take_ride.setVisibility(View.GONE);
+                 linearLayout_air_plane.setVisibility(View.GONE);
+                 linearLayout_train.setVisibility(View.GONE);
+                 dataType = Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER;
+
              }
          });
 
+         //第二層
          take_ride.setOnClickListener(new View.OnClickListener() {
 
              @Override
@@ -309,11 +357,21 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
-                 Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
-                 Bundle b = new Bundle();
-                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.SEND_MERCHANDISE);
-                 question.putExtras(b);
-                 startActivity(question);
+                 if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                     Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
+                     Bundle b = new Bundle();
+                     b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.SEND_MERCHANDISE);
+                     question.putExtras(b);
+                     startActivity(question);
+                 }else {
+                     Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
+                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+                     transaction.replace(R.id.container, newFragment);
+                     transaction.addToBackStack(null);
+
+                     transaction.commit();
+                 }
              }
          });
          air_plane.setOnClickListener(new View.OnClickListener() {

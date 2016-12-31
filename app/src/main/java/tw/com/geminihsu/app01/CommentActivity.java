@@ -2,6 +2,7 @@ package tw.com.geminihsu.app01;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -13,7 +14,11 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.CommentListItem;
 import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class CommentActivity extends Activity {
 
@@ -23,7 +28,7 @@ public class CommentActivity extends Activity {
 
     private int MAXSIZE=3;
 
-
+    private JsonPutsUtil sendDataRequest;
     private int choice = 0;
 
     @Override
@@ -33,7 +38,16 @@ public class CommentActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(this);
+        sendDataRequest.setAccountQueryCommentManagerCallBackFunction(new JsonPutsUtil.AccountQueryCommentManagerCallBackFunction() {
 
+
+            @Override
+            public void getCommentList(String message) {
+
+            }
+
+        });
 
     }
 
@@ -41,6 +55,10 @@ public class CommentActivity extends Activity {
     protected void onStart() {
         super.onStart();
         this.findViews();
+        Utility info = new Utility(this);
+        //AccountInfo accountInfo = info.getAccountInfo();
+        //if(accountInfo!=null)
+        //    sendDataRequest.getAccountComment(accountInfo);
         getDataFromDB();
         listViewAdapter = new CommentListItemAdapter(CommentActivity.this, 0, mCommentListData);
         listView.setAdapter(listViewAdapter);

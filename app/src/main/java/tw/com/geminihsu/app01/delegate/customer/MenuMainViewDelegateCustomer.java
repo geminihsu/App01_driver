@@ -80,6 +80,11 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 	public void setNavigationItem(Menu menu) {
 		//先全部隱藏
 		super.setNavigationItem(menu);
+		//更改為司機和乘客都顯示同樣的選單
+		menu.findItem(R.id.navigation_item_order).setVisible(true);
+		//menu.findItem(R.id.navigation_item_order_record).setVisible(true);
+		menu.findItem(R.id.navigation_item_begin).setVisible(true);
+
 		menu.findItem(R.id.navigation_item_order).setVisible(true);
 		menu.findItem(R.id.navigation_item_order_record).setVisible(true);
 		menu.findItem(R.id.navigation_item_logOut).setVisible(true);
