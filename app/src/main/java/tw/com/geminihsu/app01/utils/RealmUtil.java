@@ -144,6 +144,7 @@ public class RealmUtil {
         accountInfo.setConfirm_password(user.getConfirm_password());
         accountInfo.setRecommend_id(user.getRecommend_id());
         accountInfo.setRole(user.getRole());
+        accountInfo.setDriver_type(user.getDriver_type());
         accountInfo.setAccessKey(user.getAccessKey());
         accountInfo.setRegisterToken(user.getRegisterToken());
         accountInfo.setClient_ticket_id(user.getClient_ticket_id());
@@ -327,6 +328,7 @@ public class RealmUtil {
         String new_password = user.getPassword();
         String new_confirm_password = user.getPassword();
         String new_recommend_id = user.getRecommend_id();
+        String new_driver_type = user.getDriver_type();
         String new_level = user.getLevel();
         String new_client_ticket_id = user.getClient_ticket_id();
         String new_driver_ticket_id = user.getDriver_ticket_id();
@@ -343,6 +345,7 @@ public class RealmUtil {
             account.setId(new_Id);
             account.setName(new_name);
             account.setLevel(new_level);
+            account.setDriver_type(new_driver_type);
             account.setPhoneNumber(new_phoneNumber);
             account.setIdentify(new_Identify);
             account.setPassword(new_password);
@@ -361,6 +364,7 @@ public class RealmUtil {
             accountInfo.setLevel(new_level);
             accountInfo.setPhoneNumber(new_phoneNumber);
             accountInfo.setIdentify(new_Identify);
+            accountInfo.setDriver_type(new_driver_type);
             accountInfo.setPassword(new_password);
             accountInfo.setConfirm_password(new_confirm_password);
             accountInfo.setRecommend_id(new_recommend_id);

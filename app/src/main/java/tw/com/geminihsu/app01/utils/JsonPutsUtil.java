@@ -271,6 +271,7 @@ public class JsonPutsUtil {
                             new_user.setName(user.getName());
                             new_user.setPhoneNumber(user.getPhoneNumber());
                             new_user.setIdentify(user.getIdentify());
+                            new_user.setDriver_type(user.getDriver_type());
                             new_user.setPassword(newPassword);
                             new_user.setConfirm_password(newPassword);
                             new_user.setRecommend_id(user.getRecommend_id());
@@ -423,6 +424,7 @@ public class JsonPutsUtil {
                             new_user.setPassword(userInfo.getPassword());
                             new_user.setConfirm_password(userInfo.getConfirm_password());
                             new_user.setRecommend_id(userInfo.getRecommend_id());
+                            new_user.setDriver_type(userInfo.getDriver_type());
                             new_user.setRole(userInfo.getRole());
                             new_user.setAccessKey(accesskey);
                             //user.setPassword(newPassword);
@@ -648,8 +650,10 @@ public class JsonPutsUtil {
 
 
 
+                            Utility info = new Utility(mContext);
                             RealmUtil database = new RealmUtil(mContext);
-                            database.addDriverInfo(driver);
+                            if(info.getDriverAccountInfo()==null)
+                               database.addDriverInfo(driver);
                             //設定檔顯示登入的帳號密碼
                             SharedPreferences  configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -2286,6 +2290,7 @@ public class JsonPutsUtil {
                             new_user.setName(userInfo.getName());
                             new_user.setPhoneNumber(userInfo.getPhoneNumber());
                             new_user.setIdentify(userInfo.getIdentify());
+                            new_user.setDriver_type(userInfo.getDriver_type());
                             new_user.setPassword(userInfo.getPassword());
                             new_user.setConfirm_password(userInfo.getConfirm_password());
                             new_user.setRecommend_id(userInfo.getRecommend_id());

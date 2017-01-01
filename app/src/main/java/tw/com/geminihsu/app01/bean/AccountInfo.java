@@ -22,6 +22,7 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
     private int role;//0:client,1:driver,2:both
     private String registerToken;
     private String accessKey;
+    private String driver_type;//記錄目前營運的身份
 
 
     private String client_ticket_id;
@@ -136,5 +137,13 @@ public class AccountInfo extends RealmObject implements Cloneable ,Serializable 
 
     public void setDriver_ticket_id(String driver_ticket_id) {
         this.driver_ticket_id = driver_ticket_id;
+    }
+
+    public String getDriver_type() {
+        return driver_type;
+    }
+
+    public void setDriver_type(String driver_type) {
+        this.driver_type = driver_type;
     }
 }

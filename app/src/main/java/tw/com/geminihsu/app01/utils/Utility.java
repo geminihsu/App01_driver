@@ -50,6 +50,7 @@ public class Utility {
             user.setConfirm_password(accountInfo.getConfirm_password());
             user.setRecommend_id(accountInfo.getRecommend_id());
             user.setRole(accountInfo.getRole());
+            user.setDriver_type(accountInfo.getDriver_type());
             user.setAccessKey(accountInfo.getAccessKey());
             user.setRegisterToken(accountInfo.getRegisterToken());
         }
@@ -86,6 +87,17 @@ public class Utility {
             }
         }
         return user;
+    }
+
+    public RealmResults<DriverIdentifyInfo> getAllDriverAccountInfo() {
+
+        RealmUtil data = new RealmUtil(mContext);
+        AccountInfo userinfo = null;
+
+        RealmResults<DriverIdentifyInfo> drivers  = data.queryAllDriver();
+
+
+        return drivers;
     }
 
     public RealmResults<NormalOrder> getAccountOrderList() {

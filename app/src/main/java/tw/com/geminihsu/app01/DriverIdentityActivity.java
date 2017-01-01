@@ -9,8 +9,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.ArrayList;
+
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.Utility;
 
 public class DriverIdentityActivity extends Activity {
 
@@ -60,7 +64,10 @@ public class DriverIdentityActivity extends Activity {
         cargo_register = (Button) findViewById(R.id.cargo);
         trailer_register = (Button) findViewById(R.id.trailer);
 
-        if(driverIdentifyInfo!=null) {
+        Utility info = new Utility(this);
+        RealmResults<DriverIdentifyInfo> driverIdentifyInfos = info.getAllDriverAccountInfo();
+        for(DriverIdentifyInfo driverIdentifyInfo : driverIdentifyInfos)
+        {
             String type = driverIdentifyInfo.getDtype();
             Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
             if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
@@ -81,6 +88,7 @@ public class DriverIdentityActivity extends Activity {
                 trailer_register.setBackground(getDrawable(R.color.bg_gray));
             }
         }
+       
     }
 
 

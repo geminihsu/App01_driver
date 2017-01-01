@@ -19,12 +19,14 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -41,9 +43,12 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import io.realm.RealmResults;
 import tw.com.geminihsu.app01.CameraActivity;
 import tw.com.geminihsu.app01.ChangePasswordActivity;
 import tw.com.geminihsu.app01.CommentActivity;
@@ -55,6 +60,7 @@ import tw.com.geminihsu.app01.PhotoVerifyActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.RecommendActivity;
 import tw.com.geminihsu.app01.SupportAnswerActivity;
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
@@ -62,6 +68,7 @@ import tw.com.geminihsu.app01.delegate.Fragment_AccountDelegateBase;
 import tw.com.geminihsu.app01.delegate.customer.Fragment_AccountDelegateCustomer;
 import tw.com.geminihsu.app01.delegate.driver.Fragment_AccountDelegateDriver;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.UploadUtils;
 import tw.com.geminihsu.app01.utils.Utility;
 
@@ -80,10 +87,17 @@ public class Fragment_Account extends Fragment {
     private Button btn_apply_driver;
     private Button btn_driver_identity;
     private DriverIdentifyInfo driver;
-    private ArrayList<String> driver_identity;
+    private DriverIdentifyInfo change_driver;
+    private HashMap<String,Integer> driver_identity;
+    private HashMap<String,DriverIdentifyInfo> driver_mapping_value;
+
     private JsonPutsUtil sendDataRequest;
+    private RealmResults<DriverIdentifyInfo> driverIdentifyInfos;
 
 
+
+    private int changeDriverType;
+    private ProgressDialog progressDialog_loading;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -110,6 +124,35 @@ public class Fragment_Account extends Fragment {
             @Override
             public void driverChangeWorkIdentity(DriverIdentifyInfo driver) {
                 Log.e("change","dataType:"+driver.getDtype());
+                RealmUtil realmUtil = new RealmUtil(getActivity());
+                AccountInfo userInfo = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,driver.getName());
+                if(userInfo!=null)
+                {
+                    //更新資料庫帳號裡面的目前營業身份的欄位
+                    AccountInfo new_user = new AccountInfo();
+                    new_user.setId(userInfo.getId());
+                    new_user.setUid(userInfo.getUid());
+                    new_user.setName(userInfo.getName());
+                    new_user.setPhoneNumber(userInfo.getPhoneNumber());
+                    new_user.setIdentify(driver.getDtype());
+                    new_user.setPassword(userInfo.getPassword());
+                    new_user.setConfirm_password(userInfo.getConfirm_password());
+                    new_user.setRecommend_id(userInfo.getRecommend_id());
+                    new_user.setDriver_type(""+changeDriverType);
+                    new_user.setRole(userInfo.getRole());
+                    new_user.setAccessKey(userInfo.getAccessKey());
+                    //user.setPassword(newPassword);
+                    realmUtil.updateAccount(new_user);
+
+                }
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading=null;
+                    Toast.makeText(getActivity(),
+                            "更改成功",
+                            Toast.LENGTH_LONG).show();
+
+                }
             }
 
         });
@@ -120,6 +163,10 @@ public class Fragment_Account extends Fragment {
 
             viewDelegateBase = new Fragment_AccountDelegateCustomer(this);
         }*/
+        Utility info = new Utility(getActivity());
+        //if(info.getDriverAccountInfo()!=null)
+        //    sendDataRequest.getDriverInfo(info.getAccountInfo());
+        driverIdentifyInfos = info.getAllDriverAccountInfo();
         this.findViews();
         this.setLister();
 
@@ -271,7 +318,10 @@ public class Fragment_Account extends Fragment {
                 getActivity(),
                 android.R.layout.select_dialog_item);
 
-        arrayAdapter.add(driver_identity.get(0));
+        for ( String type : driver_identity.keySet() ) {
+            arrayAdapter.add(type);
+        }
+
         builderSingle.setAdapter(
                 arrayAdapter,
                 new DialogInterface.OnClickListener() {
@@ -281,8 +331,11 @@ public class Fragment_Account extends Fragment {
                         String strName = arrayAdapter.getItem(which);
                         switch (which){
                             case 0:
-
-                                sendDataRequest.driverWorkIdentity(driver);
+                                progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                                        "Loading. Please wait...", true);
+                                change_driver = driver_mapping_value.get(strName);
+                                changeDriverType = driver_identity.get(strName);
+                                sendDataRequest.driverWorkIdentity(change_driver);
                                 break;
                             case 1:
                                break;
@@ -298,21 +351,60 @@ public class Fragment_Account extends Fragment {
 
 
     private void getDriverIdentity()
-    {
+    {   driver_identity = new HashMap<String,Integer>();
+        driver_mapping_value = new HashMap<String,DriverIdentifyInfo>();
         if(driver!=null) {
-            driver_identity = new ArrayList<String>();
-            String type = driver.getDtype();
-            Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
-            if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI)
-                driver_identity.add(getString(R.string.taxi_driver));
-            else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER)
-                driver_identity.add(getString(R.string.Uber_driver));
-            else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK)
-                driver_identity.add(getString(R.string.truck_driver));
-            else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)
-                driver_identity.add(getString(R.string.cargo_driver));
-            else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER)
-                driver_identity.add(getString(R.string.trailer_driver));
+            if(driverIdentifyInfos.size()>1)
+            {
+                Utility info = new Utility(getActivity());
+                AccountInfo user = info.getAccountInfo();
+                String currentType = user.getDriver_type();
+                Constants.APP_REGISTER_DRIVER_TYPE driverCurrentType = Constants.conversion_register_driver_account_result(Integer.valueOf(currentType));
+
+                for (DriverIdentifyInfo driverIdentifyInfo:driverIdentifyInfos)
+                {
+                    String type = driverIdentifyInfo.getDtype();
+                    Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
+                    if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI&&dataType!=driverCurrentType) {
+                        driver_identity.put(getString(R.string.taxi_driver), 1);
+                        driver_mapping_value.put(getString(R.string.taxi_driver),driverIdentifyInfo);
+                    }
+                    else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER&&dataType!=driverCurrentType) {
+                        driver_identity.put(getString(R.string.Uber_driver), 2);
+                        driver_mapping_value.put(getString(R.string.Uber_driver),driverIdentifyInfo);
+
+                    }
+                    else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK&&dataType!=driverCurrentType) {
+                        driver_identity.put(getString(R.string.truck_driver), 3);
+                        driver_mapping_value.put(getString(R.string.truck_driver),driverIdentifyInfo);
+                    }
+                    else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO&&dataType!=driverCurrentType) {
+                        driver_identity.put(getString(R.string.cargo_driver), 4);
+                        driver_mapping_value.put(getString(R.string.cargo_driver),driverIdentifyInfo);
+                    }
+                    else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER&&dataType!=driverCurrentType) {
+                        driver_identity.put(getString(R.string.trailer_driver), 5);
+                        driver_mapping_value.put(getString(R.string.trailer_driver),driverIdentifyInfo);
+
+                    }
+                }
+
+
+            }else {
+
+                String type = driver.getDtype();
+                Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
+                if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI)
+                    driver_identity.put(getString(R.string.taxi_driver),1);
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER)
+                    driver_identity.put(getString(R.string.Uber_driver),2);
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK)
+                    driver_identity.put(getString(R.string.truck_driver),3);
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)
+                    driver_identity.put(getString(R.string.cargo_driver),4);
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER)
+                    driver_identity.put(getString(R.string.trailer_driver),55);
+            }
         }
     }
 
