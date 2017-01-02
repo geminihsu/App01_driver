@@ -58,19 +58,7 @@ public class ClientWaitCarActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
-        finishOrderBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-
-                Intent question = new Intent(ClientWaitCarActivity.this, MenuMainActivity.class);
-                Bundle b = new Bundle();
-                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
-                question.putExtras(b);
-                startActivity(question);
-                finish();
-            }
-        };
-
+        sendDataRequest = new JsonPutsUtil(ClientWaitCarActivity.this);
         sendDataRequest.setAccountQueryUserLocationManagerCallBackFunction(new JsonPutsUtil.AccountQueryUserLocationManagerCallBackFunction() {
 
 
@@ -87,13 +75,27 @@ public class ClientWaitCarActivity extends Activity {
             }
         });
 
+        finishOrderBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                Intent question = new Intent(ClientWaitCarActivity.this, MenuMainActivity.class);
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
+                question.putExtras(b);
+                startActivity(question);
+                finish();
+            }
+        };
+
+
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         this.findViews();
-        sendDataRequest = new JsonPutsUtil(this);
         Bundle bundle = this.getIntent().getExtras();
         if (bundle != null) {
             if (bundle.containsKey(Constants.ORDER_TICKET_ID)) {

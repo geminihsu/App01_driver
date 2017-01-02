@@ -946,16 +946,21 @@ public class JsonPutsUtil {
 
                     if (connectResult.equals(App01libObjectKey.APP_ACCOUNT_PUTS_USER_GPS_CODE.K_APP_ACCOUNT_PUTS_USER_GPS_CODE_SUCCESS)) {
                         Log.e(TAG, "get GPS success!!!!");
-                        String uid = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_UID);
+                        String datas = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
 
-                        if(uid==user.getUser_uid()){
-                            Double lat = jsonObject.getDouble(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LAT);
-                            Double lng = jsonObject.getDouble(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LNG);
-                            if (mAccountQueryUserLocationManagerCallBackFunction !=null)
-                                mAccountQueryUserLocationManagerCallBackFunction.getLocationInfo(lat,lng);
+                        if(!datas.equals("null")) {
+                            JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
+                            String uid = data.getString(App01libObjectKey.APP_OBJECT_KEY_UID);
+
+                            if (uid.equals(user.getUser_uid())) {
+                                Double lat = data.getDouble(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LAT);
+                                Double lng = data.getDouble(App01libObjectKey.APP_OBJECT_KEY_BOOKMARK_LOCATION_LNG);
+                                if (mAccountQueryUserLocationManagerCallBackFunction != null)
+                                    mAccountQueryUserLocationManagerCallBackFunction.getLocationInfo(lat, lng);
+
+                            }
 
                         }
-
                     } else {
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
 
@@ -3216,7 +3221,7 @@ public class JsonPutsUtil {
 
     }
 
-    //查詢帳號評價
+    //查詢司機位置
     private AccountQueryUserLocationManagerCallBackFunction mAccountQueryUserLocationManagerCallBackFunction;
 
     public void setAccountQueryUserLocationManagerCallBackFunction(AccountQueryUserLocationManagerCallBackFunction accountQueryUserLocationManagerCallBackFunction) {

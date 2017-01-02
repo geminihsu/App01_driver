@@ -88,7 +88,7 @@ public class DriverIdentityActivity extends Activity {
                 trailer_register.setBackground(getDrawable(R.color.bg_gray));
             }
         }
-       
+
     }
 
 

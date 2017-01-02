@@ -306,6 +306,8 @@
 
     <string name="order_finish_title">訂單處理</string>
     <string name="order_finish_ok">操作成功</string>
+    <string name="create_order_price">價錢</string>
+    <string name="create_order_tipe">小費</string>
 
     <!-- MerchandiseOrderActivity Control Panel-->
     <string name="merchandise_comment">查看評價</string>

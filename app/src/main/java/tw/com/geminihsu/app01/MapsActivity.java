@@ -146,28 +146,30 @@ public class MapsActivity extends FragmentActivity implements
         //Displaying current coordinates in toast
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
 
+
         //Displaying current coordinates in toast
         List<Address> addresses = null;
+        if(provide_location != Constants.DISPLAY_USER_LOCATION) {
+            Geocoder gc = new Geocoder(this, Locale.getDefault());
+            try {
+                addresses = gc.getFromLocation(latitude, longitude, 10);
+            } catch (IOException e) {
+            }
 
-        Geocoder gc = new Geocoder(this, Locale.getDefault());
-        try {
-            addresses = gc.getFromLocation(latitude, longitude, 10);
-        } catch (IOException e) {}
 
+            Toast.makeText(this, addresses.get(0).getAddressLine(0), Toast.LENGTH_LONG).show();
 
-        Toast.makeText(this, addresses.get(0).getAddressLine(0), Toast.LENGTH_LONG).show();
-
-        Intent i=new Intent();
-        Bundle b=new Bundle();
-        b.putSerializable(Constants.BUNDLE_LOCATION, (ArrayList<Address>)addresses);
-        b.putString(Constants.BUNDLE_MAP_LATITUDE,""+ latitude);
-        b.putString(Constants.BUNDLE_MAP_LONGITUDE,""+ longitude);
-        i.putExtras(b);
-        if(provide_location == Constants.DEPARTURE_QUERY_GPS)
-            setResult(Constants.DEPARTURE_QUERY_GPS,i);
-        else
-        if(provide_location == Constants.DESTINATION_QUERY_GPS)
-            setResult(Constants.DESTINATION_QUERY_GPS,i);
+            Intent i = new Intent();
+            Bundle b = new Bundle();
+            b.putSerializable(Constants.BUNDLE_LOCATION, (ArrayList<Address>) addresses);
+            b.putString(Constants.BUNDLE_MAP_LATITUDE, "" + latitude);
+            b.putString(Constants.BUNDLE_MAP_LONGITUDE, "" + longitude);
+            i.putExtras(b);
+            if (provide_location == Constants.DEPARTURE_QUERY_GPS)
+                setResult(Constants.DEPARTURE_QUERY_GPS, i);
+            else if (provide_location == Constants.DESTINATION_QUERY_GPS)
+                setResult(Constants.DESTINATION_QUERY_GPS, i);
+        }
     }
 
     @Override

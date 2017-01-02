@@ -55,6 +55,11 @@ public class Constants {
 
 	public final static String SERVER_SPECIAL = "dtype";// from
 
+	public final static String NEW_ORDER_DTYPE = "dtype";// from
+	public final static String NEW_ORDER_CARGO_TYPE = "cargo_type";// from
+
+
+
 	public enum APP_REGISTER_DRIVER_TYPE
 	{
 		K_REGISTER_DRIVER_TYPE_TAXI (1)  ,
@@ -95,6 +100,43 @@ public class Constants {
 		return null;
 	}
 
+
+	public enum APP_REGISTER_ORDER_TYPE
+	{
+		K_REGISTER_ORDER_TYPE_TAKE_RIDE (1)  ,
+		K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE (2)  ,
+		K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN (3),
+		K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT (4);
+
+		private int value;
+
+		private APP_REGISTER_ORDER_TYPE(int value) {
+			this.value = value;
+		}
+
+		public int value() {
+			return value;
+		}
+	};
+
+	public static Constants.APP_REGISTER_ORDER_TYPE conversion_create_new_order_cargo_type_result(int index) {
+		if (index >= 0) {
+			if (index == 1) {
+				return APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE;
+			}
+			if (index == 2) {
+				return APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE;
+			}
+			if (index == 3) {
+				return APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN;
+			}
+			if (index == 4) {
+				return APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT;
+			}
+
+		}
+		return null;
+	}
 
 }
 

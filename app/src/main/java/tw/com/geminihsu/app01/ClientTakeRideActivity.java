@@ -54,6 +54,9 @@ import tw.com.geminihsu.app01.utils.Utility;
 public class ClientTakeRideActivity extends Activity {
     private final String TAG = ClientTakeRideActivity.class.toString();
     public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
+    public final static String BUNDLE_ORDER_DRIVER_TYPE = "dtype";// from
+    public final static String BUNDLE_ORDER_CARGO_TYPE = "cargo_type";// from
+
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -92,6 +95,13 @@ public class ClientTakeRideActivity extends Activity {
 
     private LocationAddress departure_detail;
     private LocationAddress destination_detail;
+
+    private int dType;//哪一種司機型態
+    private int cargoType;//那一種訂單型態
+
+    private Constants.APP_REGISTER_DRIVER_TYPE dataType;
+    private Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +133,13 @@ public class ClientTakeRideActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 option = bundle.getInt(Constants.ARG_POSITION);
+                dType = bundle.getInt(Constants.NEW_ORDER_DTYPE);
+                cargoType = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
+
+                dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(dType));
+                orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
+
+                option = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
                 displayLayout();
             }else
             {
@@ -408,13 +425,19 @@ public class ClientTakeRideActivity extends Activity {
                             .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
 
-                                    if(option == TAKE_RIDE)
-                                        if(departure_detail!=null)
-                                         createTaxiOrder(""+option);
+                                    if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                                        if (option == TAKE_RIDE)
+                                            if (departure_detail != null)
+                                                createTaxiOrder("" + option,"0","0");
+                                            else
+                                                createTempTaxiOrder("" + option);
                                         else
-                                         createTempTaxiOrder(""+option);
-                                    else
-                                    createMechardiseOrder(""+option);
+                                            createMechardiseOrder("" + option);
+                                    }else
+                                    {
+                                        //讓使用者填入價錢和小費
+                                        provideOrderPrice();
+                                    }
 
                                 }
                             });
@@ -463,7 +486,7 @@ public class ClientTakeRideActivity extends Activity {
                   item.check=true;
                 else
                   item.check=false;
-                if(specials.get(i).getDtype().equals("1"))
+                if(specials.get(i).getDtype().equals(dType))
                 item.book_title =specials.get(i).getContent();
                 mCommentListData.add(item);
 
@@ -525,7 +548,7 @@ public class ClientTakeRideActivity extends Activity {
 
     }
 
-    private void createTaxiOrder(String target)
+    private void createTaxiOrder(String target,String price,String tip)
     {
 
         Utility info = new Utility(ClientTakeRideActivity.this);
@@ -567,8 +590,8 @@ public class ClientTakeRideActivity extends Activity {
         order.setUser_name(driver.getPhoneNumber());
         order.setAccesskey(driver.getAccessKey());
         order.setTimebegin(""+unixTime);
-        order.setDtype("1");
-        order.setCargo_type("1");
+        order.setDtype(""+dataType.value());
+        order.setCargo_type(""+orderCargoType.value());
         order.setBegin(begin_location);
         order.setEnd(end_location);
         order.setStop(stop_location);
@@ -578,8 +601,9 @@ public class ClientTakeRideActivity extends Activity {
         order.setTicket_status("0");
         order.setOrderdate(time.getText().toString());
         order.setTarget(target);
-        order.setPrice("500");
-        order.setTip("5");
+
+        order.setPrice(price);
+        order.setTip(tip);
 
 
         //sendDataRequest.putCreateQuickTaxiOrder(order);
@@ -731,6 +755,44 @@ public class ClientTakeRideActivity extends Activity {
                     }
                 });
         builderSingle.show();
+    }
+
+    private void provideOrderPrice()
+    {
+        final Dialog dialog = new Dialog(ClientTakeRideActivity.this);
+        dialog.setContentView(R.layout.dialog_enter_order_price_layout);
+        dialog.setTitle(getString(R.string.order_change_fee));
+        TextView content = (TextView)dialog.findViewById(R.id.txt_msg);
+        final EditText enter=(EditText)dialog.findViewById(R.id.editText_password);
+        enter.setText("");
+        final EditText tip=(EditText)dialog.findViewById(R.id.editText_tip);
+        tip.setText("");
+        Button sure = (Button) dialog.findViewById(R.id.sure_action);
+        sure.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                if (option == TAKE_RIDE)
+                    if (departure_detail != null)
+                        createTaxiOrder("" + option,enter.getText().toString(),tip.getText().toString());
+                    else
+                        createTempTaxiOrder("" + option);
+                else
+                    createMechardiseOrder("" + option);
+            }
+        });
+
+        Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
+        cancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                dialog.cancel();
+            }
+        });
+
+        dialog.show();
     }
 
 }

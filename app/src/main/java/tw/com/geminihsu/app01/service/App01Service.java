@@ -38,6 +38,7 @@ import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.ConfigSharedPreferencesUtil;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 /**
@@ -51,6 +52,8 @@ public class App01Service extends Service {
     private App01ServiceServiceBinder mBinder = new App01ServiceServiceBinder();
 
     private GetPushNotifyInfo_Thread getPushNotifyInfo_thread_Thread;
+    private GetServerContentDetail_Thread getServerContentDetail_Thread;
+
     private AccountInfo accountInfo;
     //Check user location
     private LocationListener listener;
@@ -131,7 +134,10 @@ public class App01Service extends Service {
     }
 
     public void requestServerContentDetail() {
-        sendCommandToRequestServerContentDetail();
+
+        Log.d(TAG, "[App01ServiceBinder]requestServerContentDetail() executed");
+        getServerContentDetail_Thread = new GetServerContentDetail_Thread();
+        getServerContentDetail_Thread.start();
     }
 
     private class GetPushNotifyInfo_Thread extends Thread {
@@ -157,6 +163,16 @@ public class App01Service extends Service {
                 }
 
             }
+
+        }
+    }
+
+    private class GetServerContentDetail_Thread extends Thread {
+
+        public void run() {
+
+
+            sendCommandToRequestServerContentDetail();
 
         }
     }
@@ -253,8 +269,13 @@ public class App01Service extends Service {
 
     private void sendCommandToRequestServerContentDetail() {
 
-        sendrequest.sendRequestServerContentDetail();
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
+                sendrequest.sendRequestServerContentDetail();
 
+            }
+        }));
 
     }
 

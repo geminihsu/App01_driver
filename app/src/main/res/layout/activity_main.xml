@@ -7,7 +7,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical">
  <RelativeLayout
         android:id="@+id/account_conlum"
         android:layout_width="match_parent"

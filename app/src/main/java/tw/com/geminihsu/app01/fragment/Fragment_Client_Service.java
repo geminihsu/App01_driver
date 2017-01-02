@@ -85,6 +85,8 @@ public class Fragment_Client_Service extends Fragment {
     private BroadcastReceiver getCurrentGPSLocationBroadcastReceiver;
 
     private Constants.APP_REGISTER_DRIVER_TYPE dataType;
+    private Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -345,9 +347,16 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
+
+
+                 orderCargoType =  Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE;
+
                  Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
                  Bundle b = new Bundle();
                  b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.TAKE_RIDE);
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+
                  question.putExtras(b);
                  startActivity(question);
              }
@@ -358,9 +367,15 @@ public class Fragment_Client_Service extends Fragment {
              @Override
              public void onClick(View v) {
                  if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                     orderCargoType =  Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE;
+
+
                      Intent question = new Intent(getActivity(), ClientTakeRideActivity.class);
                      Bundle b = new Bundle();
                      b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.SEND_MERCHANDISE);
+                     b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                     b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+
                      question.putExtras(b);
                      startActivity(question);
                  }else {

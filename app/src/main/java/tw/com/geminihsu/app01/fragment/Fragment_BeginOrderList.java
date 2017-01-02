@@ -282,7 +282,9 @@ public class Fragment_BeginOrderList extends Fragment {
                         {
                             Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                             Bundle b = new Bundle();
-                            if(orderItem.order.getDtype().equals("1"))
+                            Constants.APP_REGISTER_ORDER_TYPE cargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(orderItem.order.getCargo_type()));
+
+                            if(cargoType!=Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                             else
                                 b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
