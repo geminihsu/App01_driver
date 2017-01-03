@@ -97,6 +97,7 @@
                     android:ellipsize="middle"
                     android:singleLine="true"
                     android:layout_weight="2"
+                    android:id="@+id/time"
                     android:text=""
 
                     />
@@ -210,6 +211,7 @@
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
+                        android:id="@+id/destination_address"
                         android:text=""
 
                         />

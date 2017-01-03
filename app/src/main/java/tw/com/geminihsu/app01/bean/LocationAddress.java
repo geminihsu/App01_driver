@@ -11,6 +11,9 @@ public class LocationAddress implements Cloneable ,Serializable {
     private double longitude;
     private double latitude;
     private String location;
+    private String Locality;
+    private String zipCode;
+    private String CountryName;
     private String address;
 
     public double getLongitude() {
@@ -55,5 +58,29 @@ public class LocationAddress implements Cloneable ,Serializable {
             return null;
         }
 
+    }
+
+    public String getLocality() {
+        return Locality;
+    }
+
+    public void setLocality(String locality) {
+        Locality = locality;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public String getCountryName() {
+        return CountryName;
+    }
+
+    public void setCountryName(String countryName) {
+        CountryName = countryName;
     }
 }

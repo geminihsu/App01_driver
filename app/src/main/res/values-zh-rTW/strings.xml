@@ -447,6 +447,10 @@
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>
 
+    //尋找地圖
+    <string name="map_bookmark">加入常用</string>
+    <string name="map_add_bookmark">輸入名稱</string>
+
 
 </resources>
 

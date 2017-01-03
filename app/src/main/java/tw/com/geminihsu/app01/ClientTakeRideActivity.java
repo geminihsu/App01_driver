@@ -12,6 +12,7 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -31,11 +32,13 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
@@ -44,6 +47,7 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.LocationAddress;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.bean.OrderLocationBean;
+import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.serverbean.ServerSpecial;
@@ -57,6 +61,8 @@ public class ClientTakeRideActivity extends Activity {
     public final static String BUNDLE_ORDER_DRIVER_TYPE = "dtype";// from
     public final static String BUNDLE_ORDER_CARGO_TYPE = "cargo_type";// from
 
+
+    public final static String BUNDLE_KEEP_BOOMARK = "add_bookmark";// from
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_SUMMIT = 0x0001;
@@ -102,6 +108,8 @@ public class ClientTakeRideActivity extends Activity {
     private Constants.APP_REGISTER_DRIVER_TYPE dataType;
     private Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
+    private Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,11 +141,14 @@ public class ClientTakeRideActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 option = bundle.getInt(Constants.ARG_POSITION);
-                dType = bundle.getInt(Constants.NEW_ORDER_DTYPE);
-                cargoType = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
-
-                dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(dType));
-                orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
+                if (bundle.containsKey(Constants.NEW_ORDER_DTYPE)) {
+                    dType = bundle.getInt(Constants.NEW_ORDER_DTYPE);
+                    dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(dType));
+                }
+                if (bundle.containsKey(Constants.NEW_ORDER_CARGO_TYPE)) {
+                    cargoType = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
+                    orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
+                }
 
                 option = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
                 displayLayout();
@@ -265,7 +276,12 @@ public class ClientTakeRideActivity extends Activity {
 
                                 switch (which){
                                     case 0:
-                                        Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        /*Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.DEPARTURE_QUERY_GPS);*/
+                                        Intent map = new Intent(ClientTakeRideActivity.this, OrderMapActivity.class);
                                         Bundle b = new Bundle();
                                         b.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_GPS);
                                         map.putExtras(b);
@@ -316,7 +332,7 @@ public class ClientTakeRideActivity extends Activity {
 
                                 switch (which){
                                     case 0:
-                                        Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        Intent map = new Intent(ClientTakeRideActivity.this, OrderMapActivity.class);
                                         Bundle b = new Bundle();
                                         b.putInt(Constants.ARG_POSITION, Constants.DESTINATION_QUERY_GPS);
                                         map.putExtras(b);
@@ -395,15 +411,15 @@ public class ClientTakeRideActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                if (option == ClientTakeRideActivity.TAKE_RIDE) {
+                //if (option == ClientTakeRideActivity.TAKE_RIDE) {
                     String departure_address_info;
                     if(departure_detail!=null)
-                        departure_address_info=departure_detail.getLocation();
+                        departure_address_info=departure_detail.getAddress();
                     else
                         departure_address_info = departure_address.getText().toString();
                     String destination_address_info;
                     if(destination_detail!=null)
-                        destination_address_info=destination_detail.getLocation();
+                        destination_address_info=destination_detail.getAddress();
                     else
                         destination_address_info = destination_address.getText().toString();
 
@@ -447,7 +463,7 @@ public class ClientTakeRideActivity extends Activity {
 
                     // show it
                     alertDialog.show();
-                }else
+               /* }else
                 {
                     NormalOrder order = createMechardiseOrder(""+SEND_MERCHANDISE);
                     Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
@@ -456,7 +472,7 @@ public class ClientTakeRideActivity extends Activity {
                     b.putSerializable(BUNDLE_ORDER_TICKET_ID, order);
                     question.putExtras(b);
                     startActivity(question);
-                }
+                }*/
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
@@ -557,8 +573,8 @@ public class ClientTakeRideActivity extends Activity {
         begin_location.setId(1);
         begin_location.setLatitude(""+departure_detail.getLatitude());
         begin_location.setLongitude(""+departure_detail.getLongitude());
-        String zip = departure_detail.getAddress().substring(0,3);
-        begin_location.setZipcode(zip);
+        //String zip = departure_detail.getAddress().substring(0,3);
+        begin_location.setZipcode(departure_detail.getZipCode());
         begin_location.setAddress(departure_detail.getAddress());
 
         OrderLocationBean stop_location = new OrderLocationBean();
@@ -573,8 +589,8 @@ public class ClientTakeRideActivity extends Activity {
         end_location.setId(3);
         end_location.setLatitude(""+destination_detail.getLatitude());
         end_location.setLongitude(""+destination_detail.getLongitude());
-        String zip1 = destination_detail.getAddress().substring(0,3);
-        end_location.setZipcode(zip1);
+        //String zip1 = destination_detail.getAddress().substring(0,3);
+        end_location.setZipcode(destination_detail.getZipCode());
         end_location.setAddress(destination_detail.getAddress());
 
 
@@ -667,132 +683,156 @@ public class ClientTakeRideActivity extends Activity {
             case Constants.DEPARTURE_QUERY_GPS:
                 ArrayList<Address> locationInfo=null;
                 if(data!=null) {
-                    departure_detail = new LocationAddress();
-                    locationInfo =(ArrayList<Address>) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
-                    String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
-                    String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
-                    departure_detail.setLatitude(Double.valueOf(latitude));
-                    departure_detail.setLongitude(Double.valueOf(longitude));
-                    //departure_address.setText(locationInfo.get(0).getAddressLine(0));
-                    showAddressList(locationInfo,departure_address,departure_detail);
+                    //departure_detail = new LocationAddress();
+                    departure_detail =(LocationAddress) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    //String add_bookmark = data.getStringExtra(BUNDLE_KEEP_BOOMARK);
+                    //String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    //String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    //departure_detail.setLatitude(location.getLatitude());
+                    //departure_detail.setLongitude(location.getLongitude());
+                    boolean isBookMark = data.getBooleanExtra(BUNDLE_KEEP_BOOMARK,false);
+                    if(isBookMark)
+                    {
+                        addUserLocationToBookMark(departure_detail);
+                    }
+                    departure_address.setText(departure_detail.getAddress());
+                    //departure_detail.setLocation(location.getAddress());
+                    //departure_detail.setAddress(location.getAddress());
+                    /*if(add_bookmark.equals(true))
+                    {
+                        //新增到資料庫的BookMark
+                    }*/
+                    //showAddressList((ArrayList<Address>)locationInfo,departure_address,departure_detail);
                 }
             break;
             case Constants.DESTINATION_QUERY_GPS:
                 ArrayList<Address> locationInfo2=null;
                 if(data!=null) {
-                    destination_detail = new LocationAddress();
-                    locationInfo2 =(ArrayList<Address>) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
-                    String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
-                    String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
-                    destination_detail.setLatitude(Double.valueOf(latitude));
-                    destination_detail.setLongitude(Double.valueOf(longitude));
-                    //departure_address.setText(locationInfo.get(0).getAddressLine(0));
-                    showAddressList(locationInfo2,destination_address,destination_detail);
+                    //destination_detail = new LocationAddress();
+                    destination_detail =(LocationAddress) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    //String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    //String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    //destination_detail.setLatitude(Double.valueOf(latitude));
+                    //destination_detail.setLongitude(Double.valueOf(longitude));
+                    boolean isBookMark = data.getBooleanExtra(BUNDLE_KEEP_BOOMARK,false);
+                    if(isBookMark)
+                    {
+                        addUserLocationToBookMark(destination_detail);
+                    }
+                    destination_address.setText(destination_detail.getAddress());
+                    //destination_detail.setAddress(locationInfo2.get(0).getAddressLine(0));
+                    //destination_detail.setLocation(locationInfo2.get(0).getAddressLine(0));
+                    //showAddressList(locationInfo2,destination_address,destination_detail);
                 }
             break;
 
             case Constants.DEPARTURE_QUERY_BOOKMARK:
                 if (data!=null) {
                     departure_detail = new LocationAddress();
-                    ServerBookmark serverBookmark = (ServerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
-                    departure_address.setText(serverBookmark.getLocation());
-                    departure_detail.setLongitude(Double.parseDouble(serverBookmark.getLng()));
-                    departure_detail.setLatitude(Double.parseDouble(serverBookmark.getLat()));
-                    departure_detail.setAddress(serverBookmark.getStreetAddress());
-                    departure_detail.setLocation(serverBookmark.getLocation());
+                    USerBookmark uSerBookmark = (USerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    departure_address.setText(uSerBookmark.getStreetAddress());
+                    departure_detail.setLongitude(Double.parseDouble(uSerBookmark.getLng()));
+                    departure_detail.setLatitude(Double.parseDouble(uSerBookmark.getLat()));
+                    departure_detail.setAddress(uSerBookmark.getStreetAddress());
+                    departure_detail.setLocation(uSerBookmark.getLocation());
+                    departure_detail.setCountryName(uSerBookmark.getCountryName());
+                    departure_detail.setLocality(uSerBookmark.getLocality());
+                    departure_detail.setZipCode(uSerBookmark.getZipCode());
+
                 }
                 break;
             case Constants.DESTINATION_QUERY_BOOKMARK:
                 if (data!=null) {
                     destination_detail = new LocationAddress();
-                    ServerBookmark serverBookmark1 = (ServerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
-                    destination_address.setText(serverBookmark1.getLocation());
-                    destination_detail.setLongitude(Double.parseDouble(serverBookmark1.getLng()));
-                    destination_detail.setLatitude(Double.parseDouble(serverBookmark1.getLat()));
-                    destination_detail.setAddress(serverBookmark1.getStreetAddress());
-                    destination_detail.setLocation(serverBookmark1.getLocation());
+                    USerBookmark uSerBookmark1 = (USerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    destination_address.setText(uSerBookmark1.getStreetAddress());
+                    destination_detail.setLongitude(Double.parseDouble(uSerBookmark1.getLng()));
+                    destination_detail.setLatitude(Double.parseDouble(uSerBookmark1.getLat()));
+                    destination_detail.setAddress(uSerBookmark1.getStreetAddress());
+                    destination_detail.setLocation(uSerBookmark1.getLocation());
+                    destination_detail.setCountryName(uSerBookmark1.getCountryName());
+                    destination_detail.setLocality(uSerBookmark1.getLocality());
+                    destination_detail.setZipCode(uSerBookmark1.getZipCode());
 
                 }
                 break;
         }
         }
-    private void showAddressList(ArrayList<Address> address, final EditText showAddress, final LocationAddress locationAddress)
-    {
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(ClientTakeRideActivity.this);
-        builderSingle.setTitle("You address:");
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                ClientTakeRideActivity.this,
-                android.R.layout.select_dialog_item);
-
-
-        for(int i=  0 ;i<address.size();i++)
-        {
-            Address _address = address.get(i);
-            for(int j = 0 ;j<_address.getMaxAddressLineIndex();j++)
-                arrayAdapter.add(_address.getAddressLine(j));
-        }
-        builderSingle.setNegativeButton(
-                "cancel",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-
-        builderSingle.setAdapter(
-                arrayAdapter,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String strName = arrayAdapter.getItem(which);
-                        AlertDialog.Builder builderInner = new AlertDialog.Builder(
-                                ClientTakeRideActivity.this);
-                        locationAddress.setAddress(strName);
-                        showAddress.setText(strName);
-
-                    }
-                });
-        builderSingle.show();
-    }
 
     private void provideOrderPrice()
     {
-        final Dialog dialog = new Dialog(ClientTakeRideActivity.this);
-        dialog.setContentView(R.layout.dialog_enter_order_price_layout);
-        dialog.setTitle(getString(R.string.order_change_fee));
-        TextView content = (TextView)dialog.findViewById(R.id.txt_msg);
-        final EditText enter=(EditText)dialog.findViewById(R.id.editText_password);
-        enter.setText("");
-        final EditText tip=(EditText)dialog.findViewById(R.id.editText_tip);
-        tip.setText("");
-        Button sure = (Button) dialog.findViewById(R.id.sure_action);
-        sure.setOnClickListener(new View.OnClickListener() {
+        if(dialog==null) {
+            dialog = new Dialog(ClientTakeRideActivity.this);
+            dialog.setContentView(R.layout.dialog_enter_order_price_layout);
+            dialog.setTitle(getString(R.string.order_change_fee));
+            TextView content = (TextView) dialog.findViewById(R.id.txt_msg);
+            final EditText enter = (EditText) dialog.findViewById(R.id.editText_password);
+            enter.setText("");
+            final EditText tip = (EditText) dialog.findViewById(R.id.editText_tip);
+            tip.setText("");
+            Button sure = (Button) dialog.findViewById(R.id.sure_action);
+            sure.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
+                @Override
+                public void onClick(View v) {
 
-                if (option == TAKE_RIDE)
-                    if (departure_detail != null)
-                        createTaxiOrder("" + option,enter.getText().toString(),tip.getText().toString());
-                    else
-                        createTempTaxiOrder("" + option);
-                else
-                    createMechardiseOrder("" + option);
-            }
-        });
+                    //if (option == TAKE_RIDE)
+                    //    if (departure_detail != null)
+                            createTaxiOrder("" + option, enter.getText().toString(), tip.getText().toString());
+                   //     else
+                   //         createTempTaxiOrder("" + option);
+                   // else
+                    //    createMechardiseOrder("" + option);
+                }
+            });
 
-        Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
-        cancel.setOnClickListener(new View.OnClickListener() {
+            Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
+            cancel.setOnClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                dialog.cancel();
-            }
-        });
+                @Override
+                public void onClick(View v) {
+                    dialog.cancel();
+                }
+            });
 
-        dialog.show();
+            dialog.show();
+        }
     }
 
+    private void addUserLocationToBookMark(LocationAddress location)
+    {
+        USerBookmark item = new USerBookmark();
+        item.setLat(""+location.getLatitude());
+        item.setLng(""+location.getLongitude());
+        item.setLocation(location.getLocation());
+        item.setLocality(location.getLocality());
+        item.setCountryName(location.getCountryName());
+        item.setZipCode(location.getZipCode());
+        item.setStreetAddress(location.getAddress());
+
+        //新增地點到資料庫
+        RealmUtil database = new RealmUtil(ClientTakeRideActivity.this);
+        database.addUserBookMark(item);
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(dialog!=null)
+        {
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(dialog!=null)
+        {
+            dialog.dismiss();
+            dialog = null;
+        }
+    }
 }

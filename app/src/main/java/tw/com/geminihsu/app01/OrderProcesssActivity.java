@@ -140,10 +140,22 @@ public class OrderProcesssActivity extends Activity {
     }
 
     private void displayLayout() {
-        if(option == PASSENGER)
-        {
-            send_method.setText("一般載客");
-            if(order.getDtype().equals("1"))
+        //if(option == PASSENGER)
+       // {
+            String driver_type = order.getDtype();
+            String cargo_type = order.getCargo_type();
+            Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+
+            Constants.APP_REGISTER_DRIVER_TYPE driverType;
+
+
+            orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
+            driverType = Constants.conversion_register_driver_account_result(Integer.valueOf(driver_type));
+
+
+            if(orderCargoType != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+                send_method.setText("一般載客");
+            if(driverType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI)
                 payment.setText("跳表計費");
             else
             payment.setText("價格:"+order.getPrice()+"元\t小費" +
@@ -157,7 +169,7 @@ public class OrderProcesssActivity extends Activity {
             linearLayout_receiver.setVisibility(View.GONE);
             linearLayout_call_panel_merchandise.setVisibility(View.GONE);
             linearLayout_call_panel_client.setVisibility(View.VISIBLE);
-        }
+       // }
     }
 
 

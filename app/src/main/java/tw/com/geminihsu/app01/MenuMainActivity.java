@@ -71,6 +71,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     private ShareActionProvider mShareActionProvider;
     private App01Service myBinder;
     private AccountInfo user;
+    private boolean isServerInfoExsit;
 
 
     private ServiceConnection myLocalServiceConnection = new ServiceConnection() {
@@ -87,7 +88,9 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             Utility info = new Utility(MenuMainActivity.this);
             myBinder = ((App01Service.App01ServiceServiceBinder) service).getService(info.getAccountInfo());
             //myBinder.setUserInfo(user);
-            myBinder.requestServerContentDetail();
+
+            if(!isServerInfoExsit)
+             myBinder.requestServerContentDetail();
             myBinder.startToGetPutNotify();
             myBinder.App01ServiceCheckGPS();
         }
@@ -108,6 +111,9 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
         }
 
         Utility info = new Utility(MenuMainActivity.this);
+
+        if(info.getAllServerBookMark()!=null)
+            isServerInfoExsit = true;
 
         // 判斷要用哪一個Delegate
         if(info.getDriverAccountInfo()!=null) {

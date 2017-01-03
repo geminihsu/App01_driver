@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
@@ -32,6 +33,12 @@ public class Fragment_TrainPlanePickUp extends Fragment {
     private TabLayoutSetupCallback mToolbarSetupCallback;
     private List<String> mTabNamesList;
     private final int ACTIONBAR_MENU_ITEM_FIILTER = 0x0001;
+
+    private int dType;//哪一種司機型態
+    private int cargoType;//那一種訂單型態
+
+    private static Constants.APP_REGISTER_DRIVER_TYPE dataType;
+    private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
     public Fragment_TrainPlanePickUp() {
         // Required empty public constructor
@@ -51,12 +58,21 @@ public class Fragment_TrainPlanePickUp extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
         mTabNamesList = new ArrayList<>();
         mTabNamesList.add(getString(R.string.tab_send_train));
         mTabNamesList.add(getString(R.string.tab_pick_up_train));
+        Bundle bundle = this.getArguments();
+        if (bundle.containsKey(Constants.NEW_ORDER_DTYPE)) {
+            dType = bundle.getInt(Constants.NEW_ORDER_DTYPE);
+            dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(dType));
+        }
+        if (bundle.containsKey(Constants.NEW_ORDER_CARGO_TYPE)) {
+            cargoType = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
+            orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
+        }
 
-    }
+        }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -96,12 +112,17 @@ public class Fragment_TrainPlanePickUp extends Fragment {
                     fragment = new Fragment_PickUpTrain();
                     Bundle args2 = new Bundle();
                     args2.putInt(Constants.ARG_POSITION, 0);
+                    //args2.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                    //args2.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
                     fragment.setArguments(args2);
                     break;
                 case 1:
                     fragment = new Fragment_PickUpTrain();
                     Bundle args3 = new Bundle();
                     args3.putInt(Constants.ARG_POSITION, 1);
+                    args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                    args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+
                     fragment.setArguments(args3);
                     break;
 
@@ -131,7 +152,7 @@ public class Fragment_TrainPlanePickUp extends Fragment {
         void setupTabLayout(ViewPager viewPager);
     }
 
-    @Override
+    /*@Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_FIILTER, Menu.NONE, getString(R.string.menu_take));
         SpannableString spanString = new SpannableString(item.getTitle().toString());
@@ -179,5 +200,5 @@ public class Fragment_TrainPlanePickUp extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 }

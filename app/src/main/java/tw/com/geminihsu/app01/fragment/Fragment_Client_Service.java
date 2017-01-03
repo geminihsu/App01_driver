@@ -393,9 +393,14 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
+                 orderCargoType =  Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT;
+
                  Fragment newFragment = new Fragment_ClientAirPlanePickUp();
                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
+                 Bundle b = new Bundle();
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+                 newFragment.setArguments(b);
                  transaction.replace(R.id.container, newFragment);
                  transaction.addToBackStack(null);
 
@@ -407,9 +412,16 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
+                 orderCargoType =  Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN;
+
+                 Bundle b = new Bundle();
+                 b.putInt(Constants.ARG_POSITION, ClientTakeRideActivity.TAKE_RIDE);
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
+                 b.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+
                  Fragment newFragment = new Fragment_TrainPlanePickUp();
                  FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
+                 newFragment.setArguments(b);
                  transaction.replace(R.id.container, newFragment);
                  transaction.addToBackStack(null);
 

@@ -329,21 +329,13 @@ public class Fragment_Account extends Fragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String strName = arrayAdapter.getItem(which);
-                        switch (which){
-                            case 0:
+
                                 progressDialog_loading = ProgressDialog.show(getActivity(), "",
                                         "Loading. Please wait...", true);
                                 change_driver = driver_mapping_value.get(strName);
                                 changeDriverType = driver_identity.get(strName);
                                 sendDataRequest.driverWorkIdentity(change_driver);
-                                break;
-                            case 1:
-                               break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
-                        }
+
                     }
                 });
         builderSingle.show();
@@ -394,17 +386,27 @@ public class Fragment_Account extends Fragment {
 
                 String type = driver.getDtype();
                 Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
-                if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI)
-                    driver_identity.put(getString(R.string.taxi_driver),1);
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER)
-                    driver_identity.put(getString(R.string.Uber_driver),2);
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK)
-                    driver_identity.put(getString(R.string.truck_driver),3);
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)
-                    driver_identity.put(getString(R.string.cargo_driver),4);
+                if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                    driver_identity.put(getString(R.string.taxi_driver), 1);
+                    driver_mapping_value.put(getString(R.string.taxi_driver),driver);
+                }
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                    driver_identity.put(getString(R.string.Uber_driver), 2);
+                    driver_mapping_value.put(getString(R.string.Uber_driver),driver);
+                }
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK) {
+                    driver_identity.put(getString(R.string.truck_driver), 3);
+                    driver_mapping_value.put(getString(R.string.truck_driver),driver);
+                }
+                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO) {
+                    driver_identity.put(getString(R.string.cargo_driver), 4);
+                    driver_mapping_value.put(getString(R.string.cargo_driver),driver);
+                }
                 else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER)
                     driver_identity.put(getString(R.string.trailer_driver),55);
+                    driver_mapping_value.put(getString(R.string.trailer_driver),driver);
             }
+
         }
     }
 

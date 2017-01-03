@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="2dp"
+    android:background="@color/bg_gray"
+    android:paddingTop="2dp" >
+
+
+        <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/search_inearLayout"
+        android:background="@color/white"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_search"
+            android:textStyle="bold"
+            android:layout_gravity="top"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:text="2123"
+            android:textColor="@android:color/black"
+            android:id="@+id/textView_title" />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/white"
+        android:layout_below="@+id/search_inearLayout"
+        >
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/activity_embedded_map_view_mapview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/map"
+        >
+   <CheckBox
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="20dp"
+    android:id="@+id/addbookmark"
+    android:text="@string/map_bookmark"
+    />
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:hint="@string/map_add_bookmark"
+            android:textColor="@android:color/black"
+            android:id="@+id/bookmark" />
+    </LinearLayout>
+
+</RelativeLayout>

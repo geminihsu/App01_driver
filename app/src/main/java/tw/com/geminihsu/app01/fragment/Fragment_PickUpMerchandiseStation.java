@@ -41,11 +41,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tw.com.geminihsu.app01.BookmarksMapListActivity;
+import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MapsActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItemAdapter;
+import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.bean.LocationAddress;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 
 
 public class Fragment_PickUpMerchandiseStation extends Fragment {
@@ -75,16 +81,39 @@ public class Fragment_PickUpMerchandiseStation extends Fragment {
     private Spinner spinner_dork_location_departure;
     private Spinner spinner_dork_location_destination;
     private ArrayAdapter arrayAdapter_location;
+
+    private JsonPutsUtil sendDataRequest;
+    private AccountInfo driver;
+
+    private LocationAddress departure_detail;
+    private LocationAddress destination_detail;
+
+    private static int dType;//哪一種司機型態
+    private static int cargoType;//那一種訂單型態
+
+    private static Constants.APP_REGISTER_DRIVER_TYPE dataType;
+    private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+
+    private Dialog dialog;
+    private ArrayList<ServerBookmark> tainStationList;
+    private ServerBookmark currentLocation;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
-        // If activity recreated (such as from screen rotate), restore
-        // the previous article selection set by onSaveInstanceState().
-        // This is primarily necessary when in the two-pane layout.
-        //if (savedInstanceState != null) {
-         //   mCurrentPosition = savedInstanceState.getInt(Constants.ARG_POSITION);
-        //}
+        setHasOptionsMenu(true);
+        sendDataRequest = new JsonPutsUtil(getActivity());
+        sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
 
+            @Override
+            public void createNormalOrder(NormalOrder order) {
+
+                Intent intent = new Intent(getActivity(), ClientTakeRideSearchActivity.class);
+
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.client_pick_up_merchandise_dork, container, false);
     }
@@ -96,6 +125,14 @@ public class Fragment_PickUpMerchandiseStation extends Fragment {
         if ( data !=null)
         {
             option = data.getInt(Constants.ARG_POSITION);
+            if (data.containsKey(Constants.NEW_ORDER_DTYPE)) {
+                dType = data.getInt(Constants.NEW_ORDER_DTYPE);
+                dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(dType));
+            }
+            if (data.containsKey(Constants.NEW_ORDER_CARGO_TYPE)) {
+                cargoType = data.getInt(Constants.NEW_ORDER_CARGO_TYPE);
+                orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
+            }
         }
         this.findViews();
         displayLayout();

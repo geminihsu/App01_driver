@@ -30,6 +30,7 @@ import tw.com.geminihsu.app01.adapter.BookmarkListItem;
 import tw.com.geminihsu.app01.adapter.BookmarkListItemAdapter;
 import tw.com.geminihsu.app01.adapter.RecommendListItem;
 import tw.com.geminihsu.app01.adapter.RecommendListItemAdapter;
+import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.utils.RealmUtil;
@@ -89,19 +90,21 @@ public class BookmarksMapListActivity extends Activity {
 
                 final BookmarkListItem orderItem = mBookmarkListData.get(position);
 
-                final ServerBookmark info = orderItem.bookmark;
+                final USerBookmark info = orderItem.userbookmark;
 
                 final RadioButton select = (RadioButton) v.findViewById(R.id.title);
 
                 orderItem.check=!orderItem.check;
                 if(orderItem.check) {
-                    ServerBookmark bookmark = new ServerBookmark();
+                    USerBookmark bookmark = new USerBookmark();
                     bookmark.setId(info.getId());
                     bookmark.setLat(info.getLat());
                     bookmark.setLng(info.getLng());
                     bookmark.setLocation(info.getLocation());
                     bookmark.setStreetAddress(info.getStreetAddress());
-
+                    bookmark.setLocality(info.getLocality());
+                    bookmark.setZipCode(info.getZipCode());
+                    bookmark.setCountryName(info.getCountryName());
 
                     Intent i = new Intent();
                     Bundle b = new Bundle();
@@ -135,7 +138,7 @@ public class BookmarksMapListActivity extends Activity {
         }
     }
 
-    /* 從 xml 取得 OrderRecord 清單 */
+    /*
     private void getDataFromDB() {
 
         RealmUtil data = new RealmUtil(this);
@@ -162,7 +165,35 @@ public class BookmarksMapListActivity extends Activity {
         } catch (Throwable t) {
             Toast.makeText(BookmarksMapListActivity.this, "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
         }
-    }
+    }*/
 
+    /* 從 xml 取得 OrderRecord 清單 */
+    private void getDataFromDB() {
+
+        RealmUtil data = new RealmUtil(this);
+        RealmResults<USerBookmark> bookmarks = data.queryUserBookmark();
+        mBookmarkListData.clear();
+        try {
+            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
+            // GeoDeviceManagement.deviceList.clear();
+            for (int i = 0; i < bookmarks.size(); i++) {
+                // for listview 要用的資料
+                BookmarkListItem item = new BookmarkListItem();
+
+
+                item.book_title = bookmarks.get(i).getLocation()+":\t";
+
+                item.book_address =bookmarks.get(i).getStreetAddress();
+
+                item.userbookmark = bookmarks.get(i);
+                mBookmarkListData.add(item);
+
+
+            }
+
+        } catch (Throwable t) {
+            Toast.makeText(BookmarksMapListActivity.this, "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

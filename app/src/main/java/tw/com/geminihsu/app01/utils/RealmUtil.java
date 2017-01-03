@@ -14,6 +14,7 @@ import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.ImageBean;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.bean.OrderLocationBean;
+import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.serverbean.ServerCarbrand;
 import tw.com.geminihsu.app01.serverbean.ServerContents;
@@ -120,6 +121,12 @@ public class RealmUtil {
     public RealmResults<ServerBookmark> queryServerBookmark() {
 
         RealmResults<ServerBookmark> info = mRealm.where(ServerBookmark.class).findAll();
+        return info;
+    }
+
+    public RealmResults<USerBookmark> queryUserBookmark() {
+
+        RealmResults<USerBookmark> info = mRealm.where(USerBookmark.class).findAll();
         return info;
     }
 
@@ -316,6 +323,24 @@ public class RealmUtil {
         mRealm.commitTransaction();
     }
 
+    public void addUserBookMark(USerBookmark data)
+    {
+        mRealm.beginTransaction();
+
+        USerBookmark info = mRealm.createObject(USerBookmark.class);
+        info.setId(data.getId());
+        info.setLocation(data.getLocation());
+        info.setLat(data.getLat());
+        info.setLng(data.getLng());
+        info.setStreetAddress(data.getStreetAddress());
+        info.setCountryName(data.getCountryName());
+        info.setZipCode(data.getZipCode());
+        info.setLocality(data.getLocality());
+
+
+        mRealm.copyToRealm(info);
+        mRealm.commitTransaction();
+    }
 
     public void updateAccount(AccountInfo user)
     {

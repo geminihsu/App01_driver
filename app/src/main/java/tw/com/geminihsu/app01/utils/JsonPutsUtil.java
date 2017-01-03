@@ -802,6 +802,7 @@ public class JsonPutsUtil {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 if(volleyError!=null)
+                    if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
@@ -912,7 +913,8 @@ public class JsonPutsUtil {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 if(volleyError!=null)
-                 Log.e(TAG, volleyError.getMessage().toString());
+                    if(volleyError.getMessage()!=null)
+                      Log.e(TAG, volleyError.getMessage().toString());
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -1033,6 +1035,7 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
@@ -1162,6 +1165,7 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
@@ -1284,6 +1288,7 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
@@ -1455,10 +1460,12 @@ public class JsonPutsUtil {
                                 if(begin!=null) {
                                     beg_zipcode = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //beg_address = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
-                                    beg_latlng = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
-                                    beg_gps = beg_latlng.split(",");
-                                    beg_lat = beg_gps[0];
-                                    beg_lng = beg_gps[1];
+                                    beg_latlng = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                    if(!beg_latlng.equals("")) {
+                                        beg_gps = beg_latlng.split(",");
+                                        beg_lat = beg_gps[0];
+                                        beg_lng = beg_gps[1];
+                                    }
                                 }
 
 
@@ -1506,10 +1513,12 @@ public class JsonPutsUtil {
                                     end_zipcode = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //end_address = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
 
-                                    end_latlng = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
-                                    end_gps = end_latlng.split(",");
-                                    end_lat = end_gps[0];
-                                    end_lng = end_gps[1];
+                                    end_latlng = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                    if(!end_latlng.equals("")) {
+                                        end_gps = end_latlng.split(",");
+                                        end_lat = end_gps[0];
+                                        end_lng = end_gps[1];
+                                    }
                                 }
 
                                 OrderLocationBean endInfo = new OrderLocationBean();
@@ -1693,10 +1702,15 @@ public class JsonPutsUtil {
                                 if(begin!=null) {
                                     beg_zipcode = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //beg_address = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
-                                    beg_latlng = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
-                                    beg_gps = beg_latlng.split(",");
-                                    beg_lat = beg_gps[0];
-                                    beg_lng = beg_gps[1];
+                                    beg_latlng = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                    if(beg_latlng!=null) {
+                                        beg_gps = beg_latlng.split(",");
+                                        if(beg_gps.length>1) {
+                                            beg_lat = beg_gps[0];
+                                            beg_lng = beg_gps[1];
+                                        }
+                                    }
+
                                 }
 
 
@@ -1744,10 +1758,14 @@ public class JsonPutsUtil {
                                     end_zipcode = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //end_address = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
 
-                                    end_latlng = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
-                                    end_gps = end_latlng.split(",");
-                                    end_lat = end_gps[0];
-                                    end_lng = end_gps[1];
+                                    end_latlng = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                    if(end_latlng!=null) {
+                                        end_gps = end_latlng.split(",");
+                                        if(end_gps.length>1) {
+                                            end_lat = end_gps[0];
+                                            end_lng = end_gps[1];
+                                        }
+                                    }
                                 }
 
                                 OrderLocationBean endInfo = new OrderLocationBean();
@@ -2629,6 +2647,7 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });

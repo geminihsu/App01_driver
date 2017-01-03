@@ -198,12 +198,17 @@ public class Fragment_BeginOrderList extends Fragment {
                     public void onClick(View v) {
                         Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
                         Bundle b = new Bundle();
-                        if(orderItem.order.getTarget().equals("1"))
-                            b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
+                        String cargo_type = orderItem.order.getCargo_type();
+                        Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+
+                        orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
+
+                        if(orderCargoType != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+                        b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
                         else
                             b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
                         b.putString(BUNDLE_ORDER_TICKET_ID,orderItem.order.getTicket_id());
-                        b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
+                        //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
                         question.putExtras(b);
                         startActivity(question);
                     }
@@ -385,12 +390,19 @@ public class Fragment_BeginOrderList extends Fragment {
                 BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
                 //if(i%2==0)
                 OrderRecordListItem item = new OrderRecordListItem();
-                Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
-                if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)) {
+                Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+
+                if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
                     beginOrderListItem.order_title = "貨物快送(費用:" + order.getPrice() + "元)";
-                }
-                else
+                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
                     beginOrderListItem.order_title = "一般搭乘(照表收費)";
+                }
+                else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
+                    beginOrderListItem.order_title = "機場接送(照表收費)";
+                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
+                    beginOrderListItem.order_title = "車站接送(照表收費)";
+                }
+
                 beginOrderListItem.departure = "從:"+order.getBegin_address();
                 beginOrderListItem.destination = "到:"+order.getEnd_address();
                 beginOrderListItem.order=order;
@@ -449,12 +461,26 @@ public class Fragment_BeginOrderList extends Fragment {
                 BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
                 //if(i%2==0)
                 OrderRecordListItem item = new OrderRecordListItem();
-                Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
-                if(type.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO)) {
-                    beginOrderListItem.order_title = "貨物快送(費用:" + order.getPrice() + "元)";
-                }
+              //  Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+                Constants.APP_REGISTER_DRIVER_TYPE driverType = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+
+                String addPlayment ="";
+
+                if(driverType.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI))
+                         addPlayment = "(照表收費)";
                 else
-                    beginOrderListItem.order_title = "一般搭乘(照表收費)";
+                    addPlayment = "(費用:" + order.getPrice() + "元)";
+                if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
+                    beginOrderListItem.order_title = "貨物快送"+addPlayment;
+                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
+                    beginOrderListItem.order_title = "一般搭乘"+addPlayment;
+                }
+                else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
+                    beginOrderListItem.order_title = "機場接送"+addPlayment;
+                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
+                    beginOrderListItem.order_title = "車站接送"+addPlayment;
+                }
                 beginOrderListItem.departure = "從:"+order.getBegin_address();
                 beginOrderListItem.destination = "到:"+order.getEnd_address();
                 beginOrderListItem.order=order;

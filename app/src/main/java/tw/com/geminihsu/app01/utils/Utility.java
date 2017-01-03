@@ -100,6 +100,17 @@ public class Utility {
         return drivers;
     }
 
+
+    public RealmResults<ServerBookmark> getAllServerBookMark() {
+
+        RealmUtil data = new RealmUtil(mContext);
+        AccountInfo userinfo = null;
+
+        RealmResults<ServerBookmark> drivers  = data.queryServerBookmark();
+
+
+        return drivers;
+    }
     public RealmResults<NormalOrder> getAccountOrderList() {
         SharedPreferences configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 

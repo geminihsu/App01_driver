@@ -57,6 +57,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/address_devicename_txt"
+                            android:checked="true"
                             android:text="@string/txt_take_real_time" />
 
                         <RadioButton
@@ -64,7 +65,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/bg_gray"
-                            android:checked="true"
                             android:text="@string/txt_take_reservation" />
                     </RadioGroup>
              </LinearLayout>
@@ -73,6 +73,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     >
                     <TextView
                         android:id="@+id/date_title"
@@ -125,6 +126,7 @@
                     android:ellipsize="middle"
                     android:singleLine="true"
                     android:layout_weight="2"
+                    android:id="@+id/time_info"
                     android:text=""
 
                     />
@@ -283,6 +285,7 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/address_devicename_txt"
+                            android:checked="true"
                             android:text="@string/pick_up_tra_train" />
 
                         <RadioButton
@@ -290,7 +293,6 @@
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/bg_gray"
-                            android:checked="true"
                             android:text="@string/pick_up_thsr_train" />
                     </RadioGroup>
                     <EditText

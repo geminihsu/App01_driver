@@ -150,7 +150,7 @@ public class MapsActivity extends FragmentActivity implements
         //Displaying current coordinates in toast
         List<Address> addresses = null;
         if(provide_location != Constants.DISPLAY_USER_LOCATION) {
-            Geocoder gc = new Geocoder(this, Locale.getDefault());
+                Geocoder gc = new Geocoder(this, Locale.getDefault());
             try {
                 addresses = gc.getFromLocation(latitude, longitude, 10);
             } catch (IOException e) {
