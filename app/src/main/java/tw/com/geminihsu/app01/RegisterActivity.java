@@ -3,6 +3,7 @@ package tw.com.geminihsu.app01;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
@@ -62,6 +63,7 @@ public class RegisterActivity extends Activity {
     private boolean debug =true;
 
     private JsonPutsUtil sendDataRequest;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,12 +83,26 @@ public class RegisterActivity extends Activity {
 
             @Override
             public void registerClient(AccountInfo accountInfo) {
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                    dialog = null;
+                }
                 Intent verify = new Intent(RegisterActivity.this, VerifyCodeActivity.class);
                 Bundle b = new Bundle();
                 b.putSerializable(BUNDLE_ACCOUNT_INFO, accountInfo);
                 verify.putExtras(b);
                 startActivity(verify);
                 finish();
+            }
+
+            @Override
+            public void registerClientError(Boolean isError, String message) {
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                    dialog = null;
+                }
             }
         });
     }
@@ -157,11 +173,14 @@ public class RegisterActivity extends Activity {
 
                if (checkColumn() && agree.isChecked()&&isVerifyPhone&&isVerifyPassword&&isVerifyId) {
                    Utility info = new Utility(RegisterActivity.this);
-                   if(info.getAccountInfo()!=null)
-                   {
+                   if (info.getAccountInfo() != null) {
                        //將就得資料清除
                        info.clearData(AccountInfo.class);
                    }
+                   if (dialog == null){
+                       dialog = ProgressDialog.show(RegisterActivity.this, "",
+                               "Loading. Please wait...", true);
+
                    final AccountInfo user = new AccountInfo();
                    user.setId(id);
                    user.setName(user_name.getText().toString());
@@ -178,7 +197,7 @@ public class RegisterActivity extends Activity {
 
 
                    sendDataRequest.sendRegisterRequest(user);
-
+               }
 
                }else
                    alert();

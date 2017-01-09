@@ -96,19 +96,19 @@ public class Fragment_BeginOrder extends Fragment {
                 case 0:
                     fragment = new Fragment_BeginOrderList();
                     Bundle args2 = new Bundle();
-                    args2.putInt(Constants.ARG_POSITION, 0);
+                    args2.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.REALTIME_ORDERLIST);
                     fragment.setArguments(args2);
                     break;
                 case 1:
                     fragment = new Fragment_BeginOrderList();
                     Bundle args3 = new Bundle();
-                    args3.putInt(Constants.ARG_POSITION, 1);
+                    args3.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.RESERVATION_ORDERLIST);
                     fragment.setArguments(args3);
                     break;
                 case 2:
                     fragment = new Fragment_BeginOrderList();
                     Bundle args4 = new Bundle();
-                    args4.putInt(Constants.ARG_POSITION, 2);
+                    args4.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.CAR_COMPANY_ORDERLIST);
                     fragment.setArguments(args4);
                     break;
 

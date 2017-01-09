@@ -22,6 +22,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +44,7 @@ import tw.com.geminihsu.app01.SupportAnswerActivity;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItem;
 import tw.com.geminihsu.app01.adapter.BeginOrderListItemAdapter;
 import tw.com.geminihsu.app01.adapter.OrderRecordListItem;
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
@@ -50,8 +53,15 @@ import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class Fragment_BeginOrderList extends Fragment {
+    private final String TAG = Fragment_BeginOrderList.class.toString();
+
     public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
     public final static String BUNDLE_ORDER_TICKET = "ticket";// from
+
+    final public static int REALTIME_ORDERLIST = 0;
+    final public static int RESERVATION_ORDERLIST =1;
+    final public static int CAR_COMPANY_ORDERLIST =2;
+
 
     private ListView listView;
     private final List<BeginOrderListItem> mRecordOrderListData = new ArrayList<BeginOrderListItem>();;
@@ -63,6 +73,7 @@ public class Fragment_BeginOrderList extends Fragment {
     private ProgressDialog progressDialog_loading;
     private ArrayList<NormalOrder> orders;
     private RealmUtil database;
+    private SwipeRefreshLayout loadOrderList;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -106,7 +117,8 @@ public class Fragment_BeginOrderList extends Fragment {
                     progressDialog_loading.dismiss();
                     progressDialog_loading=null;
                 }
-                getDataFromServer(orders);
+                loadOrderList.setRefreshing(false);
+                getDataFromServer(orders,option);
                 listViewAdapter.notifyDataSetChanged();
             }
 
@@ -116,22 +128,108 @@ public class Fragment_BeginOrderList extends Fragment {
                     progressDialog_loading.dismiss();
                     progressDialog_loading=null;
                 }
-                getDataFromServer(orders);
+                getDataFromServer(orders,option);
                 listViewAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void getOrderListFail(boolean error) {
+            public void getOrderListFail(boolean error,String message) {
                 if(error)
                 {
+                    loadOrderList.setRefreshing(false);
                     if(progressDialog_loading!=null) {
                         progressDialog_loading.dismiss();
                         progressDialog_loading=null;
                     }
+                    if(message.equals("836"))
+                    {
+                        Toast.makeText(getActivity(), "司機身份已送出審核", Toast.LENGTH_LONG).show();
+
+                    }
                 }
             }
         });
-        Bundle data=getArguments();
+
+        sendDataRequest.setClientLoginDataManagerCallBackFunction(new JsonPutsUtil.ClientLoginDataManagerCallBackFunction() {
+
+            @Override
+            public void loginClient(AccountInfo accountInfo) {
+
+            }
+
+            @Override
+            public void loginDriver(DriverIdentifyInfo driver) {
+
+            }
+
+            @Override
+            public void findDriverInfo(AccountInfo accountInfo, ArrayList<DriverIdentifyInfo> driver) {
+
+               String dataType = accountInfo.getDriver_type();
+                loadOrderList.setRefreshing(false);
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading=null;
+                }
+
+                if(dataType==null&&driver.size()==0)
+                {
+                    //表示不是司機
+                    Toast.makeText(getActivity(), "未註冊司機前無法接單", Toast.LENGTH_LONG).show();
+                }else
+                if(dataType==null)
+               {
+                   String enable="";
+                   //有可能沒有驗證成功，或是還未選擇營運身份，或是選擇不營運
+                   for(int i=0;i<driver.size();i++)
+                   {
+                       DriverIdentifyInfo driverIdentifyInfo = driver.get(i);
+
+                       if (driverIdentifyInfo.getEnable().equals("0"))
+                       {
+                           Toast.makeText(getActivity(),
+                                   "司機資格審核中",
+                                   Toast.LENGTH_LONG).show();
+
+                       }else
+                       {
+                           enable = driverIdentifyInfo.getEnable();
+                       }
+                   }
+                   if(enable.equals("100"))
+                   {Toast.makeText(getActivity(),
+                           "司機身份未選擇",
+                           Toast.LENGTH_LONG).show();
+                   }/*else if(enable.equals("100"))
+                   {
+                       sendDataRequest.queryRecommendOrderList(accountInfo);
+                   }*/
+               }else{
+                    Utility info = new Utility(getActivity());
+                    if(!wait) {
+
+                        info.clearData(NormalOrder.class);
+                        sendDataRequest.queryRecommendOrderList(accountInfo);
+                    }else {
+
+                        info.clearData(NormalOrder.class);
+                        sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
+                        //getDataFromDB();
+                    }
+                }
+            }
+
+            @Override
+            public void loginError(boolean error) {
+                loadOrderList.setRefreshing(false);
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading=null;
+                }
+            }
+        });
+
+            Bundle data=getArguments();
         if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
         {
             if(data.getBoolean(Constants.ARG_POSITION)==true)
@@ -141,13 +239,21 @@ public class Fragment_BeginOrderList extends Fragment {
 
         }
         database = new RealmUtil(getActivity());
+        progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                "Loading. Please wait...", true);
         Utility info = new Utility(getActivity());
+        info.clearData(NormalOrder.class);
+        //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+        sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+       /* Utility info = new Utility(getActivity());
         //if(info.getDriverAccountInfo()!=null&&!data.getBoolean(Constants.ARG_POSITION)) {
          if(!wait) {
              progressDialog_loading = ProgressDialog.show(getActivity(), "",
                      "Loading. Please wait...", true);
              info.clearData(NormalOrder.class);
-             sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+             //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+             sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+
          }else {
              if(progressDialog_loading==null) {
                  progressDialog_loading = ProgressDialog.show(getActivity(), "",
@@ -157,7 +263,7 @@ public class Fragment_BeginOrderList extends Fragment {
              info.clearData(NormalOrder.class);
              sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
             //getDataFromDB();
-        }
+        }*/
         // 建立ListItemAdapter
         listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
         listView.setAdapter(listViewAdapter);
@@ -198,18 +304,20 @@ public class Fragment_BeginOrderList extends Fragment {
                     public void onClick(View v) {
                         Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
                         Bundle b = new Bundle();
-                        String cargo_type = orderItem.order.getCargo_type();
-                        Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
+                        if(orderItem.order.isValid()) {
+                            String cargo_type = orderItem.order.getCargo_type();
+                            Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
-                        orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
+                            orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
 
-                        if(orderCargoType != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
-                        b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-                        else
-                            b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
-                        b.putString(BUNDLE_ORDER_TICKET_ID,orderItem.order.getTicket_id());
-                        //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
-                        question.putExtras(b);
+                            if (orderCargoType != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
+                            else
+                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
+                            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
+                            //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
+                        }
+                            question.putExtras(b);
                         startActivity(question);
                     }
                 });
@@ -303,6 +411,19 @@ public class Fragment_BeginOrderList extends Fragment {
 
             }
         });
+
+        loadOrderList.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                /*progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                        "Loading. Please wait...", true);*/
+                Utility info = new Utility(getActivity());
+                info.clearData(NormalOrder.class);
+                //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+                sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+            }
+        });
     }
 
     @Override
@@ -341,6 +462,8 @@ public class Fragment_BeginOrderList extends Fragment {
         listView.setFocusable(false);
         listView.setFocusableInTouchMode(false);
         listView.setClickable(false);
+        loadOrderList = (SwipeRefreshLayout) getView().findViewById(R.id.refreshlayout);
+
         // 設定所有view 的font size
         // View main_layout = (View) getView().findViewById(R.id.main_layout);
         // DisplayUtil displayUtil = new DisplayUtil();
@@ -423,7 +546,7 @@ public class Fragment_BeginOrderList extends Fragment {
     }
 
     /* 從 xml 取得 OrderRecord 清單 */
-    private void getDataFromServer(RealmResults<NormalOrder> orders) {
+    private void getDataFromServer(RealmResults<NormalOrder> orders,int filter) {
 
         mRecordOrderListData.clear();
         try {
@@ -458,48 +581,93 @@ public class Fragment_BeginOrderList extends Fragment {
             }*/
 
             for (NormalOrder order: orders) {
-                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
-                //if(i%2==0)
-                OrderRecordListItem item = new OrderRecordListItem();
-              //  Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
-                Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
-                Constants.APP_REGISTER_DRIVER_TYPE driverType = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
 
-                String addPlayment ="";
+                Log.e(TAG,"order.getTimebegin():"+order.getTimebegin());
+                if(filter==REALTIME_ORDERLIST&&order.getTimebegin().equals("0")) {
+                    //取得即時訂單
+                    BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
+                    //if(i%2==0)
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    //  Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                    Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+                    Constants.APP_REGISTER_DRIVER_TYPE driverType = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
 
-                if(driverType.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI))
-                         addPlayment = "(照表收費)";
-                else
-                    addPlayment = "(費用:" + order.getPrice() + "元)";
-                if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
-                    beginOrderListItem.order_title = "貨物快送"+addPlayment;
-                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
-                    beginOrderListItem.order_title = "一般搭乘"+addPlayment;
-                }
-                else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
-                    beginOrderListItem.order_title = "機場接送"+addPlayment;
-                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
-                    beginOrderListItem.order_title = "車站接送"+addPlayment;
-                }
-                beginOrderListItem.departure = "從:"+order.getBegin_address();
-                beginOrderListItem.destination = "到:"+order.getEnd_address();
-                beginOrderListItem.order=order;
+                    String addPlayment = "";
 
-                if(!wait) {
-                    if(option==0)
-                        beginOrderListItem.order_time = "即時";
+                    if (driverType.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI))
+                        addPlayment = "(照表收費)";
                     else
-                        beginOrderListItem.order_time = "2015/12/08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
-                    beginOrderListItem.button_take_look_visible = View.VISIBLE;
-                }else
-                {
-                    beginOrderListItem.order_time = "訂單狀態：進行中";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
-                    beginOrderListItem.button_take_look_visible = View.GONE;
+                        addPlayment = "(費用:" + order.getPrice() + "元)";
+                    if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
+                        beginOrderListItem.order_title = "貨物快送" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
+                        beginOrderListItem.order_title = "一般搭乘" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
+                        beginOrderListItem.order_title = "機場接送" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
+                        beginOrderListItem.order_title = "車站接送" + addPlayment;
+                    }
+                    beginOrderListItem.departure = "從:" + order.getBegin_address();
+                    beginOrderListItem.destination = "到:" + order.getEnd_address();
+                    beginOrderListItem.order = order;
 
+                    if (!wait) {
+                        if (option == 0)
+                            beginOrderListItem.order_time = "即時";
+                        else
+                            beginOrderListItem.order_time = "2015/12/08 上午07:04";
+                        beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
+                        beginOrderListItem.button_take_look_visible = View.VISIBLE;
+                    } else {
+                        beginOrderListItem.order_time = "訂單狀態：進行中";
+                        beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                        beginOrderListItem.button_take_look_visible = View.GONE;
+
+                    }
+                    mRecordOrderListData.add(beginOrderListItem);
+                }else if(filter==RESERVATION_ORDERLIST&&!order.getTimebegin().equals("0")) {
+                    //取得即時訂單
+                    BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
+                    //if(i%2==0)
+                    OrderRecordListItem item = new OrderRecordListItem();
+                    //  Constants.APP_REGISTER_DRIVER_TYPE type = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+                    Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+                    Constants.APP_REGISTER_DRIVER_TYPE driverType = Constants.conversion_register_driver_account_result(Integer.valueOf(order.getDtype()));
+
+                    String addPlayment = "";
+
+                    if (driverType.equals(Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI))
+                        addPlayment = "(照表收費)";
+                    else
+                        addPlayment = "(費用:" + order.getPrice() + "元)";
+                    if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
+                        beginOrderListItem.order_title = "貨物快送" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
+                        beginOrderListItem.order_title = "一般搭乘" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
+                        beginOrderListItem.order_title = "機場接送" + addPlayment;
+                    } else if (type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
+                        beginOrderListItem.order_title = "車站接送" + addPlayment;
+                    }
+                    beginOrderListItem.departure = "從:" + order.getBegin_address();
+                    beginOrderListItem.destination = "到:" + order.getEnd_address();
+                    beginOrderListItem.order = order;
+
+                    if (!wait) {
+                        if (option == 0)
+                            beginOrderListItem.order_time = "即時";
+                        else
+                            beginOrderListItem.order_time = "2015/12/08 上午07:04";
+                        beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
+                        beginOrderListItem.button_take_look_visible = View.VISIBLE;
+                    } else {
+                        beginOrderListItem.order_time = "訂單狀態：進行中";
+                        beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
+                        beginOrderListItem.button_take_look_visible = View.GONE;
+
+                    }
+                    mRecordOrderListData.add(beginOrderListItem);
                 }
-                mRecordOrderListData.add(beginOrderListItem);
             }
 
         } catch (Throwable t) {

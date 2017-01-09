@@ -127,6 +127,9 @@ public class JsonPutsUtil {
 
                     }else
                     {
+                        if (mClientRegisterDataManagerCallBackFunction!=null)
+                            mClientRegisterDataManagerCallBackFunction.registerClientError(true,status);
+
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
 
                         Toast.makeText(mContext,
@@ -441,7 +444,7 @@ public class JsonPutsUtil {
                                 if (mClientSmsVerifyDataManagerCallBackFunction != null)
                                     mClientSmsVerifyDataManagerCallBackFunction.verifyClient(user);
                             }else
-                                getUserInfo(user);
+                                getUserInfo(user,false);
                         }
 
 
@@ -474,7 +477,7 @@ public class JsonPutsUtil {
 
     }
 
-    public void getUserInfo(final AccountInfo user) {
+    public void getUserInfo(final AccountInfo user, final boolean isCheckInfo) {
 
         final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -501,6 +504,7 @@ public class JsonPutsUtil {
                     if (connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS)) {
                         String datas = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
 
+
                         if(!datas.equals("null")){
                             //JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                             JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
@@ -510,6 +514,53 @@ public class JsonPutsUtil {
                             String realname = data.getString(App01libObjectKey.APP_OBJECT_KEY_USER_REALNAME);
                             String client_ticket = data.optString(App01libObjectKey.APP_OBJECT_KEY_USER_CLIENT_TICKETS);
                             String driver_ticket = data.optString(App01libObjectKey.APP_OBJECT_KEY_USER_DRIVER_TICKETS);
+                            ArrayList<DriverIdentifyInfo> driverIdentifyInfos = new ArrayList<DriverIdentifyInfo>();
+
+                            if(user.getRole()==2) {
+
+                                String driver = data.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
+
+                                if (!driver.equals("null")) {
+                                    //表示有司機的資料
+                                    //JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
+                                    JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
+                                    for (int i = 0; i < info.length(); i++) {
+                                        JSONObject object = info.getJSONObject(i);
+                                        String _did = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DID);
+                                        String _dtype = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE);
+                                        String _dtype_cht = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE_CHT);
+                                        String _enable = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_ENABLE);
+                                        String _enable_cht = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_ENABLE_CHT);
+                                        String car_brand = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_BRAND);
+                                        String car_number = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_NUMBER);
+                                        String car_born = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_BORN);
+                                        String car_reg = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_REGISTER);
+                                        String car_cc = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_CC);
+                                        String car_special = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_SPECIAL);
+                                        String car_files = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_FILE_IMAGE);
+                                        String car_imgs = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_IMAGE);
+
+                                        DriverIdentifyInfo driverIdentifyInfo = new DriverIdentifyInfo();
+                                        driverIdentifyInfo.setDid(_did);
+                                        driverIdentifyInfo.setUid("" + id);
+                                        driverIdentifyInfo.setDtype(_dtype);
+                                        driverIdentifyInfo.setCar_born(car_born);
+                                        driverIdentifyInfo.setCar_imgs(car_imgs);
+                                        driverIdentifyInfo.setCar_cc(car_cc);
+                                        driverIdentifyInfo.setCar_brand(car_brand);
+                                        driverIdentifyInfo.setCar_reg(car_reg);
+                                        driverIdentifyInfo.setCar_special(car_special);
+                                        driverIdentifyInfo.setCar_number(car_number);
+                                        driverIdentifyInfo.setCar_files(car_files);
+                                        driverIdentifyInfo.setEnable(_enable);
+                                        driverIdentifyInfo.setName(user.getPhoneNumber());
+                                        driverIdentifyInfo.setAccesskey(user.getAccessKey());
+                                        driverIdentifyInfo.setId(id);
+                                        driverIdentifyInfos.add(driverIdentifyInfo);
+                                    }
+                                }
+
+                            }
                             JSONObject tree = data.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_USER_TREE);
 
                             int tree_lv = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_LV);
@@ -538,31 +589,39 @@ public class JsonPutsUtil {
                             treeInfo.setStatus(tree_status);
 
 
-                            RealmUtil database = new RealmUtil(mContext);
-                            database.clearDB(AccountInfo.class);
-                            database.addAccount(user);
-                            //設定檔顯示登入的帳號密碼
-                            SharedPreferences  configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+                            if(!isCheckInfo) {
+                                RealmUtil database = new RealmUtil(mContext);
+                                database.clearDB(AccountInfo.class);
+                                database.addAccount(user);
+                                //設定檔顯示登入的帳號密碼
+                                SharedPreferences configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
 
-                            configSharedPreferences.edit().putString(mContext.getString(R.string.config_login_phone_number_key), user.getPhoneNumber()).commit();
-                            configSharedPreferences.edit().putString(mContext.getString(R.string.config_login_password_key), user.getPassword()).commit();
+                                configSharedPreferences.edit().putString(mContext.getString(R.string.config_login_phone_number_key), user.getPhoneNumber()).commit();
+                                configSharedPreferences.edit().putString(mContext.getString(R.string.config_login_password_key), user.getPassword()).commit();
 
-                            if(Integer.valueOf(did)>0)
+                            /*if(Integer.valueOf(did)>0)
                             {
                                 //表示為司機身份
                                 //需要下命令取得司機資料再存到資料庫
                                 getDriverInfo(user);
 
-                            }else {
-                                if (mClientSmsVerifyDataManagerCallBackFunction !=null)
-                                    mClientSmsVerifyDataManagerCallBackFunction.modifyPassword(user);
+                            }else */
+                                {
+                                    if (mClientSmsVerifyDataManagerCallBackFunction != null)
+                                        mClientSmsVerifyDataManagerCallBackFunction.modifyPassword(user);
 
 
-                                if (mClientLoginDataManagerCallBackFunction != null)
-                                    mClientLoginDataManagerCallBackFunction.loginClient(user);
+                                    if (mClientLoginDataManagerCallBackFunction != null)
+                                        mClientLoginDataManagerCallBackFunction.loginClient(user);
+                                }
+
+                            }else
+                            {
+
+                                    //將查詢到的司機身份資訊回傳
+                                    if (mClientLoginDataManagerCallBackFunction != null)
+                                        mClientLoginDataManagerCallBackFunction.findDriverInfo(user,driverIdentifyInfos);
                             }
-
-
                         }
                         Log.e(TAG, "get push!!!!");
 
@@ -587,8 +646,12 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                if(volleyError!=null)
+                if(volleyError!=null) {
                     Log.e(TAG, volleyError.getMessage().toString());
+                    if (mClientLoginDataManagerCallBackFunction != null)
+                        mClientLoginDataManagerCallBackFunction.loginError(true);
+
+                }
             }
         });
         requestQueue.add(jsonObjectRequest);
@@ -1065,9 +1128,9 @@ public class JsonPutsUtil {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE connectResult = App01libObjectKey.conversion_get_put_notification_result(Integer.valueOf(status));
+                    App01libObjectKey.APP_DRIVER_QUERY_ORDER_LIST connectResult = App01libObjectKey.conversion_driver_query_order_result(Integer.valueOf(status));
 
-                    if (connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS)) {
+                    if (connectResult.equals(App01libObjectKey.APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_SUCCESS)) {
                         Log.e(TAG, "get push!!!!");
                         String datas = jsonObject.optString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                         ArrayList<String> ticketList = new ArrayList<String>();
@@ -1076,7 +1139,7 @@ public class JsonPutsUtil {
                         if(datas.equals("null"))
                         {
                             if (mDriverRecommendationOrderListManagerCallBackFunction !=null)
-                                mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true);
+                                mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true,status);
                         }else{
                                 JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                                 String queryId="";
@@ -1141,12 +1204,14 @@ public class JsonPutsUtil {
                                     getRecommendationTicketInfo(user,ticketList);
                                 else {
                                     if (mDriverRecommendationOrderListManagerCallBackFunction != null)
-                                        mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true);
+                                        mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true,status);
                                 }
 
 
                         }
                     } else {
+                        if (mDriverRecommendationOrderListManagerCallBackFunction !=null)
+                            mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true,status);
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
 
                         Toast.makeText(mContext,
@@ -1205,7 +1270,7 @@ public class JsonPutsUtil {
                         if(datas.equals("null"))
                         {
                             if (mDriverRecommendationOrderListManagerCallBackFunction !=null)
-                                mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true);
+                                mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true,status);
                         }else{
                             JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
                             String queryId="";
@@ -1268,13 +1333,13 @@ public class JsonPutsUtil {
                         }
                     } else {
                         if (mDriverRecommendationOrderListManagerCallBackFunction !=null)
-                            mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true);
+                            mDriverRecommendationOrderListManagerCallBackFunction.getOrderListFail(true,status);
 
-                        String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+                        //String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
 
-                        Toast.makeText(mContext,
-                                message,
-                                Toast.LENGTH_LONG).show();
+                        //Toast.makeText(mContext,
+                        //        message,
+                          //      Toast.LENGTH_LONG).show();
 
                     }
 
@@ -1458,7 +1523,7 @@ public class JsonPutsUtil {
                                 String beg_lat="";
                                 String beg_lng="";
                                 if(begin!=null) {
-                                    beg_zipcode = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    beg_zipcode = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //beg_address = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
                                     beg_latlng = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
                                     if(!beg_latlng.equals("")) {
@@ -1471,7 +1536,10 @@ public class JsonPutsUtil {
 
                                 OrderLocationBean beginInfo = new OrderLocationBean();
                                 beginInfo.setId(0);
-                                String zipCode=beg_zipcode.substring(0,3);
+                                String zipCode="";
+                                Log.e(TAG,beg_zipcode);
+                                if(!beg_zipcode.equals(""))
+                                 zipCode=beg_zipcode.substring(0,3);
                                 beginInfo.setZipcode(zipCode);
                                 beginInfo.setLongitude(beg_lng);
                                 beginInfo.setLatitude(beg_lat);
@@ -1510,7 +1578,7 @@ public class JsonPutsUtil {
                                 String end_lat="";
                                 String end_lng="";
                                 if(end!=null) {
-                                    end_zipcode = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    end_zipcode = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //end_address = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
 
                                     end_latlng = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
@@ -1523,7 +1591,9 @@ public class JsonPutsUtil {
 
                                 OrderLocationBean endInfo = new OrderLocationBean();
                                 endInfo.setId(2);
-                                String zipcode =end_zipcode.substring(0,3);
+                                String zipcode="";
+                                if(!end_zipcode.equals(""))
+                                zipcode =end_zipcode.substring(0,3);
                                 endInfo.setZipcode(zipcode);
                                 endInfo.setLongitude(end_lng);
                                 endInfo.setLatitude(end_lat);
@@ -1585,8 +1655,11 @@ public class JsonPutsUtil {
                                     //orders.clearData(NormalOrder.class);
                                     RealmResults<NormalOrder> data=orders.getAccountOrderList();
 
-                                    if (mDriverRecommendationOrderListManagerCallBackFunction != null)
-                                        mDriverRecommendationOrderListManagerCallBackFunction.getWaitOrderListSuccess(data);
+                                    if (data.size() > 0) {
+                                        if (mDriverRecommendationOrderListManagerCallBackFunction != null)
+                                            mDriverRecommendationOrderListManagerCallBackFunction.getWaitOrderListSuccess(data);
+
+                                    }
                                 }
                                 /*ServerBookmark bookmark= location.get(i%2);
                                 //以下欄位做假資料
@@ -1700,7 +1773,7 @@ public class JsonPutsUtil {
                                 String beg_lat="";
                                 String beg_lng="";
                                 if(begin!=null) {
-                                    beg_zipcode = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    beg_zipcode = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //beg_address = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
                                     beg_latlng = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
                                     if(beg_latlng!=null) {
@@ -1755,7 +1828,7 @@ public class JsonPutsUtil {
                                 String end_lat="";
                                 String end_lng="";
                                 if(end!=null) {
-                                    end_zipcode = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    end_zipcode = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                     //end_address = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
 
                                     end_latlng = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
@@ -2067,6 +2140,8 @@ public class JsonPutsUtil {
                             mDriverChangeWorkIdentityManagerCallBackFunction.driverChangeWorkIdentity(driverIdentifyInfo);
                     } else {
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+                        if(mDriverChangeWorkIdentityManagerCallBackFunction!=null)
+                            mDriverChangeWorkIdentityManagerCallBackFunction.changeIdentityError(true);
 
                         Toast.makeText(mContext,
                                 message,
@@ -2829,7 +2904,7 @@ public class JsonPutsUtil {
                 Map<String, DataPart> params = new HashMap<>();
                 // file name could found file base or direct access from real path
                 // for now just get bitmap data from ImageView
-                params.put("images", new DataPart("sunshine.jpg", AppHelper.getFileDataFromPicture(mContext, bitmap), "image/jpeg"));
+                params.put("images", new DataPart("ic_camera_72x72.png", AppHelper.getFileDataFromPicture(mContext, bitmap), "image/jpeg"));
                 // params.put("cover", new DataPart("file_cover.jpg", AppHelper.getFileDataFromDrawable(getBaseContext(), mCoverImage.getDrawable()), "image/jpeg"));
 
                 return params;
@@ -3067,6 +3142,7 @@ public class JsonPutsUtil {
 
     public interface ClientRegisterDataManagerCallBackFunction {
         public void registerClient(AccountInfo accountInfo);
+        public void registerClientError(Boolean isError,String message);
 
     }
 
@@ -3097,6 +3173,7 @@ public class JsonPutsUtil {
     public interface ClientLoginDataManagerCallBackFunction {
         public void loginClient(AccountInfo accountInfo);
         public void loginDriver(DriverIdentifyInfo driver);
+        public void findDriverInfo(AccountInfo accountInfo,ArrayList<DriverIdentifyInfo> driver);
         public void loginError(boolean error);
 
     }
@@ -3139,7 +3216,7 @@ public class JsonPutsUtil {
 
     public interface DriverChangeWorkIdentityManagerCallBackFunction {
         public void driverChangeWorkIdentity(DriverIdentifyInfo driver);
-
+        public void changeIdentityError(boolean error);
 
     }
     //callback fucntion
@@ -3209,7 +3286,7 @@ public class JsonPutsUtil {
     public interface DriverRecommendationOrderListManagerCallBackFunction {
         public void getWaitOrderListSuccess(RealmResults<NormalOrder> data);
         public void getOrderListSuccess(RealmResults<NormalOrder> data);
-        public void getOrderListFail(boolean error);
+        public void getOrderListFail(boolean error,String message);
 
     }
 

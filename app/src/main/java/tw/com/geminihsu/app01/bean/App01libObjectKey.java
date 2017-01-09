@@ -151,6 +151,7 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_UPLOAD_FILE_URL = "file_url";
     public static final String APP_OBJECT_KEY_DRIVER_DID = "did";
     public static final String APP_OBJECT_KEY_DRIVER_DRIVER_DID = "driver_did";
+    public static final String APP_OBJECT_KEY_DRIVER_DRIVER = "driver";
     public static final String APP_OBJECT_KEY_DRIVER_TICKET_ID = "ticket_id";
     public static final String APP_OBJECT_KEY_SEND_NOTIFICATION_MESSAGE = "message";
     public static final String APP_OBJECT_KEY_SEND_ORDER_COMMENT_SCORE = "stars";
@@ -159,6 +160,8 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_USER_REALNAME = "realname";
     public static final String APP_OBJECT_KEY_USER_LEVEL = "level";
     public static final String APP_OBJECT_KEY_USER_TREE = "tree";
+    public static final String APP_OBJECT_KEY_DRIVER_ENABLE = "enabled";
+    public static final String APP_OBJECT_KEY_DRIVER_ENABLE_CHT = "enabled_cht";
     public static final String APP_OBJECT_KEY_USER_CLIENT_TICKETS = "client_tickets";
     public static final String APP_OBJECT_KEY_USER_DRIVER_TICKETS = "driver_tickets";
     public static final String APP_OBJECT_KEY_BOOKMARK_LOCATION = "locations";
@@ -447,6 +450,7 @@ public class App01libObjectKey {
         K_APP_DRIVER_WORK_IDENTITY_EXPIRED (708),
         K_APP_DRIVER_WORK_IDENTITY_WORK_ERROR(836),
         K_APP_DRIVER_WORK_IDENTITY_NO_EXSIT (701),
+        K_APP_DRIVER_WORK_IDENTITY_VERIFY_ERROR (903),
         K_APP_DRIVER_WORK_IDENTITY_ERROR (900);
 
         private int value;
@@ -493,6 +497,26 @@ public class App01libObjectKey {
         private int value;
 
         private APP_DRIVER_RECOMMEND_ORDER(int value) {
+            this.value = value;
+        }
+
+        public int value() {
+            return value;
+        }
+    };
+
+    public enum APP_DRIVER_QUERY_ORDER_LIST
+    {
+        K_APP_DRIVER_QUERY_ORDER_SUCCESS (100),
+        K_APP_DRIVER_QUERY_ORDER_EXPIRED (708),
+        K_APP_DRIVER_QUERY_ORDER_EMPTY (840),
+        K_APP_DRIVER_QUERY_ORDER_SMS_VERIFY(704),
+        K_APP_DRIVER_QUERY_ORDER_NO_EXSIT (701),
+        K_APP_DRIVER_QUERY_ORDER_VERIFY_ERROR(903);
+
+        private int value;
+
+        private APP_DRIVER_QUERY_ORDER_LIST(int value) {
             this.value = value;
         }
 
@@ -805,6 +829,9 @@ public class App01libObjectKey {
             if (index == 836) {
                 return APP_DRIVER_WORK_IDENTIFY.K_APP_DRIVER_WORK_IDENTITY_WORK_ERROR;
             }
+            if (index == 903) {
+                return APP_DRIVER_WORK_IDENTIFY.K_APP_DRIVER_WORK_IDENTITY_VERIFY_ERROR;
+            }
             if (index == 900) {
                 return APP_DRIVER_WORK_IDENTIFY.K_APP_DRIVER_WORK_IDENTITY_ERROR;
             }
@@ -866,4 +893,29 @@ public class App01libObjectKey {
         }
         return null;
     }
+    public static APP_DRIVER_QUERY_ORDER_LIST conversion_driver_query_order_result(int index) {
+        if (index >= 0) {
+            if (index == 100) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_SUCCESS;
+            }
+
+            if (index == 708) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_EXPIRED;
+            }
+            if (index == 701) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_NO_EXSIT;
+            }
+            if (index == 840) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_EMPTY;
+            }
+            if (index == 704) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_SMS_VERIFY;
+            }
+            if (index == 903) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_VERIFY_ERROR;
+            }
+        }
+        return null;
+    }
+
 }

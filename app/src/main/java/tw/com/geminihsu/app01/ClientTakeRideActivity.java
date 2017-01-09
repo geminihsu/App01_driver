@@ -502,7 +502,7 @@ public class ClientTakeRideActivity extends Activity {
                   item.check=true;
                 else
                   item.check=false;
-                if(specials.get(i).getDtype().equals(dType))
+                //if(specials.get(i).getDtype().equals(dType))
                 item.book_title =specials.get(i).getContent();
                 mCommentListData.add(item);
 
@@ -816,6 +816,8 @@ public class ClientTakeRideActivity extends Activity {
         database.addUserBookMark(item);
 
     }
+
+
 
     @Override
     public void onStop() {

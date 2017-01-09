@@ -25,6 +25,8 @@ import android.widget.TextView;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.packetzoom.speed.PacketZoomClient;
 
+import java.util.ArrayList;
+
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
@@ -102,6 +104,11 @@ public class MainActivity extends Activity {
                 //intent.putExtras(b);
                 startActivity(intent);
                 finish();
+            }
+
+            @Override
+            public void findDriverInfo(AccountInfo accountInfo, ArrayList<DriverIdentifyInfo> driver) {
+
             }
 
             @Override

@@ -102,6 +102,8 @@
     <string name="check_client">客戶</string>
     <string name="check_driver">駕駛</string>
     <string name="register_error_title">註冊失敗</string>
+    <string name="finish_register_title">司機資格審核中</string>
+    <string name="finish_register">審核通過後將開啟接單功能\n請等候簡訊</string>
 
 
 
@@ -189,6 +191,8 @@
     <string name="truck_driver">小貨車</string>
     <string name="cargo_driver">大貨車</string>
     <string name="trailer_driver">連結車</string>
+    <string name="no_work">暫時不營業</string>
+
 
     <!-- DriverLoginActivity -->
     <string name="car_title">車籍資料</string>

@@ -155,6 +155,14 @@ public class Fragment_Account extends Fragment {
                 }
             }
 
+            @Override
+            public void changeIdentityError(boolean error) {
+                if(progressDialog_loading!=null) {
+                    progressDialog_loading.dismiss();
+                    progressDialog_loading = null;
+                }
+            }
+
         });
         /*if (Constants.Driver) {
 
@@ -346,12 +354,23 @@ public class Fragment_Account extends Fragment {
     {   driver_identity = new HashMap<String,Integer>();
         driver_mapping_value = new HashMap<String,DriverIdentifyInfo>();
         if(driver!=null) {
+            Utility info = new Utility(getActivity());
+            AccountInfo user = info.getAccountInfo();
+
             if(driverIdentifyInfos.size()>1)
             {
-                Utility info = new Utility(getActivity());
-                AccountInfo user = info.getAccountInfo();
                 String currentType = user.getDriver_type();
                 Constants.APP_REGISTER_DRIVER_TYPE driverCurrentType = Constants.conversion_register_driver_account_result(Integer.valueOf(currentType));
+
+                DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
+                no_workDriverIdentifyInfo.setUid(user.getUid());
+                no_workDriverIdentifyInfo.setDid("0");
+                no_workDriverIdentifyInfo.setAccesskey(user.getAccessKey());
+                no_workDriverIdentifyInfo.setName(user.getName());
+                no_workDriverIdentifyInfo.setDtype("0");
+                driver_identity.put(getString(R.string.no_work), 0);
+                driver_mapping_value.put(getString(R.string.no_work),no_workDriverIdentifyInfo);
+
 
                 for (DriverIdentifyInfo driverIdentifyInfo:driverIdentifyInfos)
                 {
@@ -384,27 +403,39 @@ public class Fragment_Account extends Fragment {
 
             }else {
 
+                String currentType = user.getDriver_type();
+
+
+                DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
+                no_workDriverIdentifyInfo.setUid(driver.getUid());
+                no_workDriverIdentifyInfo.setAccesskey(driver.getAccesskey());
+                no_workDriverIdentifyInfo.setName(driver.getName());
+                no_workDriverIdentifyInfo.setDtype("0");
+                no_workDriverIdentifyInfo.setDid("0");
+                driver_identity.put(getString(R.string.no_work), 0);
+                driver_mapping_value.put(getString(R.string.no_work), no_workDriverIdentifyInfo);
+
+
                 String type = driver.getDtype();
-                Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
-                if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
-                    driver_identity.put(getString(R.string.taxi_driver), 1);
-                    driver_mapping_value.put(getString(R.string.taxi_driver),driver);
+
+                if (currentType.equals("")) {
+                    Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
+                    if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                        driver_identity.put(getString(R.string.taxi_driver), 1);
+                        driver_mapping_value.put(getString(R.string.taxi_driver), driver);
+                    } else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                        driver_identity.put(getString(R.string.Uber_driver), 2);
+                        driver_mapping_value.put(getString(R.string.Uber_driver), driver);
+                    } else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK) {
+                        driver_identity.put(getString(R.string.truck_driver), 3);
+                        driver_mapping_value.put(getString(R.string.truck_driver), driver);
+                    } else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO) {
+                        driver_identity.put(getString(R.string.cargo_driver), 4);
+                        driver_mapping_value.put(getString(R.string.cargo_driver), driver);
+                    } else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER)
+                        driver_identity.put(getString(R.string.trailer_driver), 5);
+                    driver_mapping_value.put(getString(R.string.trailer_driver), driver);
                 }
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
-                    driver_identity.put(getString(R.string.Uber_driver), 2);
-                    driver_mapping_value.put(getString(R.string.Uber_driver),driver);
-                }
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRUCK) {
-                    driver_identity.put(getString(R.string.truck_driver), 3);
-                    driver_mapping_value.put(getString(R.string.truck_driver),driver);
-                }
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_CARGO) {
-                    driver_identity.put(getString(R.string.cargo_driver), 4);
-                    driver_mapping_value.put(getString(R.string.cargo_driver),driver);
-                }
-                else if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER)
-                    driver_identity.put(getString(R.string.trailer_driver),55);
-                    driver_mapping_value.put(getString(R.string.trailer_driver),driver);
             }
 
         }

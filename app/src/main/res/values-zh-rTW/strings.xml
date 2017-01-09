@@ -81,6 +81,8 @@
 
 
     <string name="login_error_register_msg">請輸入正確資料</string>
+    <string name="finish_register_title">司機資格審核中</string>
+    <string name="finish_register">審核通過後將開啟接單功能\n請等候簡訊</string>
 
 
     <!--  forget password page -->

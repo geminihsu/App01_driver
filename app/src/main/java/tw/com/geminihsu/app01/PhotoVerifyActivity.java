@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -108,6 +109,8 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
     private BroadcastReceiver getRegisterDriverBroadcastReceiver;
     private JsonPutsUtil post_image;
 
+    private ProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,19 +126,19 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                 Log.e(TAG, "get request from server");
                 if (!driverIdentifyInfo.getDid().equals("")) {
-
+                    if(dialog!=null)
+                    {
+                        dialog.dismiss();
+                        dialog = null;
+                    }
+                    notifyMessage();
                     // JsonPutsUtil changeStatus = new JsonPutsUtil(PhotoVerifyActivity.this);
                     // changeStatus.driverWorkIdentity(driverIdentifyInfo);
                     //Utility user = new Utility(PhotoVerifyActivity.this);
                     //AccountInfo driver = user.getAccountInfo();
                     //driver.setRole(1);
                     //database.updateAccount(driver);
-                    Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
-                    //Bundle b = new Bundle();
-                    //b.putString(BUNDLE_ACCESS_KEY, accesskey);
-                    //intent.putExtras(b);
-                    startActivity(intent);
-                    //finish();
+
                 }
             }
 
@@ -145,6 +148,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void uploadStatusSuccess(ImageBean photo) {
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                    dialog = null;
+                }
                 if(photo.getUploadtype().equals(PHOTO_TYPE_ID))
                     btn_car_work_image.setImageResource(R.drawable.ic_file_cloud_done);
                 else  if(photo.getUploadtype().equals(PHOTO_TYPE_DRIVER))
@@ -161,7 +169,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void uploadFail(boolean error) {
-
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                    dialog = null;
+                }
             }
         });
     }
@@ -640,6 +652,10 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 //driverInfo.setCar_files("61,62,63,64");
                 Log.e(TAG,"driverInfo info:"+driverInfo.getDtype());
                 //JsonPutsUtil sendRegister = new JsonPutsUtil(PhotoVerifyActivity.this);
+                if(dialog == null)
+                    dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                            "Loading. Please wait...", true);
+
                 sendDataRequest.registerDriverAccount(driverInfo);
                 return true;
             case android.R.id.home:
@@ -667,8 +683,12 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     car_work_image.setImageBitmap(myBitmap);
                 }
 
+                if(dialog == null)
+                    dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                            "Loading. Please wait...", true);
+
                 //File img = new File(realPath);
-                post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_ID);
+                post_image.postImageToServer(driverInfo,car_work_image,PHOTO_TYPE_ID);
 
                 break;
             case PICK_IMAGE_REQUEST:
@@ -701,9 +721,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //car_work_image.setImageResource(R.drawable.sunshine);
                    // JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
                     //File img = new File(realPath);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_ID);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_work_image,PHOTO_TYPE_ID);
                     //Log.e(TAG,"USER:"+driverInfo.getAccesskey());
                     // post_image.RequestMultiPart(this,this,img);
+                    //post_image.postImageToServer2(driverInfo,bitmap,PHOTO_TYPE_ID);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -716,7 +742,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path1;
                     car_driver_id.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_DRIVER);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_driver_id,PHOTO_TYPE_DRIVER);
 
                 }
                 break;
@@ -751,7 +781,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_DRIVER);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_driver_id,PHOTO_TYPE_DRIVER);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -765,7 +799,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path2;
                     car_driver_licence.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_driver_licence,PHOTO_TYPE_CAR);
 
                 }
                 break;
@@ -800,7 +838,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_driver_licence,PHOTO_TYPE_CAR);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -814,7 +856,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path3;
                     car_work_licence_image.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_LICENSE);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_work_licence_image,PHOTO_TYPE_LICENSE);
 
                 }
                 break;
@@ -849,7 +895,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                    // post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_LICENSE);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_work_licence_image,PHOTO_TYPE_LICENSE);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -863,7 +913,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path4;
                     car_image.setImageBitmap(myBitmap);
-                    post_image.postImageToServer(driverInfo,test_image,PHOTO_TYPE_CAR_BODY);
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_image,PHOTO_TYPE_CAR_BODY);
 
                 }
                 break;
@@ -899,7 +953,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                     //File img = new File(realPath);
                     //post_image.postImageToServer(bitmap,driverInfo);
                     // post_image.RequestMultiPart(this,this,img);
-                    post_image.postImageToServer(driverInfo,test_image,"a6");
+                    if(dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    post_image.postImageToServer(driverInfo,car_image,"a6");
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -916,5 +974,27 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
     @Override
     public void onResponse(Object response) {
         Log.e("",response.toString());
+    }
+
+    private void notifyMessage() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.finish_register_title));
+
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(getString(R.string.finish_register))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent intent = new Intent(getApplicationContext(), MenuMainActivity.class);
+                        //Bundle b = new Bundle();
+                        //b.putString(BUNDLE_ACCESS_KEY, accesskey);
+                        //intent.putExtras(b);
+                        startActivity(intent);
+                        //finish();
+                    }
+                });
     }
 }

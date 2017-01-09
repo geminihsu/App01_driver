@@ -20,6 +20,7 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
     private String car_special;
     private String car_files;
     private String car_imgs;
+    private String enable;
     //private ArrayList<ImageBean> imageList;
 
 
@@ -142,4 +143,12 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
     public void setImageList(ArrayList<ImageBean> imageList) {
         this.imageList = imageList;
     }*/
+
+    public String getEnable() {
+        return enable;
+    }
+
+    public void setEnable(String enable) {
+        this.enable = enable;
+    }
 }
