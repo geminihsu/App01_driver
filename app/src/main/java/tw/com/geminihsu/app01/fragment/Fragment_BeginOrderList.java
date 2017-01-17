@@ -50,9 +50,11 @@ import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
-public class Fragment_BeginOrderList extends Fragment {
+public class Fragment_BeginOrderList extends Fragment implements
+        BeginOrderListItemAdapter.TakeLookButtonListener,BeginOrderListItemAdapter.TakeOverButtonListner {
     private final String TAG = Fragment_BeginOrderList.class.toString();
 
     public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
@@ -92,6 +94,12 @@ public class Fragment_BeginOrderList extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    public void onActivityCreated(Bundle bundle) {
+        super.onActivityCreated(bundle);
         this.findViews();
         orders = new ArrayList<NormalOrder>();
         sendDataRequest = new JsonPutsUtil(getActivity());
@@ -104,7 +112,7 @@ public class Fragment_BeginOrderList extends Fragment {
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.PASSENGER);
                 b.putString(BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
-               // b.putSerializable(BUNDLE_ORDER_TICKET, order);
+                // b.putSerializable(BUNDLE_ORDER_TICKET, order);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -143,7 +151,11 @@ public class Fragment_BeginOrderList extends Fragment {
                     }
                     if(message.equals("836"))
                     {
-                        Toast.makeText(getActivity(), "司機身份已送出審核", Toast.LENGTH_LONG).show();
+                        Utility info = new Utility(getActivity());
+                        if(info.getAccountInfo().getDriver_type().equals("0"))
+                            Toast.makeText(getActivity(), "目前暫停營業中", Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(getActivity(), "司機身份已送出審核", Toast.LENGTH_LONG).show();
 
                     }
                 }
@@ -163,58 +175,74 @@ public class Fragment_BeginOrderList extends Fragment {
             }
 
             @Override
-            public void findDriverInfo(AccountInfo accountInfo, ArrayList<DriverIdentifyInfo> driver) {
+            public void findDriverInfo(final AccountInfo accountInfo, ArrayList<DriverIdentifyInfo> driver) {
 
-               String dataType = accountInfo.getDriver_type();
+                String dataType = accountInfo.getDriver_type();
                 loadOrderList.setRefreshing(false);
-                if(progressDialog_loading!=null) {
-                    progressDialog_loading.dismiss();
-                    progressDialog_loading=null;
-                }
+
 
                 if(dataType==null&&driver.size()==0)
                 {
+                    if(progressDialog_loading!=null) {
+                        progressDialog_loading.dismiss();
+                        progressDialog_loading=null;
+                    }
                     //表示不是司機
                     Toast.makeText(getActivity(), "未註冊司機前無法接單", Toast.LENGTH_LONG).show();
                 }else
                 if(dataType==null)
-               {
-                   String enable="";
-                   //有可能沒有驗證成功，或是還未選擇營運身份，或是選擇不營運
-                   for(int i=0;i<driver.size();i++)
-                   {
-                       DriverIdentifyInfo driverIdentifyInfo = driver.get(i);
+                {
+                    if(progressDialog_loading!=null) {
+                        progressDialog_loading.dismiss();
+                        progressDialog_loading=null;
+                    }
+                    String enable="";
+                    //有可能沒有驗證成功，或是還未選擇營運身份，或是選擇不營運
+                    for(int i=0;i<driver.size();i++)
+                    {
+                        DriverIdentifyInfo driverIdentifyInfo = driver.get(i);
 
-                       if (driverIdentifyInfo.getEnable().equals("0"))
-                       {
-                           Toast.makeText(getActivity(),
-                                   "司機資格審核中",
-                                   Toast.LENGTH_LONG).show();
+                        if (driverIdentifyInfo.getEnable().equals("0"))
+                        {
+                            Toast.makeText(getActivity(),
+                                    "司機資格審核中",
+                                    Toast.LENGTH_LONG).show();
 
-                       }else
-                       {
-                           enable = driverIdentifyInfo.getEnable();
-                       }
-                   }
-                   if(enable.equals("100"))
-                   {Toast.makeText(getActivity(),
-                           "司機身份未選擇",
-                           Toast.LENGTH_LONG).show();
-                   }/*else if(enable.equals("100"))
+                        }else
+                        {
+                            enable = driverIdentifyInfo.getEnable();
+                        }
+                    }
+                    if(enable.equals("100"))
+                    {Toast.makeText(getActivity(),
+                            "司機身份未選擇",
+                            Toast.LENGTH_LONG).show();
+                    }/*else if(enable.equals("100"))
                    {
                        sendDataRequest.queryRecommendOrderList(accountInfo);
                    }*/
-               }else{
-                    Utility info = new Utility(getActivity());
+                }else{
+                    final Utility info = new Utility(getActivity());
                     if(!wait) {
 
-                        info.clearData(NormalOrder.class);
-                        sendDataRequest.queryRecommendOrderList(accountInfo);
+
+                        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+                            @Override
+                            public void run() {
+                                info.clearData(NormalOrder.class);
+                                sendDataRequest.queryRecommendOrderList(accountInfo);
+                            }
+                        }));
                     }else {
 
-                        info.clearData(NormalOrder.class);
-                        sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
-                        //getDataFromDB();
+
+                        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+                            @Override
+                            public void run() {
+                                info.clearData(NormalOrder.class);
+                                sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
+                            }
+                        }));
                     }
                 }
             }
@@ -229,22 +257,17 @@ public class Fragment_BeginOrderList extends Fragment {
             }
         });
 
-            Bundle data=getArguments();
+        Bundle data=getArguments();
         if ( data !=null && data.containsKey(Constants.ARG_POSITION) )
         {
             if(data.getBoolean(Constants.ARG_POSITION)==true)
                 wait=true;
-             else
+            else
                 option=data.getInt(Constants.ARG_POSITION);
 
         }
         database = new RealmUtil(getActivity());
-        progressDialog_loading = ProgressDialog.show(getActivity(), "",
-                "Loading. Please wait...", true);
-        Utility info = new Utility(getActivity());
-        info.clearData(NormalOrder.class);
-        //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
-        sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+
        /* Utility info = new Utility(getActivity());
         //if(info.getDriverAccountInfo()!=null&&!data.getBoolean(Constants.ARG_POSITION)) {
          if(!wait) {
@@ -266,6 +289,8 @@ public class Fragment_BeginOrderList extends Fragment {
         }*/
         // 建立ListItemAdapter
         listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
+        listViewAdapter.setTakeLookButtonListner(Fragment_BeginOrderList.this);
+        listViewAdapter.setTakeOverButtonListner(Fragment_BeginOrderList.this);
         listView.setAdapter(listViewAdapter);
         listViewAdapter.notifyDataSetChanged();
 
@@ -277,15 +302,28 @@ public class Fragment_BeginOrderList extends Fragment {
 
 
         setLister();
-		
+
     }
 
-    @Override
+        @Override
     public void onResume() {
         getActivity().setTitle(getString(R.string.begin_order_page_title));
         super.onResume();
 
-
+        if (progressDialog_loading==null) {
+            progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                    "Loading. Please wait...", true);
+        }
+        loadOrderList.setRefreshing(true);
+        final Utility info = new Utility(getActivity());
+        info.clearData(NormalOrder.class);
+        //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
+                sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+            }
+        }));
     }
 
 
@@ -294,120 +332,36 @@ public class Fragment_BeginOrderList extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
+                /*final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
 
                 final Button takeLook = (Button) v.findViewById(R.id.take_look);
 
-                takeLook.setOnClickListener(new View.OnClickListener() {
+                final NormalOrder order = orderItem.order;
+                if(order.isValid()) {
+                    final String cargo_type = order.getCargo_type();
+                    final Constants.APP_REGISTER_ORDER_TYPE[] orderCargoType = new Constants.APP_REGISTER_ORDER_TYPE[1];
 
-                    @Override
-                    public void onClick(View v) {
-                        Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
-                        Bundle b = new Bundle();
-                        if(orderItem.order.isValid()) {
-                            String cargo_type = orderItem.order.getCargo_type();
-                            Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
-                            orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
+                    takeLook.setOnClickListener(new View.OnClickListener() {
 
-                            if (orderCargoType != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
-                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-                            else
-                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
-                            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
-                            //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
+                        @Override
+                        public void onClick(View v) {
+
                         }
-                            question.putExtras(b);
-                        startActivity(question);
-                    }
-                });
-                final Button takeover = (Button) v.findViewById(R.id.take_over);
+                    });
+                    final Button takeover = (Button) v.findViewById(R.id.take_over);
 
-                takeover.setOnClickListener(new View.OnClickListener() {
+                    takeover.setOnClickListener(new View.OnClickListener() {
 
-                    @Override
-                    public void onClick(View v) {
-
-                        if (!wait){
-                         //   if (order.order_title.equals("一般搭乘(小費:50元)")) {
-                                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
-                                // set title
-                                alertDialogBuilder.setTitle(getString(R.string.menu_sure_take_over));
-
-                                // set dialog message
-                                alertDialogBuilder
-                                        .setMessage(getString(R.string.menu_cancel_order_warn))
-                                        .setCancelable(false)
-                                        .setPositiveButton(getString(R.string.menu_sure_take_over), new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                // if this button is clicked, close
-                                                // current activity
-                                                sendDataRequest.driverTakeOverOrder(orderItem.order);
-                                                /*  Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
-                                                Bundle b = new Bundle();
-                                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-                                                question.putExtras(b);
-                                                startActivity(question);*/
+                        @Override
+                        public void onClick(View v) {
 
 
-                                            }
-                                        })
-                                        .setNegativeButton(getString(R.string.menu_give_up_take_over), new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
 
-                                            }
-                                        });
-                                // create alert dialog
-                                AlertDialog alertDialog = alertDialogBuilder.create();
-                                // show it
-                                alertDialog.show();
-                          /*  } else {
-
-                                final Dialog dialog = new Dialog(getActivity());
-                                dialog.setContentView(R.layout.dialog_enter_change_price_layout);
-                                dialog.setTitle(getString(R.string.order_change_price));
-                                Button sure = (Button) dialog.findViewById(R.id.sure_action);
-                                sure.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent question = new Intent(getActivity(), SupportAnswerActivity.class);
-                                        Bundle b = new Bundle();
-                                        b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_PRICE);
-                                        question.putExtras(b);
-                                        startActivity(question);
-                                    }
-                                });
-
-                                Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
-                                cancel.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialog.show();
-                            }*/
-                     }else
-                        {
-                            Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
-                            Bundle b = new Bundle();
-                            Constants.APP_REGISTER_ORDER_TYPE cargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(orderItem.order.getCargo_type()));
-
-                            if(cargoType!=Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
-                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-                            else
-                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
-                            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
-                            question.putExtras(b);
-                            startActivity(question);
                         }
-                    }
 
-                });
+                    });
+                }*/
 
             }
         });
@@ -418,10 +372,16 @@ public class Fragment_BeginOrderList extends Fragment {
 
                 /*progressDialog_loading = ProgressDialog.show(getActivity(), "",
                         "Loading. Please wait...", true);*/
-                Utility info = new Utility(getActivity());
+                final Utility info = new Utility(getActivity());
                 info.clearData(NormalOrder.class);
                 //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
-                sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+                ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+                    @Override
+                    public void run() {
+                        sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+                    }
+                }));
+
             }
         });
     }
@@ -676,5 +636,155 @@ public class Fragment_BeginOrderList extends Fragment {
     }
 
 
+    @Override
+    public void ontakeLookButtonListener(int position) {
+        final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
 
+         final NormalOrder order = orderItem.order;
+        if (order.isValid()) {
+           /* final String cargo_type = order.getCargo_type();
+            final Constants.APP_REGISTER_ORDER_TYPE[] orderCargoType = new Constants.APP_REGISTER_ORDER_TYPE[1];
+
+            Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
+            Bundle b = new Bundle();
+
+            orderCargoType[0] = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
+
+            //if (orderCargoType[0] != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
+            //else
+            //    b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
+            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
+            //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
+
+            question.putExtras(b);
+            startActivity(question);*/
+            orderDetail(order);
+        }
+    }
+
+    @Override
+    public void ontakeOverButtonListener(int position) {
+        final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
+
+        final NormalOrder order = orderItem.order;
+
+        if (order.isValid()) {
+            final String cargo_type = order.getCargo_type();
+            final Constants.APP_REGISTER_ORDER_TYPE[] orderCargoType = new Constants.APP_REGISTER_ORDER_TYPE[1];
+
+            if (!wait) {
+                //   if (order.order_title.equals("一般搭乘(小費:50元)")) {
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                // set title
+                alertDialogBuilder.setTitle(getString(R.string.menu_sure_take_over));
+
+                // set dialog message
+                alertDialogBuilder
+                        .setMessage(getString(R.string.menu_cancel_order_warn))
+                        .setCancelable(false)
+                        .setPositiveButton(getString(R.string.menu_sure_take_over), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // if this button is clicked, close
+                                // current activity
+                                if (order.isValid()) {
+
+                                    sendDataRequest.driverTakeOverOrder(orderItem.order);
+
+                                }
+                                                /*  Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
+                                                Bundle b = new Bundle();
+                                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
+                                                question.putExtras(b);
+                                                startActivity(question);*/
+
+
+                            }
+                        })
+                        .setNegativeButton(getString(R.string.menu_give_up_take_over), new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                            }
+                        });
+                // create alert dialog
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+                          /*  } else {
+
+                                final Dialog dialog = new Dialog(getActivity());
+                                dialog.setContentView(R.layout.dialog_enter_change_price_layout);
+                                dialog.setTitle(getString(R.string.order_change_price));
+                                Button sure = (Button) dialog.findViewById(R.id.sure_action);
+                                sure.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent question = new Intent(getActivity(), SupportAnswerActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_PRICE);
+                                        question.putExtras(b);
+                                        startActivity(question);
+                                    }
+                                });
+
+                                Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
+                                cancel.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.cancel();
+                                    }
+                                });
+
+                                dialog.show();
+                            }*/
+            } else {
+                Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
+                Bundle b = new Bundle();
+                if (orderCargoType[0] != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+                    b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
+                else
+                    b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
+                b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
+                question.putExtras(b);
+                startActivity(question);
+            }
+        }
+    }
+
+    private void orderDetail(NormalOrder order)
+    {
+        String departure = "從："+order.getBegin_address()+"\n";
+        String stop = "";
+        String spec = "";
+        if(!order.getStop_address().equals("0"))
+           stop = "停靠："+order.getStop_address()+"\n";
+        String destination ="到："+ order.getEnd_address()+"\n";
+        String orderType = "時間：即時"+"\n";
+        if(order.getCar_special()!=null)
+            spec ="特殊需求："+order.getCar_special();
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.order_info));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage("客戶電話:"+order.getUser_name()+"\n"+departure+stop+destination+orderType+spec)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.sure_ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+    }
 }

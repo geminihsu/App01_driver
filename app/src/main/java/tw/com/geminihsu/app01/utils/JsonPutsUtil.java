@@ -88,7 +88,7 @@ public class JsonPutsUtil {
     public void sendRegisterRequest(final AccountInfo user)
     {
         String versionName = BuildConfig.VERSION_NAME;
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
 
         JSONObject obj = new JSONObject();
@@ -148,15 +148,20 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     public void sendReSendPasswordRequest(final AccountInfo accountInfo)
     {
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+       // final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
 
         JSONObject obj = new JSONObject();
@@ -218,14 +223,17 @@ public class JsonPutsUtil {
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+    // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
 
     //會員-忘記密碼-驗證&修改密碼
     public void sendForgetModify(final AccountInfo accountInfo, String verifiyCode, final String newPassword)
     {
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
 
         JSONObject obj = new JSONObject();
@@ -313,14 +321,17 @@ public class JsonPutsUtil {
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
 
     public void sendVerify(String code, final AccountInfo user)
     {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
 
         JSONObject obj = new JSONObject();
@@ -377,13 +388,16 @@ public class JsonPutsUtil {
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
 
     public void sendLoginRequest(final AccountInfo user, final boolean isRegister)
     {
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
         String versionName = BuildConfig.VERSION_NAME;
 
 
@@ -473,13 +487,16 @@ public class JsonPutsUtil {
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+       // AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
 
     public void getUserInfo(final AccountInfo user, final boolean isCheckInfo) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         final JSONObject obj = new JSONObject();
 
@@ -516,20 +533,28 @@ public class JsonPutsUtil {
                             String driver_ticket = data.optString(App01libObjectKey.APP_OBJECT_KEY_USER_DRIVER_TICKETS);
                             ArrayList<DriverIdentifyInfo> driverIdentifyInfos = new ArrayList<DriverIdentifyInfo>();
 
-                            if(user.getRole()==2) {
+                            //if(user.getRole()==2) {
+                            String driver_enable="";
+                            String driver="";
+                            if(data.optString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER)!=null)
+                                driver = data.optString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
 
-                                String driver = data.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
-
-                                if (!driver.equals("null")) {
+                                if (!driver.equals("")) {
                                     //表示有司機的資料
                                     //JSONObject data = jsonObject.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
                                     JSONArray info = data.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DRIVER);
+
                                     for (int i = 0; i < info.length(); i++) {
                                         JSONObject object = info.getJSONObject(i);
                                         String _did = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_DID);
                                         String _dtype = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE);
                                         String _dtype_cht = object.getString(App01libObjectKey.APP_OBJECT_KEY_ALL_SERVER_DTYPE_DRIVER_TYPE_CHT);
                                         String _enable = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_ENABLE);
+
+                                        //表示客戶已經審核司機通過
+                                        if(driver_enable.equals("100"))
+                                            user.setDriver_type(_dtype);
+
                                         String _enable_cht = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_ENABLE_CHT);
                                         String car_brand = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_BRAND);
                                         String car_number = object.getString(App01libObjectKey.APP_OBJECT_KEY_DRIVER_CAR_NUMBER);
@@ -542,6 +567,7 @@ public class JsonPutsUtil {
 
                                         DriverIdentifyInfo driverIdentifyInfo = new DriverIdentifyInfo();
                                         driverIdentifyInfo.setDid(_did);
+                                        driverIdentifyInfo.setAccesskey(user.getAccessKey());
                                         driverIdentifyInfo.setUid("" + id);
                                         driverIdentifyInfo.setDtype(_dtype);
                                         driverIdentifyInfo.setCar_born(car_born);
@@ -560,7 +586,7 @@ public class JsonPutsUtil {
                                     }
                                 }
 
-                            }
+                            //}
                             JSONObject tree = data.getJSONObject(App01libObjectKey.APP_OBJECT_KEY_USER_TREE);
 
                             int tree_lv = tree.getInt(App01libObjectKey.APP_OBJECT_KEY_USER_TREE_LV);
@@ -576,6 +602,8 @@ public class JsonPutsUtil {
                             user.setName(realname);
                             user.setDriver_ticket_id(driver_ticket);
                             user.setClient_ticket_id(client_ticket);
+                            if(!driverIdentifyInfos.isEmpty()&&user.getDriver_type()!=null)
+                                user.setRole(2);
 
                             AccountTreeInfo treeInfo = new AccountTreeInfo();
                             treeInfo.setUser_id(user.getId());
@@ -592,6 +620,11 @@ public class JsonPutsUtil {
                             if(!isCheckInfo) {
                                 RealmUtil database = new RealmUtil(mContext);
                                 database.clearDB(AccountInfo.class);
+                                database.clearDB(DriverIdentifyInfo.class);
+                                for(DriverIdentifyInfo driverIdentifyInfo : driverIdentifyInfos)
+                                {
+                                    database.addDriverInfo(driverIdentifyInfo);
+                                }
                                 database.addAccount(user);
                                 //設定檔顯示登入的帳號密碼
                                 SharedPreferences configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
@@ -647,6 +680,7 @@ public class JsonPutsUtil {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 if(volleyError!=null) {
+                    if(volleyError.getMessage()!=null)
                     Log.e(TAG, volleyError.getMessage().toString());
                     if (mClientLoginDataManagerCallBackFunction != null)
                         mClientLoginDataManagerCallBackFunction.loginError(true);
@@ -654,13 +688,16 @@ public class JsonPutsUtil {
                 }
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+       // VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
 
     public void getDriverInfo(final AccountInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         final JSONObject obj = new JSONObject();
 
@@ -752,12 +789,16 @@ public class JsonPutsUtil {
                     Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     public void getPushNotification(final AccountInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         final JSONObject obj = new JSONObject();
 
@@ -869,12 +910,16 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+       // AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     public void clearPushNotification(AccountInfo user,int pid) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         final JSONObject obj = new JSONObject();
 
@@ -923,13 +968,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
 
     public void putsUserGPSLocation(double longitude, double latitude, AccountInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -980,12 +1029,16 @@ public class JsonPutsUtil {
                       Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     public void getUserLocation(final NormalOrder user, int driverUid) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1049,13 +1102,17 @@ public class JsonPutsUtil {
                     Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //查詢客戶訂單
     public void queryClientOrderList(AccountInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1102,13 +1159,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //查詢司機訂單
     public void queryDriverOrderList(final DriverIdentifyInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1234,12 +1295,16 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
     // 訂單-自動配對可以接的訂單
     public void queryRecommendOrderList(final AccountInfo user) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1357,13 +1422,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //查詢訂單明細
     public void queryOrderInformation(final DriverIdentifyInfo user, final String orderId) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1466,13 +1535,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //查詢訂單明細
     public void queryOrderInformation(final AccountInfo user, final String orderId, final boolean max) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1531,6 +1604,9 @@ public class JsonPutsUtil {
                                         beg_lat = beg_gps[0];
                                         beg_lng = beg_gps[1];
                                     }
+
+                                    beg_address = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
                                 }
 
 
@@ -1543,11 +1619,49 @@ public class JsonPutsUtil {
                                 beginInfo.setZipcode(zipCode);
                                 beginInfo.setLongitude(beg_lng);
                                 beginInfo.setLatitude(beg_lat);
-                                beginInfo.setAddress(beg_zipcode);
+                                beginInfo.setAddress(beg_address);
                                 order.setBegin(beginInfo);
-                                order.setBegin_address(beg_zipcode);
+                                order.setBegin_address(beg_address);
 
                                 //取得暫停點資訊
+
+                                JSONArray info = object.optJSONArray(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
+
+                                String stop_latlng = "";
+                                String stop_lat="";
+                                String stop_lng="";
+                                String stop_gps[];
+                                String stop_zipcode="";
+                                String stop_address="";
+
+                                for(int i=0;i<info.length();i++)
+                                {
+                                    JSONObject stopObject = info.getJSONObject(i);
+                                    stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+
+
+                                    if(!stop_latlng.equals("")) {
+                                        stop_gps = stop_latlng.split(",");
+                                        stop_lat = stop_gps[0];
+                                        stop_lng = stop_gps[1];
+                                    }
+
+                                    stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
+
+
+                                    OrderLocationBean stopInfo = new OrderLocationBean();
+                                    stopInfo.setZipcode(stop_zipcode);
+                                    stopInfo.setLongitude(stop_lng);
+                                    stopInfo.setLatitude(stop_lat);
+                                    stopInfo.setAddress(stop_address);
+
+                                    order.setStop(stopInfo);
+                                    order.setStop_address(stop_address);
+
+
+                                }
                                 /*JSONObject stop = jsonObject.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
                                 String stop_zipcode = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                 String stop_address = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
@@ -1587,6 +1701,8 @@ public class JsonPutsUtil {
                                         end_lat = end_gps[0];
                                         end_lng = end_gps[1];
                                     }
+                                    end_address = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
                                 }
 
                                 OrderLocationBean endInfo = new OrderLocationBean();
@@ -1597,9 +1713,9 @@ public class JsonPutsUtil {
                                 endInfo.setZipcode(zipcode);
                                 endInfo.setLongitude(end_lng);
                                 endInfo.setLatitude(end_lat);
-                                endInfo.setAddress(end_zipcode);
+                                endInfo.setAddress(end_address);
                                 order.setEnd(endInfo);
-                                order.setEnd_address(end_zipcode);
+                                order.setEnd_address(end_address);
 
 
                                 String cargo_type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_TYPE);
@@ -1714,7 +1830,10 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
 
     }
@@ -1722,7 +1841,7 @@ public class JsonPutsUtil {
     //查詢訂單明細
     public void queryOrderInformation(final DriverIdentifyInfo user, final String orderId, final boolean max) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -1774,7 +1893,7 @@ public class JsonPutsUtil {
                                 String beg_lng="";
                                 if(begin!=null) {
                                     beg_zipcode = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
-                                    //beg_address = begin.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+                                    beg_address = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
                                     beg_latlng = begin.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
                                     if(beg_latlng!=null) {
                                         beg_gps = beg_latlng.split(",");
@@ -1789,15 +1908,54 @@ public class JsonPutsUtil {
 
                                 OrderLocationBean beginInfo = new OrderLocationBean();
                                 beginInfo.setId(0);
-                                String zipCode=beg_zipcode.substring(0,3);
-                                beginInfo.setZipcode(zipCode);
+                                //String zipCode=beg_zipcode.substring(0,3);
+                                beginInfo.setZipcode(beg_zipcode);
                                 beginInfo.setLongitude(beg_lng);
                                 beginInfo.setLatitude(beg_lat);
-                                beginInfo.setAddress(beg_zipcode);
+                                beginInfo.setAddress(beg_address);
                                 order.setBegin(beginInfo);
-                                order.setBegin_address(beg_zipcode);
+                                order.setBegin_address(beg_address);
 
                                 //取得暫停點資訊
+
+                                JSONArray info = object.optJSONArray(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
+
+
+                                String stop_latlng ="";
+                                String stop_lat = "";
+                                String stop_lng = "";
+                                String stop_gps[];
+                                String stop_zipcode="";
+                                String stop_address="";
+
+                                for(int i=0;i<info.length();i++) {
+                                    JSONObject stopObject = info.getJSONObject(i);
+                                    stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+
+
+                                    if (!stop_latlng.equals("")) {
+                                        stop_gps = stop_latlng.split(",");
+                                        if(stop_gps.length>1) {
+                                            stop_lat = stop_gps[0];
+                                            stop_lng = stop_gps[1];
+                                        }
+                                    }
+
+                                    stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                    stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
+                                    OrderLocationBean stopInfo = new OrderLocationBean();
+                                    stopInfo.setId(0);
+                                    stopInfo.setZipcode(stop_zipcode);
+                                    stopInfo.setLongitude(stop_lng);
+                                    stopInfo.setLatitude(stop_lat);
+                                    stopInfo.setAddress(stop_address);
+                                    order.setStop(stopInfo);
+                                    order.setStop_address(stop_address);
+
+                                }
+
+                                    //取得暫停點資訊
                                 /*JSONObject stop = jsonObject.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
                                 String stop_zipcode = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
                                 String stop_address = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
@@ -1829,7 +1987,7 @@ public class JsonPutsUtil {
                                 String end_lng="";
                                 if(end!=null) {
                                     end_zipcode = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
-                                    //end_address = end.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+                                    end_address = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
 
                                     end_latlng = end.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
                                     if(end_latlng!=null) {
@@ -1843,13 +2001,13 @@ public class JsonPutsUtil {
 
                                 OrderLocationBean endInfo = new OrderLocationBean();
                                 endInfo.setId(2);
-                                String zipcode =end_zipcode.substring(0,3);
-                                endInfo.setZipcode(zipcode);
+                                //String zipcode =end_zipcode.substring(0,3);
+                                endInfo.setZipcode(end_zipcode);
                                 endInfo.setLongitude(end_lng);
                                 endInfo.setLatitude(end_lat);
-                                endInfo.setAddress(end_zipcode);
+                                endInfo.setAddress(end_address);
                                 order.setEnd(endInfo);
-                                order.setEnd_address(end_zipcode);
+                                order.setEnd_address(end_address);
 
 
                                 String cargo_type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_TYPE);
@@ -1868,7 +2026,7 @@ public class JsonPutsUtil {
                                 JSONObject client = object.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_ORDER_CLIENT);
                                 String userPhoneNumber="";
                                 String userRealName="";
-                                if(begin!=null) {
+                                if(client!=null) {
                                     userPhoneNumber = client.getString(App01libObjectKey.APP_OBJECT_KEY_UPLOAD_GPS_USERNAME);
                                     userRealName = client.getString(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REALNAME);
                                 }
@@ -1961,14 +2119,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+       // requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
 
     }
     //推訊息給訂單建立者
     public void pushNotificationToOrderOwner(NormalOrder order,String content) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2017,13 +2178,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //訂單-快速接單(司機權限)
     public void driverTakeOverOrder(final NormalOrder order) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         final JSONObject obj = new JSONObject();
 
@@ -2104,13 +2269,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //會員-更改營運中的司機身分
     public void driverWorkIdentity(final DriverIdentifyInfo driverIdentifyInfo) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2162,13 +2331,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //訂單-結案訂單(司機權限)
     public void driverFinishOrder(final NormalOrder order) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2218,13 +2391,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //訂單-給訂單對方評價星星數
     public void commentOrder(final NormalOrder order, int star) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2278,13 +2455,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //會員-取得-使用者評價
     public void getAccountComment(final AccountInfo accountInfo) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2335,12 +2516,16 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
     //申請註冊司機
     public void registerDriverAccount(final DriverIdentifyInfo driverIdentifyInfo) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject obj = new JSONObject();
 
@@ -2424,13 +2609,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //client create order call taxi
     public void putCreateQuickTaxiOrder(final NormalOrder order) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject begin = new JSONObject();
         /*try {
@@ -2544,13 +2733,17 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //client create normal order
     public void putCreateNormalOrder(final NormalOrder order) {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
         JSONObject begin = new JSONObject();
         /*try {
@@ -2563,10 +2756,15 @@ public class JsonPutsUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
+
+        String beginZipCode="0";
+        if(order.getBegin().getZipcode()!=null)
+            beginZipCode = order.getBegin().getZipcode();
+
         try {
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT, Double.parseDouble(order.getBegin().getLatitude()));
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.parseDouble(order.getBegin().getLongitude()));
-            begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getBegin().getZipcode()));
+            begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(beginZipCode));
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getBegin().getAddress());
 
         } catch (JSONException e) {
@@ -2585,10 +2783,14 @@ public class JsonPutsUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
+        String stopZipCode="0";
+        if(order.getStop().getZipcode()!=null)
+             stopZipCode = order.getStop().getZipcode();
+
         try {
             stop.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT, Double.parseDouble(order.getStop().getLatitude()));
             stop.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.parseDouble(order.getStop().getLongitude()));
-            stop.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getStop().getZipcode()));
+            stop.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(stopZipCode));
             stop.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getStop_address());
 
         } catch (JSONException e) {
@@ -2608,10 +2810,14 @@ public class JsonPutsUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
+        String endZipCode="0";
+        if(order.getEnd().getZipcode()!=null)
+            endZipCode = order.getEnd().getZipcode();
+
         try {
             end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT,Double.parseDouble(order.getEnd().getLatitude()));
             end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.parseDouble(order.getEnd().getLongitude()));
-            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getEnd().getZipcode()));
+            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(endZipCode));
             end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getEnd().getAddress());
 
 
@@ -2660,8 +2866,8 @@ public class JsonPutsUtil {
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_TYPE, Integer.valueOf(order.getCargo_type()));
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SIZE, 0);
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_IMAGES, "");
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SPECIAL, "");
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_TIME_BEGIN, Integer.valueOf(order.getTimebegin()));
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SPECIAL, order.getCar_special());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_TIME_BEGIN, Long.parseLong(order.getTimebegin()));
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_REMARK, order.getRemark());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_PRICE, Integer.valueOf(order.getPrice()));
             obj.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_TIP, Integer.valueOf(order.getTip()));
@@ -2726,7 +2932,11 @@ public class JsonPutsUtil {
                 Log.e(TAG, volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
+
     }
 
     //取得每一張圖檔的資料
@@ -2917,7 +3127,7 @@ public class JsonPutsUtil {
     public void sendRequestServerContentDetail()
     {
 
-        final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
+        //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
 
         JSONObject obj = new JSONObject();
@@ -3125,10 +3335,14 @@ public class JsonPutsUtil {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                if(volleyError.getMessage()!=null)
                 Log.e(TAG,volleyError.getMessage().toString());
             }
         });
-        requestQueue.add(jsonObjectRequest);
+        //requestQueue.add(jsonObjectRequest);
+        // Adding request to request queue
+        //AppController.getInstance().addToRequestQueue(jsonObjectRequest);
+        VolleySingleton.getInstance(mContext).addToRequestQueue(jsonObjectRequest);
 
     }
 

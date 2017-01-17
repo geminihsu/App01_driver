@@ -114,6 +114,8 @@ public class BookmarksMapListActivity extends Activity {
                         setResult(Constants.DEPARTURE_QUERY_BOOKMARK, i);
                     else if (provide_location == Constants.DESTINATION_QUERY_BOOKMARK)
                         setResult(Constants.DESTINATION_QUERY_BOOKMARK, i);
+                    else if (provide_location == Constants.STOP_QUERY_BOOKMARK)
+                        setResult(Constants.STOP_QUERY_BOOKMARK, i);
 
                 }
                 mBookmarkListData.set(position,orderItem);

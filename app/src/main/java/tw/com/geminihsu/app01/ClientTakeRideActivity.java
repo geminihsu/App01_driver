@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,11 +17,14 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -51,8 +55,10 @@ import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
 import tw.com.geminihsu.app01.serverbean.ServerSpecial;
+import tw.com.geminihsu.app01.utils.DateTimeUtil;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class ClientTakeRideActivity extends Activity {
@@ -85,7 +91,11 @@ public class ClientTakeRideActivity extends Activity {
     private EditText date;
     private EditText time;
     private EditText departure_address;
+    private EditText stop_address;
     private EditText destination_address;
+    private EditText merchandise_content;
+    private EditText merchandise_weight;
+    private EditText merchandise_unit;
     private int option;
 
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
@@ -100,6 +110,7 @@ public class ClientTakeRideActivity extends Activity {
     private AccountInfo driver;
 
     private LocationAddress departure_detail;
+    private LocationAddress stop_detail;
     private LocationAddress destination_detail;
 
     private int dType;//哪一種司機型態
@@ -109,6 +120,10 @@ public class ClientTakeRideActivity extends Activity {
     private Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
     private Dialog dialog;
+    private long order_timeStamp;
+    private ArrayList<String> spec_list;
+
+    private ProgressDialog progressDialog_loading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,7 +183,8 @@ public class ClientTakeRideActivity extends Activity {
 
     private void findViews()
     {
-        change = (LinearLayout) findViewById (R.id.change);
+        spec_list = new ArrayList<String>();
+        change = (LinearLayout) findViewById (R.id.merchandise_content);
         linearLayout_date_picker = (LinearLayout) findViewById(R.id.date_layout);
 
         btn_datePicker = (ImageButton) findViewById(R.id.date_picker);
@@ -186,11 +202,15 @@ public class ClientTakeRideActivity extends Activity {
         date = (EditText) findViewById(R.id.date_info);
         time = (EditText) findViewById(R.id.time_info);
         departure_address = (EditText) findViewById(R.id.departure_address);
+        stop_address = (EditText) findViewById(R.id.stop_address);
         destination_address = (EditText) findViewById(R.id.destination_address);
+        merchandise_content = (EditText) findViewById(R.id.merchandise_content_info);
+        merchandise_weight = (EditText) findViewById(R.id.merchandise_weight);
+        merchandise_unit = (EditText) findViewById(R.id.merchandise_unit);
 
 
         Date dateIfo=new Date();
-        time.setText(new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss").format(dateIfo));
+        time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateIfo));
         //Log.e(TAG,new SimpleDateFormat("yyyy.MM.dd  HH:mm:ss").format(date));
 
     }
@@ -199,11 +219,11 @@ public class ClientTakeRideActivity extends Activity {
     private void displayLayout() {
         if (option == ClientTakeRideActivity.TAKE_RIDE) {
             getActionBar().setTitle(getString(R.string.client_take_ride_title));
-            change.setVisibility(View.VISIBLE);
+            change.setVisibility(View.GONE);
         } else if (option == ClientTakeRideActivity.SEND_MERCHANDISE){
             show_title.setText(getString(R.string.txt_send_merchandise));
             getActionBar().setTitle(getString(R.string.client_send_merchandise_title));
-            change.setVisibility(View.GONE);
+            change.setVisibility(View.VISIBLE);
         }
     }
     private void setLister()
@@ -246,10 +266,18 @@ public class ClientTakeRideActivity extends Activity {
 
         radioGroup_type.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                     public void onCheckedChanged(RadioGroup group, int checkedId) {
+                        Date dateIfo=new Date();
                     if (checkedId == reservation.getId()) {
                         linearLayout_date_picker.setVisibility(View.VISIBLE);
-                     } else {
+
+                        String schedule = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateIfo);
+                        date.setText(new SimpleDateFormat("yyyy-MM-dd").format(dateIfo));
+                        time.setText(new SimpleDateFormat("HH:mm:ss").format(dateIfo));
+                        order_timeStamp = DateTimeUtil.convertString_yyyymmddToMillisecondsTime(schedule);
+                    } else {
                         linearLayout_date_picker.setVisibility(View.GONE);
+                        time.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(dateIfo));
+                        order_timeStamp = 0;
 
                     }
           }
@@ -306,8 +334,46 @@ public class ClientTakeRideActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
-                startActivity(question);
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(ClientTakeRideActivity.this);
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        ClientTakeRideActivity.this,
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pop_map_option1));
+                arrayAdapter.add(getString(R.string.pop_map_option2));
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+
+                                switch (which){
+                                    case 0:
+                                        /*Intent map = new Intent(ClientTakeRideActivity.this, MapsActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.DEPARTURE_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.DEPARTURE_QUERY_GPS);*/
+                                        Intent map = new Intent(ClientTakeRideActivity.this, OrderMapActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.STOP_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.STOP_QUERY_GPS);
+                                        break;
+                                    case 1:
+                                        Intent page = new Intent(ClientTakeRideActivity.this, BookmarksMapListActivity.class);
+                                        Bundle flag = new Bundle();
+                                        flag.putInt(Constants.ARG_POSITION, Constants.STOP_QUERY_BOOKMARK);
+                                        page.putExtras(flag);
+                                        startActivityForResult(page,Constants.STOP_QUERY_BOOKMARK);
+
+                                        break;
+                                }
+                            }
+                        });
+                builderSingle.show();
             }
         });
 
@@ -361,12 +427,22 @@ public class ClientTakeRideActivity extends Activity {
                 final Dialog dialog = new Dialog(ClientTakeRideActivity.this);
                 dialog.setContentView(R.layout.client_take_ride_selectspec_requirement);
                 dialog.setTitle(getString(R.string.txt_take_spec));
-                Button cancel = (Button) dialog.findViewById(R.id.button_category_ok);
+                Button cancel = (Button) dialog.findViewById(R.id.button_category_cancel);
+                Button ok = (Button) dialog.findViewById(R.id.button_category_ok);
 
                 //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 // set the custom dialog components - text, image and button
                 ListView requirement = (ListView) dialog.findViewById(R.id.listViewDialog);
 
+                requirement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                        ClientTakeRideSelectSpecListItem item = mCommentListData.get(position);
+                        item.check= !item.check;
+                        mCommentListData.set(position,item);
+                        listViewAdapter.notifyDataSetChanged();
+                    }
+                });
                 getDataFromDB();
                 listViewAdapter = new ClientTakeRideSelectSpecListItemAdapter(ClientTakeRideActivity.this, 0, mCommentListData);
                 requirement.setAdapter(listViewAdapter);
@@ -382,8 +458,25 @@ public class ClientTakeRideActivity extends Activity {
                     }
                 });
 
+                ok.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        for(ClientTakeRideSelectSpecListItem item:mCommentListData)
+                        {
+                            if(item.check)
+                            {
+                                spec_list.add(item.spec_id);
+                            }
+                        }
+                        dialog.cancel();
+                    }
+                });
+
             }
         });
+
+
     }
 
 
@@ -412,67 +505,10 @@ public class ClientTakeRideActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 //if (option == ClientTakeRideActivity.TAKE_RIDE) {
-                    String departure_address_info;
-                    if(departure_detail!=null)
-                        departure_address_info=departure_detail.getAddress();
-                    else
-                        departure_address_info = departure_address.getText().toString();
-                    String destination_address_info;
-                    if(destination_detail!=null)
-                        destination_address_info=destination_detail.getAddress();
-                    else
-                        destination_address_info = destination_address.getText().toString();
-
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                            this);
-
-                    // set title
-                    alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
-
-                    // set dialog message
-                    alertDialogBuilder
-                            .setMessage(time.getText().toString()+"\n從:"+departure_address_info+"\n停:繼光街口\n到:"+destination_address_info)
-                            .setCancelable(false)
-                            .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                }
-                            })
-                            .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-
-                                    if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
-                                        if (option == TAKE_RIDE)
-                                            if (departure_detail != null)
-                                                createTaxiOrder("" + option,"0","0");
-                                            else
-                                                createTempTaxiOrder("" + option);
-                                        else
-                                            createMechardiseOrder("" + option);
-                                    }else
-                                    {
-                                        //讓使用者填入價錢和小費
-                                        provideOrderPrice();
-                                    }
-
-                                }
-                            });
-
-                    // create alert dialog
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-
-                    // show it
-                    alertDialog.show();
-               /* }else
-                {
-                    NormalOrder order = createMechardiseOrder(""+SEND_MERCHANDISE);
-                    Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
-                    Bundle b = new Bundle();
-                    b.putInt(Constants.ARG_POSITION, MerchandiseOrderActivity.SEND_MERCHANDISE);
-                    b.putSerializable(BUNDLE_ORDER_TICKET_ID, order);
-                    question.putExtras(b);
-                    startActivity(question);
-                }*/
+               if(!departure_address.getText().toString().isEmpty()&&!destination_address.getText().toString().isEmpty())
+                     sendOrder();
+                else
+                   alert();
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
@@ -503,6 +539,7 @@ public class ClientTakeRideActivity extends Activity {
                 else
                   item.check=false;
                 //if(specials.get(i).getDtype().equals(dType))
+                item.spec_id = specials.get(i).getId();
                 item.book_title =specials.get(i).getContent();
                 mCommentListData.add(item);
 
@@ -559,6 +596,10 @@ public class ClientTakeRideActivity extends Activity {
         order.setOrderdate(time.getText().toString());
         order.setTarget(target);
 
+        if (option == ClientTakeRideActivity.SEND_MERCHANDISE)
+        {
+            order.setRemark(merchandise_content.getText().toString()+","+merchandise_weight.getText().toString()+","+merchandise_unit.getText().toString());
+        }
        //sendDataRequest.putCreateNormalOrder(order);
         return order;
 
@@ -579,10 +620,10 @@ public class ClientTakeRideActivity extends Activity {
 
         OrderLocationBean stop_location = new OrderLocationBean();
         stop_location.setId(2);
-        stop_location.setLatitude("24.14411");
-        stop_location.setLongitude("120.679567");
-        stop_location.setZipcode("400");
-        stop_location.setAddress("台中市中區柳川里成功路300號");
+        stop_location.setLatitude(""+stop_detail.getLatitude());
+        stop_location.setLongitude(""+stop_detail.getLongitude());
+        stop_location.setZipcode(stop_detail.getZipCode());
+        stop_location.setAddress(stop_detail.getAddress());
 
 
         OrderLocationBean end_location = new OrderLocationBean();
@@ -597,15 +638,19 @@ public class ClientTakeRideActivity extends Activity {
 
 
 
-        long unixTime = System.currentTimeMillis() / 1000L;
+        //long unixTime = System.currentTimeMillis() / 1000L;
 
 
-        NormalOrder order = new NormalOrder();
+        final NormalOrder order = new NormalOrder();
         order.setUser_id(driver.getId());
         order.setUser_uid(driver.getUid());
         order.setUser_name(driver.getPhoneNumber());
         order.setAccesskey(driver.getAccessKey());
-        order.setTimebegin(""+unixTime);
+
+        Log.e(TAG,"time stamp:"+time.getText().toString());
+        order_timeStamp = DateTimeUtil.convertString_yyyymmddToMillisecondsTime(time.getText().toString());
+
+        order.setTimebegin(""+order_timeStamp);
         order.setDtype(""+dataType.value());
         order.setCargo_type(""+orderCargoType.value());
         order.setBegin(begin_location);
@@ -621,9 +666,35 @@ public class ClientTakeRideActivity extends Activity {
         order.setPrice(price);
         order.setTip(tip);
 
+        if (option == ClientTakeRideActivity.SEND_MERCHANDISE)
+        {
+            order.setRemark(merchandise_content.getText().toString()+","+merchandise_weight.getText().toString()+","+merchandise_unit.getText().toString());
+        }
+
+        String spec="";
+        if(!spec_list.isEmpty())
+        {
+            for(String spec_id:spec_list){
+                spec+=spec_id+",";
+            }
+            spec.substring(0,spec.length()-1);
+
+        }
+        Log.e(TAG,"spec car:"+spec);
+        order.setCar_special(spec);
 
         //sendDataRequest.putCreateQuickTaxiOrder(order);
-        sendDataRequest.putCreateNormalOrder(order);
+        if(progressDialog_loading==null) {
+            progressDialog_loading = ProgressDialog.show(this, "",
+                    "Loading. Please wait...", true);
+        }
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
+                sendDataRequest.putCreateNormalOrder(order);
+            }
+        }));
+
 
     }
 
@@ -726,6 +797,27 @@ public class ClientTakeRideActivity extends Activity {
                 }
             break;
 
+            case Constants.STOP_QUERY_GPS:
+                ArrayList<Address> locationInfo3=null;
+                if(data!=null) {
+                    //destination_detail = new LocationAddress();
+                    stop_detail =(LocationAddress) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    //String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    //String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    //destination_detail.setLatitude(Double.valueOf(latitude));
+                    //destination_detail.setLongitude(Double.valueOf(longitude));
+                    boolean isBookMark = data.getBooleanExtra(BUNDLE_KEEP_BOOMARK,false);
+                    if(isBookMark)
+                    {
+                        addUserLocationToBookMark(stop_detail);
+                    }
+                    stop_address.setText(stop_detail.getAddress());
+                    //destination_detail.setAddress(locationInfo2.get(0).getAddressLine(0));
+                    //destination_detail.setLocation(locationInfo2.get(0).getAddressLine(0));
+                    //showAddressList(locationInfo2,destination_address,destination_detail);
+                }
+                break;
+
             case Constants.DEPARTURE_QUERY_BOOKMARK:
                 if (data!=null) {
                     departure_detail = new LocationAddress();
@@ -738,6 +830,21 @@ public class ClientTakeRideActivity extends Activity {
                     departure_detail.setCountryName(uSerBookmark.getCountryName());
                     departure_detail.setLocality(uSerBookmark.getLocality());
                     departure_detail.setZipCode(uSerBookmark.getZipCode());
+
+                }
+                break;
+            case Constants.STOP_QUERY_BOOKMARK:
+                if (data!=null) {
+                    stop_detail = new LocationAddress();
+                    USerBookmark uSerBookmark = (USerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    stop_address.setText(uSerBookmark.getStreetAddress());
+                    stop_detail.setLongitude(Double.parseDouble(uSerBookmark.getLng()));
+                    stop_detail.setLatitude(Double.parseDouble(uSerBookmark.getLat()));
+                    stop_detail.setAddress(uSerBookmark.getStreetAddress());
+                    stop_detail.setLocation(uSerBookmark.getLocation());
+                    stop_detail.setCountryName(uSerBookmark.getCountryName());
+                    stop_detail.setLocality(uSerBookmark.getLocality());
+                    stop_detail.setZipCode(uSerBookmark.getZipCode());
 
                 }
                 break;
@@ -779,6 +886,8 @@ public class ClientTakeRideActivity extends Activity {
 
                     //if (option == TAKE_RIDE)
                     //    if (departure_detail != null)
+                    //if (departure_detail.getLongitude()==0)
+                        parserAddressToGPS();
                             createTaxiOrder("" + option, enter.getText().toString(), tip.getText().toString());
                    //     else
                    //         createTempTaxiOrder("" + option);
@@ -836,5 +945,171 @@ public class ClientTakeRideActivity extends Activity {
             dialog.dismiss();
             dialog = null;
         }
+    }
+
+    private void parserAddressToGPS() {
+
+        Geocoder fwdGeocoder = new Geocoder(ClientTakeRideActivity.this);
+
+        if(departure_detail==null) {
+        String departure = departure_address.getText().toString();
+
+
+        List<Address> departure_locations = null;
+        try {
+            departure_locations = fwdGeocoder.getFromLocationName(departure, 10);
+        } catch (IOException e) {
+        }
+
+
+
+            departure_detail = new LocationAddress();
+            if (departure_locations.size() > 0) {
+                departure_detail.setLongitude(departure_locations.get(0).getLongitude());
+                departure_detail.setLatitude(departure_locations.get(0).getLatitude());
+                departure_detail.setAddress(departure);
+                departure_detail.setLocation(departure);
+                departure_detail.setCountryName(departure_locations.get(0).getCountryName());
+                departure_detail.setLocality(departure_locations.get(0).getLocality());
+                departure_detail.setZipCode(departure_locations.get(0).getPostalCode());
+            }
+        }
+        String stop = stop_address.getText().toString();
+
+
+        if(stop_detail==null) {
+            List<Address> stop_locations = null;
+            try {
+                stop_locations = fwdGeocoder.getFromLocationName(stop, 10);
+            } catch (IOException e) {
+            }
+
+
+            //Log.e(TAG, "Stop zipCode:" + stop_locations.get(0).getPostalCode());
+            stop_detail = new LocationAddress();
+            if (stop_locations.size() > 0) {
+                stop_detail.setLongitude(stop_locations.get(0).getLongitude());
+                stop_detail.setLatitude(stop_locations.get(0).getLatitude());
+                stop_detail.setAddress(stop);
+                stop_detail.setLocation(stop);
+                stop_detail.setCountryName(stop_locations.get(0).getCountryName());
+                stop_detail.setLocality(stop_locations.get(0).getLocality());
+                stop_detail.setZipCode(stop_locations.get(0).getPostalCode());
+            }
+        }
+        String destination = destination_address.getText().toString();
+
+
+        if(destination_detail==null) {
+            List<Address> destination_locations = null;
+            try {
+                destination_locations = fwdGeocoder.getFromLocationName(destination, 10);
+            } catch (IOException e) {
+            }
+
+
+            destination_detail = new LocationAddress();
+            if (destination_locations.size() > 0) {
+                destination_detail.setLongitude(destination_locations.get(0).getLongitude());
+                destination_detail.setLatitude(destination_locations.get(0).getLatitude());
+                destination_detail.setAddress(destination);
+                destination_detail.setLocation(destination);
+                destination_detail.setCountryName(destination_locations.get(0).getCountryName());
+                destination_detail.setLocality(destination_locations.get(0).getLocality());
+                destination_detail.setZipCode(destination_locations.get(0).getPostalCode());
+            }
+        }
+
+
+    }
+
+    private void sendOrder(){
+        String departure_address_info;
+        if(departure_detail!=null)
+            departure_address_info=departure_detail.getAddress();
+        else
+            departure_address_info = departure_address.getText().toString();
+        String stop_address_info;
+        if(stop_detail!=null)
+            stop_address_info=stop_detail.getAddress();
+        else
+            stop_address_info = stop_address.getText().toString();
+
+        String destination_address_info;
+        if(destination_detail!=null)
+            destination_address_info=destination_detail.getAddress();
+        else
+            destination_address_info = destination_address.getText().toString();
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                this);
+
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(date.getText().toString()+"\t"+time.getText().toString()+"\n從:"+departure_address_info+"\n停:+"+stop_address_info+"\n到:"+destination_address_info)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                            //if (option == TAKE_RIDE) {
+                                //if (departure_detail.getLongitude()==0)
+                                parserAddressToGPS();
+                                createTaxiOrder("" + option, "0", "0");
+                            //}
+                            //else
+                             //   createMechardiseOrder("" + option);
+                        }else
+                        {
+                            //讓使用者填入價錢和小費
+                            provideOrderPrice();
+                        }
+
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+               /* }else
+                {
+                    NormalOrder order = createMechardiseOrder(""+SEND_MERCHANDISE);
+                    Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Constants.ARG_POSITION, MerchandiseOrderActivity.SEND_MERCHANDISE);
+                    b.putSerializable(BUNDLE_ORDER_TICKET_ID, order);
+                    question.putExtras(b);
+                    startActivity(question);
+                }*/
+    }
+
+    private void alert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.order));
+
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_register_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
     }
 }

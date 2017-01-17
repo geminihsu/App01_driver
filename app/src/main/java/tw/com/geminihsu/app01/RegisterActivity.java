@@ -64,6 +64,8 @@ public class RegisterActivity extends Activity {
 
     private JsonPutsUtil sendDataRequest;
     private ProgressDialog dialog;
+
+    private boolean debug_test =false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +138,14 @@ public class RegisterActivity extends Activity {
         user_password_confirm.addTextChangedListener(checkPassword);
         recommend_code = (EditText) findViewById(R.id.code);
 
+        if(debug_test)
+        {
+            user_name.setText("測試");
+            user_id.setText("H234124556");
+            user_phone.setText("0965833129");
+            user_password.setText("gemini");
+            user_password_confirm.setText("gemini");
+        }
     }
 
 

@@ -275,6 +275,7 @@
     <string name="order_recevier">收貨方 : </string>
     <string name="buyer">發貨方</string>
     <string name="order_departure_info">從 : </string>
+    <string name="order_stop_info">停 : </string>
     <string name="order_destination_info">到 : </string>
     <string name="order_date">2015/12/08 上午07:04</string>
     <string name="call_sender">撥給發貨方</string>
@@ -318,6 +319,7 @@
     <string name="merchant">發貨方</string>
     <string name="merchant＿buyer">付款方 : </string>
     <string name="merchandise_departure">起始位置 : </string>
+    <string name="merchandise_stop">停靠位置 : </string>
     <string name="merchandise_destination">終點位置 : </string>
     <string name="reservation_date">預約時間 : </string>
     <string name="merchandise_content">貨物內容 : </string>
@@ -383,6 +385,7 @@
     <string name="pick_up_tra_train">台鐵</string>
     <string name="pick_up_thsr_train">高鐵</string>
     <string name="pick_up_train">車站</string>
+    <string name="order_info">訂單細節</string>
 
     <!-- ClientOrderCarSearch -->
     <string name="txt_search">正在為您叫車</string>
@@ -451,6 +454,7 @@
     //尋找地圖
     <string name="map_bookmark">加入常用</string>
     <string name="map_add_bookmark">輸入名稱</string>
+    <string name="map_search_address">請輸入要查詢的地點</string>
 
 </resources>
 

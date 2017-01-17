@@ -39,6 +39,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
     private static Constants.APP_REGISTER_DRIVER_TYPE dataType;
     private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
+    private ViewPager viewPager;
     public Fragment_ClientAirPlanePickUp() {
         // Required empty public constructor
     }
@@ -52,6 +53,17 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
         } else {
             throw new ClassCastException(context.toString() + " must implement TabLayoutSetupCallback");
         }
+    }
+
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        //call to ViewPage to remove the pages
+        viewPager.removeAllViews();
+
+        //make this to update the pager
+        viewPager.setAdapter(null);
     }
 
     @Override
@@ -78,7 +90,8 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beginorder, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        //viewPager.setId(View.generateViewId());
         viewPager.setAdapter(new ItemsPagerAdapter(getChildFragmentManager(), mTabNamesList));
         mToolbarSetupCallback.setupTabLayout(viewPager);
 
@@ -92,6 +105,8 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
 
     }
 
+
+
     public static class ItemsPagerAdapter extends FragmentStatePagerAdapter {
 
         private List<String> mTabs = new ArrayList<>();
@@ -102,6 +117,14 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
             mTabs = tabNames;
         }
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {//初始子View方法
+            return super.instantiateItem(container, position);
+        }
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {//销毁子View
+            super.destroyItem(container, position, object);
+        }
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;

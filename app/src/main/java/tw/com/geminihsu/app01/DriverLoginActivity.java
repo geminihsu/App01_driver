@@ -38,6 +38,7 @@ public class DriverLoginActivity extends Activity {
 
     private DriverIdentifyInfo driverIdentifyInfo;
     private int choice = 0;
+    private boolean debug_test =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,14 @@ public class DriverLoginActivity extends Activity {
         car_type_id = (EditText) findViewById(R.id.car_type_id);
         car_licence_number = (EditText) findViewById(R.id.car_work_licence_number);
 
+        if(debug_test)
+        {
+            car_brand_name.setText("Audil奧迪");
+            car_cc_number.setText("1800");
+            car_release_year.setText("2005");
+            car_type_id.setText("ABY-7121");
+            car_licence_number.setText("A12345678");
+        }
 
 
     }

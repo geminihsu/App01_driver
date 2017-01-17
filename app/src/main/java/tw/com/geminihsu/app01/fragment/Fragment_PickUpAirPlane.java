@@ -17,16 +17,19 @@ package tw.com.geminihsu.app01.fragment;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -44,6 +47,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -64,8 +68,10 @@ import tw.com.geminihsu.app01.bean.OrderLocationBean;
 import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.serverbean.ServerBookmark;
+import tw.com.geminihsu.app01.utils.DateTimeUtil;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 
@@ -75,9 +81,6 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
     public final static String BUNDLE_KEEP_BOOMARK = "add_bookmark";// from
 
-
-    final public static int SEND_AIRPORT = 0;
-    final public static int PICKUP_AIRPORT =1;
     private LinearLayout change;
     private ImageButton timerPicker;
     private ImageButton departure;
@@ -90,7 +93,8 @@ public class Fragment_PickUpAirPlane extends Fragment {
     private Spinner spinner_airport_location_destination;
     private ArrayAdapter arrayAdapter_location;
     private EditText departure_address;
-    private EditText destinationn_address;
+    private EditText stop_address;
+    private EditText destination_address;
 
 
     private int option;
@@ -99,6 +103,8 @@ public class Fragment_PickUpAirPlane extends Fragment {
     private final List<ClientTakeRideSelectSpecListItem> mCommentListData = new ArrayList<ClientTakeRideSelectSpecListItem>();;
     private ClientTakeRideSelectSpecListItemAdapter listViewAdapter;
 
+    final public static int SEND_AIRPORT = 0;
+    final public static int PICKUP_AIRPORT =1;
 
     private TimePickerDialog.OnTimeSetListener timePicker;
 
@@ -106,6 +112,7 @@ public class Fragment_PickUpAirPlane extends Fragment {
     private AccountInfo driver;
 
     private LocationAddress departure_detail;
+    private LocationAddress stop_detail;
     private LocationAddress destination_detail;
 
     private static int dType;//哪一種司機型態
@@ -119,6 +126,11 @@ public class Fragment_PickUpAirPlane extends Fragment {
     private ServerBookmark currentLocation;
 
     private EditText time;
+    private EditText date;
+
+    private long order_timeStamp;
+    private ArrayList<String> spec_list;
+    private ProgressDialog progressDialog_loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
@@ -179,6 +191,7 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
     private void findViews()
     {
+        spec_list = new ArrayList<String>();
         change = (LinearLayout) getView().findViewById (R.id.change);
         timerPicker = (ImageButton) getView().findViewById(R.id.time_picker);
         departure = (ImageButton) getView().findViewById(R.id.departure);
@@ -189,10 +202,12 @@ public class Fragment_PickUpAirPlane extends Fragment {
         spinner_airport_location_departure = (Spinner) getView().findViewById(R.id.airport_location_departure);
         spinner_airport_location_destination = (Spinner) getView().findViewById(R.id.airport_location_destination);
         departure_address = (EditText) getView().findViewById(R.id.departure_address);
-        destinationn_address= (EditText) getView().findViewById(R.id.destination_address);
+        stop_address= (EditText) getView().findViewById(R.id.stop_address);
+        destination_address= (EditText) getView().findViewById(R.id.destination_address);
         time = (EditText) getView().findViewById(R.id.time);
+        date = (EditText) getView().findViewById(R.id.date_info);
         Date dateIfo=new Date();
-        //date.setText(new SimpleDateFormat("yyyy/MM/dd").format(dateIfo));
+        date.setText(new SimpleDateFormat("yyyy/MM/dd").format(dateIfo));
         time.setText(new SimpleDateFormat("yyyy/MM/dd  HH:mm:ss").format(dateIfo));
 
 
@@ -281,8 +296,42 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(getActivity(), MapsActivity.class);
-                startActivity(question);
+                AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
+
+                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                        getActivity(),
+                        android.R.layout.select_dialog_item);
+                arrayAdapter.add(getString(R.string.pop_map_option1));
+                arrayAdapter.add(getString(R.string.pop_map_option2));
+
+                builderSingle.setAdapter(
+                        arrayAdapter,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String strName = arrayAdapter.getItem(which);
+
+                                switch (which){
+                                    case 0:
+                                        Intent map = new Intent(getActivity(), OrderMapActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putInt(Constants.ARG_POSITION, Constants.STOP_QUERY_GPS);
+                                        map.putExtras(b);
+                                        startActivityForResult(map,Constants.STOP_QUERY_GPS);
+
+                                        break;
+                                    case 1:
+                                        Intent page = new Intent(getActivity(), BookmarksMapListActivity.class);
+                                        Bundle flag = new Bundle();
+                                        flag.putInt(Constants.ARG_POSITION, Constants.STOP_QUERY_GPS);
+                                        page.putExtras(flag);
+                                        startActivityForResult(page,Constants.STOP_QUERY_BOOKMARK);
+
+                                        break;
+                                }
+                            }
+                        });
+                builderSingle.show();
             }
         });
 
@@ -442,6 +491,31 @@ public class Fragment_PickUpAirPlane extends Fragment {
                     //showAddressList((ArrayList<Address>)locationInfo,departure_address,departure_detail);
                 }
                 break;
+            case Constants.STOP_QUERY_GPS:
+                //ArrayList<Address> locationInfo=null;
+                if(data!=null) {
+                    //departure_detail = new LocationAddress();
+                    departure_detail =(LocationAddress) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    //String add_bookmark = data.getStringExtra(BUNDLE_KEEP_BOOMARK);
+                    //String latitude = data.getStringExtra(Constants.BUNDLE_MAP_LATITUDE);
+                    //String longitude = data.getStringExtra(Constants.BUNDLE_MAP_LONGITUDE);
+                    //departure_detail.setLatitude(location.getLatitude());
+                    //departure_detail.setLongitude(location.getLongitude());
+                    boolean isBookMark = data.getBooleanExtra(BUNDLE_KEEP_BOOMARK,false);
+                    if(isBookMark)
+                    {
+                        addUserLocationToBookMark(stop_detail);
+                    }
+                    stop_address.setText(stop_detail.getAddress());
+                    //departure_detail.setLocation(location.getAddress());
+                    //departure_detail.setAddress(location.getAddress());
+                    /*if(add_bookmark.equals(true))
+                    {
+                        //新增到資料庫的BookMark
+                    }*/
+                    //showAddressList((ArrayList<Address>)locationInfo,departure_address,departure_detail);
+                }
+                break;
             case Constants.DESTINATION_QUERY_GPS:
                 ArrayList<Address> locationInfo2=null;
                 if(data!=null) {
@@ -456,7 +530,7 @@ public class Fragment_PickUpAirPlane extends Fragment {
                     {
                         addUserLocationToBookMark(destination_detail);
                     }
-                    destinationn_address.setText(destination_detail.getAddress());
+                    destination_address.setText(destination_detail.getAddress());
                     //destination_detail.setAddress(locationInfo2.get(0).getAddressLine(0));
                     //destination_detail.setLocation(locationInfo2.get(0).getAddressLine(0));
                     //showAddressList(locationInfo2,destination_address,destination_detail);
@@ -478,11 +552,26 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
                 }
                 break;
+            case Constants.STOP_QUERY_BOOKMARK:
+                if (data!=null) {
+                    stop_detail = new LocationAddress();
+                    USerBookmark uSerBookmark = (USerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
+                    stop_address.setText(uSerBookmark.getStreetAddress());
+                    stop_detail.setLongitude(Double.parseDouble(uSerBookmark.getLng()));
+                    stop_detail.setLatitude(Double.parseDouble(uSerBookmark.getLat()));
+                    stop_detail.setAddress(uSerBookmark.getStreetAddress());
+                    stop_detail.setLocation(uSerBookmark.getLocation());
+                    stop_detail.setCountryName(uSerBookmark.getCountryName());
+                    stop_detail.setLocality(uSerBookmark.getLocality());
+                    stop_detail.setZipCode(uSerBookmark.getZipCode());
+
+                }
+                break;
             case Constants.DESTINATION_QUERY_BOOKMARK:
                 if (data!=null) {
                     destination_detail = new LocationAddress();
                     USerBookmark uSerBookmark1 = (USerBookmark) data.getSerializableExtra(Constants.BUNDLE_LOCATION);
-                    destinationn_address.setText(uSerBookmark1.getStreetAddress());
+                    destination_address.setText(uSerBookmark1.getStreetAddress());
                     destination_detail.setLongitude(Double.parseDouble(uSerBookmark1.getLng()));
                     destination_detail.setLatitude(Double.parseDouble(uSerBookmark1.getLat()));
                     destination_detail.setAddress(uSerBookmark1.getStreetAddress());
@@ -527,69 +616,10 @@ public class Fragment_PickUpAirPlane extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                String departure_address_info;
-                if(departure_detail!=null)
-                    departure_address_info=departure_detail.getAddress();
-                else {
-                    departure_address_info = departure_address.getText().toString();
-                    currentLocation = tainStationList.get(spinner_airport_location_departure.getSelectedItemPosition());
-                    departure_detail = new LocationAddress();
-                    departure_detail.setLongitude(Double.parseDouble(currentLocation.getLng()));
-                    departure_detail.setLatitude(Double.parseDouble(currentLocation.getLat()));
-                    departure_detail.setAddress(currentLocation.getStreetAddress());
-                    departure_detail.setLocation(currentLocation.getLocation());
-                    departure_detail.setZipCode(currentLocation.getStreetAddress().substring(0,3));
-                    departure_detail.setCountryName("Taiwan");
-                    departure_detail.setLocality(currentLocation.getStreetAddress());
-                    departure_address_info=departure_detail.getAddress();
-
-                }
-                String destination_address_info;
-                if(destination_detail!=null)
-                    destination_address_info=destination_detail.getAddress();
-                else {
-                    //destination_address_info = destination_train.getText().toString();
-                    currentLocation = tainStationList.get(spinner_airport_location_destination.getSelectedItemPosition());
-                    destination_detail = new LocationAddress();
-                    destination_detail.setLongitude(Double.parseDouble(currentLocation.getLng()));
-                    destination_detail.setLatitude(Double.parseDouble(currentLocation.getLat()));
-                    destination_detail.setAddress(currentLocation.getStreetAddress());
-                    destination_detail.setLocation(currentLocation.getLocation());
-                    destination_detail.setZipCode(currentLocation.getStreetAddress().substring(0,3));
-                    destination_detail.setCountryName("Taiwan");
-                    destination_detail.setLocality(currentLocation.getStreetAddress());
-                    destination_address_info=destination_detail.getAddress();
-                }
-
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-                        getActivity());
-
-                // set title
-                alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
-
-                // set dialog message
-                alertDialogBuilder
-                        .setMessage(time.getText().toString()+"\n從:"+departure_address_info+"\n停:繼光街口\n到:"+destination_address_info)
-                        .setCancelable(false)
-                        .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                //讓使用者填入價錢和小費
-                                provideOrderPrice();
-
-
-                            }
-                        });
-
-                // create alert dialog
-                AlertDialog alertDialog = alertDialogBuilder.create();
-
-                // show it
-                alertDialog.show();
+                if(!departure_address.getText().toString().isEmpty()||!destination_address.getText().toString().isEmpty())
+                    sendOrder();
+                else
+                    alert();
                 break;
 
             default:
@@ -600,42 +630,46 @@ public class Fragment_PickUpAirPlane extends Fragment {
     }
 
     private void provideOrderPrice() {
-        if (dialog == null) {
-            dialog = new Dialog(getActivity());
-            dialog.setContentView(R.layout.dialog_enter_order_price_layout);
-            dialog.setTitle(getString(R.string.order_change_fee));
-            TextView content = (TextView) dialog.findViewById(R.id.txt_msg);
-            final EditText enter = (EditText) dialog.findViewById(R.id.editText_password);
-            enter.setText("");
-            final EditText tip = (EditText) dialog.findViewById(R.id.editText_tip);
-            tip.setText("");
-            Button sure = (Button) dialog.findViewById(R.id.sure_action);
-            sure.setOnClickListener(new View.OnClickListener() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        // ...Irrelevant code for customizing the buttons and title
+        dialogBuilder.setTitle(getString(R.string.order_change_fee));
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_enter_order_price_layout, null);
+        dialogBuilder.setView(dialogView);
 
-                @Override
-                public void onClick(View v) {
-                    createTaxiOrder("" + option, enter.getText().toString(), tip.getText().toString());
-                    if(dialog!=null) {
-                        dialog.dismiss();
-                        dialog = null;
-                    }
+        TextView content = (TextView) dialogView.findViewById(R.id.txt_msg);
+        final EditText enter = (EditText) dialogView.findViewById(R.id.editText_password);
+        enter.setText("");
+        final EditText tip = (EditText) dialogView.findViewById(R.id.editText_tip);
+        tip.setText("");
+        Button sure = (Button) dialogView.findViewById(R.id.sure_action);
+
+
+        Button cancel = (Button) dialogView.findViewById(R.id.cancel_action);
+
+        final AlertDialog alertDialog = dialogBuilder.create();
+        cancel.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+        sure.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                parserAddressToGPS();
+                createTaxiOrder("" + option, enter.getText().toString(), tip.getText().toString());
+                if(alertDialog!=null) {
+                    alertDialog.dismiss();
                 }
-            });
+            }
+        });
+        alertDialog.show();
 
-            Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
-            cancel.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    dialog.cancel();
-                }
-            });
-
-            dialog.show();
-        }
 
     }
-
     private void createTaxiOrder(String target,String price,String tip)
     {
 
@@ -651,10 +685,10 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
         OrderLocationBean stop_location = new OrderLocationBean();
         stop_location.setId(2);
-        stop_location.setLatitude("24.14411");
-        stop_location.setLongitude("120.679567");
-        stop_location.setZipcode("400");
-        stop_location.setAddress("台中市中區柳川里成功路300號");
+        stop_location.setLatitude(""+stop_detail.getLatitude());
+        stop_location.setLongitude(""+stop_detail.getLongitude());
+        stop_location.setZipcode(stop_detail.getZipCode());
+        stop_location.setAddress(stop_detail.getAddress());
 
 
         OrderLocationBean end_location = new OrderLocationBean();
@@ -669,15 +703,16 @@ public class Fragment_PickUpAirPlane extends Fragment {
 
 
 
-        long unixTime = System.currentTimeMillis() / 1000L;
-
-
-        NormalOrder order = new NormalOrder();
+        final NormalOrder order = new NormalOrder();
         order.setUser_id(driver.getId());
         order.setUser_uid(driver.getUid());
         order.setUser_name(driver.getPhoneNumber());
         order.setAccesskey(driver.getAccessKey());
-        order.setTimebegin(""+unixTime);
+
+        //Log.e(TAG,"time stamp:"+time.getText().toString());
+        order_timeStamp = DateTimeUtil.convertString_yyyymmddToMillisecondsTime(time.getText().toString());
+
+        order.setTimebegin(""+order_timeStamp);
         order.setDtype(""+dataType.value());
         order.setCargo_type(""+orderCargoType.value());
         order.setBegin(begin_location);
@@ -693,10 +728,223 @@ public class Fragment_PickUpAirPlane extends Fragment {
         order.setPrice(price);
         order.setTip(tip);
 
+        String spec="";
+        if(!spec_list.isEmpty())
+        {
+            for(String spec_id:spec_list){
+                spec+=spec_id+",";
+            }
+            spec.substring(0,spec.length()-1);
+
+        }
+        //Log.e(TAG,"spec car:"+spec);
+        order.setCar_special(spec);
 
         //sendDataRequest.putCreateQuickTaxiOrder(order);
-        sendDataRequest.putCreateNormalOrder(order);
+        if(progressDialog_loading==null) {
+            progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                    "Loading. Please wait...", true);
+        }
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
+                sendDataRequest.putCreateNormalOrder(order);
+            }
+        }));
 
     }
+
+    private void parserAddressToGPS() {
+
+        Geocoder fwdGeocoder = new Geocoder(getActivity());
+
+        if(departure_detail==null) {
+            String departure = departure_address.getText().toString();
+
+
+            List<Address> departure_locations = null;
+            try {
+                departure_locations = fwdGeocoder.getFromLocationName(departure, 10);
+            } catch (IOException e) {
+            }
+
+
+
+            departure_detail = new LocationAddress();
+            if (departure_locations.size() > 0) {
+                departure_detail.setLongitude(departure_locations.get(0).getLongitude());
+                departure_detail.setLatitude(departure_locations.get(0).getLatitude());
+                departure_detail.setAddress(departure);
+                departure_detail.setLocation(departure);
+                departure_detail.setCountryName(departure_locations.get(0).getCountryName());
+                departure_detail.setLocality(departure_locations.get(0).getLocality());
+                departure_detail.setZipCode(departure_locations.get(0).getPostalCode());
+            }
+        }
+        String stop = stop_address.getText().toString();
+
+
+        if(stop_detail==null) {
+            List<Address> stop_locations = null;
+            try {
+                stop_locations = fwdGeocoder.getFromLocationName(stop, 10);
+            } catch (IOException e) {
+            }
+
+
+            Log.e("", "Stop zipCode:" + stop_locations.get(0).getPostalCode());
+            stop_detail = new LocationAddress();
+            if (stop_locations.size() > 0) {
+                stop_detail.setLongitude(stop_locations.get(0).getLongitude());
+                stop_detail.setLatitude(stop_locations.get(0).getLatitude());
+                stop_detail.setAddress(stop);
+                stop_detail.setLocation(stop);
+                stop_detail.setCountryName(stop_locations.get(0).getCountryName());
+                stop_detail.setLocality(stop_locations.get(0).getLocality());
+                stop_detail.setZipCode(stop_locations.get(0).getPostalCode());
+            }
+        }
+        String destination = destination_address.getText().toString();
+
+
+        if(destination_detail==null) {
+            List<Address> destination_locations = null;
+            try {
+                destination_locations = fwdGeocoder.getFromLocationName(destination, 10);
+            } catch (IOException e) {
+            }
+
+
+            destination_detail = new LocationAddress();
+            if (destination_locations.size() > 0) {
+                destination_detail.setLongitude(destination_locations.get(0).getLongitude());
+                destination_detail.setLatitude(destination_locations.get(0).getLatitude());
+                destination_detail.setAddress(destination);
+                destination_detail.setLocation(destination);
+                destination_detail.setCountryName(destination_locations.get(0).getCountryName());
+                destination_detail.setLocality(destination_locations.get(0).getLocality());
+                destination_detail.setZipCode(destination_locations.get(0).getPostalCode());
+            }
+        }
+
+
+    }
+
+    private void sendOrder(){
+
+        if (option == SEND_AIRPORT) {
+            //離開車站
+            currentLocation = tainStationList.get(spinner_airport_location_departure.getSelectedItemPosition());
+            if(destination_detail==null) {
+                destination_detail = new LocationAddress();
+                destination_detail.setLongitude(Double.parseDouble(currentLocation.getLng()));
+                destination_detail.setLatitude(Double.parseDouble(currentLocation.getLat()));
+                destination_detail.setAddress(currentLocation.getStreetAddress().substring(3, currentLocation.getStreetAddress().length()));
+                destination_detail.setLocation(currentLocation.getLocation());
+                destination_detail.setZipCode(currentLocation.getStreetAddress().substring(0, 3));
+                destination_detail.setCountryName("Taiwan");
+                destination_detail.setLocality(currentLocation.getStreetAddress());
+            }
+        }else {
+            //前往車站
+            currentLocation = tainStationList.get(spinner_airport_location_destination.getSelectedItemPosition());
+            if(departure_detail==null) {
+                departure_detail = new LocationAddress();
+                departure_detail.setLongitude(Double.parseDouble(currentLocation.getLng()));
+                departure_detail.setLatitude(Double.parseDouble(currentLocation.getLat()));
+                departure_detail.setAddress(currentLocation.getStreetAddress().substring(3, currentLocation.getStreetAddress().length()));
+                departure_detail.setLocation(currentLocation.getLocation());
+                departure_detail.setZipCode(currentLocation.getStreetAddress().substring(0, 3));
+                departure_detail.setCountryName("Taiwan");
+                departure_detail.setLocality(currentLocation.getStreetAddress());
+            }
+        }
+        String departure_address_info;
+        if(departure_detail!=null)
+            departure_address_info=departure_detail.getAddress();
+        else
+            departure_address_info = departure_address.getText().toString();
+        String stop_address_info;
+        if(stop_detail!=null)
+            stop_address_info=stop_detail.getAddress();
+        else
+            stop_address_info = stop_address.getText().toString();
+
+        String destination_address_info;
+        if(destination_detail!=null)
+            destination_address_info=destination_detail.getAddress();
+        else
+            destination_address_info = destination_address.getText().toString();
+
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+                getActivity());
+
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.menu_dialog_sure));
+
+        // set dialog message
+        alertDialogBuilder
+                .setMessage(date.getText().toString()+"\t"+time.getText().toString()+"\n從:"+departure_address_info+"\n停:+"+stop_address_info+"\n到:"+destination_address_info)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.cancel_take_spec), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton(getString(R.string.sure_take_spec), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
+                            parserAddressToGPS();
+                            createTaxiOrder("" + option, "0", "0");
+
+                        }else
+                        {
+                            //讓使用者填入價錢和小費
+                            provideOrderPrice();
+                        }
+
+                    }
+                });
+
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+
+        // show it
+        alertDialog.show();
+               /* }else
+                {
+                    NormalOrder order = createMechardiseOrder(""+SEND_MERCHANDISE);
+                    Intent question = new Intent(ClientTakeRideActivity.this, MerchandiseOrderActivity.class);
+                    Bundle b = new Bundle();
+                    b.putInt(Constants.ARG_POSITION, MerchandiseOrderActivity.SEND_MERCHANDISE);
+                    b.putSerializable(BUNDLE_ORDER_TICKET_ID, order);
+                    question.putExtras(b);
+                    startActivity(question);
+                }*/
+    }
+
+
+
+    private void alert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.order));
+
+        alertDialogBuilder
+                .setMessage(getString(R.string.login_error_register_msg))
+                .setCancelable(false)
+                .setNegativeButton(getString(R.string.dialog_get_on_car_comfirm), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                });
+        // create alert dialog
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        // show it
+        alertDialog.show();
+    }
+
 }
 

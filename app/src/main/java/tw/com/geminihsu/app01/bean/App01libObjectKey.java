@@ -297,6 +297,7 @@ public class App01libObjectKey {
         K_APP_ACCOUNT_RE_SEND_PASSWORD_DATABASE_ERROR (401),
         K_APP_ACCOUNT_RE_SEND_PASSWORD_TIMEOUT (703),
         K_APP_ACCOUNT_RE_SEND_PASSWORD_COMPARE_ERROR (706),
+        K_APP_ACCOUNT_RE_SEND_PASSWORD_VERIFY_FAIL (712),
         K_APP_ACCOUNT_RE_SEND_PASSWORD_REPEATED_ERROR (713),
         K_APP_ACCOUNT_RE_SEND_PASSWORD_ACCOUNT_NO_EXSIT (701),
         K_APP_ACCOUNT_RE_SEND_PASSWORD_ACCOUNT_NO_VERIFY (704),
@@ -512,6 +513,7 @@ public class App01libObjectKey {
         K_APP_DRIVER_QUERY_ORDER_EMPTY (840),
         K_APP_DRIVER_QUERY_ORDER_SMS_VERIFY(704),
         K_APP_DRIVER_QUERY_ORDER_NO_EXSIT (701),
+        K_APP_DRIVER_QUERY_ORDER_NO_WORK (836),
         K_APP_DRIVER_QUERY_ORDER_VERIFY_ERROR(903);
 
         private int value;
@@ -637,6 +639,9 @@ public class App01libObjectKey {
             }
             if (index == 713) {
                 return APP_ACCOUNT_RE_SEND_PASSWORD_RESPONSE.K_APP_ACCOUNT_RE_SEND_PASSWORD_REPEATED_ERROR;
+            }
+            if (index == 712) {
+                return APP_ACCOUNT_RE_SEND_PASSWORD_RESPONSE.K_APP_ACCOUNT_RE_SEND_PASSWORD_VERIFY_FAIL;
             }
             if (index == 401) {
                 return APP_ACCOUNT_RE_SEND_PASSWORD_RESPONSE.K_APP_ACCOUNT_RE_SEND_PASSWORD_DATABASE_ERROR;
@@ -907,6 +912,10 @@ public class App01libObjectKey {
             }
             if (index == 840) {
                 return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_EMPTY;
+            }
+
+            if (index == 836) {
+                return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_NO_WORK;
             }
             if (index == 704) {
                 return APP_DRIVER_QUERY_ORDER_LIST.K_APP_DRIVER_QUERY_ORDER_SMS_VERIFY;

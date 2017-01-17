@@ -35,6 +35,7 @@ public class Fragment_BeginOrder extends Fragment {
         // Required empty public constructor
     }
 
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -65,6 +66,7 @@ public class Fragment_BeginOrder extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beginorder, container, false);
         viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        //viewPager.setId(View.generateViewId());
         viewPager.setAdapter(new ItemsPagerAdapter(getChildFragmentManager(), mTabNamesList));
         mToolbarSetupCallback.setupTabLayout(viewPager);
 
@@ -78,10 +80,29 @@ public class Fragment_BeginOrder extends Fragment {
 
     }
 
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        //call to ViewPage to remove the pages
+        viewPager.removeAllViews();
+
+        //make this to update the pager
+        viewPager.setAdapter(null);
+    }
+
     public static class ItemsPagerAdapter extends FragmentStatePagerAdapter {
 
         private List<String> mTabs = new ArrayList<>();
 
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {//初始子View方法
+            return super.instantiateItem(container, position);
+        }
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {//销毁子View
+            super.destroyItem(container, position, object);
+        }
         public ItemsPagerAdapter(FragmentManager fm, List<String> tabNames) {
             super(fm);
 

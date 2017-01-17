@@ -65,6 +65,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/address_devicename_txt"
+                            android:checked="true"
                             android:text="@string/txt_take_real_time" />
 
                         <RadioButton
@@ -72,9 +73,44 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/bg_gray"
-                            android:checked="true"
                             android:text="@string/txt_take_reservation" />
                     </RadioGroup>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    >
+                    <TextView
+                        android:id="@+id/date_info"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:paddingLeft="20dp"
+                        android:text="@string/txt_take_date"
+                        android:textColor="@color/btn_bouns_title"
+                        />
+                    <EditText
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="middle"
+                        android:singleLine="true"
+                        android:layout_weight="2"
+                        android:id="@+id/date_pick_info"
+                        android:text=""
+
+                        />
+                    <ImageButton
+                        android:id="@+id/date_picker"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:layout_gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/ic_arrowdown"
+                        />
              </LinearLayout>
                 <LinearLayout
                 android:layout_width="fill_parent"
@@ -97,6 +133,7 @@
                     android:ellipsize="middle"
                     android:singleLine="true"
                     android:layout_weight="2"
+                    android:id="@+id/time_info"
                     android:text=""
 
                     />
@@ -125,12 +162,19 @@
                         android:text="@string/txt_take_departure"
                         android:textColor="@color/btn_bouns_title"
                         />
+                     <Spinner android:id="@+id/dork_location_departure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:drawSelectorOnTop="true"
+                     />
                     <EditText
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
+                        android:id="@+id/departure_info"
                         android:text=""
 
                         />
@@ -163,6 +207,7 @@
                         android:ellipsize="middle"
                         android:singleLine="true"
                         android:layout_weight="2"
+                        android:id="@+id/stop_info"
                         android:text=""
 
                         />
@@ -194,7 +239,6 @@
                     <Spinner android:id="@+id/dork_location_destination"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
                         android:drawSelectorOnTop="true"
                         />
                     <EditText

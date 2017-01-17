@@ -211,8 +211,8 @@
     <string name="photo_car_full">5.車身連車牌照片</string>
     <string name="photo_skip">略過</string>
     <string name="photo_finish">完成</string>
-    <string name="pick_picture_camera">take camera</string>
-    <string name="pick_picture_gallery">picture gallery</string>
+    <string name="pick_picture_camera">相機</string>
+    <string name="pick_picture_gallery">相簿</string>
 
 
     <!-- Driver_Account_Activity -->
@@ -274,6 +274,7 @@
     <string name="order_recevier">收貨方 : </string>
     <string name="buyer">發貨方</string>
     <string name="order_departure_info">從 : </string>
+    <string name="order_stop_info">停 : </string>
     <string name="order_destination_info">到 : </string>
     <string name="order_date">2015/12/08 上午07:04</string>
     <string name="call_sender">撥給發貨方</string>
@@ -381,6 +382,7 @@
     <string name="pick_up_thsr_train">高鐵</string>
     <string name="pick_up_train">車站</string>
     <string name="txt_send_merchandise">選擇站點</string>
+    <string name="order_info">訂單細節</string>
 
 
     <!-- ClientOrderCarSearch -->
@@ -452,6 +454,7 @@
     //尋找地圖
     <string name="map_bookmark">加入常用</string>
     <string name="map_add_bookmark">輸入名稱</string>
+    <string name="map_search_address">請輸入要查詢的地點</string>
 
 
 </resources>

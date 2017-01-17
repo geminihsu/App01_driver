@@ -16,6 +16,7 @@
 package tw.com.geminihsu.app01.fragment;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -114,13 +115,19 @@ public class Fragment_Client_Service extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onActivityCreated(Bundle bundle){
+        super.onActivityCreated(bundle);
 
         this.findViews();
         setLister();
         if(getCurrentGPSLocationBroadcastReceiver!=null)
             getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
+
+    }
+        @Override
+    public void onStart() {
+        super.onStart();
+
 
 
     }
@@ -366,7 +373,7 @@ public class Fragment_Client_Service extends Fragment {
 
              @Override
              public void onClick(View v) {
-                 if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
+                // if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_UBER) {
                      orderCargoType =  Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE;
 
 
@@ -378,7 +385,7 @@ public class Fragment_Client_Service extends Fragment {
 
                      question.putExtras(b);
                      startActivity(question);
-                 }else {
+                 /*}else {
                      Fragment newFragment = new Fragment_MerchandiseDorkPickUp();
                      FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
@@ -386,7 +393,7 @@ public class Fragment_Client_Service extends Fragment {
                      transaction.addToBackStack(null);
 
                      transaction.commit();
-                 }
+                 }*/
              }
          });
          air_plane.setOnClickListener(new View.OnClickListener() {

@@ -261,7 +261,7 @@ public class ClientTakeRideSearchActivity extends Activity {
     protected void onStop()
     {
        super.onStop();
-        if (waitForDriverTakeOverOrderBroadcastReceiver != null&&waitForDriverTakeOverOrderBroadcastReceiver.isOrderedBroadcast()){
+        if (waitForDriverTakeOverOrderBroadcastReceiver != null){
             unregisterReceiver(waitForDriverTakeOverOrderBroadcastReceiver);
             waitForDriverTakeOverOrderBroadcastReceiver=null;
         }
@@ -270,7 +270,7 @@ public class ClientTakeRideSearchActivity extends Activity {
     @Override
     public void onDestroy() {
        super.onDestroy();
-        if (waitForDriverTakeOverOrderBroadcastReceiver != null&&waitForDriverTakeOverOrderBroadcastReceiver.isOrderedBroadcast()){
+        if (waitForDriverTakeOverOrderBroadcastReceiver != null){
             unregisterReceiver(waitForDriverTakeOverOrderBroadcastReceiver);
             waitForDriverTakeOverOrderBroadcastReceiver=null;
         }

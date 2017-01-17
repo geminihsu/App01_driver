@@ -89,7 +89,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             myBinder = ((App01Service.App01ServiceServiceBinder) service).getService(info.getAccountInfo());
             //myBinder.setUserInfo(user);
 
-            //if(!isServerInfoExsit)
+            if(!isServerInfoExsit)
             myBinder.requestServerContentDetail();
             myBinder.startToGetPutNotify();
             myBinder.App01ServiceCheckGPS();
@@ -112,9 +112,11 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
 
         Utility info = new Utility(MenuMainActivity.this);
 
-        if(info.getAllServerBookMark()!=null)
+        if(!info.getAllServerBookMark().isEmpty()) {
             isServerInfoExsit = true;
 
+            Log.e(TAG, "download file");
+        }
         // 判斷要用哪一個Delegate
         if(info.getDriverAccountInfo()!=null) {
 
@@ -286,7 +288,8 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        myBinder.stopToGetNotifyInfo();
+        if(myBinder!=null)
+           myBinder.stopToGetNotifyInfo();
         unbindService(myLocalServiceConnection);
     }
     // Call to update the share intent

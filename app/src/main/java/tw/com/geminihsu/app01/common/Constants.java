@@ -36,6 +36,8 @@ public class Constants {
 	public static final int DESTINATION_QUERY_BOOKMARK = 5;
 	public static final int DEPARTURE_QUERY_BOOKMARK = 6;
 	public static final int DISPLAY_USER_LOCATION = 7;
+	public static final int STOP_QUERY_GPS = 8;
+	public static final int STOP_QUERY_BOOKMARK = 9;
 	public static final String BUNDLE_LOCATION = "map";
 	public static final String BUNDLE_MAP_LATITUDE = "latitude";
 	public static final String BUNDLE_MAP_LONGITUDE = "longitude";
@@ -62,6 +64,7 @@ public class Constants {
 
 	public enum APP_REGISTER_DRIVER_TYPE
 	{
+		K_REGISTER_DRIVER_TYPE_NO_WORK (0)  ,
 		K_REGISTER_DRIVER_TYPE_TAXI (1)  ,
 		K_REGISTER_DRIVER_TYPE_UBER (2)  ,
 		K_REGISTER_DRIVER_TYPE_TRUCK (3),
@@ -80,7 +83,10 @@ public class Constants {
 	};
 
 	public static Constants.APP_REGISTER_DRIVER_TYPE conversion_register_driver_account_result(int index) {
-		if (index >= 0) {
+		//if (index >= 0) {
+			if (index == 0) {
+				return APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_NO_WORK;
+			}
 			if (index == 1) {
 				return Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI;
 			}
@@ -96,7 +102,7 @@ public class Constants {
 			if (index == 5) {
 				return APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TRAILER;
 			}
-		}
+		//}
 		return null;
 	}
 

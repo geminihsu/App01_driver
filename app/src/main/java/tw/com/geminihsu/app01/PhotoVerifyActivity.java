@@ -223,7 +223,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+              /*  AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         PhotoVerifyActivity.this,
@@ -282,14 +282,33 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         // Always show the chooser (if there are multiple options available)
                                         startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE_REQUEST);
                                         break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
+
                                 }
                             }
                         });
-                builderSingle.show();
+                builderSingle.show();*/
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // Explain to the user why we need to read the contacts
+                    }
+
+                    requestPermissions(INITIAL_PERMS,
+                            INITIAL_REQUEST);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant
+                }
+                Intent gallery = new Intent();
+                // Show only images, no videos or anything else
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_IMAGE_REQUEST);
+
             }
         });
 
@@ -297,12 +316,12 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+               /* AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         PhotoVerifyActivity.this,
                         android.R.layout.select_dialog_item);
-                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                //arrayAdapter.add(getString(R.string.pick_picture_camera));
                 arrayAdapter.add(getString(R.string.pick_picture_gallery));
                 //arrayAdapter.add("YouTube");
 
@@ -314,7 +333,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                             public void onClick(DialogInterface dialog, int which) {
                                 String strName = arrayAdapter.getItem(which);
                                 switch (which){
-                                    case 0:
+                                  /*  case 0:
                                         if(checkSelfPermission(Manifest.permission.CAMERA)
                                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -333,7 +352,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, ID_CAMERA);
                                         break;
-                                    case 1:
+                                    case 0:
                                         if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -356,26 +375,45 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         // Always show the chooser (if there are multiple options available)
                                         startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_ID_IMAGE_REQUEST);
                                         break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
+
                                 }
                             }
                         });
-                builderSingle.show();
+                builderSingle.show();*/
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // Explain to the user why we need to read the contacts
+                    }
+
+                    requestPermissions(INITIAL_PERMS,
+                            INITIAL_REQUEST);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant
+                }
+                Intent gallery = new Intent();
+                // Show only images, no videos or anything else
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_ID_IMAGE_REQUEST);
+
             }
         });
         btn_car_driver_licence.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+               /* AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         PhotoVerifyActivity.this,
                         android.R.layout.select_dialog_item);
-                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                //arrayAdapter.add(getString(R.string.pick_picture_camera));
                 arrayAdapter.add(getString(R.string.pick_picture_gallery));
                 //arrayAdapter.add("YouTube");
 
@@ -406,7 +444,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, LICENCE_CAMERA);
                                         break;
-                                    case 1:
+                                    case 0:
                                         if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -429,26 +467,45 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         // Always show the chooser (if there are multiple options available)
                                         startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_LICENCE_IMAGE_REQUEST);
                                         break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
+
                                 }
                             }
                         });
-                builderSingle.show();
+                builderSingle.show();*/
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // Explain to the user why we need to read the contacts
+                    }
+
+                    requestPermissions(INITIAL_PERMS,
+                            INITIAL_REQUEST);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant
+                }
+                Intent gallery = new Intent();
+                // Show only images, no videos or anything else
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_LICENCE_IMAGE_REQUEST);
+
             }
         });
         btn_car_work_licence_image.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+                /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         PhotoVerifyActivity.this,
                         android.R.layout.select_dialog_item);
-                arrayAdapter.add(getString(R.string.pick_picture_camera));
+               // arrayAdapter.add(getString(R.string.pick_picture_camera));
                 arrayAdapter.add(getString(R.string.pick_picture_gallery));
                 //arrayAdapter.add("YouTube");
 
@@ -479,7 +536,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, WORK_LICENCE_CAMERA);
                                         break;
-                                    case 1:
+                                    case 0:
                                         if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -502,26 +559,45 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         // Always show the chooser (if there are multiple options available)
                                         startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_WORK_LICENCE_IMAGE_REQUEST);
                                         break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
+
                                 }
                             }
                         });
-                builderSingle.show();
+                builderSingle.show();*/
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // Explain to the user why we need to read the contacts
+                    }
+
+                    requestPermissions(INITIAL_PERMS,
+                            INITIAL_REQUEST);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant
+                }
+                Intent gallery = new Intent();
+                // Show only images, no videos or anything else
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_WORK_LICENCE_IMAGE_REQUEST);
+
             }
         });
         btn_car_image.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
+              /*  AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
                 final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                         PhotoVerifyActivity.this,
                         android.R.layout.select_dialog_item);
-                arrayAdapter.add(getString(R.string.pick_picture_camera));
+                //arrayAdapter.add(getString(R.string.pick_picture_camera));
                 arrayAdapter.add(getString(R.string.pick_picture_gallery));
                 //arrayAdapter.add("YouTube");
 
@@ -553,7 +629,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
                                         startActivityForResult(intent, CAR_CAMERA);
                                         break;
-                                    case 1:
+                                    case 0:
                                         if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                                                 != PackageManager.PERMISSION_GRANTED) {
 
@@ -576,14 +652,33 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                                         // Always show the chooser (if there are multiple options available)
                                         startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_CAR_IMAGE_REQUEST);
                                         break;
-                                 /*   case 2:
-                                        Intent question = new Intent(NewPostActivity.this, YoutubeActivity.class);
-                                        startActivity(question);
-                                        break;*/
+
                                 }
                             }
                         });
-                builderSingle.show();
+                builderSingle.show();*/
+                if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Should we show an explanation?
+                    if (shouldShowRequestPermissionRationale(
+                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                        // Explain to the user why we need to read the contacts
+                    }
+
+                    requestPermissions(INITIAL_PERMS,
+                            INITIAL_REQUEST);
+
+                    // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
+                    // app-defined int constant
+                }
+                Intent gallery = new Intent();
+                // Show only images, no videos or anything else
+                gallery.setType("image/*");
+                gallery.setAction(Intent.ACTION_GET_CONTENT);
+                // Always show the chooser (if there are multiple options available)
+                startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_CAR_IMAGE_REQUEST);
+
             }
         });
     }
@@ -673,23 +768,24 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
         switch (requestCode) {
             case CAMERA:
-                String path = data.getStringExtra("image");
-                File imgFile = new File(path);
+                if ( data !=null && data.getStringExtra("image")!=null) {
+                    String path = data.getStringExtra("image");
+                    File imgFile = new File(path);
 
-                if (imgFile.exists()) {
-                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path, scaleWidth, scaleHeight);
-                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
-                    imageContentURI = path;
-                    car_work_image.setImageBitmap(myBitmap);
+                    if (imgFile.exists()) {
+                        Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path, scaleWidth, scaleHeight);
+                        //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                        imageContentURI = path;
+                        car_work_image.setImageBitmap(myBitmap);
+                    }
+
+                    if (dialog == null)
+                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                "Loading. Please wait...", true);
+
+                    //File img = new File(realPath);
+                    post_image.postImageToServer(driverInfo, car_work_image, PHOTO_TYPE_ID);
                 }
-
-                if(dialog == null)
-                    dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                            "Loading. Please wait...", true);
-
-                //File img = new File(realPath);
-                post_image.postImageToServer(driverInfo,car_work_image,PHOTO_TYPE_ID);
-
                 break;
             case PICK_IMAGE_REQUEST:
                 String realPath;
@@ -735,232 +831,251 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 }
                 break;
             case ID_CAMERA:
-                String path1 = data.getStringExtra("image");
-                File imgFile1 = new File(path1);
-                if (imgFile1.exists()) {
-                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path1, scaleWidth, scaleHeight);
-                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
-                    imageContentURI = path1;
-                    car_driver_id.setImageBitmap(myBitmap);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                if ( data !=null && data.getStringExtra("image")!=null) {
 
-                    post_image.postImageToServer(driverInfo,car_driver_id,PHOTO_TYPE_DRIVER);
+                    String path1 = data.getStringExtra("image");
+                    File imgFile1 = new File(path1);
+                    if (imgFile1.exists()) {
+                        Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path1, scaleWidth, scaleHeight);
+                        //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                        imageContentURI = path1;
+                        car_driver_id.setImageBitmap(myBitmap);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
+                        post_image.postImageToServer(driverInfo, car_driver_id, PHOTO_TYPE_DRIVER);
+
+                    }
                 }
                 break;
             case PICK_ID_IMAGE_REQUEST:
-                String realPath1;
-                // SDK < API11
-                if (Build.VERSION.SDK_INT < 11)
-                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+                if(data.getData()!=null) {
+                    String realPath1;
+                    // SDK < API11
+                    if (Build.VERSION.SDK_INT < 11)
+                        realPath1 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
 
-                    // SDK >= 11 && SDK < 19
-                else if (Build.VERSION.SDK_INT < 19)
-                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+                        // SDK >= 11 && SDK < 19
+                    else if (Build.VERSION.SDK_INT < 19)
+                        realPath1 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
 
-                    // SDK > 19 (Android 4.4)
-                else
-                    realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                        // SDK > 19 (Android 4.4)
+                    else
+                        realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                Uri uri1 = data.getData();
+                    Uri uri1 = data.getData();
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri1);
-                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath1, 300, 400);
-                    // Log.d(TAG, String.valueOf(bitmap));
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri1);
+                        bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath1, 300, 400);
+                        // Log.d(TAG, String.valueOf(bitmap));
 
-                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                    Log.e(TAG, uri1.toString());
-                    imageContentURI = realPath1;
-                    car_driver_id.setImageBitmap(bitmap);
-                    //car_driver_id.setImageResource(R.drawable.ic_camera_72x72);
-                    //car_driver_id.setVisibility(View.VISIBLE);
-                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
-                    //File img = new File(realPath);
-                    //post_image.postImageToServer(bitmap,driverInfo);
-                    // post_image.RequestMultiPart(this,this,img);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                        //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        Log.e(TAG, uri1.toString());
+                        imageContentURI = realPath1;
+                        car_driver_id.setImageBitmap(bitmap);
+                        //car_driver_id.setImageResource(R.drawable.ic_camera_72x72);
+                        //car_driver_id.setVisibility(View.VISIBLE);
+                        //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                        //File img = new File(realPath);
+                        //post_image.postImageToServer(bitmap,driverInfo);
+                        // post_image.RequestMultiPart(this,this,img);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
-                    post_image.postImageToServer(driverInfo,car_driver_id,PHOTO_TYPE_DRIVER);
+                        post_image.postImageToServer(driverInfo, car_driver_id, PHOTO_TYPE_DRIVER);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case LICENCE_CAMERA:
-                String path2 = data.getStringExtra("image");
+                if ( data !=null && data.getStringExtra("image")!=null) {
+
+                    String path2 = data.getStringExtra("image");
                 File imgFile2 = new File(path2);
                 if (imgFile2.exists()) {
                     Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path2, scaleWidth, scaleHeight);
                     //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
                     imageContentURI = path2;
                     car_driver_licence.setImageBitmap(myBitmap);
-                    if(dialog == null)
+                    if (dialog == null)
                         dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
                                 "Loading. Please wait...", true);
 
-                    post_image.postImageToServer(driverInfo,car_driver_licence,PHOTO_TYPE_CAR);
-
+                    post_image.postImageToServer(driverInfo, car_driver_licence, PHOTO_TYPE_CAR);
+                }
                 }
                 break;
             case PICK_LICENCE_IMAGE_REQUEST:
-                String realPath2;
-                // SDK < API11
-                if (Build.VERSION.SDK_INT < 11)
-                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+                if(data.getData()!=null) {
+                    String realPath2;
+                    // SDK < API11
+                    if (Build.VERSION.SDK_INT < 11)
+                        realPath2 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
 
-                    // SDK >= 11 && SDK < 19
-                else if (Build.VERSION.SDK_INT < 19)
-                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+                        // SDK >= 11 && SDK < 19
+                    else if (Build.VERSION.SDK_INT < 19)
+                        realPath2 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
 
-                    // SDK > 19 (Android 4.4)
-                else
-                    realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                        // SDK > 19 (Android 4.4)
+                    else
+                        realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                Uri uri2 = data.getData();
+                    Uri uri2 = data.getData();
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri2);
-                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath2, 300, 400);
-                    // Log.d(TAG, String.valueOf(bitmap));
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri2);
+                        bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath2, 300, 400);
+                        // Log.d(TAG, String.valueOf(bitmap));
 
-                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                    Log.e(TAG, uri2.toString());
-                    imageContentURI = realPath2;
-                    car_driver_licence.setImageBitmap(bitmap);
-                    //car_driver_licence.setImageResource(R.drawable.ic_camera_72x72);
-                    //car_driver_licence.setVisibility(View.VISIBLE);
-                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
-                    //File img = new File(realPath);
-                    //post_image.postImageToServer(bitmap,driverInfo);
-                    // post_image.RequestMultiPart(this,this,img);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                        //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        Log.e(TAG, uri2.toString());
+                        imageContentURI = realPath2;
+                        car_driver_licence.setImageBitmap(bitmap);
+                        //car_driver_licence.setImageResource(R.drawable.ic_camera_72x72);
+                        //car_driver_licence.setVisibility(View.VISIBLE);
+                        //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                        //File img = new File(realPath);
+                        //post_image.postImageToServer(bitmap,driverInfo);
+                        // post_image.RequestMultiPart(this,this,img);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
-                    post_image.postImageToServer(driverInfo,car_driver_licence,PHOTO_TYPE_CAR);
+                        post_image.postImageToServer(driverInfo, car_driver_licence, PHOTO_TYPE_CAR);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case WORK_LICENCE_CAMERA:
-                String path3 = data.getStringExtra("image");
-                File imgFile3 = new File(path3);
-                if (imgFile3.exists()) {
-                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path3, scaleWidth, scaleHeight);
-                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
-                    imageContentURI = path3;
-                    car_work_licence_image.setImageBitmap(myBitmap);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                if ( data !=null && data.getStringExtra("image")!=null) {
 
-                    post_image.postImageToServer(driverInfo,car_work_licence_image,PHOTO_TYPE_LICENSE);
+                    String path3 = data.getStringExtra("image");
+                    File imgFile3 = new File(path3);
+                    if (imgFile3.exists()) {
+                        Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path3, scaleWidth, scaleHeight);
+                        //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                        imageContentURI = path3;
+                        car_work_licence_image.setImageBitmap(myBitmap);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
+                        post_image.postImageToServer(driverInfo, car_work_licence_image, PHOTO_TYPE_LICENSE);
+
+                    }
                 }
                 break;
             case PICK_WORK_LICENCE_IMAGE_REQUEST:
-                String realPath3;
-                // SDK < API11
-                if (Build.VERSION.SDK_INT < 11)
-                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+                if(data.getData()!=null) {
+                    String realPath3;
+                    // SDK < API11
+                    if (Build.VERSION.SDK_INT < 11)
+                        realPath3 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
 
-                    // SDK >= 11 && SDK < 19
-                else if (Build.VERSION.SDK_INT < 19)
-                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+                        // SDK >= 11 && SDK < 19
+                    else if (Build.VERSION.SDK_INT < 19)
+                        realPath3 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
 
-                    // SDK > 19 (Android 4.4)
-                else
-                    realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                        // SDK > 19 (Android 4.4)
+                    else
+                        realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                Uri uri3 = data.getData();
+                    Uri uri3 = data.getData();
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri3);
-                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath3, 300, 400);
-                    // Log.d(TAG, String.valueOf(bitmap));
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri3);
+                        bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath3, 300, 400);
+                        // Log.d(TAG, String.valueOf(bitmap));
 
-                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                    Log.e(TAG, uri3.toString());
-                    imageContentURI = realPath3;
-                    car_work_licence_image.setImageBitmap(bitmap);
-                    //car_work_licence_image.setImageResource(R.drawable.ic_camera_72x72);
-                    //car_work_licence_image.setVisibility(View.VISIBLE);
-                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
-                    //File img = new File(realPath);
-                   // post_image.postImageToServer(bitmap,driverInfo);
-                    // post_image.RequestMultiPart(this,this,img);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                        //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        Log.e(TAG, uri3.toString());
+                        imageContentURI = realPath3;
+                        car_work_licence_image.setImageBitmap(bitmap);
+                        //car_work_licence_image.setImageResource(R.drawable.ic_camera_72x72);
+                        //car_work_licence_image.setVisibility(View.VISIBLE);
+                        //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                        //File img = new File(realPath);
+                        // post_image.postImageToServer(bitmap,driverInfo);
+                        // post_image.RequestMultiPart(this,this,img);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
-                    post_image.postImageToServer(driverInfo,car_work_licence_image,PHOTO_TYPE_LICENSE);
+                        post_image.postImageToServer(driverInfo, car_work_licence_image, PHOTO_TYPE_LICENSE);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
             case CAR_CAMERA:
-                String path4 = data.getStringExtra("image");
-                File imgFile4 = new File(path4);
-                if (imgFile4.exists()) {
-                    Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path4, scaleWidth, scaleHeight);
-                    //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
-                    imageContentURI = path4;
-                    car_image.setImageBitmap(myBitmap);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                if ( data !=null && data.getStringExtra("image")!=null) {
 
-                    post_image.postImageToServer(driverInfo,car_image,PHOTO_TYPE_CAR_BODY);
+                    String path4 = data.getStringExtra("image");
+                    File imgFile4 = new File(path4);
+                    if (imgFile4.exists()) {
+                        Bitmap myBitmap = ImageUtils.decodeSampledBitmapFromResource(path4, scaleWidth, scaleHeight);
+                        //ImageView myImage = (ImageView) findViewById(R.id.imageviewTest);
+                        imageContentURI = path4;
+                        car_image.setImageBitmap(myBitmap);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
+                        post_image.postImageToServer(driverInfo, car_image, PHOTO_TYPE_CAR_BODY);
+
+                    }
                 }
                 break;
             case PICK_CAR_IMAGE_REQUEST:
-                String realPath4;
-                // SDK < API11
-                if (Build.VERSION.SDK_INT < 11)
-                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
+                if(data.getData()!=null) {
+                    String realPath4;
+                    // SDK < API11
+                    if (Build.VERSION.SDK_INT < 11)
+                        realPath4 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
 
-                    // SDK >= 11 && SDK < 19
-                else if (Build.VERSION.SDK_INT < 19)
-                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
+                        // SDK >= 11 && SDK < 19
+                    else if (Build.VERSION.SDK_INT < 19)
+                        realPath4 = URICovertStringPathUtil.getRealPathFromURI_API11to18(this, data.getData());
 
-                    // SDK > 19 (Android 4.4)
-                else
-                    realPath4 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                        // SDK > 19 (Android 4.4)
+                    else
+                        realPath4 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                Uri uri4 = data.getData();
+                    Uri uri4 = data.getData();
 
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri4);
-                    bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath4, 300, 400);
-                    // Log.d(TAG, String.valueOf(bitmap));
+                    try {
+                        Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri4);
+                        bitmap = ImageUtils.decodeSampledBitmapFromResource(realPath4, 300, 400);
+                        // Log.d(TAG, String.valueOf(bitmap));
 
-                    //ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                    Log.e(TAG, uri4.toString());
-                    imageContentURI = realPath4;
-                    //car_image.setVisibility(View.VISIBLE);
-                    //car_image.setImageResource(R.drawable.ic_camera_72x72);
-                    car_image.setImageBitmap(bitmap);
+                        //ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        Log.e(TAG, uri4.toString());
+                        imageContentURI = realPath4;
+                        //car_image.setVisibility(View.VISIBLE);
+                        //car_image.setImageResource(R.drawable.ic_camera_72x72);
+                        car_image.setImageBitmap(bitmap);
 
-                    //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
-                    //File img = new File(realPath);
-                    //post_image.postImageToServer(bitmap,driverInfo);
-                    // post_image.RequestMultiPart(this,this,img);
-                    if(dialog == null)
-                        dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
-                                "Loading. Please wait...", true);
+                        //JsonPutsUtil post_image = new JsonPutsUtil(PhotoVerifyActivity.this);
+                        //File img = new File(realPath);
+                        //post_image.postImageToServer(bitmap,driverInfo);
+                        // post_image.RequestMultiPart(this,this,img);
+                        if (dialog == null)
+                            dialog = ProgressDialog.show(PhotoVerifyActivity.this, "",
+                                    "Loading. Please wait...", true);
 
-                    post_image.postImageToServer(driverInfo,car_image,"a6");
+                        post_image.postImageToServer(driverInfo, car_image, "a6");
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 break;
         }
@@ -996,5 +1111,10 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                         //finish();
                     }
                 });
+
+             alertDialogBuilder.create();
+            // show it
+            alertDialogBuilder.show();
+
     }
 }

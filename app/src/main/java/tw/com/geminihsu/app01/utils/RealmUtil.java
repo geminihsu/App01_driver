@@ -44,6 +44,7 @@ public class RealmUtil {
         mRealm = Realm.getInstance(
                 new RealmConfiguration.Builder(file)
                         .name(mContext.getString(R.string.app_database_name))
+                        .deleteRealmIfMigrationNeeded()
                         .build()
         );
     }
@@ -213,7 +214,7 @@ public class RealmUtil {
         normalOrder.setDtype(order.getDtype());
 
         normalOrder.setBegin_address(order.getBegin().getAddress());
-        //normalOrder.setStop_address(order.getStop().getAddress());
+        normalOrder.setStop_address(order.getStop().getAddress());
         normalOrder.setEnd_address(order.getEnd().getAddress());
         normalOrder.setCargo_type(order.getCargo_type());
         normalOrder.setCargo_size(order.getCargo_size());

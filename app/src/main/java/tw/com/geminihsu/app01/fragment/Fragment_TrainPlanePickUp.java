@@ -40,6 +40,7 @@ public class Fragment_TrainPlanePickUp extends Fragment {
     private static Constants.APP_REGISTER_DRIVER_TYPE dataType;
     private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
+    private ViewPager viewPager;
     public Fragment_TrainPlanePickUp() {
         // Required empty public constructor
     }
@@ -55,6 +56,16 @@ public class Fragment_TrainPlanePickUp extends Fragment {
         }
     }
 
+    @Override
+    public void onStop()
+    {
+        super.onStop();
+        //call to ViewPage to remove the pages
+        viewPager.removeAllViews();
+
+        //make this to update the pager
+        viewPager.setAdapter(null);
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +90,8 @@ public class Fragment_TrainPlanePickUp extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_beginorder, container, false);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+        //viewPager.setId(View.generateViewId());
         viewPager.setAdapter(new ItemsPagerAdapter(getChildFragmentManager(), mTabNamesList));
         mToolbarSetupCallback.setupTabLayout(viewPager);
 
@@ -102,7 +114,14 @@ public class Fragment_TrainPlanePickUp extends Fragment {
 
             mTabs = tabNames;
         }
-
+        @Override
+        public Object instantiateItem(ViewGroup container, int position) {//初始子View方法
+            return super.instantiateItem(container, position);
+        }
+        @Override
+        public void destroyItem(ViewGroup container, int position, Object object) {//销毁子View
+            super.destroyItem(container, position, object);
+        }
         @Override
         public Fragment getItem(int position) {
             Fragment fragment = null;
@@ -117,6 +136,7 @@ public class Fragment_TrainPlanePickUp extends Fragment {
                     fragment.setArguments(args2);
                     break;
                 case 1:
+
                     fragment = new Fragment_PickUpTrain();
                     Bundle args3 = new Bundle();
                     args3.putInt(Constants.ARG_POSITION, 1);

@@ -25,11 +25,14 @@ public class MerchandiseOrderActivity extends Activity {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_TAKE = 0x0001;
+    public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
+
 
     private LinearLayout linearLayout_merchandise;
     private LinearLayout linearLayout_send_merchandise;
     private LinearLayout linearLayout_passenger;
 
+    private LinearLayout linearLayout_stop_address;
 
     private TextView driver_comment;
     private TextView passenger_comment;
@@ -43,7 +46,7 @@ public class MerchandiseOrderActivity extends Activity {
     private TextView passeger_name;
     private TextView passenger_address;
     private TextView passenger_address_destination;
-
+    private TextView passenger_stop_address;
 
     final public static int MERCHANDISE = 0;
     final public static int SEND_MERCHANDISE = 1;
@@ -74,7 +77,7 @@ public class MerchandiseOrderActivity extends Activity {
                 choice = bundle.getInt(Constants.ARG_POSITION);
                 order = (NormalOrder)bundle.getSerializable(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET);
                if(order==null) {
-                   String ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
+                   String ticket_id = bundle.getString(BUNDLE_ORDER_TICKET_ID);
                    RealmUtil info = new RealmUtil(MerchandiseOrderActivity.this);
                    order = info.queryOrder(Constants.ORDER_TICKET_ID, ticket_id);
                }
@@ -105,6 +108,8 @@ public class MerchandiseOrderActivity extends Activity {
         linearLayout_merchandise = (LinearLayout) findViewById(R.id.merchandise_info);
         linearLayout_send_merchandise= (LinearLayout) findViewById(R.id.send_merchandise_info);
         linearLayout_passenger = (LinearLayout) findViewById(R.id.passeger_info);
+        linearLayout_stop_address = (LinearLayout) findViewById(R.id.stop_information);
+
         driver_comment = (TextView) findViewById(R.id.comment);
         passenger_comment = (TextView) findViewById(R.id.passeger_comment);
         insurance_info = (TextView) findViewById(R.id.insurance_inform);
@@ -113,6 +118,7 @@ public class MerchandiseOrderActivity extends Activity {
         merchandise_car_requirement = (TextView) findViewById(R.id.send_content);
         merchandise_car_requirement_spec = (TextView) findViewById(R.id.send_merchandise_content);
         merchandise_title= (TextView) findViewById(R.id.txt_info);
+        passenger_stop_address = (TextView) findViewById(R.id.stop_address);
 
         passeger_name = (TextView)findViewById(R.id.passeger_name);
         passenger_address = (TextView)findViewById(R.id.passenger_address);
@@ -149,6 +155,10 @@ public class MerchandiseOrderActivity extends Activity {
             linearLayout_passenger.setVisibility(View.VISIBLE);
             getActionBar().setTitle(getString(R.string.passenger_page_title));
 
+            if(!order.getStop_address().equals("0")) {
+                linearLayout_stop_address.setVisibility(View.VISIBLE);
+                passenger_stop_address.setText(order.getStop_address());
+            }
         }
     }
 
@@ -234,14 +244,14 @@ public class MerchandiseOrderActivity extends Activity {
             item.setTitle(spanString);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
-        }else
+        }/*else
         {
             MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_TAKE, Menu.NONE, getString(R.string.take_order));
             SpannableString spanString = new SpannableString(item.getTitle().toString());
             spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
             item.setTitle(spanString);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-        }
+        }*/
 
         return true;
     }

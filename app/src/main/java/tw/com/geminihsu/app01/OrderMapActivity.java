@@ -26,9 +26,11 @@ import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -71,8 +73,12 @@ public class OrderMapActivity extends Activity implements LocationListener {
     private LocationManager locationManager;
     private String provider;
 
+
     private CheckBox bookmark;
     private EditText bookmarkTitle;
+    private EditText searchMap;
+
+    private ImageButton search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,12 +150,13 @@ public class OrderMapActivity extends Activity implements LocationListener {
         googleMap = mMapView.getMap();
         bookmark = (CheckBox) findViewById(R.id.addbookmark);
         bookmarkTitle = (EditText) findViewById(R.id.bookmark);
+        searchMap = (EditText) findViewById(R.id.textView_title);
 
+        search = (ImageButton) findViewById(R.id.search);
     }
 
 
-    private void setLister()
-    {
+    private void setLister() {
         /*bookmark.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -168,6 +175,40 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 }
             }
         });*/
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (locationManager != null)
+                    if (ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                locationManager.removeUpdates(OrderMapActivity.this);
+
+                Geocoder fwdGeocoder = new Geocoder(OrderMapActivity.this);
+
+                String streetAddress = searchMap.getText().toString();
+                List<Address> locations = null;
+                try {
+                    locations = fwdGeocoder.getFromLocationName(streetAddress, 10);
+                } catch (IOException e) {}
+
+                googleMap.clear();
+                latitude = locations.get(0).getLatitude();
+                longitude = locations.get(0).getLongitude();
+
+                setMapView(locations.get(0).getLongitude(),locations.get(0).getLatitude());
+
+            }
+        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -265,6 +306,8 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 setResult(Constants.DEPARTURE_QUERY_GPS, i);
             else if (provide_location == Constants.DESTINATION_QUERY_GPS)
                 setResult(Constants.DESTINATION_QUERY_GPS, i);
+            else if (provide_location == Constants.STOP_QUERY_GPS)
+                setResult(Constants.STOP_QUERY_GPS, i);
 
         }
 
@@ -403,6 +446,8 @@ public class OrderMapActivity extends Activity implements LocationListener {
             setResult(Constants.DEPARTURE_QUERY_GPS, i);
         else if (provide_location == Constants.DESTINATION_QUERY_GPS)
             setResult(Constants.DESTINATION_QUERY_GPS, i);
+        else if (provide_location == Constants.STOP_QUERY_GPS)
+            setResult(Constants.STOP_QUERY_GPS, i);
         finish();
 
     }
@@ -435,6 +480,11 @@ public class OrderMapActivity extends Activity implements LocationListener {
                     result.setLocation(bookmarkTitle);
                 else
                     result.setLocation(sb.toString());
+
+                if(!searchMap.equals("")) {
+                    result.setLocation(searchMap.getText().toString());
+                    result.setAddress(searchMap.getText().toString());
+                }else
                 result.setAddress(sb.toString());
 
             }

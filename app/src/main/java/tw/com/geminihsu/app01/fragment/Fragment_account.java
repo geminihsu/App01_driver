@@ -320,33 +320,36 @@ public class Fragment_Account extends Fragment {
 	private void selectIdentity()
     {
         getDriverIdentity();
-        AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
-        final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                getActivity(),
-                android.R.layout.select_dialog_item);
+        if(!driver_identity.isEmpty()) {
+            AlertDialog.Builder builderSingle = new AlertDialog.Builder(getActivity());
 
-        for ( String type : driver_identity.keySet() ) {
-            arrayAdapter.add(type);
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                    getActivity(),
+                    android.R.layout.select_dialog_item);
+
+            for (String type : driver_identity.keySet()) {
+                arrayAdapter.add(type);
+            }
+
+            builderSingle.setAdapter(
+                    arrayAdapter,
+                    new DialogInterface.OnClickListener() {
+                        @TargetApi(Build.VERSION_CODES.M)
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String strName = arrayAdapter.getItem(which);
+
+                            progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                                    "Loading. Please wait...", true);
+                            change_driver = driver_mapping_value.get(strName);
+                            changeDriverType = driver_identity.get(strName);
+                            sendDataRequest.driverWorkIdentity(change_driver);
+
+                        }
+                    });
+            builderSingle.show();
         }
-
-        builderSingle.setAdapter(
-                arrayAdapter,
-                new DialogInterface.OnClickListener() {
-                    @TargetApi(Build.VERSION_CODES.M)
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String strName = arrayAdapter.getItem(which);
-
-                                progressDialog_loading = ProgressDialog.show(getActivity(), "",
-                                        "Loading. Please wait...", true);
-                                change_driver = driver_mapping_value.get(strName);
-                                changeDriverType = driver_identity.get(strName);
-                                sendDataRequest.driverWorkIdentity(change_driver);
-
-                    }
-                });
-        builderSingle.show();
     }
 
 
@@ -360,17 +363,22 @@ public class Fragment_Account extends Fragment {
             if(driverIdentifyInfos.size()>1)
             {
                 String currentType = user.getDriver_type();
+
+                if(currentType==null)
+                    currentType="0";
                 Constants.APP_REGISTER_DRIVER_TYPE driverCurrentType = Constants.conversion_register_driver_account_result(Integer.valueOf(currentType));
 
-                DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
-                no_workDriverIdentifyInfo.setUid(user.getUid());
-                no_workDriverIdentifyInfo.setDid("0");
-                no_workDriverIdentifyInfo.setAccesskey(user.getAccessKey());
-                no_workDriverIdentifyInfo.setName(user.getName());
-                no_workDriverIdentifyInfo.setDtype("0");
-                driver_identity.put(getString(R.string.no_work), 0);
-                driver_mapping_value.put(getString(R.string.no_work),no_workDriverIdentifyInfo);
 
+                if(Integer.valueOf(currentType)>0) {
+                    DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
+                    no_workDriverIdentifyInfo.setUid(user.getUid());
+                    no_workDriverIdentifyInfo.setDid("0");
+                    no_workDriverIdentifyInfo.setAccesskey(user.getAccessKey());
+                    no_workDriverIdentifyInfo.setName(user.getPhoneNumber());
+                    no_workDriverIdentifyInfo.setDtype("0");
+                    driver_identity.put(getString(R.string.no_work), 0);
+                    driver_mapping_value.put(getString(R.string.no_work), no_workDriverIdentifyInfo);
+                }
 
                 for (DriverIdentifyInfo driverIdentifyInfo:driverIdentifyInfos)
                 {
@@ -404,21 +412,22 @@ public class Fragment_Account extends Fragment {
             }else {
 
                 String currentType = user.getDriver_type();
-
-
-                DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
-                no_workDriverIdentifyInfo.setUid(driver.getUid());
-                no_workDriverIdentifyInfo.setAccesskey(driver.getAccesskey());
-                no_workDriverIdentifyInfo.setName(driver.getName());
-                no_workDriverIdentifyInfo.setDtype("0");
-                no_workDriverIdentifyInfo.setDid("0");
-                driver_identity.put(getString(R.string.no_work), 0);
-                driver_mapping_value.put(getString(R.string.no_work), no_workDriverIdentifyInfo);
-
+                if(currentType==null)
+                    currentType="0";
+                if(Integer.valueOf(currentType)>0) {
+                    DriverIdentifyInfo no_workDriverIdentifyInfo = new DriverIdentifyInfo();
+                    no_workDriverIdentifyInfo.setUid(driver.getUid());
+                    no_workDriverIdentifyInfo.setAccesskey(driver.getAccesskey());
+                    no_workDriverIdentifyInfo.setName(driver.getName());
+                    no_workDriverIdentifyInfo.setDtype("0");
+                    no_workDriverIdentifyInfo.setDid("0");
+                    driver_identity.put(getString(R.string.no_work), 0);
+                    driver_mapping_value.put(getString(R.string.no_work), no_workDriverIdentifyInfo);
+                }
 
                 String type = driver.getDtype();
 
-                if (currentType.equals("")) {
+                if (currentType.equals("0")) {
                     Constants.APP_REGISTER_DRIVER_TYPE dataType = Constants.conversion_register_driver_account_result(Integer.valueOf(type));
                     if (dataType == Constants.APP_REGISTER_DRIVER_TYPE.K_REGISTER_DRIVER_TYPE_TAXI) {
                         driver_identity.put(getString(R.string.taxi_driver), 1);

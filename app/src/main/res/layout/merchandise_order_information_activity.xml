@@ -448,8 +448,8 @@
         android:layout_marginTop="40dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:visibility="gone"
         android:orientation="vertical"
+        android:visibility="gone"
         >
     <LinearLayout
         android:layout_width="fill_parent"
@@ -496,25 +496,58 @@
 
     </LinearLayout>
         <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        >
+        <TextView
+            android:id="@+id/passenger_departure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="middle"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:text="@string/merchandise_departure"
+            android:textColor="@color/btn_bouns_title"
+            android:textStyle="bold"
+            android:textSize="@dimen/default_text_address_size_sp"
+            />
+        <TextView
+            android:id="@+id/passenger_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:paddingLeft="20dp"
+            android:textSize="@dimen/default_text_address_size_sp"
+            android:layout_gravity="center_vertical"
+            android:text="台中火車站"
+            android:textColor="@color/address_devicename_txt"
+            />
+    </LinearLayout>
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
             android:paddingTop="10dp"
+            android:id="@+id/stop_information"
+            android:visibility="gone"
             >
             <TextView
-                android:id="@+id/passenger_departure"
+                android:id="@+id/passenger_stop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
                 android:singleLine="true"
                 android:paddingLeft="20dp"
-                android:text="@string/merchandise_departure"
+                android:text="@string/merchandise_stop"
                 android:textColor="@color/btn_bouns_title"
                 android:textStyle="bold"
                 android:textSize="@dimen/default_text_address_size_sp"
                 />
             <TextView
-                android:id="@+id/passenger_address"
+                android:id="@+id/stop_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -615,7 +648,7 @@
                 android:paddingLeft="20dp"
                 android:textSize="@dimen/default_text_address_size_sp"
                 android:layout_gravity="center_vertical"
-                android:text="懂日語"
+                android:text=""
                 android:textColor="@color/address_devicename_txt"
                 />
         </LinearLayout>

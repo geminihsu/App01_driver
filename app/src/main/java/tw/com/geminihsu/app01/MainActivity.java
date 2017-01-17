@@ -37,6 +37,7 @@ import tw.com.geminihsu.app01.utils.FileUtil;
 import tw.com.geminihsu.app01.utils.FormatUtils;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
+import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class MainActivity extends Activity {
@@ -261,7 +262,14 @@ public class MainActivity extends Activity {
                 if(dialog == null)
                    dialog = ProgressDialog.show(MainActivity.this, "",
                         "Loading. Please wait...", true);
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
                 sendDataRequest.sendLoginRequest(user,false);
+            }
+        }));
+
+
        //     }else
        //         alert(ERROR_USER_INFO);
        // }else

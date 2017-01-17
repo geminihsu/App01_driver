@@ -15,7 +15,27 @@ import tw.com.geminihsu.app01.R;
 
 public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> {
 
-    private LayoutInflater mInflater;
+	TakeLookButtonListener takeLookButtonListner;
+
+	public interface TakeLookButtonListener {
+		public void ontakeLookButtonListener(int position);
+	}
+
+	public void setTakeLookButtonListner(TakeLookButtonListener listener) {
+		this.takeLookButtonListner = listener;
+	}
+
+	TakeOverButtonListner takeOverButtonListner;
+
+	public interface TakeOverButtonListner {
+		public void ontakeOverButtonListener(int position);
+	}
+
+	public void setTakeOverButtonListner(TakeOverButtonListner listener) {
+		this.takeOverButtonListner = listener;
+	}
+
+	private LayoutInflater mInflater;
 
 
     public BeginOrderListItemAdapter(Context _context,
@@ -27,8 +47,8 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
 
     }
    
-    public View getView(int position,
-                        View convertView, ViewGroup parent) {
+    public View getView(final int position,
+						View convertView, ViewGroup parent) {
     	
     	
         // 取出資料
@@ -78,9 +98,31 @@ public class BeginOrderListItemAdapter extends ArrayAdapter<BeginOrderListItem> 
 
 
 		}
-        
 
-        return convertView;
+
+		holder.btn_take_look.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (takeLookButtonListner != null) {
+					takeLookButtonListner.ontakeLookButtonListener(position);
+				}
+
+			}
+		});
+
+		holder.btn_take_over.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (takeOverButtonListner != null) {
+					takeOverButtonListner.ontakeOverButtonListener(position);
+				}
+
+			}
+		});
+
+		return convertView;
     }
 
     private class ViewHolder {
