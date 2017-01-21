@@ -183,11 +183,12 @@ limitations under the License.
 			<TextView
 				android:id="@+id/txt_trailer"
 				android:layout_width="wrap_content"
+
 				android:layout_height="wrap_content"
 				android:ellipsize="middle"
 				android:textStyle="bold"
 				android:layout_gravity="center_horizontal"
-				android:text="@string/service_trailer"
+				android:text="@string/service_big_trailer"
 				android:textColor="@color/btn_bouns_title"
 				/>
 		</LinearLayout>

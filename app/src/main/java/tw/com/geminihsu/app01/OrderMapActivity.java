@@ -465,6 +465,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
                     sb.append(address.getAddressLine(i)).append("\n");
                 }
+
                 sb.append(address.getLocality()).append("\n");
                 sb.append(address.getPostalCode()).append("\n");
                 sb.append(address.getCountryName());
@@ -481,11 +482,20 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 else
                     result.setLocation(sb.toString());
 
-                if(!searchMap.equals("")) {
+                if(!searchMap.getText().toString().equals("")) {
                     result.setLocation(searchMap.getText().toString());
                     result.setAddress(searchMap.getText().toString());
-                }else
-                result.setAddress(sb.toString());
+                }else {
+                    if(address.getCountryCode().equals("TW")) {
+                        result.setAddress(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                        result.setLocation(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                    }else{
+                        result.setAddress(sb.toString());
+                        result.setLocation(sb.toString());
+
+                    }
+
+                }
 
             }
         } catch (IOException e) {

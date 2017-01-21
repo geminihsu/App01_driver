@@ -24,3 +24,7 @@
 ### For OkHttp 3.x ###
 -keep class okhttp3.** { *; }
 -keep interface okhttp3.** { *; }
+
+-keep class com.newrelic.** { *; }
+-dontwarn com.newrelic.**
+-keepattributes Exceptions, Signature, InnerClasses, LineNumberTable
