@@ -134,8 +134,10 @@ public class Utility {
     }
 
     public void clearData(final Class table){
-        RealmUtil data = new RealmUtil(mContext);
-        data.clearDB(table);
+        if(mContext!=null) {
+            RealmUtil data = new RealmUtil(mContext);
+            data.clearDB(table);
+        }
     }
 
     public void clearServerInfoData(){

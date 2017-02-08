@@ -137,6 +137,7 @@
     <string name="service_truck">小貨車</string>
     <string name="service_big_truck">大貨車</string>
     <string name="service_big_trailer">連結車</string>
+    <string name="no_work">暫時不營業</string>
 
 
     <!-- SupportAnswerActivity -->
@@ -312,11 +313,16 @@
     <string name="order_finish_title">訂單處理</string>
     <string name="order_finish_ok">操作成功</string>
 
+    <string name="create_order_price">價錢</string>
+    <string name="create_order_tipe">小費</string>
+
+
     <!-- MerchandiseOrderActivity Control Panel-->
     <string name="merchandise_comment">查看評價</string>
     <string name="merchant">發貨方</string>
     <string name="merchant＿buyer">付款方 : </string>
     <string name="merchandise_departure">起始位置 : </string>
+    <string name="merchandise_stop">停靠位置 : </string>
     <string name="merchandise_destination">終點位置 : </string>
     <string name="reservation_date">預約時間 : </string>
     <string name="merchandise_content">貨物內容 : </string>

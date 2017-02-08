@@ -78,6 +78,7 @@ public class ClientTakeRideActivity extends Activity {
     final public static int SEND_MERCHANDISE= 2;
     private LinearLayout linearLayout_date_picker;
     private LinearLayout change;
+    private LinearLayout linearLayout_spec;
     private ImageButton btn_datePicker;
     private ImageButton btn_timerPicker;
     private ImageButton departure;
@@ -88,6 +89,7 @@ public class ClientTakeRideActivity extends Activity {
     private RadioButton realtime;
     private RadioButton reservation;
     private TextView show_title;
+    private TextView spec_value;
     private EditText date;
     private EditText time;
     private EditText departure_address;
@@ -121,7 +123,7 @@ public class ClientTakeRideActivity extends Activity {
 
     private Dialog dialog;
     private long order_timeStamp;
-    private ArrayList<String> spec_list;
+    private ArrayList<ClientTakeRideSelectSpecListItem> spec_list;
 
     private ProgressDialog progressDialog_loading;
 
@@ -183,9 +185,10 @@ public class ClientTakeRideActivity extends Activity {
 
     private void findViews()
     {
-        spec_list = new ArrayList<String>();
+        spec_list = new ArrayList<ClientTakeRideSelectSpecListItem>();
         change = (LinearLayout) findViewById (R.id.merchandise_content);
         linearLayout_date_picker = (LinearLayout) findViewById(R.id.date_layout);
+        linearLayout_spec = (LinearLayout) findViewById(R.id.spec_require);
 
         btn_datePicker = (ImageButton) findViewById(R.id.date_picker);
         btn_timerPicker = (ImageButton) findViewById(R.id.time_picker);
@@ -194,6 +197,7 @@ public class ClientTakeRideActivity extends Activity {
         destination = (ImageButton) findViewById(R.id.destination);
         spec = (ImageButton) findViewById(R.id.spec_option);
         show_title = (TextView) findViewById(R.id.txt_info);
+        spec_value = (TextView) findViewById(R.id.passenger_spec_value);
 
         radioGroup_type = (RadioGroup) findViewById(R.id.source);
         realtime = (RadioButton)findViewById(R.id.real_radio);
@@ -418,6 +422,68 @@ public class ClientTakeRideActivity extends Activity {
                 builderSingle.show();
             }
         });
+        getDataFromDB();
+        linearLayout_spec.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // custom dialog
+                final Dialog dialog = new Dialog(ClientTakeRideActivity.this);
+                dialog.setContentView(R.layout.client_take_ride_selectspec_requirement);
+                dialog.setTitle(getString(R.string.txt_take_spec));
+                Button cancel = (Button) dialog.findViewById(R.id.button_category_cancel);
+                Button ok = (Button) dialog.findViewById(R.id.button_category_ok);
+
+                //dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                // set the custom dialog components - text, image and button
+                ListView requirement = (ListView) dialog.findViewById(R.id.listViewDialog);
+
+                requirement.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                        ClientTakeRideSelectSpecListItem item = mCommentListData.get(position);
+                        item.check= !item.check;
+                        mCommentListData.set(position,item);
+                        listViewAdapter.notifyDataSetChanged();
+                    }
+                });
+
+                listViewAdapter = new ClientTakeRideSelectSpecListItemAdapter(ClientTakeRideActivity.this, 0, mCommentListData);
+                requirement.setAdapter(listViewAdapter);
+                listViewAdapter.notifyDataSetChanged();
+
+
+                dialog.show();
+                cancel.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
+                    }
+                });
+
+                String require;
+                ok.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        String require="";
+                        for(ClientTakeRideSelectSpecListItem item:mCommentListData)
+                        {
+                            if(item.check)
+                            {
+                                spec_list.add(item);
+                                require+=item.book_title+",";
+                            }
+                        }
+                        //require=require.substring(0,require.length()-1);
+                        spec_value.setText(require);
+                        dialog.cancel();
+                    }
+                });
+
+            }
+        });
 
         spec.setOnClickListener(new View.OnClickListener() {
 
@@ -458,17 +524,23 @@ public class ClientTakeRideActivity extends Activity {
                     }
                 });
 
+                String require;
                 ok.setOnClickListener(new View.OnClickListener() {
 
                     @Override
                     public void onClick(View v) {
+                        String require="";
                         for(ClientTakeRideSelectSpecListItem item:mCommentListData)
                         {
                             if(item.check)
                             {
-                                spec_list.add(item.spec_id);
+                                spec_list.add(item);
+                                require+=item.book_title+",";
                             }
                         }
+                        //require.substring(0,require.length()-2);
+                        //require=require.substring(0,require.length()-1);
+                        spec_value.setText(require);
                         dialog.cancel();
                     }
                 });
@@ -534,10 +606,8 @@ public class ClientTakeRideActivity extends Activity {
                 // for listview 要用的資料
                 ClientTakeRideSelectSpecListItem item = new ClientTakeRideSelectSpecListItem();
 
-                if(i==0)
-                  item.check=true;
-                else
-                  item.check=false;
+
+                item.check=false;
                 //if(specials.get(i).getDtype().equals(dType))
                 item.spec_id = specials.get(i).getId();
                 item.book_title =specials.get(i).getContent();
@@ -672,12 +742,12 @@ public class ClientTakeRideActivity extends Activity {
         }
 
         String spec="";
-        if(!spec_list.isEmpty())
+       if(!spec_list.isEmpty())
         {
-            for(String spec_id:spec_list){
-                spec+=spec_id+",";
+            for(ClientTakeRideSelectSpecListItem item:spec_list){
+                spec+=item.spec_id+",";
             }
-            spec.substring(0,spec.length()-1);
+            spec.substring(0,spec.length()-2);
 
         }
         Log.e(TAG,"spec car:"+spec);

@@ -45,8 +45,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.newrelic.agent.android.NewRelic;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.RealmResults;
 import tw.com.geminihsu.app01.CameraActivity;
@@ -98,10 +101,15 @@ public class Fragment_Account extends Fragment {
 
     private int changeDriverType;
     private ProgressDialog progressDialog_loading;
+
+    private Map<String, Object> attributes = new HashMap<String, Object>();
+    private String sessionId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        sessionId = NewRelic.currentSessionId();
+        NewRelic.startInteraction("AccountBehavior");
         // If activity recreated (such as from screen rotate), restore
         // the previous article selection set by onSaveInstanceState().
         // This is primarily necessary when in the two-pane layout.
@@ -124,6 +132,7 @@ public class Fragment_Account extends Fragment {
             @Override
             public void driverChangeWorkIdentity(DriverIdentifyInfo driver) {
                 Log.e("change","dataType:"+driver.getDtype());
+                NewRelic.setUserId(driver.getName());
                 RealmUtil realmUtil = new RealmUtil(getActivity());
                 AccountInfo userInfo = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,driver.getName());
                 if(userInfo!=null)
@@ -143,6 +152,7 @@ public class Fragment_Account extends Fragment {
                     new_user.setAccessKey(userInfo.getAccessKey());
                     //user.setPassword(newPassword);
                     realmUtil.updateAccount(new_user);
+                    attributes.put("driver", changeDriverType);
 
                 }
                 if(progressDialog_loading!=null) {
@@ -161,6 +171,9 @@ public class Fragment_Account extends Fragment {
                     progressDialog_loading.dismiss();
                     progressDialog_loading = null;
                 }
+                Toast.makeText(getActivity(),
+                        "更改失敗",
+                        Toast.LENGTH_LONG).show();
             }
 
         });
@@ -196,7 +209,8 @@ public class Fragment_Account extends Fragment {
     @Override
 	public void onStop() {
 		super.onStop();
-
+        boolean eventRecorded = NewRelic.recordEvent("AccountInfo", attributes);
+        NewRelic.endInteraction(sessionId);
 	}
 
 	private void findViews()
@@ -344,6 +358,7 @@ public class Fragment_Account extends Fragment {
                                     "Loading. Please wait...", true);
                             change_driver = driver_mapping_value.get(strName);
                             changeDriverType = driver_identity.get(strName);
+                            attributes.put("select driver", strName);
                             sendDataRequest.driverWorkIdentity(change_driver);
 
                         }

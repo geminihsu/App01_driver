@@ -32,6 +32,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.newrelic.agent.android.NewRelic;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,7 +231,9 @@ public class Fragment_BeginOrderList extends Fragment implements
                         ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
                             @Override
                             public void run() {
-                                info.clearData(NormalOrder.class);
+                                if(info!=null)
+                                    info.clearData(NormalOrder.class);
+                                boolean attributeSet = NewRelic.setAttribute("Query Recommendation List", accountInfo.getAccessKey());
                                 sendDataRequest.queryRecommendOrderList(accountInfo);
                             }
                         }));
@@ -239,6 +243,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                         ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
                             @Override
                             public void run() {
+                                if(info!=null)
                                 info.clearData(NormalOrder.class);
                                 sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
                             }
@@ -317,6 +322,7 @@ public class Fragment_BeginOrderList extends Fragment implements
         loadOrderList.setRefreshing(true);
         final Utility info = new Utility(getActivity());
         info.clearData(NormalOrder.class);
+
         //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
         ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
             @Override

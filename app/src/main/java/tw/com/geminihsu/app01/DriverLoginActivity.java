@@ -38,7 +38,7 @@ public class DriverLoginActivity extends Activity {
 
     private DriverIdentifyInfo driverIdentifyInfo;
     private int choice = 0;
-    private boolean debug_test =false;
+    private boolean debug_test =true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
