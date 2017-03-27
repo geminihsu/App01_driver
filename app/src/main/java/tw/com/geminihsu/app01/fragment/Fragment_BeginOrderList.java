@@ -320,14 +320,17 @@ public class Fragment_BeginOrderList extends Fragment implements
                     "Loading. Please wait...", true);
         }
         loadOrderList.setRefreshing(true);
-        final Utility info = new Utility(getActivity());
-        info.clearData(NormalOrder.class);
+
 
         //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
         ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
             @Override
             public void run() {
-                sendDataRequest.getUserInfo(info.getAccountInfo(),true);
+                if(getActivity()!=null) {
+                    Utility info = new Utility(getActivity());
+                    info.clearData(NormalOrder.class);
+                    sendDataRequest.getUserInfo(info.getAccountInfo(), true);
+                }
             }
         }));
     }

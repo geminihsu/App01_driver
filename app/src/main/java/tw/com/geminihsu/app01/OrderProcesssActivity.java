@@ -12,6 +12,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Address;
+import android.location.Criteria;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +37,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
@@ -39,7 +49,7 @@ import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
-public class OrderProcesssActivity extends Activity {
+public class OrderProcesssActivity extends Activity implements LocationListener {
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_CANCEL = 0x0001;
@@ -80,6 +90,9 @@ public class OrderProcesssActivity extends Activity {
     private NormalOrder order;
     private JsonPutsUtil sendDataRequest;
     private int option;
+    private LocationManager locationManager;
+    private String provider;
+    private String location_address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +111,31 @@ public class OrderProcesssActivity extends Activity {
 
             }
         });
+
+        if (!runtime_permissions()) {
+            // Get the location manager
+            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            // Define the criteria how to select the locatioin provider -> use
+            // default
+            Criteria criteria = new Criteria();
+            provider = locationManager.getBestProvider(criteria, false);
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
+            Location location = locationManager.getLastKnownLocation(provider);
+
+
+            if (location != null) {
+                onLocationChanged(location);
+            }
+        }
 
     }
 
@@ -264,16 +302,24 @@ public class OrderProcesssActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(OrderProcesssActivity.this, MapsActivity.class);
-                startActivity(question);
+                /*Intent question = new Intent(OrderProcesssActivity.this, MapsNavigationActivity.class);
+                Bundle b = new Bundle();
+                b.putString(Constants.ARG_POSITION, order.getBegin_address());
+                question.putExtras(b);
+                startActivity(question);*/
+
+                /*Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr="+location_address+"&daddr="+order.getBegin_address()));
+                startActivity(intent);*/
             }
         });
         destination.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent question = new Intent(OrderProcesssActivity.this, MapsActivity.class);
-                startActivity(question);
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                        Uri.parse("http://maps.google.com/maps?saddr="+location_address+"&daddr="+order.getEnd_address()));
+                startActivity(intent);
             }
         });
         change_money.setOnClickListener(new View.OnClickListener() {
@@ -509,7 +555,7 @@ public class OrderProcesssActivity extends Activity {
     private boolean runtime_permissions() {
         if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this, android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED){
 
-            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE, android.Manifest.permission.CALL_PHONE},100);
+            requestPermissions(new String[]{android.Manifest.permission.CALL_PHONE, android.Manifest.permission.CALL_PHONE,android.Manifest.permission.ACCESS_FINE_LOCATION,},100);
 
             return true;
         }
@@ -573,5 +619,46 @@ public class OrderProcesssActivity extends Activity {
         // show it
         alertDialog.show();
     }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        Log.e("Map:",""+latitude);
+        Log.e("Map:",""+longitude);
+        String msg = latitude + ", "+longitude;
+
+        //Displaying current coordinates in toast
+        //Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
+
+        //Displaying current coordinates in toast
+        List<Address> addresses = null;
+
+        Geocoder gc = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = gc.getFromLocation(latitude, longitude, 10);
+        } catch (IOException e) {
+        }
+
+        location_address = addresses.get(0).getAddressLine(0);
+
+
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
+
 
 }

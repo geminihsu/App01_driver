@@ -60,6 +60,8 @@ public class Constants {
 	public final static String NEW_ORDER_DTYPE = "dtype";// from
 	public final static String NEW_ORDER_CARGO_TYPE = "cargo_type";// from
 
+	public final static String NEWS_CONTENT = "news_content";// from
+	public final static String NEWS_TITLE = "news_content_title";// from
 
 
 	public enum APP_REGISTER_DRIVER_TYPE

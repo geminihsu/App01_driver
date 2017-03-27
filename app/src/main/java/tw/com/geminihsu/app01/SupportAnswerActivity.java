@@ -15,14 +15,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.serverbean.ServerContents;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
-import tw.com.geminihsu.app01.utils.Utility;
 import tw.com.geminihsu.app01.webview.MyBrowser;
 
 public class SupportAnswerActivity extends Activity {
@@ -41,6 +43,9 @@ public class SupportAnswerActivity extends Activity {
     private TextView content;
     private Spinner spinner_reason;
     private ArrayAdapter arrayAdapter_reason;
+    private EditText user_name;
+    private EditText user_contact;
+    private EditText user_content;
 
     final public static int QUESTION = 0;
 
@@ -55,8 +60,14 @@ public class SupportAnswerActivity extends Activity {
     final public static int REPORT_APP= 9;
     final public static int ONLINE_CHECK= 10;
     final public static int REPORT_PRICE= 11;
+    final public static int TOP_NEWS= 12;
 
     private int choice = 0;
+    private String newsContent ="";
+    private String newsContentTitle ="";
+
+    private JsonPutsUtil sendDataRequest;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +76,14 @@ public class SupportAnswerActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(SupportAnswerActivity.this);
+        sendDataRequest.setCustomerReturnFeedBackManagerCallBackFunction(new JsonPutsUtil.CustomerReturnFeedBackManagerCallBackFunction() {
+            @Override
+            public void sendStatus(boolean status) {
+                 finish();
+            }
 
-
+        });
     }
 
     @Override
@@ -77,6 +94,11 @@ public class SupportAnswerActivity extends Activity {
         if (bundle != null) {
             if (bundle.containsKey(Constants.ARG_POSITION)){
                 choice = bundle.getInt(Constants.ARG_POSITION);
+                if(choice == TOP_NEWS)
+                {
+                    newsContent = bundle.getString(Constants.NEWS_CONTENT);
+                    newsContentTitle = bundle.getString(Constants.NEWS_TITLE);
+                }
                 displayLayout();
             }else
             {
@@ -108,6 +130,10 @@ public class SupportAnswerActivity extends Activity {
 
         manual = (TextView) findViewById(R.id.manual);
         content = (TextView) findViewById(R.id.content);
+
+        user_name = (EditText) findViewById(R.id.user_name);
+        user_contact = (EditText) findViewById(R.id.user_contact);
+        user_content = (EditText) findViewById(R.id.user_suggestion);
 
         spinner_reason = (Spinner)findViewById(R.id.reason);
 
@@ -157,10 +183,15 @@ public class SupportAnswerActivity extends Activity {
             content.setText("\t\t\t\t"+info.getContent());
 
         }
-        else if(choice == SupportAnswerActivity.MANUAL){
+        else if(choice == SupportAnswerActivity.MANUAL) {
             getActionBar().setTitle(getString(R.string.order_pannel_info));
             manual.setVisibility(View.VISIBLE);
             manual.setText("使用說明細節");
+        }
+        else if(choice == SupportAnswerActivity.TOP_NEWS){
+            getActionBar().setTitle(newsContentTitle);
+            manual.setVisibility(View.VISIBLE);
+            manual.setText(newsContent);
         } else if(choice == SupportAnswerActivity.CANCEL_FEEDBACK){
             getActionBar().setTitle(getString(R.string.menu_cancel_order));
             linearLayout_cancel_order.setVisibility(View.VISIBLE);
@@ -219,11 +250,17 @@ public class SupportAnswerActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 if(choice== SupportAnswerActivity.SUGGESTION) {
-                    Intent question = new Intent(SupportAnswerActivity.this, MerchandiseOrderActivity.class);
+                    /*Intent question = new Intent(SupportAnswerActivity.this, MerchandiseOrderActivity.class);
                     Bundle b = new Bundle();
                     b.putInt(Constants.ARG_POSITION, Constants.CONTROL_PANNEL_MANUAL);
                     question.putExtras(b);
-                    startActivity(question);
+                    startActivity(question);*/
+                    AccountInfo user = new AccountInfo();
+                    user.setName(user_name.getText().toString());
+                    user.setPhoneNumber(user_contact.getText().toString());
+
+                    sendDataRequest.sendCustomerSuggestion(user,user_content.getText().toString());
+
                 }else if(choice== SupportAnswerActivity.SMS_REPORT || choice== SupportAnswerActivity.CANCEL_FEEDBACK)
                 {
                     Intent question = new Intent(SupportAnswerActivity.this, MenuMainActivity.class);

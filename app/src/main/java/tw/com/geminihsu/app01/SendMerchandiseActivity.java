@@ -51,6 +51,11 @@ public class SendMerchandiseActivity extends Activity {
                 question.putExtras(b);
                 startActivity(question);
             }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+
+            }
         });
 
     }

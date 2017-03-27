@@ -802,7 +802,10 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                     // SDK > 19 (Android 4.4)
                 else
-                    realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, uri);
+                    if(Build.MODEL.equals("SM-G900F"))
+                        realPath = URICovertStringPathUtil.getRealPathFromUri(this, uri);
+                    else
+                        realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, uri);
 
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
@@ -862,7 +865,10 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                        realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                        if(Build.MODEL.equals("SM-G900F"))
+                            realPath1 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
+                        else
+                            realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
                     Uri uri1 = data.getData();
 
@@ -923,7 +929,10 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                        realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                         if(Build.MODEL.equals("SM-G900F"))
+                            realPath2 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
+                        else
+                             realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
                     Uri uri2 = data.getData();
 
@@ -985,7 +994,11 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                        realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+                         if(Build.MODEL.equals("SM-G900F"))
+                            realPath3 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
+                        else
+                             realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
+
 
                     Uri uri3 = data.getData();
 
@@ -1047,6 +1060,9 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
+                        if(Build.MODEL.equals("SM-G900F"))
+                        realPath4 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
+                        else
                         realPath4 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
                     Uri uri4 = data.getData();

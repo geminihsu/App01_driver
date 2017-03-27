@@ -60,7 +60,7 @@ public class RegisterActivity extends Activity {
 
     private Button verify;
     private CheckBox agree;
-    private boolean debug =true;
+    private boolean debug = false;
 
     private JsonPutsUtil sendDataRequest;
     private ProgressDialog dialog;

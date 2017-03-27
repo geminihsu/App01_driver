@@ -145,6 +145,11 @@ public class Fragment_PickUpMerchandiseStation extends Fragment {
                 startActivity(intent);
                 getActivity().finish();
             }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+
+            }
         });
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.client_pick_up_merchandise_dork, container, false);

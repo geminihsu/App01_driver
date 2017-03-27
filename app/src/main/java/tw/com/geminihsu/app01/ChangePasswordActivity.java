@@ -5,15 +5,21 @@ import android.app.Activity;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.ForegroundColorSpan;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.FormatUtils;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class ChangePasswordActivity extends Activity {
@@ -24,6 +30,14 @@ public class ChangePasswordActivity extends Activity {
     private EditText name_edit;
     private EditText id_edit;
     private EditText phone_edit;
+    private EditText old_password;
+    private EditText new_password;
+    private EditText new_password_confirm;
+    private JsonPutsUtil sendDataRequest;
+    private AccountInfo accountInfo;
+
+    private boolean isVerifyPassword;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,10 +69,47 @@ public class ChangePasswordActivity extends Activity {
         }
         this.setLister();
 
+        sendDataRequest = new JsonPutsUtil(ChangePasswordActivity.this);
+        sendDataRequest.setAccountChangePasswordDataManagerCallBackFunction(new JsonPutsUtil.AccountChangePasswordDataManagerCallBackFunction() {
+
+
+            @Override
+            public void modifyPassword(boolean status) {
+                if(status)
+                {
+
+                    Toast.makeText(ChangePasswordActivity.this,
+                            "修改成功",
+                            Toast.LENGTH_LONG).show();
+
+                    RealmUtil realmUtil = new RealmUtil(ChangePasswordActivity.this);
+                    //AccountInfo userInfo = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,driver.getName());
+                    if(accountInfo!=null)
+                    {
+                        //更新資料庫帳號裡面的目前營業身份的欄位
+                        AccountInfo new_user = new AccountInfo();
+                        new_user.setId(accountInfo.getId());
+                        new_user.setUid(accountInfo.getUid());
+                        new_user.setName(accountInfo.getName());
+                        new_user.setPhoneNumber(accountInfo.getPhoneNumber());
+                        new_user.setIdentify(accountInfo.getDriver_type());
+                        new_user.setPassword(accountInfo.getPassword());
+                        new_user.setConfirm_password(accountInfo.getConfirm_password());
+                        new_user.setRecommend_id(accountInfo.getRecommend_id());
+                        new_user.setDriver_type(accountInfo.getDriver_type());
+                        new_user.setRole(accountInfo.getRole());
+                        new_user.setAccessKey(accountInfo.getAccessKey());
+                        new_user.setPassword(new_password.getText().toString());
+                        realmUtil.updateAccount(new_user);
+
+                    }
+                }
+            }
+        });
 
 
 
-    }
+        }
 
     private void findViews()
     {
@@ -74,7 +125,7 @@ public class ChangePasswordActivity extends Activity {
         id_edit = (EditText) findViewById(R.id.id_edit);
         phone_edit = (EditText) findViewById(R.id.phone_edit);
         Utility account = new Utility(this);
-        AccountInfo accountInfo = account.getAccountInfo();
+        accountInfo = account.getAccountInfo();
         name_edit.setText(accountInfo.getName());
         name_edit.setEnabled(false);
         id_edit.setText(accountInfo.getIdentify());
@@ -83,11 +134,40 @@ public class ChangePasswordActivity extends Activity {
         phone_edit.setEnabled(false);
 
 
+        old_password = (EditText) findViewById(R.id.edit_old_password);
+        new_password = (EditText) findViewById(R.id.edit_new_password);
+        new_password_confirm = (EditText) findViewById(R.id.edit_new_password_confirm);
+        new_password_confirm.addTextChangedListener(checkPassword);
+
 
     }
 
 
+    private TextWatcher checkPassword= new TextWatcher() {
+        private CharSequence temp;
 
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            temp = s;
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        }
+
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (!FormatUtils.isConfirmPassword(new_password.getText().toString(),new_password_confirm.getText().toString())) {
+                new_password_confirm.setError(getString(R.string.login_error_register_msg));
+                isVerifyPassword = false;
+            }else
+                isVerifyPassword = true;
+        }
+
+
+    };
 
 
     private void setLister()
@@ -115,7 +195,8 @@ public class ChangePasswordActivity extends Activity {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
                 //將表單資料送出後回到主畫面
-                this.finish();
+                //this.finish();
+                sendDataRequest.sendModifyPasswordRequest(accountInfo,new_password.getText().toString());
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.

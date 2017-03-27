@@ -65,6 +65,7 @@ public class Fragment_TrainPlanePickUp extends Fragment {
 
         //make this to update the pager
         viewPager.setAdapter(null);
+
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {

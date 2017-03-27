@@ -89,6 +89,7 @@ public class MapsActivity extends FragmentActivity implements
 
         if(provide_location == Constants.DISPLAY_USER_LOCATION)
         {
+
             longitude = args.getDouble("lng");
             latitude = args.getDouble("lat");
         }

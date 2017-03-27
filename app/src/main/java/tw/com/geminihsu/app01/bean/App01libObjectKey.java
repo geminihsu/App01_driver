@@ -13,6 +13,7 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_METHOD_VERIFY = "m_reg_verify";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_VERIFY = "m_reg_resend";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_SEND_PASSWORD = "m_forget_sendsms";
+    public static final String APP_OBJECT_KEY_PUTS_METHOD_MODIFY_PASSWORD = "m_modify_passowrd";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_RE_MODIFY_PASSWORD = "m_forget_modify";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_LOGIN_VERIFY = "m_auth_user";
     public static final String APP_OBJECT_KEY_PUTS_METHOD_GET_PUSH_NOTIFICATION = "p_get";
@@ -30,6 +31,7 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_PUTS_PUSH_NOTIFICATION_TO_ORDER_OWNER = "t_push_message";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_WORK_IDENTITY = "m_modify_did";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_TAKE_OVER_ORDER = "t_order";
+    public static final String APP_OBJECT_KEY_PUTS_CUSTOMER_CANCEL_ORDER = "t_cancel";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_FINISH_ORDER = "t_finish";
     public static final String APP_OBJECT_KEY_PUTS_COMMENT_ORDER = "t_assess";
     public static final String APP_OBJECT_KEY_PUTS_DRIVER_RECOMMEND_ORDER = "t_match";
@@ -38,7 +40,10 @@ public class App01libObjectKey {
 
 
     public static final String APP_OBJECT_KEY_PUTS_CONTENT_DETAIL = "c_get_all";
+    public static final String APP_OBJECT_KEY_PUTS_NEW_LIST = "n_fetch_list";
+    public static final String APP_OBJECT_KEY_PUTS_NEW_LIST_CONTENT = "n_fetch_content";
 
+    public static final String APP_OBJECT_KEY_PUTS_CUSTOMER_SUGGESTION = "f_push_suggest";
 
 
 
@@ -65,6 +70,12 @@ public class App01libObjectKey {
     //send re-forgot-modify password json to server attribute
     public static final String APP_OBJECT_KEY_RE_SEND_VERIFY_CODE = "verifycode";
     public static final String APP_OBJECT_KEY_RE_SEND_NEW_PASSWORD = "new_password";
+
+    //send modify password json to server attribute
+    public static final String APP_OBJECT_KEY_MODIFY_PASSWORD_USERNAME = "username";
+    public static final String APP_OBJECT_KEY_MODIFY_PASSWORD_OLD_PASSWORD = "old_password";
+    public static final String APP_OBJECT_KEY_MODIFY_PASSWORD_NEW_PASSWORD = "new_password";
+    public static final String APP_OBJECT_KEY_MODIFY_PASSWORD_ACCESSKEY = "accesskey";
 
 
     //send login json to server attribute
@@ -225,6 +236,11 @@ public class App01libObjectKey {
     public static final String APP_OBJECT_KEY_GET_USER_ACCESSKEY = "accesskey";
     public static final String APP_OBJECT_KEY_GET_USER_UID = "uid";
 
+    //send customer feedback to server
+    public static final String APP_OBJECT_KEY_SEND_CUSTOMER_FEEDBACK_NAME = "name";
+    public static final String APP_OBJECT_KEY_SEND_CUSTOMER_FEEDBACK_CONTACT = "contact";
+    public static final String APP_OBJECT_KEY_SEND_CUSTOMER_FEEDBACK_CONTENT = "content";
+
 
 
     public enum APP_REGISTER_RESPONSE_CODE
@@ -326,6 +342,28 @@ public class App01libObjectKey {
         private int value;
 
         private APP_ACCOUNT_LOGIN_VERIFY_RESPONSE_CODE(int value) {
+            this.value = value;
+        }
+
+        public int value() {
+            return value;
+        }
+    };
+
+    public enum APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE
+    {
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_SUCCESS (100)  ,
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_SAME_OLD_ERROR (902),
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_EXPIRED_ERROR (708),
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_NO_EXSIT (701),
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_NO_SMS (704),
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_OLD_PASSWORD_ERROR (709),
+        K_APP_ACCOUNT_CHANE_PASSWORD_CODE_DATABASE_ERROR(401),
+        K_APP_ACCOUNT_LOGIN_VERIFY_CODE_ENTER_ERROR (900);
+
+        private int value;
+
+        private APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE(int value) {
             this.value = value;
         }
 
@@ -927,4 +965,35 @@ public class App01libObjectKey {
         return null;
     }
 
+    public static APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE conversion_account_change_password_result(int index) {
+        if (index >= 0) {
+            if (index == 100) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_SUCCESS;
+            }
+
+            if (index == 902) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_SAME_OLD_ERROR;
+            }
+            if (index == 708) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_EXPIRED_ERROR;
+            }
+            if (index == 701) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_NO_EXSIT;
+            }
+
+            if (index == 704) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_NO_SMS;
+            }
+            if (index == 709) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_OLD_PASSWORD_ERROR;
+            }
+            if (index == 401) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_CHANE_PASSWORD_CODE_DATABASE_ERROR;
+            }
+            if (index == 900) {
+                return APP_ACCOUNT_CHANE_PASSWORD_RESPONSE_CODE.K_APP_ACCOUNT_LOGIN_VERIFY_CODE_ENTER_ERROR;
+            }
+        }
+        return null;
+    }
 }

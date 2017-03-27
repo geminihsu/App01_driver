@@ -51,6 +51,8 @@
     <string name="app_report">APP評分</string>
     <string name="merchandise_calculator">才數計算機</string>
     <string name="map_location">選擇地點</string>
+    <string name="query_driver_map_location">司機位置</string>
+    <string name="map_location_navigation">導航到地點</string>
     <string name="driver_online_check">線上簽收</string>
     <string name="driver_report_price">等待審核</string>
     <string name="camera_title">拍攝相片</string>
@@ -74,9 +76,11 @@
     <string name="login_button">Login</string>
     <string name="register_button">Register</string>
     <string name="login_error_title">登入失敗</string>
+    <string name="map_error_title">查詢失敗</string>
     <string name="login_error_msg">抱歉！\n您輸入的手機號碼或密碼有誤。</string>
     <string name="login_error_user_msg">請先註冊</string>
     <string name="login_error_register_msg">請輸入正確資料</string>
+    <string name="map_error_query_msg">請輸入正確地址資料</string>
     <string name="login_error_gps">Location Service Disabled</string>
     <string name="login_error_gps_msg">Please enable location servies</string>
 

@@ -3,8 +3,10 @@ package tw.com.geminihsu.app01;
 
 import android.*;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -79,6 +81,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
     private EditText searchMap;
 
     private ImageButton search;
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,32 +183,38 @@ public class OrderMapActivity extends Activity implements LocationListener {
             @Override
             public void onClick(View v) {
 
-                if (locationManager != null)
-                    if (ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
+                if(!searchMap.getText().toString().equals("")) {
+                    if (locationManager != null)
+                        if (ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            return;
+                        }
+                    locationManager.removeUpdates(OrderMapActivity.this);
+
+                    Geocoder fwdGeocoder = new Geocoder(OrderMapActivity.this);
+
+                    String streetAddress = searchMap.getText().toString();
+                    List<Address> locations = null;
+                    try {
+                        locations = fwdGeocoder.getFromLocationName(streetAddress, 10);
+                    } catch (IOException e) {
                     }
-                locationManager.removeUpdates(OrderMapActivity.this);
 
-                Geocoder fwdGeocoder = new Geocoder(OrderMapActivity.this);
+                    googleMap.clear();
+                    latitude = locations.get(0).getLatitude();
+                    longitude = locations.get(0).getLongitude();
 
-                String streetAddress = searchMap.getText().toString();
-                List<Address> locations = null;
-                try {
-                    locations = fwdGeocoder.getFromLocationName(streetAddress, 10);
-                } catch (IOException e) {}
-
-                googleMap.clear();
-                latitude = locations.get(0).getLatitude();
-                longitude = locations.get(0).getLongitude();
-
-                setMapView(locations.get(0).getLongitude(),locations.get(0).getLatitude());
+                    setMapView(locations.get(0).getLongitude(), locations.get(0).getLatitude());
+                }else
+                {
+                    alert();
+                }
 
             }
         });
@@ -530,6 +539,31 @@ public class OrderMapActivity extends Activity implements LocationListener {
 
     @Override
     public void onProviderDisabled(String provider) {
+
+    }
+
+    private void alert()
+    {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        // set title
+        alertDialogBuilder.setTitle(getString(R.string.map_error_title));
+
+            // set dialog message
+            alertDialogBuilder
+                    .setMessage(getString(R.string.login_error_register_msg))
+                    .setCancelable(false)
+                    .setNegativeButton(getString(R.string.sure_ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            alertDialog = null;
+                        }
+                    });
+
+            // create alert dialog
+            if (alertDialog == null) {
+                alertDialog = alertDialogBuilder.create();
+                // show it
+                alertDialog.show();
+            }
 
     }
 }

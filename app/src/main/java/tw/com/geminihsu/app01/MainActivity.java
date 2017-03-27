@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
@@ -178,6 +179,7 @@ public class MainActivity extends Activity {
         this.findViews();
         this.setLister();
 
+        Log.e(TAG,"Model Number:"+ Build.MODEL);
         if (!phone_number.isEmpty() && !password.isEmpty())
         {
                     changeActivity();

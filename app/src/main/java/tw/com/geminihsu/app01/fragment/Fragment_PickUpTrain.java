@@ -92,6 +92,7 @@ public class Fragment_PickUpTrain extends Fragment {
     private LinearLayout linearLayout_departure;
     private LinearLayout linearLayout_destination;
     private LinearLayout linearLayout_date_picker;
+    private LinearLayout linearLayout_time_picker;
 
     private ImageButton timerPicker;
     private ImageButton departure;
@@ -172,6 +173,11 @@ public class Fragment_PickUpTrain extends Fragment {
                 startActivity(intent);
                 getActivity().finish();
             }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+
+            }
         });
         // If activity recreated (such as from screen rotate), restore
         // the previous article selection set by onSaveInstanceState().
@@ -226,6 +232,7 @@ public class Fragment_PickUpTrain extends Fragment {
         linearLayout_departure = (LinearLayout) getView().findViewById (R.id.layout_depature);
         linearLayout_destination = (LinearLayout) getView().findViewById (R.id.layout_destination);
         linearLayout_date_picker = (LinearLayout) getView().findViewById(R.id.date_layout);
+        linearLayout_time_picker = (LinearLayout) getView().findViewById(R.id.time_layout);
 
         btn_datePicker = (ImageButton) getView().findViewById(R.id.date_picker);
         timerPicker = (ImageButton) getView().findViewById(R.id.time_picker);
@@ -335,9 +342,10 @@ public class Fragment_PickUpTrain extends Fragment {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == reservation.getId()) {
                     linearLayout_date_picker.setVisibility(View.VISIBLE);
+                    linearLayout_time_picker.setVisibility(View.GONE);
                 } else {
                     linearLayout_date_picker.setVisibility(View.GONE);
-
+                    linearLayout_time_picker.setVisibility(View.VISIBLE);
                 }
             }
         });

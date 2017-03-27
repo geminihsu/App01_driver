@@ -125,6 +125,8 @@ public class Fragment_Account extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().setTitle(getString(R.string.myaccount_page_title));
+
         sendDataRequest = new JsonPutsUtil(getActivity());
         sendDataRequest.setDriverChangeWorkIdentityManagerCallBackFunction(new JsonPutsUtil.DriverChangeWorkIdentityManagerCallBackFunction() {
 
@@ -153,6 +155,7 @@ public class Fragment_Account extends Fragment {
                     //user.setPassword(newPassword);
                     realmUtil.updateAccount(new_user);
                     attributes.put("driver", changeDriverType);
+
 
                 }
                 if(progressDialog_loading!=null) {

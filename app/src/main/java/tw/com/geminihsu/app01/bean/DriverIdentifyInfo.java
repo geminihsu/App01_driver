@@ -10,6 +10,7 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
     private String uid;
     private String did;//註冊司機成功，從Server回傳的did
     private String name;
+    private String realname;
     private String accesskey;
     private String dtype;
     private String car_number;
@@ -55,6 +56,14 @@ public class DriverIdentifyInfo extends RealmObject implements Cloneable ,Serial
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
     }
 
     public String getAccesskey() {

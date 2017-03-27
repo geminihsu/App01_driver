@@ -26,8 +26,11 @@ import java.util.List;
 
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItem;
 import tw.com.geminihsu.app01.adapter.DriverReportPriceListItemAdapter;
+import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.canvas.DrawView;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.JsonPutsUtil;
+import tw.com.geminihsu.app01.utils.RealmUtil;
 
 public class ClientTakeRideSearchActivity extends Activity {
 
@@ -50,6 +53,9 @@ public class ClientTakeRideSearchActivity extends Activity {
 
     private BroadcastReceiver waitForDriverTakeOverOrderBroadcastReceiver;
 
+    private JsonPutsUtil sendDataRequest;
+    private int ticketId;
+    private NormalOrder order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +63,23 @@ public class ClientTakeRideSearchActivity extends Activity {
         getActionBar().setHomeButtonEnabled(true);
         getActionBar().setDisplayHomeAsUpEnabled(true);
         getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+        sendDataRequest = new JsonPutsUtil(ClientTakeRideSearchActivity.this);
+        sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
+
+            @Override
+            public void createNormalOrder(NormalOrder order) {
+
+
+            }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+                Intent intent = new Intent(ClientTakeRideSearchActivity.this, MainActivity.class);
+
+                startActivity(intent);
+                finish();
+            }
+        });
         waitForDriverTakeOverOrderBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -93,6 +116,14 @@ public class ClientTakeRideSearchActivity extends Activity {
                 option = bundle.getInt(Constants.ARG_POSITION);
                 if(option == DRIVER_REPORT_PRICE)
                     displayLayout();
+                else
+                {
+                    ticketId =  option;
+                    if (order == null) {
+                        RealmUtil info = new RealmUtil(ClientTakeRideSearchActivity.this);
+                        order = info.queryOrder(Constants.ORDER_TICKET_ID, String.valueOf(ticketId));
+                    }
+                }
 
             }else
             {
@@ -211,9 +242,16 @@ public class ClientTakeRideSearchActivity extends Activity {
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-                Intent question = new Intent(ClientTakeRideSearchActivity.this, MenuMainActivity.class);
-                question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(question);
+                if(option == DRIVER_REPORT_PRICE) {
+                    Intent question = new Intent(ClientTakeRideSearchActivity.this, MenuMainActivity.class);
+                    question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(question);
+                }else
+                {
+                    //cancel order
+
+                    sendDataRequest.clientCancelOrder(order);
+                }
 
                 return true;
             case android.R.id.home:

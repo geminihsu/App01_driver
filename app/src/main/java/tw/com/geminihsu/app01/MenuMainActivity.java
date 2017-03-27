@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.google.android.gms.location.LocationListener;
 
 import tw.com.geminihsu.app01.bean.AccountInfo;
+import tw.com.geminihsu.app01.callback.FragmentViewListener;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_ClientAirPlanePickUp;
@@ -52,7 +53,7 @@ import tw.com.geminihsu.app01.utils.RealmBackupRestore;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class MenuMainActivity extends AppCompatActivity implements Fragment_BeginOrder.TabLayoutSetupCallback,Fragment_ClientAirPlanePickUp.TabLayoutSetupCallback,Fragment_TrainPlanePickUp.TabLayoutSetupCallback,Fragment_MerchandiseDorkPickUp.TabLayoutSetupCallback,
-        Fragment_BeginOrderInteractive.OnListItemClickListener,LocationListener {
+        Fragment_BeginOrderInteractive.OnListItemClickListener,LocationListener,FragmentViewListener {
     private static final String[] INITIAL_PERMS={
             Manifest.permission.ACCESS_FINE_LOCATION
     };
@@ -386,5 +387,10 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             return (PackageManager.PERMISSION_GRANTED == checkSelfPermission(perm));
         }else
             return false;
+    }
+
+    @Override
+    public void refreshListView() {
+
     }
 }

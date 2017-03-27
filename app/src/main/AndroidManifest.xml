@@ -89,9 +89,11 @@
         <activity android:name=".CameraActivity"
             android:label="@string/camera_title"
             android:configChanges="orientation|screenSize"/>
-
         <activity android:name=".OrderMapActivity"
             android:label="@string/map_location"
+            android:configChanges="orientation|screenSize"/>
+        <activity android:name=".MapsNavigationActivity"
+            android:label="@string/map_location_navigation"
             android:configChanges="orientation|screenSize"/>
 
         <meta-data

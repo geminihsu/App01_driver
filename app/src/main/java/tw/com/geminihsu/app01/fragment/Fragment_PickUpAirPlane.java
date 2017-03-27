@@ -147,6 +147,11 @@ public class Fragment_PickUpAirPlane extends Fragment {
                 startActivity(intent);
                 getActivity().finish();
             }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+
+            }
         });
 
 

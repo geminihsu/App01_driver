@@ -79,6 +79,7 @@
                      android:layout_height="wrap_content"
                      android:ellipsize="middle"
                      android:singleLine="true"
+                     android:id="@+id/user_name"
                      android:text=""
 
                      />
@@ -102,6 +103,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
                     android:singleLine="true"
+                    android:id="@+id/user_contact"
                     android:text=""
 
                     />
@@ -126,7 +128,7 @@
                         android:ellipsize="middle"
                         android:verticalScrollbarPosition="left"
                         android:text=""
-
+                        android:id="@+id/user_suggestion"
                         />
                 </LinearLayout>
             </LinearLayout>
@@ -431,8 +433,6 @@
                 android:id="@+id/manual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="middle"
-                android:singleLine="true"
                 android:layout_gravity="center_horizontal"
                 android:textStyle="bold"
                 android:text="@string/txt_answer"

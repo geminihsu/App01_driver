@@ -142,6 +142,16 @@ public class ClientTakeRideActivity extends Activity {
 
                 Intent intent = new Intent(getApplicationContext(), ClientTakeRideSearchActivity.class);
 
+                Bundle b = new Bundle();
+                b.putInt(Constants.ARG_POSITION, Integer.valueOf(order.getTicket_id()));
+                intent.putExtras(b);
+                startActivity(intent);
+                finish();
+            }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }
