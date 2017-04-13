@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="2dp"
     android:background="@color/bg_gray"
     android:paddingTop="2dp" >
 
@@ -16,6 +15,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_above="@+id/map"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true">
         <ImageButton
@@ -48,7 +48,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@color/white"
-        android:layout_below="@+id/search_inearLayout"
+        android:layout_above="@+id/edit_txt"
         >
         <com.google.android.gms.maps.MapView
             android:id="@+id/activity_embedded_map_view_mapview"
@@ -61,7 +61,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/map"
+        android:id="@+id/edit_txt"
+        android:layout_above="@+id/linearLayout_function"
         >
    <CheckBox
     android:layout_width="wrap_content"
@@ -80,5 +81,38 @@
             android:textColor="@android:color/black"
             android:id="@+id/bookmark" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/linearLayout_function"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/action_bar_background"
+        android:orientation="horizontal" >
 
+        <!-- delete button -->
+
+        <TextView
+            android:id="@+id/btn_delete_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/map_location"
+            android:paddingLeft="20dp"
+            android:textColor="@color/white"
+            />
+        <!-- save button -->
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right|center_vertical"
+            android:layout_gravity="center_vertical"
+            android:background="@color/transparent"
+            android:paddingRight="20dp"
+            android:textColor="@color/white"
+            android:text="@string/dialog_get_on_car_comfirm"
+             />
+    </LinearLayout>
 </RelativeLayout>

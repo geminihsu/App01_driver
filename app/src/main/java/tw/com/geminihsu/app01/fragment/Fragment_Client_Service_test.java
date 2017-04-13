@@ -16,7 +16,6 @@
 package tw.com.geminihsu.app01.fragment;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,14 +25,15 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
@@ -45,30 +45,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import tw.com.geminihsu.app01.ClientTakeRideActivity;
 import tw.com.geminihsu.app01.ClientTakeRideSearchActivity;
 import tw.com.geminihsu.app01.MainActivity;
 import tw.com.geminihsu.app01.R;
-import tw.com.geminihsu.app01.adapter.ClientTakeRideSelectSpecListItem;
 import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.LocationAddress;
 import tw.com.geminihsu.app01.bean.NormalOrder;
@@ -79,7 +83,8 @@ import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
-public class Fragment_Client_Service extends Fragment {
+public class Fragment_Client_Service_test extends Fragment  implements LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener{
 
     private final int ACTIONBAR_MENU_ITEM_FIILTER = 0x0001;
 
@@ -105,7 +110,6 @@ public class Fragment_Client_Service extends Fragment {
 
     private MapView mapView;
     private GoogleMap googleMap;
-    private BroadcastReceiver getCurrentGPSLocationBroadcastReceiver;
 
     private Constants.APP_REGISTER_DRIVER_TYPE dataType;
     private Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
@@ -115,6 +119,15 @@ public class Fragment_Client_Service extends Fragment {
     private JsonPutsUtil sendDataRequest;
     private LocationAddress departure_detail;
     private ProgressDialog progressDialog_loading;
+
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private boolean getLocation = true;
+
+    static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    private TimerTask task;
+    private Timer timer;
 
     private LocationAddress result;
 
@@ -135,12 +148,10 @@ public class Fragment_Client_Service extends Fragment {
         mapView = (MapView) view.findViewById(R.id.fragment_embedded_map_view_mapview);
         mapView.onCreate(savedInstanceState);
         //setMapView(37.37044279,-122.00614899);
-
+        setMapView(25.0477,121.518);
         googleMap = mapView.getMap();
-        if(!runtime_permissions())
-        {
-            setMapView(25.0477,121.518);
-        }
+
+
         return view;
     }
 
@@ -148,14 +159,35 @@ public class Fragment_Client_Service extends Fragment {
     public void onActivityCreated(Bundle bundle){
         super.onActivityCreated(bundle);
         result=new LocationAddress();
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mGoogleApiClient = new GoogleApiClient.Builder(getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
         this.findViews();
         setLister();
-        if(getCurrentGPSLocationBroadcastReceiver!=null)
-            getActivity().registerReceiver((getCurrentGPSLocationBroadcastReceiver), new IntentFilter("location_update"));
 
+        if(task == null) {
+            task = new TimerTask() {
+                @Override
+                public void run() {
+                    getLocation = true;
+                }
+            };
+
+            timer = new Timer();
+        }
+
+
+        timer.schedule(task, 1000, 2000);
     }
         @Override
     public void onStart() {
+        mGoogleApiClient.connect();
         super.onStart();
 
 
@@ -201,7 +233,7 @@ public class Fragment_Client_Service extends Fragment {
 
     @Override
     public void onResume() {
-        getActivity().setTitle("");
+        getActivity().setTitle(getString(R.string.service_info));
         super.onResume();
         if (mapView != null) {
             mapView.onResume();
@@ -213,59 +245,7 @@ public class Fragment_Client_Service extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getCurrentGPSLocationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
 
-              //  if(!test) {
-                    // textView.append("\n" +intent.getExtras().get("coordinates"));
-                if (intent.getExtras().containsKey("longitude")) {
-                    double longitude = (double) intent.getExtras().get("longitude");
-                    double latitude = (double) intent.getExtras().get("latitude");
-                    googleMap.clear();
-                    setMapView(longitude, latitude);
-
-                    Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                    try {
-                        List<Address> addressList = geocoder.getFromLocation(
-                                latitude, longitude, 1);
-                        if (addressList != null && addressList.size() > 0) {
-                            Address address = addressList.get(0);
-                            StringBuilder sb = new StringBuilder();
-                            for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                                sb.append(address.getAddressLine(i)).append("\n");
-                            }
-
-                            sb.append(address.getLocality()).append("\n");
-                            sb.append(address.getPostalCode()).append("\n");
-                            sb.append(address.getCountryName());
-
-                            result.setLatitude(latitude);
-                            result.setLongitude(longitude);
-
-                            result.setCountryName(address.getCountryName());
-                            result.setLocality(address.getLocality());
-                            result.setZipCode(address.getPostalCode());
-
-                            result.setLocation(sb.toString());
-
-                            if(address.getCountryCode().equals("TW")) {
-                                result.setAddress(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
-                                result.setLocation(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
-                            }else{
-                                result.setAddress(sb.toString());
-                                result.setLocation(sb.toString());
-
-                            }
-                        }
-                    }catch (IOException e) {
-                        Log.e("", "Unable connect to Geocoder", e);
-                    }
-                            //test = true;
-                }
-               // }
-            }
-        };
 
         sendDataRequest = new JsonPutsUtil(getActivity());
         sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
@@ -310,11 +290,19 @@ public class Fragment_Client_Service extends Fragment {
             progressDialog_loading.cancel();
             progressDialog_loading = null;
         }
-        if (getCurrentGPSLocationBroadcastReceiver != null){
-            getActivity().unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
-            getCurrentGPSLocationBroadcastReceiver=null;
+        mGoogleApiClient.disconnect();
+
+        if(task!=null) {
+            task.cancel();
+            task = null;
+        }
+        if(timer!=null) {
+            timer.cancel();
+            timer = null;
         }
 
+        //isShowOneKey = false;
+        //getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -326,11 +314,15 @@ public class Fragment_Client_Service extends Fragment {
                // Log.e(TAG, "Error while attempting MapView.onDestroy(), ignoring exception", e);
             }
         }
-        if (getCurrentGPSLocationBroadcastReceiver != null){
-            getActivity().unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
-            getCurrentGPSLocationBroadcastReceiver=null;
-        }
 
+         if(task!=null) {
+             task.cancel();
+             task = null;
+         }
+        if(timer!=null) {
+            timer.cancel();
+            timer = null;
+        }
         super.onDestroy();
     }
 
@@ -611,15 +603,6 @@ public class Fragment_Client_Service extends Fragment {
 
 
 
-    private boolean runtime_permissions() {
-        if(Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},100);
-
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -627,7 +610,9 @@ public class Fragment_Client_Service extends Fragment {
         SpannableString spanString = new SpannableString(item.getTitle().toString());
         spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
         item.setTitle(spanString);
-        if(isShowOneKey)
+        Utility driver = new Utility(getActivity());
+
+        if(isShowOneKey&&driver.getAllDriverAccountInfo().isEmpty())
             item.setVisible(true);
         else
             item.setVisible(false);
@@ -647,15 +632,132 @@ public class Fragment_Client_Service extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 100) {
 
-            setMapView(25.0477,121.518);
-        } else {
-            runtime_permissions();
-            // }
+    private void getCurrentAddress(double longitude,double latitude)
+    {
+        Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocation(
+                    latitude, longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                Address address = addressList.get(0);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    sb.append(address.getAddressLine(i)).append("\n");
+                }
+
+                sb.append(address.getLocality()).append("\n");
+                sb.append(address.getPostalCode()).append("\n");
+                sb.append(address.getCountryName());
+
+                result.setLatitude(latitude);
+                result.setLongitude(longitude);
+
+                result.setCountryName(address.getCountryName());
+                result.setLocality(address.getLocality());
+                result.setZipCode(address.getPostalCode());
+
+                result.setLocation(sb.toString());
+
+                if(address.getCountryCode().equals("TW")) {
+                    result.setAddress(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                    result.setLocation(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                }else{
+                    result.setAddress(sb.toString());
+                    result.setLocation(sb.toString());
+
+                }
+                curAddress = result.getAddress();
+            }
+        }catch (IOException e) {
+            Log.e("", "Unable connect to Geocoder", e);
+        }
+        //test = true;
+
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getActivity(),
+                "onConnectionFailed: \n" + connectionResult.toString(),
+                Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            String strLocation =
+                    DateFormat.getTimeInstance().format(location.getTime()) + "\n" +
+                            "Latitude=" + location.getLatitude() + "\n" +
+                            "Longitude=" + location.getLongitude();
+            Log.e("TAG",strLocation);
+            if(getLocation) {
+                setMapView(location.getLongitude(), location.getLatitude());
+                getLocation = false;
+                getCurrentAddress(location.getLongitude(),location.getLatitude());
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(getActivity(),
+                            "permission was granted, :)",
+                            Toast.LENGTH_LONG).show();
+
+                    try{
+                        LocationServices.FusedLocationApi.requestLocationUpdates(
+                                mGoogleApiClient, mLocationRequest, this);
+                    }catch(SecurityException e){
+                        Toast.makeText(getActivity(),
+                                "SecurityException:\n" + e.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getActivity(),
+                            "permission denied, ...:(",
+                            Toast.LENGTH_LONG).show();
+                }
+                return;
+            }
+
         }
     }
 }

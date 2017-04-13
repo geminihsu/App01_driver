@@ -36,6 +36,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.List;
@@ -44,12 +45,15 @@ import java.util.Locale;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
+import tw.com.geminihsu.app01.serverbean.ServerSpecial;
 import tw.com.geminihsu.app01.service.App01Service;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
 public class OrderProcesssActivity extends Activity implements LocationListener {
+
+    private final String TAG = JsonPutsUtil.class.toString();
 
     //actionBar item Id
     private final int ACTIONBAR_MENU_ITEM_CANCEL = 0x0001;
@@ -93,6 +97,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
     private LocationManager locationManager;
     private String provider;
     private String location_address;
+    private String driverPhoneNumber="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +114,25 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
             public void driverFinishOrder(NormalOrder order) {
                 finishOrder();
 
+            }
+        });
+
+        sendDataRequest.setServerRequestOrderManagerCallBackFunction(new JsonPutsUtil.ServerRequestOrderManagerCallBackFunction() {
+
+
+            @Override
+            public void createNormalOrder(NormalOrder order) {
+
+            }
+
+            @Override
+            public void cancelNormalOrder(NormalOrder order) {
+                Toast.makeText(OrderProcesssActivity.this,
+                        "訂單取消成功",
+                        Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -149,6 +173,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
             option = bundle.getInt(Constants.ARG_POSITION);
             ticket_id = bundle.getString(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET_ID);
             order = (NormalOrder) bundle.getSerializable(Fragment_BeginOrderList.BUNDLE_ORDER_TICKET);
+            driverPhoneNumber = bundle.getString(Fragment_BeginOrderList.BUNDLE_DRIVER_PHONE);
 
             if (order == null) {
                 RealmUtil info = new RealmUtil(OrderProcesssActivity.this);
@@ -224,15 +249,17 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
         date.setText("即時");
         from.setText(order.getBegin_address());
 
-        Log.e("",order.getStop_address());
-        if ((order.getStop_address().equals("0"))||(order.getStop_address().equals(""))) {
-            linearLayout_stop_address.setVisibility(View.GONE);
-        }else
-        {
-            linearLayout_stop_address.setVisibility(View.VISIBLE);
-            stop.setText(order.getStop_address());
+        //Log.e("",order.getStop_address());
+        if(order.getStop_address()!=null) {
+            if ((order.getStop_address().equals("0")) || (order.getStop_address().equals(""))) {
+                linearLayout_stop_address.setVisibility(View.GONE);
+            } else {
+                linearLayout_stop_address.setVisibility(View.VISIBLE);
+                stop.setText(order.getStop_address());
+            }
         }
-        location.setText(order.getEnd_address());
+        if(order.getEnd_address()!=null)
+            location.setText(order.getEnd_address());
         linearLayout_change_price.setVisibility(View.GONE);
         linearLayout_online_check_price.setVisibility(View.GONE);
         linearLayout_sender.setVisibility(View.GONE);
@@ -308,9 +335,9 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
                 question.putExtras(b);
                 startActivity(question);*/
 
-                /*Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
                         Uri.parse("http://maps.google.com/maps?saddr="+location_address+"&daddr="+order.getBegin_address()));
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
         destination.setOnClickListener(new View.OnClickListener() {
@@ -402,7 +429,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
                         .setPositiveButton(getString(R.string.order_finish_make_sure_ok), new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 // if this button is clicked, close
-                                sendDataRequest.driverFinishOrder(order);
+                                sendDataRequest.driverFinishOrder(order,driverPhoneNumber);
                             }
                         })
                         .setNegativeButton(getString(R.string.order_finish_make_sure_cancel), new DialogInterface.OnClickListener() {
@@ -500,11 +527,13 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
                                 // if this button is clicked, close
                                 // current activity
 
-                                Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
+                                /*Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
                                 Bundle b = new Bundle();
                                 b.putInt(Constants.ARG_POSITION, Constants.CANCEL_ORDER_FEEDBACK);
                                 question.putExtras(b);
-                                startActivity(question);
+                                startActivity(question);*/
+                                sendDataRequest.clientCancelOrder(order,driverPhoneNumber);
+
                             }
                         })
                         .setNegativeButton(getString(R.string.menu_give_up_cancel_order),new DialogInterface.OnClickListener() {
@@ -591,12 +620,52 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
         String departure = "從:"+order.getBegin_address()+"\n";
         String stop = "";
         String spec = "";
+        String type = "";
+        String reMark = "";
+        ServerSpecial specContent;
+
+        Constants.APP_REGISTER_ORDER_TYPE dataType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+        if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)
+            type = getString(R.string.client_take_ride_title);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)
+            type = getString(R.string.client_train_pick_up);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)
+            type = getString(R.string.client_airplane_pick_up);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+            type = getString(R.string.client_merchanse_send_title);
+
+
+        if(order.getCar_special()!=null && !order.getCar_special().equals("")) {
+            spec = "特殊需求：";
+            String[] spec_array = order.getCar_special().split(",");
+            if(spec_array.length == 0) {
+                RealmUtil specQuery = new RealmUtil(this);
+                specContent = specQuery.queryServerSpecialItem(Constants.SPEC_ID, order.getCar_special());
+                spec +=  specContent.getContent();
+            }else{
+                String spec_detail = "";
+                for(String spec_id : spec_array)
+                {
+                    RealmUtil specQuery = new RealmUtil(this);
+                    specContent = specQuery.queryServerSpecialItem(Constants.SPEC_ID, spec_id);
+                    spec_detail +=  specContent.getContent()+",";
+
+                }
+
+                spec_detail = spec_detail.substring(0,spec_detail.length()-1);
+                spec += spec_detail+"\n";
+            }
+        }
+
+        if(!order.getRemark().equals(""))
+            reMark = "備註："+order.getRemark();
+
+
         if(!order.getStop_address().equals("0"))
             stop = "停靠："+order.getStop_address()+"\n";
         String destination ="到："+ order.getEnd_address()+"\n";
         String orderType = "時間：即時"+"\n";
-        if(order.getCar_special()!=null)
-            spec ="特殊需求："+order.getCar_special();
+
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 OrderProcesssActivity.this);
 
@@ -605,7 +674,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("客戶電話:"+order.getUser_name()+"\n"+departure+stop+destination+orderType+spec)
+                .setMessage("訂單類型:"+type+"\n"+"客戶電話:"+order.getUser_name()+"\n"+departure+stop+destination+orderType+spec+reMark)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.sure_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

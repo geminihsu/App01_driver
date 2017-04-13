@@ -52,9 +52,11 @@ public class VerifyCodeActivity extends Activity {
     private AccountInfo accountInfo;
     private JsonPutsUtil sendDataRequest;
     private LinearLayout linearLayout_new_password;
+    private LinearLayout info;
     private int new_password_request;
     private CountDownTimer checkEnterTimer;
     private TextView txt_countDownMsg;
+    private boolean isExpired;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,8 +138,12 @@ public class VerifyCodeActivity extends Activity {
 
             @Override
             public void onFinish() {
-                txt_countDownMsg.setText("Time Out!!");
-                finish();
+                txt_countDownMsg.setText("驗證已失效");
+                confirm.setText("重新取得驗證碼");
+                code.setVisibility(View.GONE);
+                txt_countDownMsg.setVisibility(View.GONE);
+                error.setVisibility(View.GONE);
+                isExpired = true;
             }
 
             @Override
@@ -191,11 +197,12 @@ public class VerifyCodeActivity extends Activity {
         configSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         linearLayout_new_password = (LinearLayout)findViewById(R.id.linearLayout_new_password);
 
+        info = (LinearLayout)findViewById(R.id.info);
+
         error = (TextView) findViewById(R.id.error);
         confirm = (Button) findViewById(R.id.login);
         //confirm.setEnabled(false);
         code = (EditText) findViewById(R.id.code);
-        code.setText("1234");
         new_password = (EditText)findViewById(R.id.edit_new_password);
         txt_countDownMsg = (TextView)findViewById(R.id.txt_forget_password);
     }
@@ -224,6 +231,11 @@ public class VerifyCodeActivity extends Activity {
                             sendDataRequest.sendForgetModify(accountInfo, code.getText().toString(), new_password.getText().toString());
                         else
                             sendDataRequest.sendVerify(code.getText().toString(), accountInfo);
+                    }
+
+                    if(isExpired)
+                    {
+                        sendDataRequest.sendReSendPasswordRequest(accountInfo);
                     }
             }
         });

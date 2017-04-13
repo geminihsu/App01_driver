@@ -9,6 +9,7 @@ import tw.com.geminihsu.app01.MenuMainActivity;
 import tw.com.geminihsu.app01.R;
 import tw.com.geminihsu.app01.fragment.Fragment_Client_Service;
 import tw.com.geminihsu.app01.delegate.MenuMainViewDelegateBase;
+import tw.com.geminihsu.app01.fragment.Fragment_Client_Service_test;
 
 public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 	private final String TAG= this.getClass().getSimpleName();
@@ -21,7 +22,7 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 	@Override
 	public void setContentLayoutFragment() {
 
-		Fragment newFragment = new Fragment_Client_Service();
+		Fragment newFragment = new Fragment_Client_Service_test();
 
 		FragmentTransaction ft = mainActivity.getSupportFragmentManager().beginTransaction();
 		//if (mainActivity.getSupportFragmentManager().findFragmentByTag(MultiLiveView.PARENT_FRAGMENT_TAG_ID) == null) {
@@ -82,8 +83,8 @@ public class MenuMainViewDelegateCustomer extends MenuMainViewDelegateBase {
 		super.setNavigationItem(menu);
 		//更改為司機和乘客都顯示同樣的選單
 		menu.findItem(R.id.navigation_item_order).setVisible(true);
-		menu.findItem(R.id.navigation_item_wait).setVisible(true);
-		menu.findItem(R.id.navigation_item_begin).setVisible(true);
+		menu.findItem(R.id.navigation_item_wait).setVisible(false);
+		menu.findItem(R.id.navigation_item_begin).setVisible(false);
 
 		menu.findItem(R.id.navigation_item_order).setVisible(true);
 		//menu.findItem(R.id.navigation_item_order_record).setVisible(true);

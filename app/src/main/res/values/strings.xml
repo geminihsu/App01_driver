@@ -25,6 +25,7 @@
     <string name="photo_verify_page_title">上傳證件</string>
     <string name="driver_account_page_title">編輯司機資料</string>
     <string name="order_filter_page_title">訂單篩選</string>
+    <string name="order_call_taxi_page_title">一鍵叫車</string>
     <string name="begin_order_page_title">開始接單</string>
     <string name="wait_order_page_title">待跑訂單</string>
     <string name="order_process_page_title">訂單處理</string>

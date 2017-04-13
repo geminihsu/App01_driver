@@ -14,21 +14,19 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" android:id="@+id/main_layout"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
 	android:background="@color/bg_gray"
 	>
 	<LinearLayout
 		android:id="@+id/camera1"
 		android:layout_width="match_parent"
-		android:layout_height="250dp"
+		android:layout_height="400dp"
 		android:orientation="vertical"
 		android:gravity="center_horizontal"
-		android:layout_marginTop="20dp"
-		android:layout_marginLeft="20dp"
-		android:layout_marginRight="20dp"
+		android:layout_below="@id/service_info"
+		android:layout_above="@+id/camera1_linearLayout"
 		android:background="@color/bg_light_gray"
 		>
 		<com.google.android.gms.maps.MapView
@@ -39,24 +37,15 @@ limitations under the License.
 
 		</LinearLayout>
 
-    <TextView
-	    android:id="@+id/service_info"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:padding="16dp"
-		android:orientation="horizontal"
-		android:textStyle="bold"
-		android:layout_gravity="center_horizontal"
-		android:textSize="@dimen/default_text_address_size_sp"
-		android:textColor="@color/btn_bouns_title"
-	    android:text="@string/service_info"
-	/>
+
 
     <LinearLayout
         android:id="@+id/camera1_linearLayout"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:layout_height="200dp"
         android:orientation="horizontal"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
 		>
 		<LinearLayout
 			android:layout_width="fill_parent"
@@ -196,8 +185,10 @@ limitations under the License.
 	<LinearLayout
 		android:id="@+id/taxi_linearLayout"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
+		android:layout_height="200dp"
 		android:orientation="horizontal"
+		android:layout_alignParentBottom="true"
+		android:layout_centerHorizontal="true"
 		android:visibility="gone"
 		>
 		<LinearLayout
@@ -309,4 +300,4 @@ limitations under the License.
 				/>
 		</LinearLayout>
 	</LinearLayout>
-</LinearLayout>
+</RelativeLayout>

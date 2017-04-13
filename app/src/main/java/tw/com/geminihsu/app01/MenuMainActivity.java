@@ -93,7 +93,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
             if(!isServerInfoExsit)
             myBinder.requestServerContentDetail();
             myBinder.startToGetPutNotify();
-            myBinder.App01ServiceCheckGPS();
+            //myBinder.App01ServiceCheckGPS();
         }
     };
 
@@ -224,7 +224,7 @@ public class MenuMainActivity extends AppCompatActivity implements Fragment_Begi
                     //Replacing the main content with ContentFragment Which is our Inbox View;
                     case R.id.navigation_item_order:
                         // Toast.makeText(getApplicationContext(),"Inbox Selected",Toast.LENGTH_SHORT).show();
-                        viewDelegateBase.setNavigationItemOnClick_service();
+                         viewDelegateBase.setNavigationItemOnClick_service();
                         return true;
 
                     // For rest of the options we just show a toast on click

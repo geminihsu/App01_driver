@@ -105,7 +105,10 @@ public class Fragment_NotifyList extends Fragment {
                 for(int i=0 ;i<titleList.size();i++)
                 {
                     Titlelist[i] = titleList.get(i);
+
                 }
+
+
                 ListAdapter adapter = new ArrayAdapter<>(getActivity() , android.R.layout.simple_list_item_1 ,Titlelist);
                 //使用ListAdapter來顯示你輸入的文字
 

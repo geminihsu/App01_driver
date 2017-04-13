@@ -250,7 +250,7 @@ public class ClientTakeRideSearchActivity extends Activity {
                 {
                     //cancel order
 
-                    sendDataRequest.clientCancelOrder(order);
+                    sendDataRequest.clientCancelOrder(order,null);
                 }
 
                 return true;
@@ -303,6 +303,18 @@ public class ClientTakeRideSearchActivity extends Activity {
             unregisterReceiver(waitForDriverTakeOverOrderBroadcastReceiver);
             waitForDriverTakeOverOrderBroadcastReceiver=null;
         }
+
+       /* if(option == DRIVER_REPORT_PRICE) {
+            Intent question = new Intent(ClientTakeRideSearchActivity.this, MenuMainActivity.class);
+            question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(question);
+        }else
+        {
+            //cancel order
+
+            sendDataRequest.clientCancelOrder(order);
+        }*/
+
     }
 
     @Override
@@ -312,5 +324,18 @@ public class ClientTakeRideSearchActivity extends Activity {
             unregisterReceiver(waitForDriverTakeOverOrderBroadcastReceiver);
             waitForDriverTakeOverOrderBroadcastReceiver=null;
         }
+
+        if(option == DRIVER_REPORT_PRICE) {
+            Intent question = new Intent(ClientTakeRideSearchActivity.this, MenuMainActivity.class);
+            question.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(question);
+        }else
+        {
+            //cancel order
+
+            sendDataRequest.clientCancelOrder(order,null);
+        }
+
     }
+
 }

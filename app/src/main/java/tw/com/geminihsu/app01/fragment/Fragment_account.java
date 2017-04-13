@@ -45,7 +45,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.newrelic.agent.android.NewRelic;
+//import com.newrelic.agent.android.NewRelic;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -108,8 +108,8 @@ public class Fragment_Account extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        sessionId = NewRelic.currentSessionId();
-        NewRelic.startInteraction("AccountBehavior");
+       // sessionId = NewRelic.currentSessionId();
+       //NewRelic.startInteraction("AccountBehavior");
         // If activity recreated (such as from screen rotate), restore
         // the previous article selection set by onSaveInstanceState().
         // This is primarily necessary when in the two-pane layout.
@@ -134,7 +134,7 @@ public class Fragment_Account extends Fragment {
             @Override
             public void driverChangeWorkIdentity(DriverIdentifyInfo driver) {
                 Log.e("change","dataType:"+driver.getDtype());
-                NewRelic.setUserId(driver.getName());
+                //NewRelic.setUserId(driver.getName());
                 RealmUtil realmUtil = new RealmUtil(getActivity());
                 AccountInfo userInfo = realmUtil.queryAccount(Constants.ACCOUNT_PHONE_NUMBER,driver.getName());
                 if(userInfo!=null)
@@ -212,8 +212,8 @@ public class Fragment_Account extends Fragment {
     @Override
 	public void onStop() {
 		super.onStop();
-        boolean eventRecorded = NewRelic.recordEvent("AccountInfo", attributes);
-        NewRelic.endInteraction(sessionId);
+        //boolean eventRecorded = NewRelic.recordEvent("AccountInfo", attributes);
+        //NewRelic.endInteraction(sessionId);
 	}
 
 	private void findViews()

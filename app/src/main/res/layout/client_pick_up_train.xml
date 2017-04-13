@@ -200,14 +200,13 @@
                         />
                  </LinearLayout>
                 <LinearLayout
-                    android:id="@+id/layout_depature"
+                    android:id="@+id/layout_departure"
                     android:layout_width="fill_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:visibility="gone"
                     >
                     <TextView
-                        android:id="@+id/depature_station"
+                        android:id="@+id/departurestation"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="middle"
@@ -217,12 +216,22 @@
                         android:text="@string/pick_up_train"
                         android:textColor="@color/btn_bouns_title"
                         />
-                    <Spinner android:id="@+id/train_leave_location"
+                    <Spinner android:id="@+id/train_departure"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginRight="10dp"
                         android:drawSelectorOnTop="true"
+                        android:visibility="gone"
+                        />
+                    <ImageButton
+                        android:id="@+id/map_departure"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/transparent"
+                        android:layout_gravity="center_vertical"
+                        android:paddingRight="10dp"
+                        android:src="@drawable/ic_arrowdown"
                         />
                 </LinearLayout>
                 <LinearLayout
@@ -372,6 +381,7 @@
             android:layout_height="match_parent"
             android:paddingTop="10dp"
             android:orientation="horizontal"
+            android:id="@+id/spec_require"
             >
             <TextView
                 android:id="@+id/passenger_spec"
@@ -384,6 +394,14 @@
                 android:text="@string/merchandise_requirement"
                 android:textColor="@color/btn_bouns_title"
                 />
+            <TextView
+                android:id="@+id/passenger_spec_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:text=""/>
             <ImageButton
                 android:id="@+id/spec_option"
                 android:layout_width="wrap_content"

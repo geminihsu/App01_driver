@@ -10,6 +10,7 @@ import tw.com.geminihsu.app01.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderInteractive;
 import tw.com.geminihsu.app01.fragment.Fragment_BeginOrderList;
 import tw.com.geminihsu.app01.fragment.Fragment_Bouns;
+import tw.com.geminihsu.app01.fragment.Fragment_Client_Service_test;
 import tw.com.geminihsu.app01.fragment.Fragment_NotifyList;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderFilter;
 import tw.com.geminihsu.app01.fragment.Fragment_OrderRecord;
@@ -38,11 +39,11 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	public void setNavigationItemOnClick_beginOrder() {
 		FragmentTransaction fragTran;
-		Fragment_BeginOrder frag2 = new Fragment_BeginOrder();
+		Fragment_BeginOrderList frag2 = new Fragment_BeginOrderList();
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
-		fragTran.replace(R.id.container, frag2, Fragment_BeginOrder.class.getSimpleName());
+		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderList.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragTran.addToBackStack(Fragment_BeginOrder.class.getSimpleName());
+		fragTran.addToBackStack(Fragment_BeginOrderList.class.getSimpleName());
 		fragTran.commit();
 	}
 
@@ -65,7 +66,7 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
 		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderList.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragTran.addToBackStack(Fragment_BeginOrderInteractive.class.getSimpleName());
+		fragTran.addToBackStack(Fragment_BeginOrderList.class.getSimpleName());
 		fragTran.commit();
 	}
 
@@ -82,11 +83,11 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	public void setNavigationItemOnClick_service() {
 		FragmentTransaction fragTran;
-		Fragment_Client_Service frag2 = new Fragment_Client_Service();
+		Fragment_Client_Service_test frag2 = new Fragment_Client_Service_test();
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
-		fragTran.replace(R.id.container, frag2, Fragment_Client_Service.class.getSimpleName());
+		fragTran.replace(R.id.container, frag2, Fragment_Client_Service_test.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragTran.addToBackStack(Fragment_Client_Service.class.getSimpleName());
+		fragTran.addToBackStack(Fragment_Client_Service_test.class.getSimpleName());
 		fragTran.commit();
 
 	}

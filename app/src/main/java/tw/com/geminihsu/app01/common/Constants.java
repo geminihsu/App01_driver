@@ -64,6 +64,9 @@ public class Constants {
 	public final static String NEWS_TITLE = "news_content_title";// from
 
 
+	public final static String SPEC_ID = "id";// from
+
+
 	public enum APP_REGISTER_DRIVER_TYPE
 	{
 		K_REGISTER_DRIVER_TYPE_NO_WORK (0)  ,

@@ -90,7 +90,7 @@
             android:label="@string/camera_title"
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".OrderMapActivity"
-            android:label="@string/map_location"
+            android:label=""
             android:configChanges="orientation|screenSize"/>
         <activity android:name=".MapsNavigationActivity"
             android:label="@string/map_location_navigation"
@@ -131,7 +131,7 @@
 
     <!-- get gps location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-feature android:name="android.hardware.location.gps" />
 
 
 </manifest>

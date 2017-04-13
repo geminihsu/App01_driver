@@ -125,6 +125,13 @@ public class Utility {
         return  orders;
       }
 
+    public RealmResults<NormalOrder> getAccountOrderListByPhoneNumber(String number) {
+        RealmUtil data = new RealmUtil(mContext);
+        RealmResults<NormalOrder> orders = data.queryOrderList(Constants.ACCOUNT_USERNAME, number);
+        NormalOrder mOrder = new NormalOrder();
+        return  orders;
+    }
+
     public RealmResults<NormalOrder> getWaitOrderList() {
 
         RealmUtil data = new RealmUtil(mContext);

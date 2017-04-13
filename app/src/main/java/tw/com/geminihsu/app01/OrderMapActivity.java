@@ -2,6 +2,7 @@ package tw.com.geminihsu.app01;
 
 
 import android.*;
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -16,11 +17,13 @@ import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
+import com.google.android.gms.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.SpannableString;
@@ -29,6 +32,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -36,6 +40,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,6 +53,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,11 +63,13 @@ import tw.com.geminihsu.app01.adapter.CommentListItemAdapter;
 import tw.com.geminihsu.app01.bean.LocationAddress;
 import tw.com.geminihsu.app01.bean.USerBookmark;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.utils.FileUtil;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.Utility;
 
-public class OrderMapActivity extends Activity implements LocationListener {
+public class OrderMapActivity extends Activity implements  LocationListener, GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
 
     //actionBar item Id
@@ -82,7 +92,23 @@ public class OrderMapActivity extends Activity implements LocationListener {
 
     private ImageButton search;
     private AlertDialog alertDialog;
+    private String searchAddress;
 
+    private static final int REQUEST_EXTERNAL_GPS = 1;
+    private static String[] PERMISSIONS_GPS = {
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+    };
+
+    private GoogleApiClient mGoogleApiClient;
+    private LocationRequest mLocationRequest;
+    private boolean getLocation = true;
+
+    static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+
+    private LocationAddress result;
+    private String curAddress = "";
+    private Button send;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -99,31 +125,15 @@ public class OrderMapActivity extends Activity implements LocationListener {
         if (args != null)
             provide_location = args.getInt(Constants.ARG_POSITION);
 
-
-        if (!runtime_permissions()) {
-            // Get the location manager
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            // Define the criteria how to select the locatioin provider -> use
-            // default
-            Criteria criteria = new Criteria();
-            provider = locationManager.getBestProvider(criteria, false);
-            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return;
-            }
-            Location location = locationManager.getLastKnownLocation(provider);
-
-
-            if (location != null) {
-                onLocationChanged(location);
-            }
-        }
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000);
+        mLocationRequest.setFastestInterval(5000);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
 
     }
 
@@ -139,6 +149,8 @@ public class OrderMapActivity extends Activity implements LocationListener {
     @Override
     protected void onStart() {
         super.onStart();
+        result=new LocationAddress();
+        mGoogleApiClient.connect();
         this.findViews();
         setLister();
 
@@ -156,6 +168,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
         searchMap = (EditText) findViewById(R.id.textView_title);
 
         search = (ImageButton) findViewById(R.id.search);
+        send = (Button) findViewById(R.id.btn_save);
     }
 
 
@@ -183,7 +196,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
             @Override
             public void onClick(View v) {
 
-                if(!searchMap.getText().toString().equals("")) {
+                if (!searchMap.getText().toString().equals("")) {
                     if (locationManager != null)
                         if (ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(OrderMapActivity.this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                             // TODO: Consider calling
@@ -195,7 +208,6 @@ public class OrderMapActivity extends Activity implements LocationListener {
                             // for ActivityCompat#requestPermissions for more details.
                             return;
                         }
-                    locationManager.removeUpdates(OrderMapActivity.this);
 
                     Geocoder fwdGeocoder = new Geocoder(OrderMapActivity.this);
 
@@ -209,14 +221,22 @@ public class OrderMapActivity extends Activity implements LocationListener {
                     googleMap.clear();
                     latitude = locations.get(0).getLatitude();
                     longitude = locations.get(0).getLongitude();
-
+                    searchAddress =  locations.get(0).getAddressLine(0);
                     setMapView(locations.get(0).getLongitude(), locations.get(0).getLatitude());
-                }else
-                {
+                } else {
                     alert();
                 }
 
             }
+        });
+
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(longitude!=0)
+                    returnAddress();
+            }
+
         });
     }
     @Override
@@ -230,8 +250,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 return true;
 
             case ACTIONBAR_MENU_ITEM_SUMMIT:
-            if(longitude!=0)
-                returnAddress();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -245,17 +264,6 @@ public class OrderMapActivity extends Activity implements LocationListener {
         if (mMapView != null) {
             mMapView.onResume();
         }
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.requestLocationUpdates(provider, 400, 1, this);
 
     }
 
@@ -265,17 +273,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
             mMapView.onPause();
         }
         super.onPause();
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        locationManager.removeUpdates(this);
+
     }
 
     @Override
@@ -298,6 +296,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
     @Override
     public void onStop() {
         super.onStop();
+        mGoogleApiClient.disconnect();
         /*if (getCurrentGPSLocationBroadcastReceiver != null){
             unregisterReceiver(getCurrentGPSLocationBroadcastReceiver);
             getCurrentGPSLocationBroadcastReceiver=null;
@@ -331,11 +330,11 @@ public class OrderMapActivity extends Activity implements LocationListener {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-       MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.sure_take_spec));
+       /*MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_SUMMIT, Menu.NONE, getString(R.string.sure_take_spec));
        SpannableString spanString = new SpannableString(item.getTitle().toString());
        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
        item.setTitle(spanString);
-       item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+       item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
         return true;
     }
 
@@ -360,6 +359,11 @@ public class OrderMapActivity extends Activity implements LocationListener {
             googleMap = mMapView.getMap();
 
             //Creating a LatLng Object to store Coordinates
+
+
+
+
+
             LatLng latLng = new LatLng(latitude, longitude);
 
             //Adding marker to map
@@ -399,7 +403,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
      *
      * PARAMETERS: int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults
      **********************************************************************/
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if(requestCode == 100){
@@ -430,7 +434,7 @@ public class OrderMapActivity extends Activity implements LocationListener {
             runtime_permissions();
             // }
         }
-    }
+    }*/
 
     private void returnAddress()
     {
@@ -492,8 +496,8 @@ public class OrderMapActivity extends Activity implements LocationListener {
                     result.setLocation(sb.toString());
 
                 if(!searchMap.getText().toString().equals("")) {
-                    result.setLocation(searchMap.getText().toString());
-                    result.setAddress(searchMap.getText().toString());
+                    result.setLocation(searchMap.getText().toString()+"("+searchAddress+")");
+                    result.setAddress(searchMap.getText().toString()+"("+searchAddress+")");
                 }else {
                     if(address.getCountryCode().equals("TW")) {
                         result.setAddress(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
@@ -515,32 +519,22 @@ public class OrderMapActivity extends Activity implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        latitude = location.getLatitude();
-        longitude = location.getLongitude();
-        Log.e("Map:",""+latitude);
-        Log.e("Map:",""+longitude);
-
-
-        setMapView(latitude,longitude);
-        //if(longitude!=0)
-         //  returnAddress();
-
-    }
-
-    @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
+        if (location != null) {
+            String strLocation =
+                    DateFormat.getTimeInstance().format(location.getTime()) + "\n" +
+                            "Latitude=" + location.getLatitude() + "\n" +
+                            "Longitude=" + location.getLongitude();
+            Log.e("TAG",strLocation);
+            if(getLocation) {
+                setMapView(location.getLongitude(), location.getLatitude());
+                getLocation = false;
+                getCurrentAddress(location.getLongitude(),location.getLatitude());
+            }
+        }
 
     }
 
-    @Override
-    public void onProviderEnabled(String provider) {
 
-    }
-
-    @Override
-    public void onProviderDisabled(String provider) {
-
-    }
 
     private void alert()
     {
@@ -564,6 +558,127 @@ public class OrderMapActivity extends Activity implements LocationListener {
                 // show it
                 alertDialog.show();
             }
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_EXTERNAL_GPS: {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+// Get the location manager
+                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    // Define the criteria how to select the locatioin provider -> use
+                    // default
+                    Criteria criteria = new Criteria();
+                    provider = locationManager.getBestProvider(criteria, false);
+                    if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        // TODO: Consider calling
+                        //    ActivityCompat#requestPermissions
+                        // here to request the missing permissions, and then overriding
+                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                        //                                          int[] grantResults)
+                        // to handle the case where the user grants the permission. See the documentation
+                        // for ActivityCompat#requestPermissions for more details.
+                        return;
+                    }
+                    Location location = locationManager.getLastKnownLocation(provider);
+
+
+                    if (location != null) {
+                        onLocationChanged(location);
+                    }
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'switch' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    private void getCurrentAddress(double longitude,double latitude)
+    {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addressList = geocoder.getFromLocation(
+                    latitude, longitude, 1);
+            if (addressList != null && addressList.size() > 0) {
+                Address address = addressList.get(0);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+                    sb.append(address.getAddressLine(i)).append("\n");
+                }
+
+                sb.append(address.getLocality()).append("\n");
+                sb.append(address.getPostalCode()).append("\n");
+                sb.append(address.getCountryName());
+
+                result.setLatitude(latitude);
+                result.setLongitude(longitude);
+
+                result.setCountryName(address.getCountryName());
+                result.setLocality(address.getLocality());
+                result.setZipCode(address.getPostalCode());
+
+                result.setLocation(sb.toString());
+
+                if(address.getCountryCode().equals("TW")) {
+                    result.setAddress(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                    result.setLocation(address.getAddressLine(0).substring(3, address.getAddressLine(0).length()));
+                }else{
+                    result.setAddress(sb.toString());
+                    result.setLocation(sb.toString());
+
+                }
+                curAddress = result.getAddress();
+            }
+        }catch (IOException e) {
+            Log.e("", "Unable connect to Geocoder", e);
+        }
+        //test = true;
+
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }

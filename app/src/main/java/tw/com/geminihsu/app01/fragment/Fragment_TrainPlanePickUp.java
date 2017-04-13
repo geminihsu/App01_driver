@@ -30,6 +30,8 @@ import tw.com.geminihsu.app01.common.Constants;
 
 public class Fragment_TrainPlanePickUp extends Fragment {
 
+    public final static String BUNDLE_ORDER_CUR_ADDRESS = "address";// from
+
     private TabLayoutSetupCallback mToolbarSetupCallback;
     private List<String> mTabNamesList;
     private final int ACTIONBAR_MENU_ITEM_FIILTER = 0x0001;
@@ -41,6 +43,8 @@ public class Fragment_TrainPlanePickUp extends Fragment {
     private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
     private ViewPager viewPager;
+    private static String currAddress = "";
+
     public Fragment_TrainPlanePickUp() {
         // Required empty public constructor
     }
@@ -84,6 +88,10 @@ public class Fragment_TrainPlanePickUp extends Fragment {
             orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
         }
 
+        if (bundle.containsKey(BUNDLE_ORDER_CUR_ADDRESS)) {
+            currAddress = bundle.getString(BUNDLE_ORDER_CUR_ADDRESS);
+
+        }
         }
 
     @Override
@@ -132,6 +140,8 @@ public class Fragment_TrainPlanePickUp extends Fragment {
                     fragment = new Fragment_PickUpTrain();
                     Bundle args2 = new Bundle();
                     args2.putInt(Constants.ARG_POSITION, 0);
+                    args2.putString(BUNDLE_ORDER_CUR_ADDRESS, currAddress);
+
                     //args2.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
                     //args2.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
                     fragment.setArguments(args2);
@@ -143,6 +153,7 @@ public class Fragment_TrainPlanePickUp extends Fragment {
                     args3.putInt(Constants.ARG_POSITION, 1);
                     args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
                     args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+                    args3.putString(BUNDLE_ORDER_CUR_ADDRESS, currAddress);
 
                     fragment.setArguments(args3);
                     break;

@@ -32,6 +32,9 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
 
     private TabLayoutSetupCallback mToolbarSetupCallback;
     private List<String> mTabNamesList;
+    public final static String BUNDLE_ORDER_CUR_ADDRESS = "address";// from
+
+
 
     private int dType;//哪一種司機型態
     private int cargoType;//那一種訂單型態
@@ -40,6 +43,7 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
     private static Constants.APP_REGISTER_ORDER_TYPE orderCargoType;
 
     private ViewPager viewPager;
+    private static String currAddress = "";
     public Fragment_ClientAirPlanePickUp() {
         // Required empty public constructor
     }
@@ -83,6 +87,10 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
             orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
         }
 
+        if (bundle.containsKey(BUNDLE_ORDER_CUR_ADDRESS)) {
+            currAddress = bundle.getString(BUNDLE_ORDER_CUR_ADDRESS);
+
+        }
     }
 
     @Override
@@ -134,6 +142,8 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
                     fragment = new Fragment_PickUpAirPlane();
                     Bundle args2 = new Bundle();
                     args2.putInt(Constants.ARG_POSITION, 0);
+                    args2.putString(BUNDLE_ORDER_CUR_ADDRESS, currAddress);
+
 
                     fragment.setArguments(args2);
                     break;
@@ -143,6 +153,9 @@ public class Fragment_ClientAirPlanePickUp extends Fragment {
                     args3.putInt(Constants.ARG_POSITION, 1);
                     args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_DRIVER_TYPE, dataType.value());
                     args3.putInt(ClientTakeRideActivity.BUNDLE_ORDER_CARGO_TYPE, orderCargoType.value());
+                    args3.putString(BUNDLE_ORDER_CUR_ADDRESS, currAddress);
+
+
 
                     fragment.setArguments(args3);
                     break;

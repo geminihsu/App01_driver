@@ -42,7 +42,7 @@ public class MenuMainViewDelegateDriver extends MenuMainViewDelegateBase {
 	public void setNavigationItem(Menu menu) {
 		//先全部隱藏
 		super.setNavigationItem(menu);
-		menu.findItem(R.id.navigation_item_order).setVisible(true);
+		menu.findItem(R.id.navigation_item_order).setVisible(false);
 		//menu.findItem(R.id.navigation_item_order_record).setVisible(true);
 		menu.findItem(R.id.navigation_item_begin).setVisible(true);
 		//menu.findItem(R.id.navigation_item_order_filter).setVisible(true);

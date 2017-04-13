@@ -28,8 +28,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.newrelic.agent.android.Agent;
-import com.newrelic.agent.android.NewRelic;
+//import com.newrelic.agent.android.Agent;
+//import com.newrelic.agent.android.NewRelic;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -145,7 +145,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -158,7 +158,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG,volleyError.getMessage().toString());
@@ -223,7 +223,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -236,7 +236,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG,volleyError.getMessage().toString());
             }
@@ -304,7 +304,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -317,7 +317,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG,volleyError.getMessage().toString());
             }
@@ -408,7 +408,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -421,7 +421,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG,volleyError.getMessage().toString());
             }
@@ -481,7 +481,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -494,7 +494,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
                 if(volleyError!=null)
                     if(volleyError.getMessage()!=null)
                 Log.e(TAG,volleyError.getMessage().toString());
@@ -587,7 +587,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -600,7 +600,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG,volleyError.getMessage().toString());
             }
@@ -639,7 +639,7 @@ public class JsonPutsUtil {
                     if (connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS)) {
                         String datas = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
 
-                        NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "getUserInfo");
+                        //NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "getUserInfo");
 
                         if(!datas.equals("null")){
                             //JSONArray info = jsonObject.getJSONArray(App01libObjectKey.APP_OBJECT_KEY_NOTIFICATION_INFO_MESSAGE);
@@ -793,7 +793,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -806,7 +806,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError!=null) {
                     if(volleyError.getMessage()!=null)
@@ -980,6 +980,7 @@ public class JsonPutsUtil {
                                 if(ticketStatus.equals("ticket_order")) {
                                     content = "已有司機接單";
                                     driver_uid =object.getString(App01libObjectKey.APP_OBJECT_KEY_UID);
+                                    Log.e(TAG,"driver_uid:"+driver_uid);
                                 }
                                 else  if(ticketStatus.equals("ticket_finish"))
                                     content = "已到目的地，感謝您的搭乘";
@@ -1033,7 +1034,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1046,7 +1047,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError!=null)
                     if(volleyError.getMessage()!=null)
@@ -1099,7 +1100,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1112,7 +1113,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -1164,7 +1165,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1177,7 +1178,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError!=null)
                     if(volleyError.getMessage()!=null)
@@ -1246,7 +1247,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1259,7 +1260,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError!=null)
                     Log.e(TAG, volleyError.getMessage().toString());
@@ -1347,7 +1348,7 @@ public class JsonPutsUtil {
             @Override
             public void onResponse(JSONObject jsonObject) {
                 Log.e(TAG,"[queryDRIVEROrderList]:"+ jsonObject.toString());
-                NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", 200, System.nanoTime(), System.nanoTime(),100 ,100, "Recommendation List");
+                //NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", 200, System.nanoTime(), System.nanoTime(),100 ,100, "Recommendation List");
 
                 try {
                     // Parsing json object response
@@ -1446,7 +1447,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1459,7 +1460,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
@@ -1494,7 +1495,7 @@ public class JsonPutsUtil {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "queryRecommendOrderList");
+                    //NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "queryRecommendOrderList");
 
                     App01libObjectKey.APP_DRIVER_RECOMMEND_ORDER connectResult = App01libObjectKey.conversion_get_put_driver_recommend_order_result(Integer.valueOf(status));
 
@@ -1581,7 +1582,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1594,7 +1595,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
@@ -1607,8 +1608,8 @@ public class JsonPutsUtil {
 
     }
 
-    // 訂單-客戶取消訂單
-    public void clientCancelOrder(final NormalOrder order) {
+    // 訂單-取消訂單
+    public void clientCancelOrder(final NormalOrder order,String driverPhoneNumber) {
 
         //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -1616,7 +1617,7 @@ public class JsonPutsUtil {
 
         try {
             obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_CUSTOMER_CANCEL_ORDER);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, order.getUser_name());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, driverPhoneNumber);
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY, order.getAccesskey());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DRIVER_TICKET_ID, Integer.valueOf(order.getTicket_id()));
 
@@ -1632,7 +1633,7 @@ public class JsonPutsUtil {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "queryRecommendOrderList");
+                    //NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Puts", Integer.valueOf(status), System.nanoTime(), System.nanoTime(),100 ,100, "queryRecommendOrderList");
 
                     App01libObjectKey.APP_DRIVER_RECOMMEND_ORDER connectResult = App01libObjectKey.conversion_get_put_driver_recommend_order_result(Integer.valueOf(status));
 
@@ -1651,7 +1652,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1664,7 +1665,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                     Log.e(TAG, volleyError.getMessage().toString());
@@ -1771,7 +1772,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -1784,7 +1785,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -1888,33 +1889,33 @@ public class JsonPutsUtil {
                                 String stop_zipcode="";
                                 String stop_address="";
 
-                                for(int i=0;i<info.length();i++)
-                                {
-                                    JSONObject stopObject = info.getJSONObject(i);
-                                    stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                if(info!=null) {
+                                    for (int i = 0; i < info.length(); i++) {
+                                        JSONObject stopObject = info.getJSONObject(i);
+                                        stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
 
 
-                                    if(!stop_latlng.equals("")) {
-                                        stop_gps = stop_latlng.split(",");
-                                        stop_lat = stop_gps[0];
-                                        stop_lng = stop_gps[1];
+                                        if (!stop_latlng.equals("")) {
+                                            stop_gps = stop_latlng.split(",");
+                                            stop_lat = stop_gps[0];
+                                            stop_lng = stop_gps[1];
+                                        }
+
+                                        stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                        stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
+
+                                        OrderLocationBean stopInfo = new OrderLocationBean();
+                                        stopInfo.setZipcode(stop_zipcode);
+                                        stopInfo.setLongitude(stop_lng);
+                                        stopInfo.setLatitude(stop_lat);
+                                        stopInfo.setAddress(stop_address);
+
+                                        order.setStop(stopInfo);
+                                        order.setStop_address(stop_address);
+
+
                                     }
-
-                                    stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
-                                    stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
-
-
-
-                                    OrderLocationBean stopInfo = new OrderLocationBean();
-                                    stopInfo.setZipcode(stop_zipcode);
-                                    stopInfo.setLongitude(stop_lng);
-                                    stopInfo.setLatitude(stop_lat);
-                                    stopInfo.setAddress(stop_address);
-
-                                    order.setStop(stopInfo);
-                                    order.setStop_address(stop_address);
-
-
                                 }
                                 /*JSONObject stop = jsonObject.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
                                 String stop_zipcode = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
@@ -1975,6 +1976,8 @@ public class JsonPutsUtil {
                                 String cargo_type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_TYPE);
                                 String cargo_size = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SIZE);
                                 String cargo_imgs = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_IMAGES);
+                                String cargo_spec = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SPECIAL);
+
 
                                 String price = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_PRICE);
                                 String tip = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_TIP);
@@ -1997,9 +2000,10 @@ public class JsonPutsUtil {
                                 order.setTicket_id(id);
                                 order.setUser_uid(uid);
                                 order.setDtype(dtype);
-                                order.setUser_name(user.getPhoneNumber());
+                                order.setUser_name(userPhoneNumber);
                                 order.setUser_id(Integer.valueOf(uid));
                                 order.setCargo_imgs(cargo_imgs);
+                                order.setCar_special(cargo_spec);
                                 order.setTimebegin(timebegin);
                                 order.setRemark(remark);
                                 order.setTicket_status(order_status);
@@ -2023,7 +2027,7 @@ public class JsonPutsUtil {
                                 if(max) {
                                     Utility orders = new Utility(mContext);
                                     //orders.clearData(NormalOrder.class);
-                                    RealmResults<NormalOrder> data=orders.getAccountOrderList();
+                                    RealmResults<NormalOrder> data=orders.getAccountOrderListByPhoneNumber(userPhoneNumber);
 
                                     if (data.size() > 0) {
                                         if (mDriverRecommendationOrderListManagerCallBackFunction != null)
@@ -2072,7 +2076,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2085,7 +2089,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
@@ -2189,31 +2193,33 @@ public class JsonPutsUtil {
                                 String stop_zipcode="";
                                 String stop_address="";
 
-                                for(int i=0;i<info.length();i++) {
-                                    JSONObject stopObject = info.getJSONObject(i);
-                                    stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
+                                if(info!=null) {
+                                    for (int i = 0; i < info.length(); i++) {
+                                        JSONObject stopObject = info.getJSONObject(i);
+                                        stop_latlng = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
 
 
-                                    if (!stop_latlng.equals("")) {
-                                        stop_gps = stop_latlng.split(",");
-                                        if(stop_gps.length>1) {
-                                            stop_lat = stop_gps[0];
-                                            stop_lng = stop_gps[1];
+                                        if (!stop_latlng.equals("")) {
+                                            stop_gps = stop_latlng.split(",");
+                                            if (stop_gps.length > 1) {
+                                                stop_lat = stop_gps[0];
+                                                stop_lng = stop_gps[1];
+                                            }
                                         }
+
+                                        stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
+                                        stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
+
+                                        OrderLocationBean stopInfo = new OrderLocationBean();
+                                        stopInfo.setId(0);
+                                        stopInfo.setZipcode(stop_zipcode);
+                                        stopInfo.setLongitude(stop_lng);
+                                        stopInfo.setLatitude(stop_lat);
+                                        stopInfo.setAddress(stop_address);
+                                        order.setStop(stopInfo);
+                                        order.setStop_address(stop_address);
+
                                     }
-
-                                    stop_zipcode = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
-                                    stop_address = stopObject.optString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
-
-                                    OrderLocationBean stopInfo = new OrderLocationBean();
-                                    stopInfo.setId(0);
-                                    stopInfo.setZipcode(stop_zipcode);
-                                    stopInfo.setLongitude(stop_lng);
-                                    stopInfo.setLatitude(stop_lat);
-                                    stopInfo.setAddress(stop_address);
-                                    order.setStop(stopInfo);
-                                    order.setStop_address(stop_address);
-
                                 }
 
                                     //取得暫停點資訊
@@ -2274,6 +2280,8 @@ public class JsonPutsUtil {
                                 String cargo_type = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_TYPE);
                                 String cargo_size = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SIZE);
                                 String cargo_imgs = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_IMAGES);
+                                String cargo_spec = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_CARGO_SPECIAL);
+
 
                                 String price = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_PRICE);
                                 String tip = object.getString(App01libObjectKey.APP_OBJECT_KEY_ORDER_TIP);
@@ -2290,15 +2298,17 @@ public class JsonPutsUtil {
                                 if(client!=null) {
                                     userPhoneNumber = client.getString(App01libObjectKey.APP_OBJECT_KEY_UPLOAD_GPS_USERNAME);
                                     userRealName = client.getString(App01libObjectKey.APP_OBJECT_KEY_REGISTER_REALNAME);
+                                    order.setUser_name(userPhoneNumber);
                                 }
 
 
                                 order.setTicket_id(id);
                                 order.setUser_uid(uid);
                                 order.setDtype(dtype);
-                                order.setUser_name(user.getName());
+                                order.setUser_name(userPhoneNumber);
                                 order.setUser_id(Integer.valueOf(uid));
                                 order.setCargo_imgs(cargo_imgs);
+                                order.setCar_special(cargo_spec);
                                 order.setTimebegin(timebegin);
                                 order.setRemark(remark);
                                 order.setTicket_status(order_status);
@@ -2322,7 +2332,7 @@ public class JsonPutsUtil {
                                 if(max) {
                                     Utility orders = new Utility(mContext);
                                     //orders.clearData(NormalOrder.class);
-                                    RealmResults<NormalOrder> data=orders.getAccountOrderList();
+                                    RealmResults<NormalOrder> data=orders.getAccountOrderListByPhoneNumber(userPhoneNumber);
 
                                     if (mDriverRecommendationOrderListManagerCallBackFunction != null)
                                         mDriverRecommendationOrderListManagerCallBackFunction.getOrderListSuccess(data);
@@ -2368,7 +2378,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2381,9 +2391,10 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
-                Log.e(TAG, volleyError.getMessage().toString());
+                if(volleyError.getMessage()!=null)
+                    Log.e(TAG, volleyError.getMessage().toString());
             }
         });
        // requestQueue.add(jsonObjectRequest);
@@ -2453,7 +2464,7 @@ public class JsonPutsUtil {
     }
 
     //訂單-快速接單(司機權限)
-    public void driverTakeOverOrder(final NormalOrder order) {
+    public void driverTakeOverOrder(final NormalOrder order,String driverPhone) {
 
         //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -2461,7 +2472,7 @@ public class JsonPutsUtil {
 
         try {
             obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_DRIVER_TAKE_OVER_ORDER);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, order.getUser_name());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, driverPhone);
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY, order.getAccesskey());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DRIVER_TICKET_ID, Integer.valueOf(order.getTicket_id()));
         } catch (JSONException e) {
@@ -2586,7 +2597,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
                     if(mDriverChangeWorkIdentityManagerCallBackFunction!=null)
                         mDriverChangeWorkIdentityManagerCallBackFunction.changeIdentityError(true);
 
@@ -2601,7 +2612,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
                 if(mDriverChangeWorkIdentityManagerCallBackFunction!=null)
                     mDriverChangeWorkIdentityManagerCallBackFunction.changeIdentityError(true);
 
@@ -2617,7 +2628,7 @@ public class JsonPutsUtil {
     }
 
     //訂單-結案訂單(司機權限)
-    public void driverFinishOrder(final NormalOrder order) {
+    public void driverFinishOrder(final NormalOrder order,String driverPhoneNumber) {
 
         //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -2625,7 +2636,7 @@ public class JsonPutsUtil {
 
         try {
             obj.put(App01libObjectKey.APP_OBJECT_KEY_PUTS_METHOD, App01libObjectKey.APP_OBJECT_KEY_PUTS_DRIVER_FINISH_ORDER);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, order.getUser_name());
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_LOGIN_USERNAME, driverPhoneNumber);
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_ACCESSKEY, order.getAccesskey());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_DRIVER_TICKET_ID, Integer.valueOf(order.getTicket_id()));
         } catch (JSONException e) {
@@ -2657,7 +2668,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                     NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                     //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2670,7 +2681,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -2727,7 +2738,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2740,7 +2751,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -2794,7 +2805,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2807,7 +2818,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -2893,7 +2904,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -2906,7 +2917,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 Log.e(TAG, volleyError.getMessage().toString());
             }
@@ -2938,6 +2949,7 @@ public class JsonPutsUtil {
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getBegin().getAddress());
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT, Double.valueOf(order.getBegin().getLatitude()));
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.valueOf(order.getBegin().getLongitude()));
+
             begin.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getBegin().getZipcode()));
 
         } catch (JSONException e) {
@@ -2958,25 +2970,33 @@ public class JsonPutsUtil {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }*/
-        try {
-            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getEnd().getAddress());
-            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT, Double.valueOf(order.getEnd().getLatitude()));
-            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.valueOf(order.getEnd().getLongitude()));
-            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getEnd().getZipcode()));
-
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+//        try {
+//            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ADDRESS, order.getEnd().getAddress());
+//            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LAT, Double.valueOf(order.getEnd().getLatitude()));
+//            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_LNG, Double.valueOf(order.getEnd().getLongitude()));
+//            end.put(App01libObjectKey.APP_OBJECT_KEY_ORDER_ZIPCODE, Integer.valueOf(order.getEnd().getZipcode()));
+//
+//
+//        } catch (JSONException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//        }
 
         JSONArray jsonArrayBegin = new JSONArray();
 
         jsonArrayBegin.put(begin);
 
+        JSONObject stop = new JSONObject();
+
+        JSONArray jsonArrayStop = new JSONArray();
+
+        jsonArrayStop.put(stop);
+
         JSONArray jsonArrayEnd = new JSONArray();
 
         jsonArrayEnd.put(end);
+
+
 
         JSONObject obj = new JSONObject();
 
@@ -2985,7 +3005,7 @@ public class JsonPutsUtil {
             obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_USERNAME, order.getUser_name());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_ACCESSKEY, order.getAccesskey());
             obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_BEG, jsonArrayBegin);
-            obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP, "");
+            obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP, jsonArrayStop);
             obj.put(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_END, jsonArrayEnd);
 
 
@@ -3221,7 +3241,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -3234,7 +3254,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG, volleyError.getMessage().toString());
@@ -3262,7 +3282,7 @@ public class JsonPutsUtil {
                     String status = result.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
                     String message = result.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
                     App01libObjectKey.APP_POST_UPLOAD_IMAGE_RESPONSE_CODE connectResult = App01libObjectKey.conversion_upload_image_result(Integer.valueOf(status));
-                    NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Post", response.statusCode, response.networkTimeMs, response.networkTimeMs, Long.valueOf(response.headers.get("X-Android-Sent-Millis")),Long.valueOf(response.headers.get("X-Android-Received-Millis"))  , "upload image");
+                    //NewRelic.noticeHttpTransaction(Constants.SERVER_URL, "Post", response.statusCode, response.networkTimeMs, response.networkTimeMs, Long.valueOf(response.headers.get("X-Android-Sent-Millis")),Long.valueOf(response.headers.get("X-Android-Received-Millis"))  , "upload image");
 
                     if (connectResult.equals(App01libObjectKey.APP_POST_UPLOAD_IMAGE_RESPONSE_CODE.K_APP_POST_UPLOAD_IMAGE_SUCCESS)) {
                         Log.e(TAG, "get file info!!!!");
@@ -3291,7 +3311,7 @@ public class JsonPutsUtil {
 
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 }
             }
@@ -3316,7 +3336,7 @@ public class JsonPutsUtil {
                 }
                 Log.i("Error", errorMessage);
                 error.printStackTrace();
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),error);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),error);
 
             }
         }) {
@@ -3639,7 +3659,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                   // NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -3652,7 +3672,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                 Log.e(TAG,volleyError.getMessage().toString());
@@ -3720,7 +3740,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -3733,7 +3753,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                     Log.e(TAG,volleyError.getMessage().toString());
@@ -3796,7 +3816,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -3809,7 +3829,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                     Log.e(TAG,volleyError.getMessage().toString());
@@ -3869,7 +3889,7 @@ public class JsonPutsUtil {
                     }
 
                 } catch (JSONException e) {
-                    NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                    //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                     e.printStackTrace();
                     Toast.makeText(mContext,
@@ -3882,7 +3902,7 @@ public class JsonPutsUtil {
             public void onErrorResponse(VolleyError volleyError) {
                 Exception e =  new Exception();
                 e.setStackTrace(volleyError.getStackTrace());
-                NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
+                //NewRelic.noticeNetworkFailure(Constants.SERVER_URL, "Puts",System.nanoTime(), System.nanoTime(),e);
 
                 if(volleyError.getMessage()!=null)
                     Log.e(TAG,volleyError.getMessage().toString());
@@ -3895,12 +3915,12 @@ public class JsonPutsUtil {
 
     }
     //new method for appending the crossProcessID necessary for CAT in New Relic
-    public static void setCrossProcessHeader(HttpURLConnection conn) {
+    /*public static void setCrossProcessHeader(HttpURLConnection conn) {
         String crossProcessId = Agent.getCrossProcessId(); // API call into the agent for the X-NewRelic-ID
         if (crossProcessId != null) {
             conn.setRequestProperty("X-NewRelic-ID", crossProcessId);
         }
-    }
+    }*/
 
     //callback fucntion
     private ClientRegisterDataManagerCallBackFunction mClientRegisterDataManagerCallBackFunction;

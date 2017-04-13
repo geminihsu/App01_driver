@@ -275,13 +275,14 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:orientation="vertical"
-        android:visibility="gone"
+
         >
         <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="match_parent"
             android:paddingTop="10dp"
             android:orientation="horizontal"
+            android:id="@+id/spec_require"
             >
             <TextView
                 android:id="@+id/passenger_spec"
@@ -294,6 +295,14 @@
                 android:text="@string/merchandise_requirement"
                 android:textColor="@color/btn_bouns_title"
                 />
+            <TextView
+                android:id="@+id/passenger_spec_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:layout_weight="1"
+                android:text=""/>
             <ImageButton
                 android:id="@+id/spec_option"
                 android:layout_width="wrap_content"
@@ -315,7 +324,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="middle"
-                android:singleLine="true"
                 android:paddingLeft="20dp"
                 android:text="@string/merchandise_spec"
                 android:textColor="@color/btn_bouns_title"

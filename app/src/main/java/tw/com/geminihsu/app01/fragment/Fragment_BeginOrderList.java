@@ -32,7 +32,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.newrelic.agent.android.NewRelic;
+//import com.newrelic.agent.android.NewRelic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +50,7 @@ import tw.com.geminihsu.app01.bean.AccountInfo;
 import tw.com.geminihsu.app01.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01.bean.NormalOrder;
 import tw.com.geminihsu.app01.common.Constants;
+import tw.com.geminihsu.app01.serverbean.ServerSpecial;
 import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
@@ -61,6 +62,8 @@ public class Fragment_BeginOrderList extends Fragment implements
 
     public final static String BUNDLE_ORDER_TICKET_ID = "ticket_id";// from
     public final static String BUNDLE_ORDER_TICKET = "ticket";// from
+    public final static String BUNDLE_DRIVER_PHONE = "driver_phone_number";// from
+
 
     final public static int REALTIME_ORDERLIST = 0;
     final public static int RESERVATION_ORDERLIST =1;
@@ -78,6 +81,7 @@ public class Fragment_BeginOrderList extends Fragment implements
     private ArrayList<NormalOrder> orders;
     private RealmUtil database;
     private SwipeRefreshLayout loadOrderList;
+    private String driverPhoneNumber = "";//in order to take over order, this one used to record driver phone number
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, 
         Bundle savedInstanceState) {
@@ -114,7 +118,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION,OrderProcesssActivity.PASSENGER);
                 b.putString(BUNDLE_ORDER_TICKET_ID, order.getTicket_id());
-                // b.putSerializable(BUNDLE_ORDER_TICKET, order);
+                b.putString(BUNDLE_DRIVER_PHONE, driverPhoneNumber);
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -225,6 +229,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                    }*/
                 }else{
                     final Utility info = new Utility(getActivity());
+                    driverPhoneNumber = accountInfo.getPhoneNumber();
                     if(!wait) {
 
 
@@ -233,7 +238,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                             public void run() {
                                 if(info!=null)
                                     info.clearData(NormalOrder.class);
-                                boolean attributeSet = NewRelic.setAttribute("Query Recommendation List", accountInfo.getAccessKey());
+                                //boolean attributeSet = NewRelic.setAttribute("Query Recommendation List", accountInfo.getAccessKey());
                                 sendDataRequest.queryRecommendOrderList(accountInfo);
                             }
                         }));
@@ -293,10 +298,12 @@ public class Fragment_BeginOrderList extends Fragment implements
             //getDataFromDB();
         }*/
         // 建立ListItemAdapter
-        listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
-        listViewAdapter.setTakeLookButtonListner(Fragment_BeginOrderList.this);
-        listViewAdapter.setTakeOverButtonListner(Fragment_BeginOrderList.this);
-        listView.setAdapter(listViewAdapter);
+        if(listViewAdapter == null) {
+            listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
+            listViewAdapter.setTakeLookButtonListner(Fragment_BeginOrderList.this);
+            listViewAdapter.setTakeOverButtonListner(Fragment_BeginOrderList.this);
+            listView.setAdapter(listViewAdapter);
+        }
         listViewAdapter.notifyDataSetChanged();
 
         // During startup, check if there are arguments passed to the fragment.
@@ -698,7 +705,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                                 // current activity
                                 if (order.isValid()) {
 
-                                    sendDataRequest.driverTakeOverOrder(orderItem.order);
+                                    sendDataRequest.driverTakeOverOrder(orderItem.order,driverPhoneNumber);
 
                                 }
                                                 /*  Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
@@ -757,6 +764,8 @@ public class Fragment_BeginOrderList extends Fragment implements
                 else
                     b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
                 b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
+                b.putString(BUNDLE_DRIVER_PHONE, driverPhoneNumber);
+
                 question.putExtras(b);
                 startActivity(question);
             }
@@ -768,12 +777,54 @@ public class Fragment_BeginOrderList extends Fragment implements
         String departure = "從："+order.getBegin_address()+"\n";
         String stop = "";
         String spec = "";
+        ServerSpecial specContent;
+
+        String type = "";
+        Constants.APP_REGISTER_ORDER_TYPE dataType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
+        if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)
+            type = getString(R.string.client_take_ride_title);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)
+            type = getString(R.string.client_train_pick_up);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)
+            type = getString(R.string.client_airplane_pick_up);
+        else if (dataType == Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
+            type = getString(R.string.client_merchanse_send_title);
+
+
         if(!order.getStop_address().equals("0"))
            stop = "停靠："+order.getStop_address()+"\n";
         String destination ="到："+ order.getEnd_address()+"\n";
         String orderType = "時間：即時"+"\n";
-        if(order.getCar_special()!=null)
-            spec ="特殊需求："+order.getCar_special();
+        spec = "特殊需求：";
+        String remark= "";
+        String spec_detail = "";
+        if(order.getCar_special()!=null) {
+            String[] spec_array = order.getCar_special().split(",");
+            if(!order.getCar_special().equals("")){
+            if(spec_array.length == 0) {
+                RealmUtil specQuery = new RealmUtil(getActivity());
+                specContent = specQuery.queryServerSpecialItem(Constants.SPEC_ID, order.getCar_special());
+                spec +=  specContent.getContent();
+            }else {
+
+                for (String spec_id : spec_array) {
+                    RealmUtil specQuery = new RealmUtil(getActivity());
+                    specContent = specQuery.queryServerSpecialItem(Constants.SPEC_ID, spec_id);
+                    spec_detail += specContent.getContent() + ",";
+
+                }
+            }
+
+                spec_detail = spec_detail.substring(0,spec_detail.length()-1);
+                spec += spec_detail+"\n";
+            }else
+                spec = "";
+        }
+
+        if(!order.getRemark().equals(""))
+            remark = "備註：" +order.getRemark();
+        else
+            remark = "";
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
                 getActivity());
 
@@ -782,7 +833,7 @@ public class Fragment_BeginOrderList extends Fragment implements
 
         // set dialog message
         alertDialogBuilder
-                .setMessage("客戶電話:"+order.getUser_name()+"\n"+departure+stop+destination+orderType+spec)
+                .setMessage("訂單類型:"+type+"\n"+"客戶電話:"+order.getUser_name()+"\n"+departure+stop+destination+orderType+spec+remark)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.sure_ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

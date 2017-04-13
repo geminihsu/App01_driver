@@ -24,7 +24,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.newrelic.agent.android.Agent;
+//import com.newrelic.agent.android.Agent;
 import com.packetzoom.speed.PacketZoomClient;
 
 import java.net.HttpURLConnection;
@@ -42,7 +42,7 @@ import tw.com.geminihsu.app01.utils.JsonPutsUtil;
 import tw.com.geminihsu.app01.utils.RealmUtil;
 import tw.com.geminihsu.app01.utils.ThreadPoolUtil;
 import tw.com.geminihsu.app01.utils.Utility;
-import com.newrelic.agent.android.NewRelic;
+//import com.newrelic.agent.android.NewRelic;
 
 public class MainActivity extends Activity {
     public final static String TAG = MainActivity.class.toString();// from
@@ -81,9 +81,9 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_page_activity);
-        NewRelic.withApplicationToken(
+        /*NewRelic.withApplicationToken(
                 "AAd366f2a60eb34eb4f3b07073a52201c9b1055f16"
-        ).start(this.getApplication());
+        ).start(this.getApplication());*/
 
         String filePath = Environment.getExternalStorageDirectory()+Constants.SDACRD_DIR_APP_ROOT;
         FileUtil.checkSdCard(filePath);// 檢查S是否有 SD卡,並建立會用到的 SD卡路徑

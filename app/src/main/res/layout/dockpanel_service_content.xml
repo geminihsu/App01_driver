@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/bg_gray"
+    android:orientation="horizontal">
+<!-- 被景色 #AA050505-->
+	<TextView
+		android:id="@+id/service_info"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:padding="16dp"
+		android:orientation="horizontal"
+		android:textStyle="bold"
+		android:layout_gravity="center_horizontal"
+		android:textSize="@dimen/default_text_address_size_sp"
+		android:textColor="@color/btn_bouns_title"
+		android:text="@string/service_info"
+		/>
+
+	
+    <HorizontalScrollView
+        android:id="@+id/scrollView_dockpanel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"    
+
+     >
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+			<ImageButton
+                android:id="@+id/btn_taxi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+				android:contentDescription="snapshot"
+                android:paddingLeft="@dimen/dock_panel_item_left_right_paddind"
+                android:paddingRight="@dimen/dock_panel_item_left_right_paddind"
+                android:src="@drawable/ic_maps_local_taxi" >
+            </ImageButton>
+            <ImageButton
+                android:id="@+id/btn_uber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+				android:contentDescription="change monitor"
+                android:paddingLeft="@dimen/dock_panel_item_left_right_paddind"
+                android:paddingRight="@dimen/dock_panel_item_left_right_paddind"
+                android:src="@drawable/ic_notification_drive_eta" />
+            
+            <ImageButton
+                android:id="@+id/btn_truck"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/dock_panel_item_left_right_paddind"
+                android:paddingRight="@dimen/dock_panel_item_left_right_paddind"
+                android:src="@drawable/ic_maps_local_shipping" />
+            <ImageButton
+                android:id="@+id/btn_dock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+				android:contentDescription="Change stream"
+                android:paddingLeft="@dimen/dock_panel_item_left_right_paddind"
+                android:paddingRight="@dimen/dock_panel_item_left_right_paddind"
+                android:src="@drawable/ic_maps_directions_ferry" />
+			<ImageButton
+                android:id="@+id/trailer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:paddingLeft="@dimen/dock_panel_item_left_right_paddind"
+                android:paddingRight="@dimen/dock_panel_item_left_right_paddind"
+                android:src="@drawable/ic_maps_directions_bus" />
+
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+</RelativeLayout>

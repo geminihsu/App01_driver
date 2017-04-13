@@ -137,6 +137,12 @@ public class RealmUtil {
         return info;
     }
 
+    public ServerSpecial queryServerSpecialItem(String column, String value) {
+
+        ServerSpecial info = mRealm.where(ServerSpecial.class).equalTo(column, value).findFirst();
+        return info;
+    }
+
     public void addAccount(AccountInfo user)
     {
         mRealm.beginTransaction();
@@ -214,8 +220,10 @@ public class RealmUtil {
         normalOrder.setDtype(order.getDtype());
 
         normalOrder.setBegin_address(order.getBegin().getAddress());
-        normalOrder.setStop_address(order.getStop().getAddress());
-        normalOrder.setEnd_address(order.getEnd().getAddress());
+        if(order.getStop()!=null)
+             normalOrder.setStop_address(order.getStop().getAddress());
+        if(order.getEnd()!=null)
+            normalOrder.setEnd_address(order.getEnd().getAddress());
         normalOrder.setCargo_type(order.getCargo_type());
         normalOrder.setCargo_size(order.getCargo_size());
         normalOrder.setCargo_imgs(order.getCargo_imgs());

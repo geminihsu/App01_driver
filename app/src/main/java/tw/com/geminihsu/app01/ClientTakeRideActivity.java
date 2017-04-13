@@ -67,6 +67,12 @@ public class ClientTakeRideActivity extends Activity {
     public final static String BUNDLE_ORDER_DRIVER_TYPE = "dtype";// from
     public final static String BUNDLE_ORDER_CARGO_TYPE = "cargo_type";// from
 
+    //public final static String BUNDLE_ORDER_CUR_LONGITUDE = "dtype";// from
+    //public final static String BUNDLE_ORDER_CUR_LATITUDE = "cargo_type";// from
+
+
+    public final static String BUNDLE_ORDER_CUR_ADDRESS = "address";// from
+
 
     public final static String BUNDLE_KEEP_BOOMARK = "add_bookmark";// from
 
@@ -95,6 +101,7 @@ public class ClientTakeRideActivity extends Activity {
     private EditText departure_address;
     private EditText stop_address;
     private EditText destination_address;
+    private EditText remark;
     private EditText merchandise_content;
     private EditText merchandise_weight;
     private EditText merchandise_unit;
@@ -127,6 +134,8 @@ public class ClientTakeRideActivity extends Activity {
 
     private ProgressDialog progressDialog_loading;
 
+    private String currAddress = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,13 +149,19 @@ public class ClientTakeRideActivity extends Activity {
             @Override
             public void createNormalOrder(NormalOrder order) {
 
+                if(progressDialog_loading!=null)
+                {
+                    progressDialog_loading.cancel();
+                    progressDialog_loading = null;
+                }
+
                 Intent intent = new Intent(getApplicationContext(), ClientTakeRideSearchActivity.class);
 
                 Bundle b = new Bundle();
                 b.putInt(Constants.ARG_POSITION, Integer.valueOf(order.getTicket_id()));
                 intent.putExtras(b);
                 startActivity(intent);
-                finish();
+                //finish();
             }
 
             @Override
@@ -157,11 +172,6 @@ public class ClientTakeRideActivity extends Activity {
             }
         });
 
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
         this.findViews();
         this.setLister();
         Bundle bundle = this.getIntent().getExtras();
@@ -177,6 +187,11 @@ public class ClientTakeRideActivity extends Activity {
                     orderCargoType = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargoType));
                 }
 
+                if (bundle.containsKey(BUNDLE_ORDER_CUR_ADDRESS)) {
+                    currAddress = bundle.getString(BUNDLE_ORDER_CUR_ADDRESS);
+                    departure_address.setText(currAddress);
+                }
+
                 option = bundle.getInt(Constants.NEW_ORDER_CARGO_TYPE);
                 displayLayout();
             }else
@@ -188,6 +203,13 @@ public class ClientTakeRideActivity extends Activity {
         {
             //Error!!!!
         }
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
 
 
@@ -216,7 +238,9 @@ public class ClientTakeRideActivity extends Activity {
         date = (EditText) findViewById(R.id.date_info);
         time = (EditText) findViewById(R.id.time_info);
         departure_address = (EditText) findViewById(R.id.departure_address);
+        departure_address.setText(currAddress);
         stop_address = (EditText) findViewById(R.id.stop_address);
+        remark = (EditText) findViewById(R.id.spec_info);
         destination_address = (EditText) findViewById(R.id.destination_address);
         merchandise_content = (EditText) findViewById(R.id.merchandise_content_info);
         merchandise_weight = (EditText) findViewById(R.id.merchandise_weight);
@@ -432,6 +456,7 @@ public class ClientTakeRideActivity extends Activity {
                 builderSingle.show();
             }
         });
+
         getDataFromDB();
         linearLayout_spec.setOnClickListener(new View.OnClickListener() {
 
@@ -458,10 +483,13 @@ public class ClientTakeRideActivity extends Activity {
                     }
                 });
 
-                listViewAdapter = new ClientTakeRideSelectSpecListItemAdapter(ClientTakeRideActivity.this, 0, mCommentListData);
+                if(listViewAdapter == null) {
+                    //getDataFromDB();
+                    listViewAdapter = new ClientTakeRideSelectSpecListItemAdapter(ClientTakeRideActivity.this, 0, mCommentListData);
+
+                }
                 requirement.setAdapter(listViewAdapter);
                 listViewAdapter.notifyDataSetChanged();
-
 
                 dialog.show();
                 cancel.setOnClickListener(new View.OnClickListener() {
@@ -486,7 +514,9 @@ public class ClientTakeRideActivity extends Activity {
                                 require+=item.book_title+",";
                             }
                         }
-                        //require=require.substring(0,require.length()-1);
+
+                        if(!require.isEmpty())
+                            require=require.substring(0,require.length()-1);
                         spec_value.setText(require);
                         dialog.cancel();
                     }
@@ -742,6 +772,7 @@ public class ClientTakeRideActivity extends Activity {
         order.setTicket_status("0");
         order.setOrderdate(time.getText().toString());
         order.setTarget(target);
+        order.setRemark(remark.getText().toString());
 
         order.setPrice(price);
         order.setTip(tip);
@@ -757,7 +788,7 @@ public class ClientTakeRideActivity extends Activity {
             for(ClientTakeRideSelectSpecListItem item:spec_list){
                 spec+=item.spec_id+",";
             }
-            spec.substring(0,spec.length()-2);
+            spec = spec.substring(0,spec.length()-1);
 
         }
         Log.e(TAG,"spec car:"+spec);
@@ -1016,6 +1047,12 @@ public class ClientTakeRideActivity extends Activity {
             dialog.dismiss();
             dialog = null;
         }
+
+        if(progressDialog_loading!=null)
+        {
+            progressDialog_loading.cancel();
+            progressDialog_loading = null;
+        }
     }
     @Override
     public void onDestroy() {
@@ -1024,6 +1061,12 @@ public class ClientTakeRideActivity extends Activity {
         {
             dialog.dismiss();
             dialog = null;
+        }
+
+        if(progressDialog_loading!=null)
+        {
+            progressDialog_loading.cancel();
+            progressDialog_loading = null;
         }
     }
 
