@@ -63,7 +63,7 @@
     <string name="driver_idenity_page_title">選擇身份</string>
     <string name="driver_login_page_title">司機登入</string>
     <!-- login page -->
-    <string name="app_name">App01</string>
+    <string name="app_name">App01_driver</string>
     <string name="app_database_name">App01.realm</string>
     <string name="portal_login">Log In</string>
     <string name="portal_clean">Sign Out</string>
@@ -168,6 +168,9 @@
     <string name="txt_recommend_friend">我推薦的好友</string>
     <string name="txt_apply_driver">成為司機</string>
     <string name="txt_driver_identity">選擇司機身份</string>
+    <string name="txt_car_register">車籍登陸</string>
+    <string name="txt_upload_identity">上傳證件</string>
+
 
     <!-- ChangeAccountActivity -->
     <string name="txt_name_show">姓名</string>
@@ -187,6 +190,9 @@
     <string name="default_title">車神</string>
     <string name="default_info">可以領取以下獎勵</string>
     <string name="txt_prize_info">獲取積分200點</string>
+    <string name="txt_upgrade">升</string>
+    <string name="txt_now_upgrade">現在可以升級</string>
+
 
     <!-- DriverIdentityActivity -->
     <string name="pick_identity_title">選擇註冊身份</string>
@@ -460,6 +466,23 @@
     <string name="map_bookmark">加入常用</string>
     <string name="map_add_bookmark">輸入名稱</string>
     <string name="map_search_address">請輸入要查詢的地點</string>
+
+    <!-- dialog 內容 -->
+    <string name="dialog_title_exit">Exit?</string>
+    <string name="dialog_info_confirm_exit">Do you want to exit?</string>
+
+    <!-- global string -->
+    <string name="g_done">Done</string>
+    <string name="g_back">Back</string>
+    <string name="g_add">Add</string>
+    <string name="g_modify">Modify</string>
+    <string name="g_delete">Delete</string>
+    <string name="g_ok">OK</string>
+    <string name="g_no">NO</string>
+    <string name="g_yes">YES</string>
+    <string name="g_cancel">Cancel</string>
+    <string name="g_select_all">Select All</string>
+    <string name="language_end">.</string>
 
 </resources>
 

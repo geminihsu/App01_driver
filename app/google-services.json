@@ -1,35 +1,20 @@
 {
   "project_info": {
-    "project_number": "589360701153",
-    "firebase_url": "https://app01-94a66.firebaseio.com",
-    "project_id": "app01-94a66",
-    "storage_bucket": "app01-94a66.appspot.com"
+    "project_number": "967325783248",
+    "project_id": "calm-inkwell-164905"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:589360701153:android:d7ce115bd8efcdf0",
+        "mobilesdk_app_id": "1:967325783248:android:66c517e683222135",
         "android_client_info": {
-          "package_name": "tw.com.geminihsu.app01"
+          "package_name": "tw.com.geminihsu.app01Client"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "589360701153-887meqb4t6d4j7q2rg90hfveh3nemsmk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "tw.com.geminihsu.app01",
-            "certificate_hash": "AC2EFB66C2E972B8911CFD919D04499F15C4A02F"
-          }
-        },
-        {
-          "client_id": "589360701153-n4r8t5k66dcl41649552r4sdahltm8lh.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBz00ihZrZw1KebWyLOPVlQ2lX1K9YK00E"
+          "current_key": "AIzaSyAzflaT_HQRyQ5ZNvF_in-TLTQsm2d2QLo"
         }
       ],
       "services": {
@@ -37,16 +22,11 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "589360701153-n4r8t5k66dcl41649552r4sdahltm8lh.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
-          "status": 2
+          "status": 1
         }
       }
     }

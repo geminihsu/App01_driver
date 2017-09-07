@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="tw.com.geminihsu.app01.MenuMainActivity">
+    tools:context="tw.com.geminihsu.app01Client.MenuMainActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_recycler"

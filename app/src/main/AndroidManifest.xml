@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="tw.com.geminihsu.app01">
+    package="tw.com.geminihsu.app01Client">
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
 
@@ -10,89 +10,89 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/CustomTheme">
-        <activity android:name=".MainActivity"  android:configChanges="orientation|screenSize">
+        <activity android:name="tw.com.geminihsu.app01Client.MainActivity"  android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ForgetPasswordActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.ForgetPasswordActivity"
             android:label="@string/forget_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".RegisterActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.RegisterActivity"
             android:label="@string/register_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".VerifyCodeActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.VerifyCodeActivity"
             android:label="@string/verify_code_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MenuMainActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.MenuMainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".SupportAnswerActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.SupportAnswerActivity"
             android:label="@string/suggestion_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ChangePasswordActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.ChangePasswordActivity"
             android:label="@string/change_password_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".CommentActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.CommentActivity"
             android:label="@string/commmet_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".RecommendActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.RecommendActivity"
             android:label="@string/recommend_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".BoundsRecordActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.BoundsRecordActivity"
             android:label="@string/bouns_record_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".DriverIdentityActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.DriverIdentityActivity"
             android:label="@string/driver_idenity_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".DriverLoginActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.DriverLoginActivity"
             android:label="@string/driver_login_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".PhotoVerifyActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.PhotoVerifyActivity"
             android:label="@string/photo_verify_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".DriverAccountActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.DriverAccountActivity"
             android:label="@string/driver_account_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".OrderProcesssActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.OrderProcesssActivity"
             android:label="@string/order_process_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MerchandiseOrderActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.MerchandiseOrderActivity"
             android:label="@string/merchandise_page_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MapsActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.MapsActivity"
             android:label="@string/map_location"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ClientTakeRideActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.ClientTakeRideActivity"
             android:label="@string/client_take_ride_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".BookmarksMapListActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.BookmarksMapListActivity"
             android:label="@string/client_book_marks_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ClientWaitCarActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.ClientWaitCarActivity"
             android:label="@string/client_take_ride_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".ClientTakeRideSearchActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.ClientTakeRideSearchActivity"
             android:label="@string/client_take_ride_search_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".SendMerchandiseActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.SendMerchandiseActivity"
             android:label="@string/client_merchanse_send_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".DriverCommentActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.DriverCommentActivity"
             android:label="@string/driver_comment_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MerchandiseUnitcalculatorActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.MerchandiseUnitcalculatorActivity"
             android:label="@string/merchandise_calculator"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".CameraActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.CameraActivity"
             android:label="@string/camera_title"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".OrderMapActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.OrderMapActivity"
             android:label=""
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".MapsNavigationActivity"
+        <activity android:name="tw.com.geminihsu.app01Client.MapsNavigationActivity"
             android:label="@string/map_location_navigation"
             android:configChanges="orientation|screenSize"/>
 
@@ -100,17 +100,17 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <service android:name=".filebase.InstanceIDService">
+        <service android:name="tw.com.geminihsu.app01Client.filebase.InstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".filebase.MessagingService">
+        <service android:name="tw.com.geminihsu.app01Client.filebase.MessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="tw.com.geminihsu.app01.service.App01Service" >
+        <service android:name="tw.com.geminihsu.app01Client.service.App01Service" >
         </service>
     </application>
         <meta-data

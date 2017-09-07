@@ -13,7 +13,7 @@ android {
     buildToolsVersion "24.0.2"
 
     defaultConfig {
-        applicationId "tw.com.geminihsu.app01"
+        applicationId "tw.com.geminihsu.app01Client"
         minSdkVersion 21
         targetSdkVersion 24
         versionCode 1
@@ -57,4 +57,4 @@ dependencies {
 
 }
 apply plugin: 'com.google.gms.google-services'
-apply plugin: 'newrelic'
+//apply plugin: 'newrelic'

@@ -17,7 +17,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <tw.com.geminihsu.app01.camera2raw.AutoFitTextureView
+    <tw.com.geminihsu.app01Client.camera2raw.AutoFitTextureView
         android:id="@+id/texture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
