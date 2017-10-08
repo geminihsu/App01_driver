@@ -1815,7 +1815,7 @@ public class JsonPutsUtil {
     }
 
     //查詢訂單明細
-    public void queryOrderInformation(final AccountInfo user, final String orderId, final boolean max) {
+    public void queryOrderInformation(final AccountInfo user, final String orderId, final int ticketLen) {
 
         //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -1934,25 +1934,6 @@ public class JsonPutsUtil {
 
                                     }
                                 }
-                                /*JSONObject stop = jsonObject.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_STOP);
-                                String stop_zipcode = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ZIPCODE);
-                                String stop_address = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_ADDRESS);
-
-                                String stop_latlng = stop.getString(App01libObjectKey.APP_OBJECT_KEY_QUERY_ORDER_LATLNG);
-                                String stop_gps[] = stop_latlng.split(",");
-                                String stop_lat = stop_gps[0];
-                                String stop_lng = stop_gps[1];
-
-                                OrderLocationBean stopInfo = new OrderLocationBean();
-                                stopInfo.setId(0);
-                                stopInfo.setZipcode(stop_zipcode);
-                                stopInfo.setLongitude(stop_lng);
-                                stopInfo.setLatitude(stop_lat);
-                                stopInfo.setAddress(stop_address);
-                                order.setStop(stopInfo);
-                                order.setStop_address(stop_address);
-
-                                */
 
                                 //取得目的地資訊
                                 JSONObject end = object.optJSONObject(App01libObjectKey.APP_OBJECT_KEY_QUICK_TAXI_ORDER_END);
@@ -2044,17 +2025,17 @@ public class JsonPutsUtil {
                                     Log.e(TAG,"add order to database");
                                 }
 
-                                if(max) {
+                                //if(order.getTicket_id().equals(lastTicket_no)) {
                                     Utility orders = new Utility(mContext);
                                     //orders.clearData(NormalOrder.class);
                                     RealmResults<NormalOrder> data=orders.getRecommendationOrderList();
-
-                                    if (data.size() > 0) {
+                                    System.out.println("call back: data.size():"+data.size());
+                                    if (data.size() == ticketLen) {
                                         if (mDriverRecommendationOrderListManagerCallBackFunction != null)
                                             mDriverRecommendationOrderListManagerCallBackFunction.getWaitOrderListSuccess(data);
 
                                     }
-                                }
+                               // }
                                 /*ServerBookmark bookmark= location.get(i%2);
                                 //以下欄位做假資料
                                 order.setTarget("1");
@@ -2124,7 +2105,7 @@ public class JsonPutsUtil {
     }
 
     //查詢訂單明細
-    public void queryOrderInformation(final DriverIdentifyInfo user, final String orderId, final boolean max) {
+    public void queryOrderInformation(final DriverIdentifyInfo user, final String orderId, final int ticketLen) {
 
         //final RequestQueue requestQueue = Volley.newRequestQueue(mContext);
 
@@ -2349,14 +2330,17 @@ public class JsonPutsUtil {
                                 if(database.queryOrder(Constants.ORDER_TICKET_ID,order.getTicket_id())==null)
                                     database.addNormalOrder(order);
 
-                                if(max) {
+                               // if(max) {
                                     Utility orders = new Utility(mContext);
                                     //orders.clearData(NormalOrder.class);
-                                    RealmResults<NormalOrder> data=orders.getAccountOrderListByPhoneNumber(userPhoneNumber);
+                                    //RealmResults<NormalOrder> data=orders.getAccountOrderListByPhoneNumber(userPhoneNumber);
+                                    RealmResults<NormalOrder> data=orders.getRecommendationOrderList();
 
-                                    if (mDriverRecommendationOrderListManagerCallBackFunction != null)
-                                        mDriverRecommendationOrderListManagerCallBackFunction.getOrderListSuccess(data);
-                                }
+                                    if(data.size() == ticketLen) {
+                                        if (mDriverRecommendationOrderListManagerCallBackFunction != null)
+                                            mDriverRecommendationOrderListManagerCallBackFunction.getOrderListSuccess(data);
+                                    }
+                              //  }
                                 /*ServerBookmark bookmark= location.get(i%2);
                                 //以下欄位做假資料
                                 order.setTarget("1");
@@ -2808,7 +2792,7 @@ public class JsonPutsUtil {
                     // Parsing json object response
                     // response will be a json object
                     String status = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_ACCOUNT_INFO_STATUS);
-                    App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE connectResult = App01libObjectKey.conversion_get_put_notification_result(Integer.valueOf(status));
+                    App01libObjectKey.APP_GET_COMMENT_RESPONSE_CODE connectResult = App01libObjectKey.conversion_get_account_comment_result(Integer.valueOf(status));
 
                     if (connectResult.equals(App01libObjectKey.APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_SUCCESS)) {
                         Log.e(TAG, "get push!!!!");
@@ -4410,30 +4394,27 @@ public class JsonPutsUtil {
 
 
     private void getRecommendationTicketInfo(AccountInfo user,ArrayList<String> ticketList) {
-        ArrayList<NormalOrder> orderList = new ArrayList<NormalOrder>();
-        boolean isEnd = false;
+
         Utility orders = new Utility(mContext);
         orders.clearData(NormalOrder.class);
+
+        Log.e(TAG,"[getRecommendationTicketInfo] ticketList.size():"+ticketList.size());
         for (int i = 0; i < ticketList.size(); i++) {
 
             String ticket_no = ticketList.get(i);
-            if (i == ticketList.size() - 1)
-                isEnd = true;
-            queryOrderInformation(user, ticket_no, isEnd);
+
+            queryOrderInformation(user, ticket_no, ticketList.size());
         }
     }
 
     private void getRecommendationTicketInfo(DriverIdentifyInfo user,ArrayList<String> ticketList) {
-        ArrayList<NormalOrder> orderList = new ArrayList<NormalOrder>();
-        boolean isEnd = false;
+
         Utility orders = new Utility(mContext);
         orders.clearData(NormalOrder.class);
         for (int i = 0; i < ticketList.size(); i++) {
 
             String ticket_no = ticketList.get(i);
-            if (i == ticketList.size() - 1)
-                isEnd = true;
-            queryOrderInformation(user, ticket_no, isEnd);
+            queryOrderInformation(user, ticket_no, ticketList.size());
         }
     }
 

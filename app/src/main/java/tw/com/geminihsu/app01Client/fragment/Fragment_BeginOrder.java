@@ -86,6 +86,7 @@ public class Fragment_BeginOrder extends Fragment implements Fragment_BeginOrder
             mTabNamesList.clear();
             mTabNamesList.add(getString(R.string.tab_real_time));
             mTabNamesList.add(getString(R.string.tab_reservation));
+            itemsPagerAdapter.notifyDataSetChanged();
             //viewPager.setAdapter(itemsPagerAdapter);
             //itemsPagerAdapter.notifyDataSetChanged();
         }
@@ -123,8 +124,9 @@ public class Fragment_BeginOrder extends Fragment implements Fragment_BeginOrder
             mTabNamesList.clear();
             mTabNamesList.add(getString(R.string.tab_real_time));
             mTabNamesList.add(getString(R.string.tab_reservation));
-            viewPager.setAdapter(itemsPagerAdapter);
             itemsPagerAdapter.notifyDataSetChanged();
+            //viewPager.setAdapter(itemsPagerAdapter);
+
         }
     }
 
@@ -154,22 +156,7 @@ public class Fragment_BeginOrder extends Fragment implements Fragment_BeginOrder
             {
                 case 0:
 
-                    /*Fragment_BeginOrderList.BeginOrderRefreshTabListener beginOrderRefreshTabListener;
-                    beginOrderRefreshTabListener = new Fragment_BeginOrderList.BeginOrderRefreshTabListener() {
-                        @Override
-                        public void refreshTabListener(boolean wait) {
-                            if(itemsPagerAdapter !=null)
-                            {
-                               /* mTabNamesList.clear();
-                                mTabNamesList.add(getString(R.string.tab_real_time));
-                                mTabNamesList.add(getString(R.string.tab_reservation));
-                                //viewPager.setAdapter(itemsPagerAdapter);
-                                //itemsPagerAdapter.notifyDataSetChanged();*/
-                                /*onResume();
-                            }
 
-                        }
-                    };*/
                     fragment = new Fragment_BeginOrderList();
                     Bundle args2 = new Bundle();
                     args2.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.REALTIME_ORDERLIST);
@@ -177,34 +164,13 @@ public class Fragment_BeginOrder extends Fragment implements Fragment_BeginOrder
                     fragment.setArguments(args2);
                     break;
                 case 1:
-                    /*Fragment_BeginOrderList.BeginOrderRefreshTabListener beginOrderRefreshTabListener2;
-                    beginOrderRefreshTabListener2 = new Fragment_BeginOrderList.BeginOrderRefreshTabListener() {
-                        @Override
-                        public void refreshTabListener(boolean wait) {
-                            /*if(itemsPagerAdapter !=null)
-                            {
-                                mTabNamesList.clear();
-                                mTabNamesList.add(getString(R.string.tab_real_time));
-                                mTabNamesList.add(getString(R.string.tab_reservation));
-                                //viewPager.setAdapter(itemsPagerAdapter);
-                                //itemsPagerAdapter.notifyDataSetChanged();
-                            }*/
-                            /*onResume();
 
-                        }
-                    };*/
                     fragment = new Fragment_BeginOrderList();
                     Bundle args3 = new Bundle();
                     args3.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.RESERVATION_ORDERLIST);
                     //args3.putSerializable(Constants.INTERFACE,(Fragment_BeginOrderList.BeginOrderRefreshTabListener)beginOrderRefreshTabListener2);
                     fragment.setArguments(args3);
                     break;
-                /*case 2:
-                    fragment = new Fragment_BeginOrderList();
-                    Bundle args4 = new Bundle();
-                    args4.putInt(Constants.ARG_POSITION, Fragment_BeginOrderList.CAR_COMPANY_ORDERLIST);
-                    fragment.setArguments(args4);
-                    break;*/
 
             }
             return fragment;
@@ -232,12 +198,7 @@ public class Fragment_BeginOrder extends Fragment implements Fragment_BeginOrder
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        /*MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_FIILTER, Menu.NONE, getString(R.string.order_filter_page_title));
-        SpannableString spanString = new SpannableString(item.getTitle().toString());
-        spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
-        item.setTitle(spanString);
 
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);*/
         super.onCreateOptionsMenu(menu,inflater);
     }
 

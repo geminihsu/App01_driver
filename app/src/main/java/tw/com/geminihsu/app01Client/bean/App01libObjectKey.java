@@ -377,6 +377,26 @@ public class App01libObjectKey {
         }
     };
 
+    public enum APP_GET_COMMENT_RESPONSE_CODE
+    {
+        K_APP_ACCOUNT_COMMENT_CODE_SUCCESS (100)  ,
+        K_APP_ACCOUNT_COMMENT_ACCOUNT_EXPIRED (708),
+        K_APP_ACCOUNT_COMMENT_ACCOUNT_NO_SMS_VERIFY(704),
+        K_APP_ACCOUNT_COMMENT_NO_EXSIT (701),
+        K_APP_ACCOUNT_COMMENT_ACCOUNT_ERROR (703),
+        K_APP_ACCOUNT_COMMENT_DATABASE_ERROR (403),
+        K_APP_GET_PUSH_CODE_ENTER_ERROR (900);
+
+        private int value;
+
+        private APP_GET_COMMENT_RESPONSE_CODE(int value) {
+            this.value = value;
+        }
+
+        public int value() {
+            return value;
+        }
+    };
     public enum APP_GET_PUSH_RESPONSE_CODE
     {
         K_APP_GET_PUSH_CODE_SUCCESS (100)  ,
@@ -781,6 +801,33 @@ public class App01libObjectKey {
             if (index == 9301) {
                 return APP_GET_PUSH_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ACCOUNT_NOT_DRIVER;
             }
+        }
+        return null;
+    }
+
+    public static APP_GET_COMMENT_RESPONSE_CODE conversion_get_account_comment_result(int index) {
+        if (index >= 0) {
+            if (index == 100) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_ACCOUNT_COMMENT_CODE_SUCCESS;
+            }
+            if (index == 708) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_ACCOUNT_COMMENT_ACCOUNT_EXPIRED;
+            }
+            if (index == 701) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_ACCOUNT_COMMENT_NO_EXSIT;
+            }
+            if (index == 704) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_ACCOUNT_COMMENT_ACCOUNT_NO_SMS_VERIFY;
+            }
+            if (index == 900) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_GET_PUSH_CODE_ENTER_ERROR;
+            }
+
+            if (index == 401) {
+                return APP_GET_COMMENT_RESPONSE_CODE.K_APP_ACCOUNT_COMMENT_DATABASE_ERROR;
+            }
+
+
         }
         return null;
     }

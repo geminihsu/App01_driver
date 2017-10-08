@@ -290,25 +290,7 @@ public class Fragment_BeginOrderList extends Fragment implements
         }
         database = new RealmUtil(getActivity());
 
-       /* Utility info = new Utility(getActivity());
-        //if(info.getDriverAccountInfo()!=null&&!data.getBoolean(Constants.ARG_POSITION)) {
-         if(!wait) {
-             progressDialog_loading = ProgressDialog.show(getActivity(), "",
-                     "Loading. Please wait...", true);
-             info.clearData(NormalOrder.class);
-             //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
-             sendDataRequest.getUserInfo(info.getAccountInfo(),true);
 
-         }else {
-             if(progressDialog_loading==null) {
-                 progressDialog_loading = ProgressDialog.show(getActivity(), "",
-                         "Loading. Please wait...", true);
-             }
-
-             info.clearData(NormalOrder.class);
-             sendDataRequest.queryDriverOrderList(info.getDriverAccountInfo());
-            //getDataFromDB();
-        }*/
         // 建立ListItemAdapter
         if(listViewAdapter == null) {
             listViewAdapter = new BeginOrderListItemAdapter(getActivity(), 0, mRecordOrderListData);
@@ -366,36 +348,7 @@ public class Fragment_BeginOrderList extends Fragment implements
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 
-                /*final BeginOrderListItem orderItem = mRecordOrderListData.get(position);
 
-                final Button takeLook = (Button) v.findViewById(R.id.take_look);
-
-                final NormalOrder order = orderItem.order;
-                if(order.isValid()) {
-                    final String cargo_type = order.getCargo_type();
-                    final Constants.APP_REGISTER_ORDER_TYPE[] orderCargoType = new Constants.APP_REGISTER_ORDER_TYPE[1];
-
-
-                    takeLook.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-                        }
-                    });
-                    final Button takeover = (Button) v.findViewById(R.id.take_over);
-
-                    takeover.setOnClickListener(new View.OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-
-
-
-                        }
-
-                    });
-                }*/
 
             }
         });
@@ -466,113 +419,13 @@ public class Fragment_BeginOrderList extends Fragment implements
     }
 
 
-    /* 從 table 取得 OrderRecord 清單 */
-    private void getDataFromDB() {
 
-        Utility orders = new Utility(getActivity());
-        RealmResults<NormalOrder> data=orders.getWaitOrderList();
-        mRecordOrderListData.clear();
-        try {
-            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
-            // GeoDeviceManagement.deviceList.clear();
-
-          /*  for (int i = 0; i < 10; i++) {
-                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
-                if(i%2==0)
-                    beginOrderListItem.order_title = "一般搭乘(小費:50元)";
-                else
-                    beginOrderListItem.order_title = "貨物快送(小費:80元)";
-                beginOrderListItem.departure = "從:台中市大道一段1號";
-                beginOrderListItem.destination = "到:台中市政府";
-
-
-                if(!wait) {
-                    if(option==0)
-                        beginOrderListItem.order_time = "即時";
-                    else
-                        beginOrderListItem.order_time = "2015/12/08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
-                    beginOrderListItem.button_take_look_visible = View.VISIBLE;
-                }else
-                {
-                    beginOrderListItem.order_time = "2015-12-08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
-                    beginOrderListItem.button_take_look_visible = View.GONE;
-
-                }
-                mRecordOrderListData.add(beginOrderListItem);
-            }*/
-
-            for (NormalOrder order: data) {
-                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
-                //if(i%2==0)
-                OrderRecordListItem item = new OrderRecordListItem();
-                Constants.APP_REGISTER_ORDER_TYPE type = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(order.getCargo_type()));
-
-                if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)) {
-                    beginOrderListItem.order_title = "貨物快送(費用:" + order.getPrice() + "元)";
-                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_TAKE_RIDE)) {
-                    beginOrderListItem.order_title = "一般搭乘(照表收費)";
-                }
-                else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_AIRPORT)) {
-                    beginOrderListItem.order_title = "機場接送(照表收費)";
-                }else if(type.equals(Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_PICK_UP_TRAIN)) {
-                    beginOrderListItem.order_title = "車站接送(照表收費)";
-                }
-
-                beginOrderListItem.departure = "從:"+order.getBegin_address();
-                beginOrderListItem.destination = "到:"+order.getEnd_address();
-                beginOrderListItem.order=order;
-
-
-                {
-                    beginOrderListItem.order_time = "2015-12-08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
-                    beginOrderListItem.button_take_look_visible = View.GONE;
-
-                }
-                mRecordOrderListData.add(beginOrderListItem);
-            }
-
-        } catch (Throwable t) {
-            Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
-        }
-    }
 
     /* 從 xml 取得 OrderRecord 清單 */
     private void getDataFromServer(RealmResults<NormalOrder> orders,int filter) {
 
         mRecordOrderListData.clear();
         try {
-            // GeoDeviceManagement.deviceList = new ArrayList<UpnpSearchResultBean>();
-            // GeoDeviceManagement.deviceList.clear();
-
-          /*  for (int i = 0; i < 10; i++) {
-                BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
-                if(i%2==0)
-                    beginOrderListItem.order_title = "一般搭乘(小費:50元)";
-                else
-                    beginOrderListItem.order_title = "貨物快送(小費:80元)";
-                beginOrderListItem.departure = "從:台中市大道一段1號";
-                beginOrderListItem.destination = "到:台中市政府";
-
-
-                if(!wait) {
-                    if(option==0)
-                        beginOrderListItem.order_time = "即時";
-                    else
-                        beginOrderListItem.order_time = "2015/12/08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_take_over);
-                    beginOrderListItem.button_take_look_visible = View.VISIBLE;
-                }else
-                {
-                    beginOrderListItem.order_time = "2015-12-08 上午07:04";
-                    beginOrderListItem.button_information = getString(R.string.list_btn_order_process);
-                    beginOrderListItem.button_take_look_visible = View.GONE;
-
-                }
-                mRecordOrderListData.add(beginOrderListItem);
-            }*/
 
             for (NormalOrder order: orders) {
 
@@ -676,23 +529,6 @@ public class Fragment_BeginOrderList extends Fragment implements
 
          final NormalOrder order = orderItem.order;
         if (order.isValid()) {
-           /* final String cargo_type = order.getCargo_type();
-            final Constants.APP_REGISTER_ORDER_TYPE[] orderCargoType = new Constants.APP_REGISTER_ORDER_TYPE[1];
-
-            Intent question = new Intent(getActivity(), MerchandiseOrderActivity.class);
-            Bundle b = new Bundle();
-
-            orderCargoType[0] = Constants.conversion_create_new_order_cargo_type_result(Integer.valueOf(cargo_type));
-
-            //if (orderCargoType[0] != Constants.APP_REGISTER_ORDER_TYPE.K_REGISTER_ORDER_TYPE_SEND_MERCHANDISE)
-                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-            //else
-            //    b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.MERCHANDISE);
-            b.putString(BUNDLE_ORDER_TICKET_ID, orderItem.order.getTicket_id());
-            //b.putSerializable(BUNDLE_ORDER_TICKET,orderItem.order);
-
-            question.putExtras(b);
-            startActivity(question);*/
             orderDetail(order);
         }
     }
@@ -726,11 +562,6 @@ public class Fragment_BeginOrderList extends Fragment implements
                                     sendDataRequest.driverTakeOverOrder(orderItem.order,driverPhoneNumber);
 
                                 }
-                                                /*  Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
-                                                Bundle b = new Bundle();
-                                                b.putInt(Constants.ARG_POSITION, OrderProcesssActivity.PASSENGER);
-                                                question.putExtras(b);
-                                                startActivity(question);*/
 
 
                             }
@@ -745,35 +576,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 // show it
                 alertDialog.show();
-                          /*  } else {
 
-                                final Dialog dialog = new Dialog(getActivity());
-                                dialog.setContentView(R.layout.dialog_enter_change_price_layout);
-                                dialog.setTitle(getString(R.string.order_change_price));
-                                Button sure = (Button) dialog.findViewById(R.id.sure_action);
-                                sure.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        Intent question = new Intent(getActivity(), SupportAnswerActivity.class);
-                                        Bundle b = new Bundle();
-                                        b.putInt(Constants.ARG_POSITION, SupportAnswerActivity.REPORT_PRICE);
-                                        question.putExtras(b);
-                                        startActivity(question);
-                                    }
-                                });
-
-                                Button cancel = (Button) dialog.findViewById(R.id.cancel_action);
-                                cancel.setOnClickListener(new View.OnClickListener() {
-
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.cancel();
-                                    }
-                                });
-
-                                dialog.show();
-                            }*/
             } else {
                 Intent question = new Intent(getActivity(), OrderProcesssActivity.class);
                 Bundle b = new Bundle();
