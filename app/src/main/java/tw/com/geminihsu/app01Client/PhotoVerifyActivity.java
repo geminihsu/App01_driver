@@ -796,7 +796,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                     // SDK > 19 (Android 4.4)
                 else
-                    if(Build.MODEL.equals("SM-G900F"))
+                    if(uri.getPath().indexOf("/external/images/") != -1)
                         realPath = URICovertStringPathUtil.getRealPathFromUri(this, uri);
                     else
                         realPath = URICovertStringPathUtil.getRealPathFromURI_API19(this, uri);
@@ -849,6 +849,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             case PICK_ID_IMAGE_REQUEST:
                 if(data.getData()!=null) {
                     String realPath1;
+                    Uri uri1 = data.getData();
                     // SDK < API11
                     if (Build.VERSION.SDK_INT < 11)
                         realPath1 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
@@ -859,12 +860,12 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                        if(Build.MODEL.equals("SM-G900F"))
+                    if(uri1.getPath().indexOf("/external/images/") != -1)
                             realPath1 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
                         else
                             realPath1 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                    Uri uri1 = data.getData();
+
 
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri1);
@@ -913,6 +914,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             case PICK_LICENCE_IMAGE_REQUEST:
                 if(data.getData()!=null) {
                     String realPath2;
+                    Uri uri2 = data.getData();
                     // SDK < API11
                     if (Build.VERSION.SDK_INT < 11)
                         realPath2 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
@@ -923,12 +925,12 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                         if(Build.MODEL.equals("SM-G900F"))
+                    if(uri2.getPath().indexOf("/external/images/") != -1)
                             realPath2 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
                         else
                              realPath2 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                    Uri uri2 = data.getData();
+
 
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri2);
@@ -978,6 +980,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             case PICK_WORK_LICENCE_IMAGE_REQUEST:
                 if(data.getData()!=null) {
                     String realPath3;
+                    Uri uri3 = data.getData();
                     // SDK < API11
                     if (Build.VERSION.SDK_INT < 11)
                         realPath3 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
@@ -988,13 +991,13 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                         if(Build.MODEL.equals("SM-G900F"))
+                    if(uri3.getPath().indexOf("/external/images/") != -1)
                             realPath3 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
                         else
                              realPath3 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
 
-                    Uri uri3 = data.getData();
+
 
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri3);
@@ -1044,6 +1047,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
             case PICK_CAR_IMAGE_REQUEST:
                 if(data.getData()!=null) {
                     String realPath4;
+                    Uri uri4 = data.getData();
                     // SDK < API11
                     if (Build.VERSION.SDK_INT < 11)
                         realPath4 = URICovertStringPathUtil.getRealPathFromURI_BelowAPI11(this, data.getData());
@@ -1054,12 +1058,12 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
                         // SDK > 19 (Android 4.4)
                     else
-                        if(Build.MODEL.equals("SM-G900F"))
+                    if(uri4.getPath().indexOf("/external/images/") != -1)
                         realPath4 = URICovertStringPathUtil.getRealPathFromUri(this, data.getData());
                         else
                         realPath4 = URICovertStringPathUtil.getRealPathFromURI_API19(this, data.getData());
 
-                    Uri uri4 = data.getData();
+
 
                     try {
                         Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri4);
