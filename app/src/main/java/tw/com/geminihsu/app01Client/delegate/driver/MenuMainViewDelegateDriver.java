@@ -4,15 +4,13 @@ package tw.com.geminihsu.app01Client.delegate.driver;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import tw.com.geminihsu.app01Client.MenuMainActivity;
 import tw.com.geminihsu.app01Client.R;
-import tw.com.geminihsu.app01Client.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01Client.delegate.MenuMainViewDelegateBase;
+import tw.com.geminihsu.app01Client.fragment.Fragment_BeginOrder;
 
 public class MenuMainViewDelegateDriver extends MenuMainViewDelegateBase {
 	private final String TAG= this.getClass().getSimpleName();

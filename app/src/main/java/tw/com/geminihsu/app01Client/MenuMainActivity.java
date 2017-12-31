@@ -21,8 +21,6 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,7 +35,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.LocationListener;
 
-import tw.com.geminihsu.app01Client.R;
 import tw.com.geminihsu.app01Client.bean.AccountInfo;
 import tw.com.geminihsu.app01Client.callback.FragmentViewListener;
 import tw.com.geminihsu.app01Client.fragment.Fragment_BeginOrder;
@@ -46,7 +43,6 @@ import tw.com.geminihsu.app01Client.fragment.Fragment_ClientAirPlanePickUp;
 import tw.com.geminihsu.app01Client.fragment.Fragment_MerchandiseDorkPickUp;
 import tw.com.geminihsu.app01Client.fragment.Fragment_TrainPlanePickUp;
 import tw.com.geminihsu.app01Client.delegate.MenuMainViewDelegateBase;
-import tw.com.geminihsu.app01Client.delegate.customer.MenuMainViewDelegateCustomer;
 import tw.com.geminihsu.app01Client.delegate.driver.MenuMainViewDelegateDriver;
 import tw.com.geminihsu.app01Client.service.App01Service;
 import tw.com.geminihsu.app01Client.utils.Utility;

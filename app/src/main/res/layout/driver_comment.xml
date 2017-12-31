@@ -61,11 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
-                    android:rating="5"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="10dp"
-                    android:isIndicator="true"
-                    style="?android:attr/ratingBarStyleSmall"
+                    android:rating="0.0"
                     />
             </LinearLayout>
             <TextView
@@ -149,10 +145,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:numStars="5"
-                    android:rating="5"
+                    android:rating="0.0"
                     android:layout_gravity="center_vertical"
-                    android:isIndicator="true"
-                    style="?android:attr/ratingBarStyleSmall"
                     />
             </LinearLayout>
 
@@ -197,11 +191,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"
-            android:rating="5"
+            android:rating="0.0"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
-            android:isIndicator="true"
-            style="?android:attr/ratingBarStyleIndicator"
             />
     </LinearLayout>
 
@@ -243,11 +235,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:numStars="5"
-                android:rating="5"
+                android:rating="0.0"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="10dp"
-                android:isIndicator="true"
-                style="?android:attr/ratingBarStyleIndicator"
+
                 />
         </LinearLayout>
 

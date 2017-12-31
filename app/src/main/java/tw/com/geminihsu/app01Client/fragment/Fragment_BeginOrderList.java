@@ -45,6 +45,7 @@ import tw.com.geminihsu.app01Client.adapter.OrderRecordListItem;
 import tw.com.geminihsu.app01Client.bean.AccountInfo;
 import tw.com.geminihsu.app01Client.bean.DriverIdentifyInfo;
 import tw.com.geminihsu.app01Client.bean.NormalOrder;
+import tw.com.geminihsu.app01Client.bean.RideType;
 import tw.com.geminihsu.app01Client.common.Constants;
 import tw.com.geminihsu.app01Client.serverbean.ServerSpecial;
 import tw.com.geminihsu.app01Client.utils.JsonPutsUtil;
@@ -308,7 +309,16 @@ public class Fragment_BeginOrderList extends Fragment implements
 
 
         setLister();
-
+        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+            @Override
+            public void run() {
+                if(getActivity()!=null) {
+                    Utility info = new Utility(getActivity());
+                    info.clearData(NormalOrder.class);
+                    sendDataRequest.getUserInfo(info.getAccountInfo(), true);
+                }
+            }
+        }));
     }
 
         @Override
@@ -322,7 +332,7 @@ public class Fragment_BeginOrderList extends Fragment implements
             getActivity().setTitle(getString(R.string.begin_order_page_title));
         super.onResume();
 
-        if (progressDialog_loading==null) {
+       /* if (progressDialog_loading==null) {
             progressDialog_loading = ProgressDialog.show(getActivity(), "",
                     "Loading. Please wait...", true);
         }
@@ -330,7 +340,7 @@ public class Fragment_BeginOrderList extends Fragment implements
 
 
         //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
-        ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
+        /*ThreadPoolUtil.getThreadPoolExecutor().execute((new Runnable(){
             @Override
             public void run() {
                 if(getActivity()!=null) {
@@ -339,7 +349,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                     sendDataRequest.getUserInfo(info.getAccountInfo(), true);
                 }
             }
-        }));
+        }));*/
     }
 
 
@@ -357,8 +367,8 @@ public class Fragment_BeginOrderList extends Fragment implements
             @Override
             public void onRefresh() {
 
-                /*progressDialog_loading = ProgressDialog.show(getActivity(), "",
-                        "Loading. Please wait...", true);*/
+                progressDialog_loading = ProgressDialog.show(getActivity(), "",
+                        "Loading. Please wait...", true);
                 final Utility info = new Utility(getActivity());
                 info.clearData(NormalOrder.class);
                 //sendDataRequest.queryRecommendOrderList(info.getAccountInfo());
@@ -429,7 +439,7 @@ public class Fragment_BeginOrderList extends Fragment implements
 
             for (NormalOrder order: orders) {
 
-                Log.e(TAG,"order.getTimebegin():"+order.getTimebegin());
+                //Log.e(TAG,"order.getTimebegin():"+order.getTimebegin());
                 if(filter==REALTIME_ORDERLIST&&order.getTimebegin().equals("0")) {
                     //取得即時訂單
                     BeginOrderListItem beginOrderListItem = new BeginOrderListItem();
@@ -457,6 +467,9 @@ public class Fragment_BeginOrderList extends Fragment implements
                     beginOrderListItem.departure = "從:" + order.getBegin_address();
                     beginOrderListItem.destination = "到:" + order.getEnd_address();
                     beginOrderListItem.order = order;
+                    //Log.e(TAG, "valid:"+beginOrderListItem.order.isValid());
+
+
 
                     if (!wait) {
                         if (option == 0)
@@ -499,6 +512,7 @@ public class Fragment_BeginOrderList extends Fragment implements
                     beginOrderListItem.departure = "從:" + order.getBegin_address();
                     beginOrderListItem.destination = "到:" + order.getEnd_address();
                     beginOrderListItem.order = order;
+                    //Log.e(TAG, "valid:"+beginOrderListItem.order.isValid());
 
                     if (!wait) {
                         if (option == 0)
@@ -518,7 +532,8 @@ public class Fragment_BeginOrderList extends Fragment implements
             }
 
         } catch (Throwable t) {
-            Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
+            if(t != null && getActivity()!=null)
+                Toast.makeText(getActivity(), "Exception: " + t.toString(), Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -6,6 +6,7 @@ import tw.com.geminihsu.app01Client.MenuMainActivity;
 import tw.com.geminihsu.app01Client.R;
 import tw.com.geminihsu.app01Client.fragment.Fragment_About;
 import tw.com.geminihsu.app01Client.fragment.Fragment_Account;
+import tw.com.geminihsu.app01Client.fragment.Fragment_BeginOrder;
 import tw.com.geminihsu.app01Client.fragment.Fragment_BeginOrderList;
 import tw.com.geminihsu.app01Client.fragment.Fragment_Bouns;
 import tw.com.geminihsu.app01Client.fragment.Fragment_Client_Service_test;
@@ -36,11 +37,11 @@ public class MenuMainViewDelegateBase extends BaseViewDelegate{
 
 	public void setNavigationItemOnClick_beginOrder() {
 		FragmentTransaction fragTran;
-		Fragment_BeginOrderList frag2 = new Fragment_BeginOrderList();
+		Fragment_BeginOrder frag2 = new Fragment_BeginOrder();
 		fragTran = mainActivity.getSupportFragmentManager().beginTransaction();
-		fragTran.replace(R.id.container, frag2, Fragment_BeginOrderList.class.getSimpleName());
+		fragTran.replace(R.id.container, frag2, Fragment_BeginOrder.class.getSimpleName());
 		fragTran.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-		fragTran.addToBackStack(Fragment_BeginOrderList.class.getSimpleName());
+		fragTran.addToBackStack(Fragment_BeginOrder.class.getSimpleName());
 		fragTran.commit();
 	}
 

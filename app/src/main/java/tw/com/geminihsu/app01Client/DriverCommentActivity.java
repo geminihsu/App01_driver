@@ -64,11 +64,7 @@ public class DriverCommentActivity extends Activity {
             }
         });
 
-    }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
         this.findViews();
 
         this.setLister();
@@ -94,6 +90,12 @@ public class DriverCommentActivity extends Activity {
             }
 
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
 
 
         }

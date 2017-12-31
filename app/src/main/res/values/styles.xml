@@ -17,7 +17,7 @@
         <!-- actionbar item 顏色 -->
         <item name="android:actionMenuTextColor">@android:color/white</item>
         <item name="android:actionMenuTextAppearance">@style/MyActionBar.MenuTextStyle</item>
-        <!--<item name="android:homeAsUpIndicator">@android:drawable/ic_menu_preferences</item>-->
+        <item name="android:homeAsUpIndicator">@drawable/ic_alerts_and_states_back</item>
     </style>
     <style name="Widget.MyTheme.ActionBar" parent="android:Widget.Holo.Light.ActionBar">
         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>

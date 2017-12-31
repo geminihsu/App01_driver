@@ -491,13 +491,13 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
     public boolean onCreateOptionsMenu(Menu menu) {
 
 
-        MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_CANCEL, Menu.NONE, getString(R.string.menu_cancel_order));
+        /*MenuItem item = menu.add(Menu.NONE, ACTIONBAR_MENU_ITEM_CANCEL, Menu.NONE, getString(R.string.menu_cancel_order));
         SpannableString spanString = new SpannableString(item.getTitle().toString());
         spanString.setSpan(new ForegroundColorSpan(Color.WHITE), 0, spanString.length(), 0); //fix the color to white
         item.setTitle(spanString);
 
         item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-
+*/
 
         return true;
     }
@@ -507,7 +507,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
         switch (item.getItemId()) {
 
             case ACTIONBAR_MENU_ITEM_CANCEL:
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+               /* AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
                 // set title
                 alertDialogBuilder.setTitle(getString(R.string.menu_cancel_order));
 
@@ -517,15 +517,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
                         .setCancelable(false)
                         .setPositiveButton(getString(R.string.menu_sure_cancel_order),new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
-                                // if this button is clicked, close
-                                // current activity
-
-                                /*Intent question = new Intent(OrderProcesssActivity.this, SupportAnswerActivity.class);
-                                Bundle b = new Bundle();
-                                b.putInt(Constants.ARG_POSITION, Constants.CANCEL_ORDER_FEEDBACK);
-                                question.putExtras(b);
-                                startActivity(question);*/
-                                sendDataRequest.clientCancelOrder(order,driverPhoneNumber);
+                              sendDataRequest.clientCancelOrder(order,driverPhoneNumber);
 
                             }
                         })
@@ -539,7 +531,7 @@ public class OrderProcesssActivity extends Activity implements LocationListener 
                 // create alert dialog
                 AlertDialog alertDialog = alertDialogBuilder.create();
                 // show it
-                alertDialog.show();
+                alertDialog.show();*/
                 return true;
             case android.R.id.home:
                 // app icon in action bar clicked; goto parent activity.
