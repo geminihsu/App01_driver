@@ -136,6 +136,15 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
                 }
             }
 
+            @Override
+            public void error(boolean isError) {
+                if(dialog!=null)
+                {
+                    dialog.dismiss();
+                    dialog = null;
+                }
+            }
+
         });
         post_image.setDriverRegisterUploadPhotoManagerCallBackFunction(new JsonPutsUtil.DriverRegisterUploadPhotoManagerCallBackFunction() {
 
@@ -402,70 +411,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void onClick(View v) {
-               /* AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                        PhotoVerifyActivity.this,
-                        android.R.layout.select_dialog_item);
-                //arrayAdapter.add(getString(R.string.pick_picture_camera));
-                arrayAdapter.add(getString(R.string.pick_picture_gallery));
-                //arrayAdapter.add("YouTube");
-
-                builderSingle.setAdapter(
-                        arrayAdapter,
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String strName = arrayAdapter.getItem(which);
-                                switch (which){
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.CAMERA)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.CAMERA)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
-                                        startActivityForResult(intent, LICENCE_CAMERA);
-                                        break;
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        Intent gallery = new Intent();
-                                        // Show only images, no videos or anything else
-                                        gallery.setType("image/*");
-                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
-                                        // Always show the chooser (if there are multiple options available)
-                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_LICENCE_IMAGE_REQUEST);
-                                        break;
-
-                                }
-                            }
-                        });
-                builderSingle.show();*/
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
 
@@ -494,70 +440,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void onClick(View v) {
-                /*AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                        PhotoVerifyActivity.this,
-                        android.R.layout.select_dialog_item);
-               // arrayAdapter.add(getString(R.string.pick_picture_camera));
-                arrayAdapter.add(getString(R.string.pick_picture_gallery));
-                //arrayAdapter.add("YouTube");
-
-                builderSingle.setAdapter(
-                        arrayAdapter,
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String strName = arrayAdapter.getItem(which);
-                                switch (which){
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.CAMERA)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.CAMERA)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
-                                        startActivityForResult(intent, WORK_LICENCE_CAMERA);
-                                        break;
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        Intent gallery = new Intent();
-                                        // Show only images, no videos or anything else
-                                        gallery.setType("image/*");
-                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
-                                        // Always show the chooser (if there are multiple options available)
-                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_WORK_LICENCE_IMAGE_REQUEST);
-                                        break;
-
-                                }
-                            }
-                        });
-                builderSingle.show();*/
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
 
@@ -586,71 +469,7 @@ public class PhotoVerifyActivity extends Activity implements Response.ErrorListe
 
             @Override
             public void onClick(View v) {
-              /*  AlertDialog.Builder builderSingle = new AlertDialog.Builder(PhotoVerifyActivity.this);
 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                        PhotoVerifyActivity.this,
-                        android.R.layout.select_dialog_item);
-                //arrayAdapter.add(getString(R.string.pick_picture_camera));
-                arrayAdapter.add(getString(R.string.pick_picture_gallery));
-                //arrayAdapter.add("YouTube");
-
-                builderSingle.setAdapter(
-                        arrayAdapter,
-                        new DialogInterface.OnClickListener() {
-                            @TargetApi(Build.VERSION_CODES.M)
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String strName = arrayAdapter.getItem(which);
-                                switch (which){
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.CAMERA)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.CAMERA)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        car_work_image.setVisibility(View.VISIBLE);
-                                        Intent intent = new Intent(PhotoVerifyActivity.this, CameraActivity.class);
-                                        startActivityForResult(intent, CAR_CAMERA);
-                                        break;
-                                    case 0:
-                                        if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                                != PackageManager.PERMISSION_GRANTED) {
-
-                                            // Should we show an explanation?
-                                            if (shouldShowRequestPermissionRationale(
-                                                    Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                                                // Explain to the user why we need to read the contacts
-                                            }
-
-                                            requestPermissions(INITIAL_PERMS,
-                                                    INITIAL_REQUEST);
-
-                                            // MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE is an
-                                            // app-defined int constant
-                                        }
-                                        Intent gallery = new Intent();
-                                        // Show only images, no videos or anything else
-                                        gallery.setType("image/*");
-                                        gallery.setAction(Intent.ACTION_GET_CONTENT);
-                                        // Always show the chooser (if there are multiple options available)
-                                        startActivityForResult(Intent.createChooser(gallery, "Select Picture"), PICK_CAR_IMAGE_REQUEST);
-                                        break;
-
-                                }
-                            }
-                        });
-                builderSingle.show();*/
                 if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
 

@@ -53,7 +53,7 @@ public class RegisterActivity extends Activity {
     private JsonPutsUtil sendDataRequest;
     private ProgressDialog dialog;
 
-    private boolean debug_test =false;
+    private boolean debug_test =true;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

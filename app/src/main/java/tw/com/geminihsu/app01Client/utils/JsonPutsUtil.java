@@ -2900,6 +2900,8 @@ public class JsonPutsUtil {
 
                     } else {
                         String message = jsonObject.getString(App01libObjectKey.APP_OBJECT_KEY_DEVICE_INFO_MESSAGE);
+                        if (mServerRequestDataManagerCallBackFunction!=null)
+                            mServerRequestDataManagerCallBackFunction.error(true);
 
                         Toast.makeText(mContext,
                                 message,
@@ -4192,6 +4194,7 @@ public class JsonPutsUtil {
 
     public interface ServerRequestDataManagerCallBackFunction {
         public void registerDriver(DriverIdentifyInfo driverIdentifyInfo);
+        public void error(boolean isError);
 
     }
 
